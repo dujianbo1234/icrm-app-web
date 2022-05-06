@@ -1,0 +1,24 @@
+import { request } from "./request.js";
+
+// 查询存量客户列表
+export const queryCustSearchList = (params,fun) => {request("custinfo.queryCustSearchList", params, fun)}
+// 查询潜在客户列表
+export const queryCustBaseInfoList = (params,fun) => {request("custinfo.queryCustBaseInfoList", params, fun)}
+// 查询客户经理
+export const queryCustManagers = (params,fun) => {request("custinfo.queryCustManagers", params, fun)}
+// 查询客户经理列表
+export const queryCustManagerList = (params,fun) => {request("custinfo.queryCustManagerList", params, fun)}
+// 查询潜在客户统计数量
+export const queryCustOrgMangerCount = (params,fun) => {request("custinfo.queryCustOrgMangerCount", params, fun)}
+// 查询重要潜客列表
+export const queryCustomersInfoList = (params,fun) => {request("custinfo.queryCustomersInfoList", params, fun)}
+// 新增重要潜客信息
+export const saveCustomersInfo = (params,fun) => {request("custinfo.saveCustomersInfo", params, fun)}
+// 分配重要潜客信息
+export const updatePoteCustomersInfo = (params,fun) => {request("custinfo.updatePoteCustomersInfo", params, fun)}
+// 删除重要潜客信息
+export const deleteCustomersMarketing = (params,fun) => {request("custinfo.deleteCustomersMarketing", params, fun)}
+// 获取重要潜客营销信息列表
+export const queryPoteCustomersMarketing = (params,fun) => {request("custinfo.queryPoteCustomersMarketing", params, fun)}
+// 新增重要潜客营销信息
+export const saveCustomersMarketing = (params,fun) => {request("custinfo.saveCustomersMarketing", params, fun)}
