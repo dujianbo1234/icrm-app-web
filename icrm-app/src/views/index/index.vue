@@ -195,9 +195,7 @@
         </div>
       </div>
       <!-- 分割线 -->
-      <div class="dividers">
-        <van-divider :dashed="true"/>
-      </div>
+      <div class="dividers"><van-divider :dashed="true"/></div>
       <!-- 客户增长趋势 -->
       <div class="contentItem">
         <div class="custStyle">
@@ -212,20 +210,45 @@
         <TitleCard></TitleCard>
       </div>
       <!-- 分割线 -->
-      <div class="dividers">
-        <van-divider :dashed="true"/>
-      </div>
+      <div class="dividers"><van-divider :dashed="true"/></div>
       <!-- AUM余额分布图 -->
       <div class="contentItem">
         <div class="custStyle aumStyle">
           <span class="title">AUM余额分布图</span>
           <span class="btn" @click="aumClick">
-            <van-icon :name="require('@/assets/image/AUM_img.png')" size="0.2rem" />
+            <van-icon :name="require('@/assets/image/AUM_img.png')" size="0.2rem" v-if="aumFlag == 0"/>
+            <van-icon :name="require('@/assets/image/AUM_YE.png')" size="0.2rem" v-else/>
           </span>
         </div>
-        <div v-show="aumFlag">列表</div>
-        <echarts-pie v-show="!aumFlag" unit="万元" :data="aumDisDiaData" ref="aumDisDiaChart"/>
+        <div v-show="aumFlag == 0">列表</div>
+        <echarts-pie v-show="aumFlag == 1" unit="万元" :data="aumDisDiaData" ref="aumDisDiaChart"/>
       </div>
+      <!-- 分割线 -->
+      <div class="dividers"><van-divider :dashed="true"/></div>
+      <!-- AUM余额-增长趋势 -->
+      <div class="contentItem">
+        <div class="custStyle aumStyle">
+          <span class="title">增长趋势</span>
+          <selectors :title="['日', '月']"></selectors>
+        </div>
+        <echartHistogram :dataArr="dataArr" :timeUnit="timeUnit"></echartHistogram>
+      </div>
+      <!-- 贷款余额(万元) -->
+      <div class="contentItem" style="margin-top: 0.12rem">
+        <TitleCard></TitleCard>
+      </div>
+      <!-- 分割线 -->
+      <div class="dividers"><van-divider :dashed="true"/></div>
+      <!-- 贷款余额-增长趋势 -->
+      <div class="contentItem">
+        <div class="custStyle aumStyle">
+          <span class="title">增长趋势</span>
+          <selectors :title="['日', '月']"></selectors>
+        </div>
+        <echartHistogram :dataArr="dataArr" :timeUnit="timeUnit"></echartHistogram>
+      </div>
+
+
       <!-- 另外一半 -->
       <div class="zbst" v-if="mianTabActive == 1">
         <org-list
@@ -449,7 +472,7 @@ export default {
       dataArr: ['全部','财富客群','贷款客群','代发客群','新客客群'],
       timeUnit: 0,
       custType: 0,
-      aumFlag: true
+      aumFlag: 0
     };
   },
   computed: {
@@ -682,27 +705,27 @@ export default {
             var dataObj = res.data.records[0];
             this.aumDisDiaData = [
               {
-                name: "定期存款",
+                name: "定期存款余额",
                 value: Number((dataObj.timeDpsitBal / 10000).toFixed(2)),
               },
               {
-                name: "活期存款",
+                name: "活期存款余额",
                 value: Number((dataObj.currDpsitBal / 10000).toFixed(2)),
               },
               {
-                name: "理财",
+                name: "理财余额",
                 value: Number((dataObj.cftBal / 10000).toFixed(2)),
               },
               {
-                name: "信托",
+                name: "信托余额",
                 value: Number((dataObj.entrstBal / 10000).toFixed(2)),
               },
               {
-                name: "基金",
+                name: "基金余额",
                 value: Number((dataObj.fndBal / 10000).toFixed(2)),
               },
               {
-                name: "保险",
+                name: "保险余额",
                 value: Number((dataObj.insBal / 10000).toFixed(2)),
               },
             ];
@@ -903,11 +926,13 @@ export default {
     },
     /* AUM余额分布图切换 */
     aumClick(){
-      this.aumFlag = !this.aumFlag
-      if(!this.aumFlag) {
+      if(this.aumFlag == 0){
+        this.aumFlag = 1
         this.$nextTick(()=>{
           this.getAumDisDiaData()
         })
+      }else{
+        this.aumFlag = 0
       }
     }
   },
@@ -1326,7 +1351,7 @@ export default {
 .dividers:deep(.van-divider) {
   border: 0 dashed rgba(0, 0, 0, 0.04);
   padding: 0 0.02rem;
-  margin: 0.01rem 0;
+  margin: 0.005rem 0;
 }
 .custStyle {
   font-size: 0.14rem;

@@ -21,11 +21,11 @@
             <!-- 上升 -->
             <van-icon :name="require('@/assets/image/index_arrow_top.png')" size="0.16rem" v-if="item > 0"/>
             <!-- 下降png -->
-            <van-icon :name="require('@/assets/image/index_main_numDown.png')" size="0.16rem" v-else-if="item < 0"/>
+            <!-- <van-icon :name="require('@/assets/image/index_main_numDown.png')" size="0.16rem" v-else-if="item < 0"/> -->
+            <!-- 下降icon -->
+            <van-icon name="down" size="0.12rem" color="#37cd37"  v-else-if="item < 0"/>
             <!-- 无数据 -->
             <van-icon :name="require('@/assets/image/index_main_numLine.png')" size="0.16rem" v-else/>
-            <!-- 下降icon -->
-            <!-- <van-icon name="down" size="0.12rem" color="#37cd37" v-if="false"/> -->
           </p>
         </div>
       </template>
@@ -118,6 +118,7 @@ export default {
     .textS {
       display: flex;
       justify-content: start;
+      align-items: center;
       color: #262626;
     }
   }
