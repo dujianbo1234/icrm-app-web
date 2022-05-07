@@ -1,6 +1,6 @@
 <template>
   <div class="Table">
-    <table border="0" cellspacing="0" cellpadding="0" width="100%">
+    <table border="0" cellspacing="0" cellpadding="0">
       <!-- 表头 -->
       <tr height="32">
         <th v-for="item in listLabel" :key="item" :align="item.align">{{ item.label }}</th>
@@ -48,9 +48,12 @@ export default {
 .Table {
   font-size: 0.12rem;
   width: 3.27rem;
-  overflow-x:scroll;
+  overflow-x: scroll;
   &:deep(table) {
+    min-width: 4.27rem;
     th, td{
+      word-break: keep-all;
+      word-wrap:break-word;
       border-bottom: 0.005rem solid rgba(0,0,0,0.08);
     }
   }
