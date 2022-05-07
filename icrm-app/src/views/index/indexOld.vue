@@ -537,6 +537,7 @@ export default {
           dataEncode: dataEncode || "",
         },
         (res) => {
+          console.log(this.dataDate, dataEncode)
           if (res.data && res.data.records && res.data.records.length) {
             var dataObj = res.data.records[0];
             this.aumDisDiaData = [

@@ -202,11 +202,30 @@
       <div class="contentItem">
         <div class="custStyle">
           <selectors :title="['客户增长趋势', '客户服务等级']" @change="changeL"></selectors>
-          <selectors :title="['日', '月']" @change="changeR"></selectors>
+          <selectors :title="['日', '月']" @change="changeR" v-if="custType == 0"></selectors>
         </div>
-        <echartHistogram :dataArr="dataArr"></echartHistogram>
+        <echartHistogram :dataArr="dataArr" :timeUnit="timeUnit" v-show="custType === 0"></echartHistogram>
+        <echarts-funnel v-show="custType === 1" :data="custLvDisDiaData" ref="custLvDisDiaChart"/>
       </div>
-
+      <!-- AUM余额(万元) -->
+      <div class="contentItem" style="margin-top: 0.12rem">
+        <TitleCard></TitleCard>
+      </div>
+      <!-- 分割线 -->
+      <div class="dividers">
+        <van-divider :dashed="true"/>
+      </div>
+      <!-- AUM余额分布图 -->
+      <div class="contentItem">
+        <div class="custStyle aumStyle">
+          <span class="title">AUM余额分布图</span>
+          <span class="btn" @click="aumClick">
+            <van-icon :name="require('@/assets/image/AUM_img.png')" size="0.2rem" />
+          </span>
+        </div>
+        <div v-show="aumFlag">列表</div>
+        <echarts-pie v-show="!aumFlag" unit="万元" :data="aumDisDiaData" ref="aumDisDiaChart"/>
+      </div>
       <!-- 另外一半 -->
       <div class="zbst" v-if="mianTabActive == 1">
         <org-list
@@ -295,13 +314,16 @@ import echartsLine from "../../components/common/echarts-line.vue";
 import echartsFunnel from "../../components/common/echarts-funnel.vue";
 import selectors from "./components/selectors.vue"
 import echartHistogram from "./components/echart-Histogram.vue"
+import TitleCard from "@/views/index/components/TitleCard.vue"
+
 export default {
   components: {
     echartsPie,
     echartsLine,
     echartsFunnel,
     selectors,
-    echartHistogram
+    echartHistogram,
+    TitleCard
   },
   data() {
     return {
@@ -424,7 +446,10 @@ export default {
       serveLvDisDiaData: [],
       custNumDisDiaData: [],
       custNumDisDiaDate: [],
-      dataArr: ['全部','财富客群','贷款客群','代发客群','新客客群']
+      dataArr: ['全部','财富客群','贷款客群','代发客群','新客客群'],
+      timeUnit: 0,
+      custType: 0,
+      aumFlag: true
     };
   },
   computed: {
@@ -840,9 +865,7 @@ export default {
       if (this.$refs.zbstOrg) {
         this.$refs.zbstOrg.activeOrg();
       } else {
-        this.zbstActiveOrg({
-          value: "",
-        });
+        this.zbstActiveOrg({value: ""});
       }
     },
     khgmActiveOrg(orgValue) {
@@ -866,17 +889,30 @@ export default {
     },
     /* 客户增长趋势/客户服务等级 */
     changeL(data){
-      this.dataArr = [['全部','财富客群','贷款客群','代发客群','新客客群'],['选项1','选项2','选项3','选项4','选项5','选项6','选项7','选项8']][data]
-      // alert(data)
+      if(data == 1) {
+        this.$nextTick(()=>{
+          // this.getAumDisDiaData()
+          this.getCustLvDisDiaData()
+        })
+      }
+      this.custType = data
     },
     /* 日/月 */
     changeR(data){
-      // alert(data)
+      this.timeUnit = data
+    },
+    /* AUM余额分布图切换 */
+    aumClick(){
+      this.aumFlag = !this.aumFlag
+      if(!this.aumFlag) {
+        this.$nextTick(()=>{
+          this.getAumDisDiaData()
+        })
+      }
     }
   },
   mounted() {
     queryBusiDt({}, (res1) => {
-      console.log(res1)
       if (res1.data) {
         this.dataDate = res1.data.workDate;
         if (this.$store.state.userMsg.roleId == "00000004") {
@@ -951,7 +987,27 @@ export default {
   },
 };
 </script>
+<style lang="less" scoped>
+.aumStyle {
+  align-items: center;
+  .title {
+    font-family: PingFangSC-Medium;
+    font-size: 0.14rem;
+    color: rgba(0,0,0,0.85);
+    letter-spacing: 0;
+    font-weight: 500;
+  }
+  .btn {
+    width: 0.32rem;
+    height: 0.32rem;
+    background: #EDEFF2;
+    border: 1px solid rgba(0,0,0,0.02);
+    border-radius: 0.04rem;
+    padding: 0.04rem;
+  }
+}
 
+</style>
 <style scoped>
 * {
   box-sizing: border-box;
@@ -1127,7 +1183,6 @@ export default {
   background-color: #fff;
   border-radius: 0.08rem;
 }
-
 .contentHead {
   display: flex;
   align-items: center;
