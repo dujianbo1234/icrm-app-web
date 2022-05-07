@@ -200,7 +200,7 @@
       <div class="contentItem">
         <div class="custStyle">
           <selectors :title="['客户增长趋势', '客户服务等级']" @change="changeL"></selectors>
-          <selectors :title="['日', '月']" @change="changeR" v-if="custType == 0"></selectors>
+          <selectors :title="['日', '月']" :typeP="1" @change="changeR" v-if="custType == 0"></selectors>
         </div>
         <echartHistogram :dataArr="dataArr" :timeUnit="timeUnit" v-show="custType === 0"></echartHistogram>
         <echarts-funnel v-show="custType === 1" :data="custLvDisDiaData" ref="custLvDisDiaChart"/>
@@ -220,7 +220,10 @@
             <van-icon :name="require('@/assets/image/list_2.png')" size="0.32rem" v-else/>
           </span>
         </div>
-        <div v-show="aumFlag == 0">列表</div>
+        <!-- 列表 -->
+        <div v-show="aumFlag == 0">
+          <Table :listLabel="listLabel" :listData="listData"></Table>
+        </div>
         <echarts-pie v-show="aumFlag == 1" unit="万元" :data="aumDisDiaData" ref="aumDisDiaChart"/>
       </div>
       <!-- 分割线 -->
@@ -229,7 +232,7 @@
       <div class="contentItem">
         <div class="custStyle aumStyle">
           <span class="title">增长趋势</span>
-          <selectors :title="['日', '月']"></selectors>
+          <selectors :title="['日', '月']" :typeP="1"></selectors>
         </div>
         <echartHistogram :dataArr="dataArr" :timeUnit="timeUnit"></echartHistogram>
       </div>
@@ -243,7 +246,7 @@
       <div class="contentItem">
         <div class="custStyle aumStyle">
           <span class="title">增长趋势</span>
-          <selectors :title="['日', '月']"></selectors>
+          <selectors :title="['日', '月']" :typeP="1"></selectors>
         </div>
         <echartHistogram :dataArr="dataArr" :timeUnit="timeUnit"></echartHistogram>
       </div>
@@ -338,7 +341,7 @@ import echartsFunnel from "../../components/common/echarts-funnel.vue";
 import selectors from "./components/selectors.vue"
 import echartHistogram from "./components/echart-Histogram.vue"
 import TitleCard from "@/views/index/components/TitleCard.vue"
-
+import Table from "@/views/index/components/Table.vue"
 export default {
   components: {
     echartsPie,
@@ -346,7 +349,8 @@ export default {
     echartsFunnel,
     selectors,
     echartHistogram,
-    TitleCard
+    TitleCard,
+    Table
   },
   data() {
     return {
@@ -472,7 +476,23 @@ export default {
       dataArr: ['全部','财富客群','贷款客群','代发客群','新客客群'],
       timeUnit: 0,
       custType: 0,
-      aumFlag: 0
+      aumFlag: 0,
+      listLabel: [
+        { label: '类型', align: 'left' },
+        { label: '金额(万元)', align: 'right' },
+        { label: '较上日(万元)', align: 'right' },
+        { label: '较上月(万元)', align: 'right' },
+        { label: '较年初(万元)', align: 'right' },
+      ],
+      listData: [
+        { name: '活期存款余额', a: 1345234.65, b: -8037.51, c: '', d: '' },
+        { name: '定期存款余额', a: 1345234.65, b: 5460.36, c: '', d: '' },
+        { name: '理财余额', a: 1345234.65, b: '', c: '', d: '' },
+        { name: '基金余额', a: 1345234.65, b: '', c: '', d: '' },
+        { name: '保险余额', a: 1345234.65, b: '', c: '', d: '' },
+        { name: '信托余额', a: 1345234.65, b: '', c: '', d: '' },
+        { name: '合计', a: 1345234.65, b: '', c: '', d: '' },
+      ]
     };
   },
   computed: {
@@ -914,9 +934,10 @@ export default {
     changeL(data){
       if(data == 1) {
         this.$nextTick(()=>{
-          // this.getAumDisDiaData()
           this.getCustLvDisDiaData()
         })
+      }else{
+        this.timeUnit = 0
       }
       this.custType = data
     },
