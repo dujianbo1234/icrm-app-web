@@ -216,8 +216,8 @@
         <div class="custStyle aumStyle">
           <span class="title">AUM余额分布图</span>
           <span class="btn" @click="aumClick">
-            <van-icon :name="require('@/assets/image/AUM_img.png')" size="0.2rem" v-if="aumFlag == 0"/>
-            <van-icon :name="require('@/assets/image/AUM_YE.png')" size="0.2rem" v-else/>
+            <van-icon :name="require('@/assets/image/list_1.png')" size="0.32rem" v-if="aumFlag == 0"/>
+            <van-icon :name="require('@/assets/image/list_2.png')" size="0.32rem" v-else/>
           </span>
         </div>
         <div v-show="aumFlag == 0">列表</div>
@@ -1023,12 +1023,12 @@ export default {
     font-weight: 500;
   }
   .btn {
-    width: 0.32rem;
-    height: 0.32rem;
-    background: #EDEFF2;
-    border: 1px solid rgba(0,0,0,0.02);
-    border-radius: 0.04rem;
-    padding: 0.04rem;
+    // width: 0.32rem;
+    // height: 0.32rem;
+    // background: #EDEFF2;
+    // border: 1px solid rgba(0,0,0,0.02);
+    // border-radius: 0.04rem;
+    // padding: 0.04rem;
   }
 }
 
