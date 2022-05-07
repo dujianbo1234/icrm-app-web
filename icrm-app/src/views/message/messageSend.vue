@@ -42,7 +42,7 @@
                     </div>
 				</div>
 		</van-list>
-        <van-dialog v-model:show="show" title="标题" theme='round-button' show-cancel-button>
+        <van-dialog v-model="show" title="标题" theme='round-button' show-cancel-button>
             
         </van-dialog>
 	</div>
@@ -59,6 +59,7 @@
 	export default {
 		data() {
 			return {
+				show:false,
 				finished:false,
 				pageIndex: 0,
 

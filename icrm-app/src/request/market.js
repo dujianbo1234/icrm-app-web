@@ -5,4 +5,4 @@ export const queryCommercialOpportunityCount = (params,fun) => {request("market.
 // 查询商机列表
 export const queryCommercialOpportunityList = (params,fun) => {request("market.queryCommercialOpportunityList", params, fun)}
 // 查询短信审批列表
-export const queryMessageApproveList = (params,fun) => {request("custinfo.queryMessageApproveList", params, fun)}
+export const queryMessageApproveList = (params,fun) => {request("market.queryMessageApproveList", params, fun)}
