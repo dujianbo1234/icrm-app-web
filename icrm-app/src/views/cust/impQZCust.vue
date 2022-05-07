@@ -175,7 +175,7 @@
 			</div>
 		</van-popup>
 		<cust-list-cs ref="custList" @activeCust="activeCust" />
-		<org-list ref="orgList" type="2" @close="$refs.orgList.cancle()" @activeOrg="activeOrg" />
+		<org-list ref="orgList" type="2" @activeOrg="activeOrg" />
 	</div>
 </template>
 

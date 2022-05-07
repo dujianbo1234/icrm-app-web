@@ -81,7 +81,7 @@
 			<van-tabs v-model:active="active" line-width="80" color="#0088FF" title-active-color="#0066FF"
 				title-inactive-color="#8A8A8A">
 				<van-tab title="客户维护情况" />
-				<van-tab title="登陆数据统计" />
+				<van-tab title="登录数据统计" />
 				<van-tab title="" disabled />
 			</van-tabs>
 			<van-dropdown-menu :close-on-click-outside="false" active-color="#1989fa">
@@ -232,7 +232,7 @@
 						value: "0"
 					},
 					{
-						title: "代办完成数",
+						title: "必办完成数",
 						value: "0"
 					},
 					{
