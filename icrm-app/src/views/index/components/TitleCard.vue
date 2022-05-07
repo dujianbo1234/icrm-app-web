@@ -72,6 +72,7 @@ export default {
     .titleL {
       display: flex;
       justify-content: start;
+      align-items: center;
       height: 0.2rem;
       text-align: left;
       h3 {

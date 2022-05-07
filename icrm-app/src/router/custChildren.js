@@ -27,5 +27,10 @@ export default [{
 		path: '/impQZCustDetail',
 		name: 'impQZCustDetail',
 		component: () => import('@/views/cust/impQZCustDetail.vue')
+	},
+	{
+		path: '/messageSend',
+		name: 'messageSend',
+		component: () => import('@/views/message/messageSend.vue')
 	}
 ];

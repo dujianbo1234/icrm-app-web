@@ -264,6 +264,9 @@
 					case "存量客户":
 						this.$router.push('./clCustList');
 						break;
+					case "短信审批":
+						this.$router.push('messageSend')
+						break;
 					default:
 						Toast("功能开发中");
 						break;

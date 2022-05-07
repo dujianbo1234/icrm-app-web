@@ -3,7 +3,7 @@
   <div class="echarts-barNew">
     <div class="echarts" ref="echarts"></div>
     <div class="title">
-      <span class="left">2022-04-24 
+      <span class="left">{{moment().format('YYYY-MM') + '-' + axisValue}}
         <span :style="{'color': currentNum > 0 ? 'red' : (currentNum < 0 ? '#37cd37' : '#8C8C8C') }">
           {{currentNum > 0 ? `+${currentNum}` : currentNum}}{{unit}}
         </span>
@@ -15,6 +15,7 @@
 </template>
 
 <script>
+import moment from "moment"
 export default {
   name: "echarts-barNew",
   props: {
@@ -43,11 +44,13 @@ export default {
   data() {
     return {
       currentNum: 0,
+      axisValue: 0,
       option: {
         tooltip: {
           show: true,
           trigger: 'axis',
 					formatter: params => {
+            this.axisValue = params[0].axisValue
             this.currentNum = params[0].value
             let string = 
             `<div style="display: flex;justify-content: space-between;align-items: center;">
@@ -117,6 +120,7 @@ export default {
     })
   },
   methods: {
+    moment,
     initData() {
       let myChart = this.$echarts.init(this.$refs.echarts);
       // 使用刚指定的配置项和数据显示图表
