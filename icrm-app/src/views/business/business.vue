@@ -127,14 +127,15 @@
 				this.kequnIndex = i;
 			},
 			openDetail(item) {
+				localStorage.setItem("lastPageParams",JSON.stringify(item));
 				this.$router.push({
 					name: 'chooseCust',
-					params: item
+					params: {item: JSON.stringify(item)}
 				})
 			}
 		},
 		mounted() {
-
+			
 		}
 	}
 </script>
