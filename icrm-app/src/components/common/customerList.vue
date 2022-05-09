@@ -1,20 +1,20 @@
 <template>
 	<div class="home">
 		<div class="custBtnType"></div>
-		<van-popup v-model:show="show" v-if="show" duration="0" position="bottom" :style="{ height: '100%' }" z-index="99999"
-			teleport="#app" :overlay="false">
-			<div class="topZW"></div>
-			<van-search class="searchBox" shape="round" v-model="searchValue" show-action placeholder="请输入客户经理姓名或工号"
+		<van-popup v-model:show="show" v-if="show" round duration="0" position="bottom" :style="{ height: '70%' }" z-index="99999"
+			teleport="#app" :close-on-click-overlay="false">
+			<div class="popTitle">
+				<div class="popTitle1" @click="cancle">取消</div>
+				<div class="popTitle2">客户经理</div>
+				<div class="popTitle3" @click="checkAll">全部选择</div>
+			</div>
+			<van-search class="searchBox" shape="round" v-model="searchValue" show-action placeholder="请输入工号、姓名"
 				@search="search">
 				<template #action>
-					<div @click="search" style="color: #026DFF;font-weight: 500;margin: 0 0.05rem;">搜索</div>
-				</template>
-				<template #left>
-					<van-icon name="arrow-left" size="20" style="margin-right: 0.1rem;" @click="cancle" />
+					<div @click="search" style="color: #026DFF;margin: 0 0.05rem;">搜索</div>
 				</template>
 			</van-search>
 			<div class="topFixed">
-				<div class="titleTop"></div>
 				<div class="itemTitle">
 					<div class="itemTitle1">姓名</div>
 					<div class="itemTitle2">工号</div>
@@ -75,15 +75,15 @@
 				this.$emit("close");
 			},
 			checkCust(item) {
-				Dialog.confirm({
-					message: '是否分配给该客户经理',
-					confirmButtonColor: '#026DFF',
-					cancelButtonColor: '#999999'
-				}).then(() => {
-					this.chooseCust = item;
-					this.cancle();
-					this.$emit("activeCust", item)
-				});
+				this.chooseCust = item;
+				this.cancle();
+				this.$emit("activeCust", item)
+			},
+			checkAll() {
+				this.chooseCust = {};
+				this.searchValue = "";
+				this.cancle();
+				this.$emit("activeCust", {});
 			},
 			search() {
 				this.pageIndex = 0;
@@ -135,10 +135,36 @@
 		border: 0;
 	}
 
-	.topZW {
+	.popTitle {
 		width: 100%;
-		height: constant(safe-area-inset-top);
-		height: env(safe-area-inset-top);
+		height: 0.45rem;
+		background: #FFFFFF;
+		display: flex;
+		flex-wrap: nowrap;
+		justify-content: center;
+		align-items: center;
+		font-family: PingFangSC-Regular;
+		font-size: 0.14rem;
+		letter-spacing: 0;
+		font-weight: 400;
+		position: relative;
+		box-shadow: inset 0 -0.005rem 0 0 rgba(231,233,236,1);
+	}
+
+	.popTitle1 {
+		position: absolute;
+		left: 0.16rem;
+		color: #8C8C8C;
+	}
+
+	.popTitle2 {
+		color: #262626;
+	}
+
+	.popTitle3 {
+		position: absolute;
+		right: 0.16rem;
+		color: #026DFF;
 	}
 
 	.custBtnType {
@@ -161,8 +187,8 @@
 
 	.listBox {
 		margin-top: 0rem;
-		height: calc(100% - constant(safe-area-inset-top) - 1.12rem);
-		height: calc(100% - env(safe-area-inset-top) - 1.12rem);
+		height: calc(100% - constant(safe-area-inset-bottom) - 1.48rem);
+		height: calc(100% - env(safe-area-inset-bottom) - 1.48rem);
 		background-color: #FFFFFF;
 		overflow: auto;
 	}
@@ -176,13 +202,7 @@
 	.topZW2 {
 		width: 100%;
 		background-color: #FFFFFF;
-		height: 0.65rem;
-	}
-
-	.titleTop {
-		width: 100%;
-		height: 0.1rem;
-		background-color: #F8F8F8;
+		height: 0.55rem;
 	}
 
 	.itemTitle {

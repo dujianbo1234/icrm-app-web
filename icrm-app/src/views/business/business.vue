@@ -164,7 +164,6 @@
 					duration: 0
 				});
 				this.pageIndex++;
-				console.log(this.kequnList[this.kequnIndex].text,this.kequnList[this.kequnIndex].value);
 				queryCmrcOpportunitySumList({
 					pageSize: "10",
 					pageNum: this.pageIndex,
@@ -202,6 +201,7 @@
 						}
 					})
 					this.kequnList = this.kequnList.concat(arr);
+					console.log(this.kequnList)
 				} else {
 					Toast.fail("商机大类数据为空")
 				}

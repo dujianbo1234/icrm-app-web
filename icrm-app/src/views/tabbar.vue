@@ -38,7 +38,7 @@
 					},
 					{
 						name: 'business',
-						value: '发现',
+						value: '商机',
 						url: '/business',
 						icon: require('../assets/image/tabbar_business.png'),
 						act_icon: require('../assets/image/tabbar_business_a.png')
