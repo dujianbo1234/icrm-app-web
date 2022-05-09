@@ -3,7 +3,7 @@
     <!-- title选择 -->
     <van-tabs class="cust" v-model:active="active" :shrink="true" @change="change">
       <van-tab v-for="item in dataArr" :title="item" :key="item">
-        <echartsBar ref="echartsBar" :yName="'增长人数'" :timeUnit="timeUnit" :barData="barData"></echartsBar>
+        <echartsBar ref="echartsBar" :yName="['增长人数','增长(万元)'][type]" :timeUnit="timeUnit" :barData="barData"></echartsBar>
       </van-tab>
     </van-tabs>
     <!-- 下方月份选择 -->
@@ -33,13 +33,16 @@ export default {
           xAxis: ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30"],
         }
       }
+    },
+    type: {
+      type: Number,
+      default: 0
     }
   },
   data() {
     return {
       active2: 11,
       active: 0,
-      type: 0
     };
   },
   methods: {
