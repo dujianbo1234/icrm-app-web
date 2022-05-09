@@ -33,12 +33,13 @@ export default {
   },
   watch: {
     barData(newData, oldData){
-      let myChart = this.$echarts.init(this.$refs.echarts);
-      // 使用刚指定的配置项和数据显示图表
-      this.option.xAxis.data = newData.xAxis
-      this.option.series[0].data = this.setNum(newData.series)
-      myChart.clear()
-      myChart.setOption(this.option);
+      this.initData(newData.xAxis, newData.series)
+      // let myChart = this.$echarts.init(this.$refs.echarts);
+      // // 使用刚指定的配置项和数据显示图表
+      // this.option.xAxis.data = newData.xAxis
+      // this.option.series[0].data = this.setNum(newData.series)
+      // myChart.clear()
+      // myChart.setOption(this.option);
     }
   },
   data() {
@@ -115,18 +116,19 @@ export default {
       }
     };
   },
-  mounted(){
+  created(){
     this.$nextTick(()=>{
-      this.initData()
+      this.initData(this.barData.xAxis, this.barData.series)
     })
   },
   methods: {
     moment,
-    initData() {
+    initData(xAxis, series) {
+      console.log('newData',xAxis, series)
       let myChart = this.$echarts.init(this.$refs.echarts);
       // 使用刚指定的配置项和数据显示图表
-      this.option.xAxis.data = this.barData.xAxis
-      this.option.series[0].data = this.setNum(this.barData.series)
+      this.option.xAxis.data = xAxis
+      this.option.series[0].data = this.setNum(series)
       myChart.clear()
       myChart.setOption(this.option);
     },

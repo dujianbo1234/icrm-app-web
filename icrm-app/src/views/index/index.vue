@@ -175,7 +175,9 @@
           <selectors :title="['客户增长趋势', '客户服务等级']" @change="changeL"></selectors>
           <selectors :title="['日', '月']" :typeP="1" @change="changeR" v-if="custType == 0"></selectors>
         </div>
-        <echartHistogram :dataArr="dataArr" :timeUnit="timeUnit" v-show="custType === 0"></echartHistogram>
+        <!-- 客户增长趋势-图 -->
+        <echartHistogram ref="Histogram" :dataArr="['全部','财富客群','贷款客群','代发客群','基础客群','商户客群']" :barData="barData" @change="barChange" :timeUnit="timeUnit" v-show="custType === 0"></echartHistogram>
+        <!-- 客户服务等级-图 -->
         <echarts-funnel v-show="custType === 1" :data="custLvDisDiaData" ref="custLvDisDiaChart"/>
       </div>
       <!-- AUM余额(万元) -->
@@ -207,7 +209,7 @@
           <span class="title">增长趋势</span>
           <selectors :title="['日', '月']" :typeP="1"></selectors>
         </div>
-        <echartHistogram :dataArr="dataArr" :timeUnit="timeUnit"></echartHistogram>
+        <echartHistogram :dataArr="['全部','活期存款','定期存款','理财','基金','保险','信托']" :timeUnit="timeUnit"></echartHistogram>
       </div>
       <!-- 贷款余额(万元) -->
       <div class="contentItem" style="margin-top: 0.12rem">
@@ -221,7 +223,7 @@
           <span class="title">增长趋势</span>
           <selectors :title="['日', '月']" :typeP="1"></selectors>
         </div>
-        <echartHistogram :dataArr="dataArr" :timeUnit="timeUnit"></echartHistogram>
+        <echartHistogram :dataArr="['全部','按揭贷款','消费贷款','经营贷款']" :timeUnit="timeUnit"></echartHistogram>
       </div>
 
 
@@ -296,14 +298,15 @@
 <script>
 import { formatNum } from "../../api/common.js";
 import {
-  queryBusiDt,
-  queryHomeDayReportList,
-  queryHomeOrgDayReportList,
-  queryHomPeCstAum,
-  queryHomPeCstBalDgrm,
-  queryHomCusts,
-  queryAst,
-  queryHomPeCstSvrLvlDgrm,
+ queryBusiDt,
+ queryHomeDayReportList,
+ queryHomeOrgDayReportList,
+ queryHomPeCstAum,
+ queryHomPeCstBalDgrm,
+ queryHomCusts,
+ queryAst,
+ queryHomPeCstSvrLvlDgrm,
+ queryCustomertrends
 } from "../../request/index.js";
 import { queryCommercialOpportunityCount } from "../../request/market.js";
 import { queryWarningRmdMgtSum } from "../../request/product.js";
@@ -315,6 +318,7 @@ import selectors from "./components/selectors.vue"
 import echartHistogram from "./components/echart-Histogram.vue"
 import TitleCard from "@/views/index/components/TitleCard.vue"
 import Table from "@/views/index/components/Table.vue"
+import moment from "moment"
 export default {
   components: {
     echartsPie,
@@ -446,7 +450,6 @@ export default {
       serveLvDisDiaData: [],
       custNumDisDiaData: [],
       custNumDisDiaDate: [],
-      dataArr: ['全部','财富客群','贷款客群','代发客群','新客客群'],
       timeUnit: 0,
       custType: 0,
       aumFlag: 0,
@@ -465,15 +468,15 @@ export default {
         { name: '保险余额', a: 1345234.65, b: '', c: '', d: '' },
         { name: '信托余额', a: 1345234.65, b: '', c: '', d: '' },
         { name: '合计', a: 1345234.65, b: '', c: '', d: '' },
-      ]
+      ],
+      barData: {},
+      barDataxData: [],
+      xAxis: []
     };
   },
   computed: {
     showDate() {
-      return `${this.dataDate.slice(0, 4)}.${this.dataDate.slice(
-        4,
-        6
-      )}.${this.dataDate.slice(6, 8)}`;
+      return `${this.dataDate.slice(0, 4)}.${this.dataDate.slice(4,6)}.${this.dataDate.slice(6, 8)}`;
     },
   },
   methods: {
@@ -828,11 +831,7 @@ export default {
       );
     },
     getCustNumDisDiaData() {
-      queryHomCusts(
-        {
-          etlDt: this.dataDate,
-        },
-        (res) => {
+      queryHomCusts({etlDt: this.dataDate},(res) => {
           if (res.data && res.data.records && res.data.records.length) {
             var dataObj = res.data.records.reverse();
             this.custNumDisDiaData = [
@@ -910,11 +909,12 @@ export default {
           this.getCustLvDisDiaData()
         })
       }else{
+        this.customertrends()
         this.timeUnit = 0
       }
       this.custType = data
     },
-    /* 日/月 */
+    /* 日0/月1 */
     changeR(data){
       this.timeUnit = data
     },
@@ -927,6 +927,65 @@ export default {
         })
       }else{
         this.aumFlag = 0
+      }
+    },
+    /* 查询客户增长趋势 */
+    customertrends(){
+      let time = this.dataDate // 拿到默认数据日期(YYYYMMDD)
+      let body = {
+        judge: '', // 0的时候为月
+        pageNum: '1',
+        pageSize: '31'
+      }
+      let xAxis = []
+      // 根据查询日期 日/月 生成一条X轴
+      if(this.timeUnit == 0){
+        body.etlDt = moment(time).format('YYYYMM')
+        let lastDay = Number(moment(time).endOf('M').format('DD')) // 计算该月有多天
+        for(let i = lastDay - 1; i >= 0; i--){
+          xAxis.push(moment(time).subtract(i, 'day').format('YYYYMMDD'))
+        }
+      }else{
+        body.etlDt = moment(time).format('YYYYMMDD')
+        body.judge = '0'
+        for(let i = 11; i >= 0; i--){
+          xAxis.push(moment(time).subtract(i, 'month').format('YYYYMM')) // 往前推12个月
+        }
+      }
+      queryCustomertrends(body, (res) => {
+        let data = res.data.records
+        // 零售客户数（全部), 财富客户数, 贷款客户数, 代发客户数, 基础客户数, 商户客户数
+        let arr = ['custCnt','vipCustCnt','loanCustCnt','agentCustCnt','basicCstCnt','merntCstCnt']
+        let xData = [[],[],[],[],[],[]] 
+        // 根据生成的X轴去拿到接口返回的每一条X轴的数据
+        xAxis.forEach(itemX => {
+          let flag = true
+          data.forEach(item => {
+            if(itemX == item.etlDt){
+              arr.forEach((name,index)=> {
+                xData[index].push(item[name] || 0)
+              })
+              flag = false
+            }
+          })
+          if(flag){
+            arr.forEach((name,index)=> {
+              xData[index].push(0)
+            })
+          }
+        })
+        this.barDataxData = xData
+        this.xAxis = xAxis
+        this.barData = {
+          series : xData,
+          xAxis: xAxis,
+        }
+      })
+    },
+    barChange(v){
+      this.barData = {
+        series : this.barDataxData[v],
+        xAxis: this.xAxis
       }
     }
   },
@@ -964,12 +1023,8 @@ export default {
           }
         );
         this.getKHGMMsg();
-        let todayDate = new Date(
-          `${this.dataDate.slice(0, 4)}-${this.dataDate.slice(
-            4,
-            6
-          )}-${this.dataDate.slice(6, 8)}`
-        );
+        this.customertrends()
+        let todayDate = new Date(`${this.dataDate.slice(0, 4)}-${this.dataDate.slice(4,6)}-${this.dataDate.slice(6, 8)}`);
         this.todayDate = todayDate;
         let sjc = todayDate.getTime();
         this.weekList = [];

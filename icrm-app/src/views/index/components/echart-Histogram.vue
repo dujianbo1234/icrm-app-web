@@ -1,10 +1,12 @@
 <template>
   <div class="echart-Histogram">
-    <van-tabs class="cust" v-model:active="active" @click-tab="onClickTab" :shrink="true">
+    <!-- title选择 -->
+    <van-tabs class="cust" v-model:active="active" :shrink="true" @change="change">
       <van-tab v-for="item in dataArr" :title="item" :key="item">
         <echartsBar ref="echartsBar" :yName="'增长人数'" :barData="barData"></echartsBar>
       </van-tab>
     </van-tabs>
+    <!-- 下方月份选择 -->
     <van-tabs class="month" v-model:active="active2" type="card" v-if="timeUnit != 1">
       <van-tab v-for="index in ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月']" :key="index" :title="index">
       </van-tab>
@@ -21,21 +23,27 @@ export default {
   },
   props: {
     dataArr: Array,
-    timeUnit: Number
+    timeUnit: Number, // 是否展示下方月份选择
+    barData: {
+      type: Object,
+      default: ()=>{
+        return {
+          series: [120, -100, 150, 80, 70, 110, 130, 240, -100, 120,120, -200, 150, 80, 70, 110, 130, 240, 100, 120,120, 200, 150, 80, 70, 110, 130, 240, 100, 120],
+          xAxis: ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30"],
+        }
+      }
+    }
   },
   data() {
     return {
       active2: 0,
       active: 0,
-      barData: {
-        xAxis: ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30"],
-        series: [120, -100, 150, 80, 70, 110, 130, 240, -100, 120,120, -200, 150, 80, 70, 110, 130, 240, 100, 120,120, 200, 150, 80, 70, 110, 130, 240, 100, 120]
-      }
+      type: 0
     };
   },
   methods: {
-    onClickTab(){
-      
+    change(v){
+      this.$emit('change', v)
     }
   },
 };

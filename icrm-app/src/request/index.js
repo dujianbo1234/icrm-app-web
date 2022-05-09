@@ -36,3 +36,9 @@ export const queryDirectSaleRankByEmpID = (params,fun) => {request("index.queryD
 export const queryGroupSaleRankShareList = (params,fun) => {request("index.queryGroupSaleRankShareList", params, fun)}
 // 首页业绩排名-搜索
 export const querySaleRankSearchList = (params,fun) => {request("index.querySaleRankSearchList", params, fun)}
+// 客户增长趋势图
+export const queryCustomertrends = (params,fun) => {request("index.queryCustomertrends", params, fun)}
+// AUM增长趋势图
+export const queryAUMGrowthTrend = (params,fun) => {request("index.queryAUMGrowthTrend", params, fun)}
+// 贷款增长趋势
+export const queryLoanGrowthTrend = (params,fun) => {request("index.queryLoanGrowthTrend", params, fun)}
