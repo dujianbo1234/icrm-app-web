@@ -10,7 +10,6 @@ export const queryMessageApproveList = (params,fun) => {request("market.queryMes
 export const queryCmrcOpportunitySum = (params,fun) => {request("market.queryCmrcOpportunitySum", params, fun)}
 // 查询商机汇总列表
 export const queryCmrcOpportunitySumList = (params,fun) => {request("market.queryCmrcOpportunitySumList", params, fun)}
-<<<<<<< HEAD
 // 查询商机列表
 export const queryCmrcOpportunityList = (params,fun) => {request("market.queryCmrcOpportunityList", params, fun)}
 // 查询商机详情
