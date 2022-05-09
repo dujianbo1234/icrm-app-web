@@ -3,17 +3,17 @@
     <div class="titleTop">
       <div class="titleL">
         <van-icon :name="require('@/assets/image/AUM_img.png')" size="0.2rem" />
-        <h3>AUM余额(万元)</h3>
+        <h3>{{title[num ? 0 : 1]}}(万元)</h3>
         <van-icon name="question-o" size="0.16rem" color="#BFBFBF"/>
       </div>
-      <span class="titleR">
+      <span class="titleR" @click="clickBtn">
         <van-icon :name="require('@/assets/image/AUM_YE.png')" size="0.16rem"/>
-        <span class="text">切换为贷款日均</span>
+        <span class="text">切换为{{title[num ? 1 : 0]}}</span>
       </span>
     </div>
-    <div class="titleNum">{{numFliter(4409514, false)}}</div>
+    <div class="titleNum">{{numFliter(arr[num ? 1 : 0][0], false)}}</div>
     <div class="titleBot">
-      <template v-for="(item,index) in [4409514,-49514,4409514]" :key="index">
+      <template v-for="(item,index) in arr[num ? 1 : 0]" :key="index">
         <div>
           <p class="textF">{{['较上日','较上月','较年初'][index]}}</p>
           <p class="textS">
@@ -21,9 +21,9 @@
             <!-- 上升 -->
             <van-icon :name="require('@/assets/image/index_arrow_top.png')" size="0.16rem" v-if="item > 0"/>
             <!-- 下降png -->
-            <!-- <van-icon :name="require('@/assets/image/index_main_numDown.png')" size="0.16rem" v-else-if="item < 0"/> -->
+            <van-icon :name="require('@/assets/image/index_main_numDown.png')" size="0.16rem" v-else-if="item < 0"/>
             <!-- 下降icon -->
-            <van-icon name="down" size="0.12rem" color="#37cd37"  v-else-if="item < 0"/>
+            <!-- <van-icon name="down" size="0.12rem" color="#37cd37"  v-else-if="item < 0"/> -->
             <!-- 无数据 -->
             <van-icon :name="require('@/assets/image/index_main_numLine.png')" size="0.16rem" v-else/>
           </p>
@@ -41,16 +41,22 @@ export default {
       type: Array,
       default: ["选项1", "选项2"],
     },
+    arr: {
+      type: Array,
+      default: [[], []],
+    }
   },
   data() {
-    return {};
+    return {
+      num: true
+    };
   },
-
   methods: {
     numFliter(value, tip){
       if(value == undefined){
         return '0'
       }
+      value = (Number(value)/10000).toFixed(2)
       let n = value.toString().split('.')
       let z = /\d{1,3}(?=(\d{3})+$)/g
       let b = Number(value) > 0 && tip ? '+' : ''
@@ -59,6 +65,9 @@ export default {
       }else{
         return `${b}${value.toString().replace(z, '$&,')}`
       }
+    },
+    clickBtn(){
+      this.num = !this.num
     }
   },
 };

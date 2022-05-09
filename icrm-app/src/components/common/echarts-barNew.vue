@@ -3,7 +3,9 @@
   <div class="echarts-barNew">
     <div class="echarts" ref="echarts"></div>
     <div class="title">
-      <span class="left">{{axisValue}}
+      <span class="left">
+        <span class="timeText" v-if="timeUnit == 0">{{moment(axisValue).format('YYYY-MM-DD')}}</span>
+        <span class="timeText" v-else>{{moment(axisValue).format('YYYY-MM')}}</span>
         <span :style="{'color': currentNum > 0 ? 'red' : (currentNum < 0 ? '#37cd37' : '#8C8C8C') }">
           {{currentNum > 0 ? `+${currentNum}` : currentNum}}{{unit}}
         </span>
@@ -26,6 +28,7 @@ export default {
       }
     },
     yName: String,
+    timeUnit: Number,
     unit: {
       type: String,
       default: '人'
@@ -100,7 +103,7 @@ export default {
           name: this.yName,
           nameTextStyle: {
             color: '#8C8C8C',
-            align: "center"
+            align: "right"
           },
           splitLine :{
             lineStyle:{
@@ -148,7 +151,7 @@ export default {
         newArr.push(obj)
         // 初始化顶部展示
         if(index == 0){
-          this.axisValue = item.time      // 日期
+          this.axisValue = item.time
           this.currentNum = item.toYstd   // 较上日
           this.pepoe = item.value         // 总数
         }
@@ -189,6 +192,9 @@ export default {
     .left {
       font-size: 0.12rem;
       margin-right: 0.1rem;
+      .timeText {
+        margin-right: 0.02rem ;
+      }
     }
     .right {
       font-size: 0.12rem;

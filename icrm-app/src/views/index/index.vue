@@ -182,7 +182,7 @@
       </div>
       <!-- AUM余额(万元) -->
       <div class="contentItem" style="margin-top: 0.12rem">
-        <TitleCard></TitleCard>
+        <TitleCard :title="['AUM余额','AUM日均']" :arr="peCstAum"></TitleCard>
       </div>
       <!-- 分割线 -->
       <div class="dividers"><van-divider :dashed="true"/></div>
@@ -213,7 +213,7 @@
       </div>
       <!-- 贷款余额(万元) -->
       <div class="contentItem" style="margin-top: 0.12rem">
-        <TitleCard></TitleCard>
+        <TitleCard :title="['贷款余额','贷款日均']" :arr="peCstLoan"></TitleCard>
       </div>
       <!-- 分割线 -->
       <div class="dividers"><van-divider :dashed="true"/></div>
@@ -472,7 +472,9 @@ export default {
       barData: {},
       barDataxData: [],
       xAxis: [],
-      selectTime: []
+      selectTime: [],
+      peCstAum: [[],[]],
+      peCstLoan: [[],[]],
     };
   },
   computed: {
@@ -553,14 +555,53 @@ export default {
       }
     },
     getKHGMMsg(dataEncode) {
-      queryHomPeCstAum(
-        {
-          etlDt: this.dataDate,
-          dataEncode: dataEncode || "",
-        },
-        (res) => {
+      let body = {
+        etlDt: this.dataDate,
+        dataEncode: dataEncode || "",
+      }
+      queryHomPeCstAum(body,(res) => {
+        console.log(res)
           if (res.data && res.data.records && res.data.records.length) {
             var dataObj = res.data.records[0];
+            console.log(dataObj)
+            this.peCstAum = [ // 待测试
+              [
+                dataObj.aumBbalKh,                // AUM余额
+                dataObj.aumBbalToYstdKh,          // AUM余额较上月
+                dataObj.aumBbalToLastMonthKh      // AUM余额较年初
+              ],
+              [
+                dataObj.aumYearAvg,               // AUM日均
+                dataObj.aumYearAvgToLm,           // AUM日均较上月
+                dataObj.aumYearAvgToYy,           // AUM日均较年初
+              ]
+            ]
+            this.peCstLoan = [
+              [
+                dataObj.loanMonthAvg,             // 贷款余额(暂无)
+                dataObj.loanMonthAvgToLm,         // 贷款余额较上月(暂无)
+                dataObj.loanMonthAvgToLy          // 贷款余额较年初(暂无)
+              ],
+              [
+                dataObj.loanMonthAvg,             // 贷款月日均
+                dataObj.loanMonthAvgToLm,         // 贷款月日均较上月
+                dataObj.loanMonthAvgToLy          // 贷款月日均较年初
+              ]
+            ]
+            this.listData = [
+              { name: '活期存款余额', a: dataObj.currDpsitBal, b: dataObj.currDpsitBalToYstd, c: dataObj.currDpsitBalToLastMonth, d: dataObj.currDpsitBalToBegng },
+              { name: '定期存款余额', a: dataObj.timeDpsitBal, b: dataObj.timeDpsitBalToYstd, c: dataObj.timeDpsitBalToLastMonth, d: dataObj.timeDpsitBalToBegng },
+              { name: '理财余额', a: dataObj.cftBal, b: dataObj.cftBalToYstd, c: dataObj.cftBalToLastMonth, d: dataObj.cftBalToBegng },
+              { name: '基金余额', a: dataObj.fndBal, b: dataObj.fndBalToYstd, c: dataObj.fndBalToLastMonth, d: dataObj.fndBalToBegng },
+              { name: '保险余额', a: dataObj.insBal, b: dataObj.insBalToYstd, c: dataObj.insBalToLastMonth, d: dataObj.insBalToBegng },
+              { name: '信托余额', a: dataObj.entrstBal, b: dataObj.entrstBalToYstd, c: dataObj.entrstBalToLastMonth, d: dataObj.entrstBalToBegng },
+              { 
+                name: '合计',
+                a: dataObj.currDpsitBal + dataObj.timeDpsitBal + dataObj.cftBal + dataObj.fndBal + dataObj.insBal + dataObj.entrstBal,
+                b: '',
+                c: '',
+                d: '' },
+            ]
             for (let item of this.showData) {
               switch (item.title) {
                 case "零售客户数":
@@ -905,6 +946,7 @@ export default {
     },
     /* 客户增长趋势/客户服务等级 */
     changeL(data){
+      this.custType = data
       if(data == 1) {
         this.$nextTick(()=>{
           this.getCustLvDisDiaData()
@@ -913,14 +955,11 @@ export default {
         this.customertrends(this.dataDate)
         this.timeUnit = 0
       }
-      this.custType = data
     },
     /* 日0/月1 */
     changeR(data){
       this.timeUnit = data
-      if(data == 0){
-        this.$refs.Histogram.init()
-      }
+      this.$refs.Histogram.init()
       this.customertrends(this.dataDate)
     },
     /* AUM余额分布图切换 */

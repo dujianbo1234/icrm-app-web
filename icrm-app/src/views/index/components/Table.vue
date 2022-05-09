@@ -7,10 +7,20 @@
       </tr>
       <tr v-for="item in listData" :key="item.name" height="32">
         <td align="left" valign="middle">{{item.name}}</td>
-        <td align="right" valign="middle">{{item.a}}</td>
-        <td align="right" valign="middle">{{item.b}}</td>
-        <td align="right" valign="middle">{{item.c}}</td>
-        <td align="right" valign="middle">{{item.d}}</td>
+        <td align="right" valign="middle" v-for="name in ['a','b','c','d']" :key="name">
+          <span class="textS">
+            <span :style="{'color' : (item[name] > 0 && name != 'a') ? '#FF3A3A' : (item[name] < 0 ? ' #37CD37' : '#595959')}">{{numFliter(item[name], name != 'a')}}</span>
+            <template v-if="name != 'a'">
+              <!-- 上升 -->
+              <van-icon :name="require('@/assets/image/index_arrow_top.png')" size="0.16rem" v-if="item[name] > 0"/>
+              <!-- 下降icon -->
+              <!-- <van-icon name="down" size="0.12rem" color="#37cd37" v-else-if="item[name] < 0"/> -->
+            <van-icon :name="require('@/assets/image/index_main_numDown.png')" size="0.16rem" v-else-if="item[name] < 0"/>
+              <!-- 无数据 -->
+              <van-icon :name="require('@/assets/image/index_main_numLine.png')" size="0.16rem" v-else/>
+            </template>
+          </span>
+        </td>
       </tr>
     </table>
   </div>
@@ -28,17 +38,18 @@ export default {
   },
 
   methods: {
-    numFliter(value, tip) {
-      if (value == undefined) {
-        return "0";
+    numFliter(value, tip){
+      if(value == undefined){
+        return '0'
       }
-      let n = value.toString().split(".");
-      let z = /\d{1,3}(?=(\d{3})+$)/g;
-      let b = Number(value) > 0 && tip ? "+" : "";
-      if (value.toString().indexOf(".") >= 0) {
-        return `${b}${n[0].replace(z, "$&,")}.${n[1]}`;
-      } else {
-        return `${b}${value.toString().replace(z, "$&,")}`;
+      value = (Number(value)/10000).toFixed(2)
+      let n = value.toString().split('.')
+      let z = /\d{1,3}(?=(\d{3})+$)/g
+      let b = Number(value) > 0 && tip ? '+' : ''
+      if(value.toString().indexOf('.') >= 0){
+        return `${b}${n[0].replace(z, '$&,')}.${n[1]}`
+      }else{
+        return `${b}${value.toString().replace(z, '$&,')}`
       }
     },
   },
@@ -55,6 +66,10 @@ export default {
       word-break: keep-all;
       word-wrap:break-word;
       border-bottom: 0.005rem solid rgba(0,0,0,0.08);
+      .textS {
+        display: flex;
+        justify-content: end;
+      }
     }
   }
 }
