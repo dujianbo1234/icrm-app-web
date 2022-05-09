@@ -7,8 +7,8 @@
       </van-tab>
     </van-tabs>
     <!-- 下方月份选择 -->
-    <van-tabs class="month" v-model:active="active2" type="card" v-if="timeUnit != 1">
-      <van-tab v-for="index in ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月']" :key="index" :title="index">
+    <van-tabs class="month" v-model:active="active2" type="card" @change="change2" v-if="timeUnit != 1">
+      <van-tab v-for="item in selectTime" :key="item.key" :title="item.title">
       </van-tab>
     </van-tabs>
   </div>
@@ -24,6 +24,7 @@ export default {
   props: {
     dataArr: Array,
     timeUnit: Number, // 是否展示下方月份选择
+    selectTime: Array, // 根据数据日期生成的可以选择查询的12个月
     barData: {
       type: Object,
       default: ()=>{
@@ -36,14 +37,27 @@ export default {
   },
   data() {
     return {
-      active2: 0,
+      active2: 11,
       active: 0,
       type: 0
     };
   },
   methods: {
+    // 选择title类型
     change(v){
       this.$emit('change', v)
+    },
+    // 选择月份时重置title
+    change2(v){
+      this.active = 0
+      this.$emit('change', 0)
+      this.$emit('change2', v)
+    },
+    init(){
+      this.active = 0
+      this.active2 = 11
+      this.$emit('change', 0)
+      this.$emit('change2', 11)
     }
   },
 };

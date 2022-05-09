@@ -176,7 +176,7 @@
           <selectors :title="['日', '月']" :typeP="1" @change="changeR" v-if="custType == 0"></selectors>
         </div>
         <!-- 客户增长趋势-图 -->
-        <echartHistogram ref="Histogram" :dataArr="['全部','财富客群','贷款客群','代发客群','基础客群','商户客群']" :barData="barData" @change="barChange" :timeUnit="timeUnit" v-show="custType === 0"></echartHistogram>
+        <echartHistogram ref="Histogram" :dataArr="['全部','财富客群','贷款客群','代发客群','基础客群','商户客群']" :selectTime="selectTime" :barData="barData" @change="barChange" @change2="barChange2" :timeUnit="timeUnit" v-show="custType === 0"></echartHistogram>
         <!-- 客户服务等级-图 -->
         <echarts-funnel v-show="custType === 1" :data="custLvDisDiaData" ref="custLvDisDiaChart"/>
       </div>
@@ -471,7 +471,8 @@ export default {
       ],
       barData: {},
       barDataxData: [],
-      xAxis: []
+      xAxis: [],
+      selectTime: []
     };
   },
   computed: {
@@ -909,7 +910,7 @@ export default {
           this.getCustLvDisDiaData()
         })
       }else{
-        this.customertrends()
+        this.customertrends(this.dataDate)
         this.timeUnit = 0
       }
       this.custType = data
@@ -917,6 +918,10 @@ export default {
     /* 日0/月1 */
     changeR(data){
       this.timeUnit = data
+      if(data == 0){
+        this.$refs.Histogram.init()
+      }
+      this.customertrends(this.dataDate)
     },
     /* AUM余额分布图切换 */
     aumClick(){
@@ -930,8 +935,7 @@ export default {
       }
     },
     /* 查询客户增长趋势 */
-    customertrends(){
-      let time = this.dataDate // 拿到默认数据日期(YYYYMMDD)
+    customertrends(time){
       let body = {
         judge: '', // 0的时候为月
         pageNum: '1',
@@ -941,16 +945,29 @@ export default {
       // 根据查询日期 日/月 生成一条X轴
       if(this.timeUnit == 0){
         body.etlDt = moment(time).format('YYYYMM')
-        let lastDay = Number(moment(time).endOf('M').format('DD')) // 计算该月有多天
+        let lastDay = Number(moment(time).endOf('month').format('DD')) // 计算该月有多天
         for(let i = lastDay - 1; i >= 0; i--){
-          xAxis.push(moment(time).subtract(i, 'day').format('YYYYMMDD'))
+          let obj = {
+            value: moment(time).endOf('month').subtract(i, 'day').format('DD'), // 需要展示的时间
+            time: moment(time).endOf('month').subtract(i, 'day').format('YYYYMMDD') // 保留原时间戳
+          }
+          // xAxis.push(moment(time).subtract(i, 'day').format('YYYYMMDD'))
+          xAxis.push(obj)
         }
+        console.log(xAxis)
       }else{
         body.etlDt = moment(time).format('YYYYMMDD')
         body.judge = '0'
         for(let i = 11; i >= 0; i--){
-          xAxis.push(moment(time).subtract(i, 'month').format('YYYYMM')) // 往前推12个月
+          let obj = {
+            value: moment(time).subtract(i, 'month').format('MM'),  // 需要展示的时间
+            time: moment(time).subtract(i, 'month').format('YYYYMM')    // 保留原时间戳 往前推12个月
+          }
+          // xAxis.push(moment(time).subtract(i, 'day').format('YYYYMMDD'))
+          xAxis.push(obj)
+          // xAxis.push(moment(time).subtract(i, 'month').format('YYYYMM')) 
         }
+        console.log(xAxis)
       }
       queryCustomertrends(body, (res) => {
         let data = res.data.records
@@ -961,38 +978,63 @@ export default {
         xAxis.forEach(itemX => {
           let flag = true
           data.forEach(item => {
-            if(itemX == item.etlDt){
+            if(itemX.time == item.etlDt){
               arr.forEach((name,index)=> {
-                xData[index].push(item[name] || 0)
+                // xData[index].push(item[name] || 0)
+                let obj = {
+                  value: item[name] || 0,
+                  toYstd: item[`${name}${['ToYstd','ToLastMonth'][this.timeUnit]}`] || 0,
+                  time: itemX.time
+                }
+                xData[index].push(obj)
               })
               flag = false
             }
           })
           if(flag){
             arr.forEach((name,index)=> {
-              xData[index].push(0)
+              // xData[index].push(0)
+                let obj = {
+                  value: 0,
+                  toYstd: 0,
+                  time: itemX.time
+                }
+                xData[index].push(obj)
             })
           }
         })
         this.barDataxData = xData
         this.xAxis = xAxis
         this.barData = {
-          series : xData,
+          series : xData[0],
           xAxis: xAxis,
         }
       })
     },
+    // 选择title
     barChange(v){
       this.barData = {
         series : this.barDataxData[v],
         xAxis: this.xAxis
       }
+    },
+    // 查询选择的月份的数据
+    barChange2(v){
+      this.customertrends(this.selectTime[v].key)
     }
   },
   mounted() {
     queryBusiDt({}, (res1) => {
       if (res1.data) {
         this.dataDate = res1.data.workDate;
+        this.selectTime = []
+        for(let i = 11; i >= 0; i--){
+          let obj = {
+            key: moment(this.dataDate).subtract(i, 'month').format('YYYYMM'),
+            title: moment(this.dataDate).subtract(i, 'month').format('M月'),
+          }
+          this.selectTime.push(obj)
+        }
         if (this.$store.state.userMsg.roleId == "00000004") {
           var queryCommercialOpportunityCountPostMsg = {
             followUpLab: "2",
@@ -1023,7 +1065,7 @@ export default {
           }
         );
         this.getKHGMMsg();
-        this.customertrends()
+        this.customertrends(this.dataDate)
         let todayDate = new Date(`${this.dataDate.slice(0, 4)}-${this.dataDate.slice(4,6)}-${this.dataDate.slice(6, 8)}`);
         this.todayDate = todayDate;
         let sjc = todayDate.getTime();

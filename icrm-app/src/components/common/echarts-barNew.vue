@@ -3,12 +3,12 @@
   <div class="echarts-barNew">
     <div class="echarts" ref="echarts"></div>
     <div class="title">
-      <span class="left">{{moment().format('YYYY-MM') + '-' + axisValue}}
+      <span class="left">{{axisValue}}
         <span :style="{'color': currentNum > 0 ? 'red' : (currentNum < 0 ? '#37cd37' : '#8C8C8C') }">
           {{currentNum > 0 ? `+${currentNum}` : currentNum}}{{unit}}
         </span>
       </span>
-      <span class="right">客户总数：<span class="text">483948700</span></span>
+      <span class="right">客户总数：<span class="text">{{pepoe}}</span></span>
     </div>
     <span class="time">日期</span>
   </div>
@@ -45,14 +45,16 @@ export default {
   data() {
     return {
       currentNum: 0,
-      axisValue: 0,
+      axisValue: moment(),
+      pepoe: 0,
       option: {
         tooltip: {
           show: true,
           trigger: 'axis',
 					formatter: params => {
-            this.axisValue = params[0].axisValue
-            this.currentNum = params[0].value
+            this.axisValue = params[0].data.time
+            this.currentNum = params[0].data.toYstd
+            this.pepoe = params[0].value
             let string = 
             `<div style="display: flex;justify-content: space-between;align-items: center;">
               <span style="width: 0.05rem; height: 0.05rem; border-radius: 50%; background: ${params[0].color}; margin-right: 0.06rem"></span>
@@ -124,7 +126,6 @@ export default {
   methods: {
     moment,
     initData(xAxis, series) {
-      console.log('newData',xAxis, series)
       let myChart = this.$echarts.init(this.$refs.echarts);
       // 使用刚指定的配置项和数据显示图表
       this.option.xAxis.data = xAxis
@@ -135,14 +136,22 @@ export default {
     /* 判断每条数据显示的颜色 */
     setNum(arr){
       let newArr = []
-      arr.forEach(item => {
+      arr.forEach((item, index) => {
         let obj = {
-          value: item,
+          value: item.value,
+          toYstd: item.toYstd,
+          time: item.time,
           itemStyle: {
-            color: item < 0 ? '#8C8C8C' : '#026DFF'
+            color: item.value < 0 ? '#8C8C8C' : '#026DFF'
           }
         }
         newArr.push(obj)
+        // 初始化顶部展示
+        if(index == 0){
+          this.axisValue = item.time      // 日期
+          this.currentNum = item.toYstd   // 较上日
+          this.pepoe = item.value         // 总数
+        }
       })
       return newArr
     }
