@@ -169,9 +169,9 @@
 				if (elment.exapSt == '审批中') {
 					this.showApprove = true;
 				} else {
-					this.showApprove = true;
+					// this.showApprove = true;
 
-					// return false
+					return false
 				}
 				this.formData = elment
 				this.shrtmsgCntnt = elment.shrtmsgCntnt
