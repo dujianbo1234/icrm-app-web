@@ -10,3 +10,11 @@ export const queryMessageApproveList = (params,fun) => {request("market.queryMes
 export const queryCmrcOpportunitySum = (params,fun) => {request("market.queryCmrcOpportunitySum", params, fun)}
 // 查询商机汇总列表
 export const queryCmrcOpportunitySumList = (params,fun) => {request("market.queryCmrcOpportunitySumList", params, fun)}
+// 查询商机列表
+export const queryCmrcOpportunityList = (params,fun) => {request("market.queryCmrcOpportunityList", params, fun)}
+// 查询商机详情
+export const queryCmrcOpportunityDetail = (params,fun) => {request("market.queryCmrcOpportunityDetail", params, fun)}
+// 查询商机实用度
+export const queryOpportPractialInfo = (params,fun) => {request("market.queryOpportPractialInfo", params, fun)}
+// 保存商机实用度
+export const saveOpportPractialInfo = (params,fun) => {request("market.saveOpportPractialInfo", params, fun)}
