@@ -65,65 +65,67 @@
     <van-overlay :show="showApprove" @click="showApprove = false">
       <div class="wrapper"  @click.stop>
         <div class="block">
-
-            <van-cell-group title="审批">
-              <div class="flexWrap">
-                <van-field
-                  v-model="shrtmsgCntnt"
-                  input-align="left"
-                  border
-                  maxlength="200"
-                  rows="5"
-                  type="textarea"
-                  readonly
-                >
+            <div class="formList">
+              <van-cell-group title="审批">
+                <div class="flexWrap">
+                  <van-field
+                    v-model="shrtmsgCntnt"
+                    input-align="left"
+                    border
+                    maxlength="200"
+                    autosize
+                  
+                    type="textarea"
+                    readonly
+                  >
+                    <template #label>
+                      <span>短信内容</span>
+                    </template>
+                  </van-field>
+                </div>
+                <van-field>
                   <template #label>
-                    <span>短信内容</span>
+                    <span>审批结果</span>
+                    <span style="color: #026dff; margin-left: 0.01rem">*</span>
                   </template>
-                </van-field>
-              </div>
-              <van-field>
-                <template #label>
-                  <span>审批结果</span>
-                  <span style="color: #026dff; margin-left: 0.01rem">*</span>
-                </template>
-                <template #input>
-                  <div class="busiBox">
-                    <div
-                      class="busiItem ycsl"
-                      v-for="(approveItem, i) in approveTypeList"
-                      :key="'approveItem' + i"
-                      :class="i == approveIndex ? 'busiItem_a' : ''"
-                      @click="approveIndex = i"
-                    >
-                      {{ approveItem.codeName }}
+                  <template #input>
+                    <div class="busiBox">
+                      <div
+                        class="busiItem ycsl"
+                        v-for="(approveItem, i) in approveTypeList"
+                        :key="'approveItem' + i"
+                        :class="i == approveIndex ? 'busiItem_a' : ''"
+                        @click="approveIndex = i"
+                      >
+                        {{ approveItem.codeName }}
+                      </div>
                     </div>
-                  </div>
-                </template>
-              </van-field>
-              <div class="flexWrap">
-                <van-field
-                  v-model="exapOpnn"
-                  input-align="left"
-                  border
-                  autosize=""
-                  maxlength="100"
-                  rows="4"
-                  type="textarea"
-                >
-                  <template #label>
-                    <span>审批意见</span>
                   </template>
                 </van-field>
-              </div>
-              
-            </van-cell-group>
+                <div class="flexWrap">
+                  <van-field
+                    v-model="exapOpnn"
+                    input-align="left"
+                    border
+                    autosize=""
+                    maxlength="100"
+                    rows="4"
+                    type="textarea"
+                  >
+                    <template #label>
+                      <span>审批意见</span>
+                    </template>
+                  </van-field>
+                </div>
+                
+              </van-cell-group>
+            </div>
             <div class="btnStyle">
                 <van-button plain  type="primary" @click="showApprove = false">取消</van-button>
                 <van-button  type="primary" @click="saveApprove">提交</van-button>
-              </div>
-          </div>
+            </div>
         </div>
+      </div>
     </van-overlay>
   </div>
 </template>
@@ -382,7 +384,8 @@ export default {
   border-radius: 0.08rem;
   padding: 0.1rem 0.1rem;
   margin-top: 0.1rem;
-  font-size: 0.14rem;
+  font-size: 0.12rem;
+  color: #8C8C8C;
 }
 .busiBox {
   width: 100%;
@@ -414,22 +417,30 @@ export default {
     display: flex;
     align-items: center;
     justify-content: center;
-     overflow: auto;
 
     height: 100%;
 	   border-radius: 0.08rem;
 
   }
    .block {
+    position: relative;
     width: 90%;
-    height: 70%;
+    height: 68%;
     background-color: #fff;
 	   border-radius: 0.08rem;
      overflow: auto;
 
 
   }
-  
+  .formList{
+    width: 100%;
+    height: 5rem;
+    overflow: auto;
+  }
+  /* .block /deep/ .van-cell-group{
+    height: 80%;
+    overflow: auto;
+  } */
   .block /deep/ .van-hairline--top-bottom:after, .van-hairline-unset--top-bottom:after{
     border-width:0px ;
   }
@@ -441,7 +452,8 @@ export default {
     width:100%;
     display: flex;
     justify-content: space-around;
-    margin-top: 0.32rem;
+    position: absolute;
+    bottom: 00.16rem;
   }
   .btnStyle /deep/ .van-button--primary{
     width: 1.08rem;
