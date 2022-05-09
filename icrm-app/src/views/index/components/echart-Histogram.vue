@@ -43,17 +43,17 @@ export default {
 
 <style lang="less" scoped>
 .echart-Histogram {
-  /deep/.van-tabs__nav--card {
+  &:deep(.van-tabs__nav--card){
     margin: 0;
   }
-  /deep/.cust {
+  &:deep(.cust){
     --van-tab-text-color: #8C8C8C;
     --van-tab-active-text-color: #026DFF;
     --van-tabs-bottom-bar-color: #026DFF;
     --van-tab-font-size: 0.14rem;
     margin-bottom: 0.12rem;
   }
-  /deep/.month {
+  &:deep(.month) {
     .van-tabs__nav--card {
       border: none;
     }

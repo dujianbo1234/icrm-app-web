@@ -54,33 +54,18 @@
         <org-list :type="4" showText="请选择机构" @activeOrg="khgmActiveOrg" />
         <div class="currentDate">当前数据时间：{{ showDate }}</div>
       </div>
-      <div
-        class="contentItem week"
-        :class="showWeekDetial ? 'open' : 'close'"
-        v-if="$store.state.userMsg.roleId != '00000006'"
-      >
+      <div class="contentItem week" :class="showWeekDetial ? 'open' : 'close'" v-if="$store.state.userMsg.roleId != '00000006'">
         <div class="weekListTitle">
           <h2>工作日报(3月)</h2>
           <span>* 只展示近7天的数据</span>
         </div>
         <div class="weekList">
-          <div
-            class="weekItem"
-            v-for="(week, i) in weekList"
-            :key="'week' + i"
-            @click="showWeek(week)"
-          >
+          <div class="weekItem" v-for="(week, i) in weekList" :key="'week' + i" @click="showWeek(week)">
             <div class="weekWeek">{{ week.week }}</div>
-            <div
-              class="weekDate today"
-              v-if="week.timeStamp === week.todayTimeStamp"
-            >
+            <div class="weekDate today" v-if="week.timeStamp === week.todayTimeStamp">
               {{ week.showDate }}
             </div>
-            <div
-              class="weekDate future"
-              v-else-if="week.timeStamp > week.todayTimeStamp"
-            >
+            <div class="weekDate future" v-else-if="week.timeStamp > week.todayTimeStamp">
               {{ week.showDate }}
             </div>
             <div class="weekDate" v-else>{{ week.showDate }}</div>
@@ -98,27 +83,15 @@
 			</van-tabs> -->
       <div class="contentItem khgm" v-if="mianTabActive == 0">
         <div class="contentHead">
-          <van-icon
-            :name="require('../../assets/image/index_main_lskhs.png')"
-            size="0.2rem"
-          />
+          <van-icon :name="require('../../assets/image/index_main_lskhs.png')" size="0.2rem"/>
           <h3>零售客户数</h3>
         </div>
         <!-- <org-list type="0" showText="请选择机构" v-if="$store.state.userMsg.roleId!='00000004'" @activeOrg="khgmActiveOrg" /> -->
         <div class="khgmBox">
-          <div
-            class="khgmItemBox"
-            v-for="(item, i) in showData"
-            :key="'khgm' + i"
-          >
+          <div class="khgmItemBox" v-for="(item, i) in showData" :key="'khgm' + i">
             <div class="khgmMainTitle">
               {{ item.title }}{{ item.unit }}
-              <van-icon
-                style="margin-left: 0.058rem"
-                @click="showQuest(item.title)"
-                :name="require('../../assets/image/index_question.png')"
-                size="0.133rem"
-              />
+              <van-icon style="margin-left: 0.058rem" @click="showQuest(item.title)" :name="require('../../assets/image/index_question.png')" size="0.133rem"/>
             </div>
             <div class="khgmValue">{{ item.value0 || "0" }}</div>
             <div class="khgmTitle">

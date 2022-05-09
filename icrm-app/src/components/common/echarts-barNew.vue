@@ -61,6 +61,7 @@ export default {
           },
           axisPointer: {
 						type: 'cross',
+            snap: true,
             label: {
               show: false
             }
