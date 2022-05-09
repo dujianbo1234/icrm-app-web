@@ -3,16 +3,16 @@
 		<nav-bar title="选择客户" type="2" leftIcon />
 		<div class="fixedPlace">
 			<div class="plate1">
-				<div class="plate1_1">{{baseMsg.value0}}</div>
+				<div class="plate1_1">{{baseMsg.cmrcOpptSubclassNm}}</div>
 				<div class="plate1_2">
 					<div class="plate1_2_1">
-						<van-rate v-model="baseMsg.value1" :size="16" color="#FFBA00" void-icon="star" readonly void-color="#E0E0E0" allow-half gutter="2" />
-						<div class="plate1_2_1_value">{{baseMsg.value1}}</div>
+						<van-rate v-model="baseMsg.practialScore" :size="16" color="#FFBA00" void-icon="star" readonly void-color="#E0E0E0" allow-half gutter="2" />
+						<div class="plate1_2_1_value">{{baseMsg.practialScore}}</div>
 					</div>
-					<div class="plate1_2_2">到期日期：{{baseMsg.value6}}</div>
+					<div class="plate1_2_2">到期日期：{{baseMsg.cmrcOpptExpDay}}</div>
 				</div>
-				<div class="plate1_3">{{baseMsg.value2}}/{{baseMsg.value3}}/{{baseMsg.value4}}</div>
-				<div class="plate1_4" :class="openDesc?'':'plate1_4_close'">商机描述：{{baseMsg.value10}}</div>
+				<div class="plate1_3">{{baseMsg.keyWords}}</div>
+				<div class="plate1_4" :class="openDesc?'':'plate1_4_close'">商机描述：{{baseMsg.cmrcOpptDsc}}</div>
 			</div>
 			<div class="plate2" @click="openDesc=!openDesc;resetTop();">
 				<van-icon v-if="openDesc" name="arrow-up" size="20" color="#8C8C8C" />
