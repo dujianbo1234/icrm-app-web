@@ -10,3 +10,5 @@ export const queryMessageApproveList = (params,fun) => {request("market.queryMes
 export const queryCmrcOpportunitySum = (params,fun) => {request("market.queryCmrcOpportunitySum", params, fun)}
 // 查询商机汇总列表
 export const queryCmrcOpportunitySumList = (params,fun) => {request("market.queryCmrcOpportunitySumList", params, fun)}
+// 短信审批发送
+export const approveMessageSendApply = (params,fun) => {request("market.approveMessageSendApply", params, fun)}
