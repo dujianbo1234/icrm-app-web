@@ -240,7 +240,6 @@
 				this.finished = false;
 			},
 			activeCust(custValue) {
-				console.log(custValue)
 				if (custValue.empId) {
 					this.chooseCust = custValue
 				} else {
@@ -264,18 +263,19 @@
 				this.$router.push({
 					name: 'busiDetail',
 					params: {
-						sysId: item.sysId
+						sysId: item.sysId,
+						custNo: item.custNo
 					}
 				})
 			},
 			onLoad() {
 				this.loading = true;
 				this.finished = false;
-				// Toast.loading({
-				// 	message: "正在加载",
-				// 	forbidClick: true,
-				// 	duration: 0
-				// });
+				Toast.loading({
+					message: "正在加载",
+					forbidClick: true,
+					duration: 0
+				});
 				this.pageIndex++;
 				queryCmrcOpportunityList({
 					pageSize: "10",

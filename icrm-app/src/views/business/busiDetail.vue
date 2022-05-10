@@ -69,7 +69,7 @@
 				<div class="plate1_5_1">我评</div>
 				<van-rate v-model="score" :size="18" color="#FFBA00" void-icon="star" readonly void-color="#E0E0E0" allow-half />
 				<div class="plate1_5_2">{{score}}</div>
-				<div class="plate1_5_3" @click="changeScore=true">
+				<div class="plate1_5_3" @click="score_c=score;changeScore=true;">
 					<van-icon :name="require('../../assets/image/common_edit.png')" size="12"/>
 					<span style="margin-left: 0.02rem;">修改</span>
 				</div>
@@ -83,12 +83,16 @@
 				<div class="plateTitle1"></div>
 				<div class="plateTitle2">请您对该商机实用度进行评价</div>
 			</div>
-			<div class="plate2_1" :style="{'background': score?'#026DFF':'#B3D3FF'}" @click="saveScore">发布</div>
+			<div class="plate2_1" :style="{'background': score_c?'#026DFF':'#B3D3FF'}" @click="saveScore">发布</div>
 			<div class="plate2_2">
 				<div class="plate2_2_1">实用度</div>
-				<van-rate v-model="score" :size="27" color="#FFBA00" void-icon="star" void-color="#E0E0E0" allow-half />
-				<div class="plate2_2_2" v-if="score">{{score}}</div>
-				<div class="plate2_2_3" v-if="score">较好</div>
+				<van-rate v-model="score_c" :size="27" color="#FFBA00" void-icon="star" void-color="#E0E0E0" allow-half />
+				<div class="plate2_2_2" v-if="score_c">{{score_c}}</div>
+				<span class="plate2_2_3" v-if="score_c&&score_c<=1">很差</span>
+				<span class="plate2_2_3" v-else-if="score_c&&score_c<=2">较差</span>
+				<span class="plate2_2_3" v-else-if="score_c&&score_c<=3">一般</span>
+				<span class="plate2_2_3" v-else-if="score_c&&score_c<=4">较好</span>
+				<span class="plate2_2_3" v-else-if="score_c&&score_c<=5">很好</span>
 			</div>
 			<div class="plate2_3"></div>
 			<div class="plate2_4">
@@ -96,36 +100,99 @@
 				<van-icon name="arrow" color="#026DFF"/>
 			</div>
 		</div>
-		<div class="plate3">
-			<div class="plateTitle">
+		<div class="plate3" v-if="followMsg.length">
+			<div class="plateTitle" style="margin-bottom: 0.2rem;">
 				<div class="plateTitle1"></div>
 				<div class="plateTitle2">跟进记录</div>
 			</div>
+			<van-steps direction="vertical" :active="0">
+				<van-step v-for="(followItem,i) in followMsg" :key="'followItem'+i">
+					<div class="followItem1">{{followItem.serviceTypeNm}}</div>
+					<div class="followItem2_1" :style="{'-webkit-line-clamp':followItem.showDesc?'100':'15'}" @click="followItem.showDesc=!followItem.showDesc">{{followItem.serviceContent}}</div>
+					<div class="followItem3" v-if="i!=followMsg.length-1"></div>
+					<div class="followItem4">
+						<div class="followItem4_1">
+							{{followItem.followupDt.slice(5,10).split("-").join("/")}}
+						</div>
+						<div class="followItem4_2">{{followItem.followupDt.slice(-8,-3)}}</div>
+					</div>
+					<template #active-icon>
+						<div class="active-icon-out">
+							<div class="active-icon-in"></div>
+						</div>
+					</template>
+					<template #inactive-icon>
+						<div class="inactive-icon"></div>
+					</template>
+				</van-step>
+			</van-steps>
 		</div>
-		<div class="plate4">
+		<div class="plate4" v-if="otherBusi.length">
 			<div class="plateTitle">
 				<div class="plateTitle1"></div>
 				<div class="plateTitle2">他的其他商机</div>
+			</div>
+			<div class="otherBusi" v-for="(otherBusiItem,i) in otherBusi" :key="'otherBusiItem'+i">
+				<div class="otherBusi1">
+					<div class="otherBusi1_1">{{otherBusiItem.cmrcOpptSubclassNm}}</div>
+					<div class="otherBusi1_2">到期日：{{otherBusiItem.cmrcOpptExpDay}}</div>
+				</div>
+				<div class="otherBusi2" @click="openOther(otherBusiItem)">查看详情</div>
+				<div class="otherBusi3"></div>
 			</div>
 		</div>
 		<div class="bottomZW"></div>
 		<div style="height: 0.66rem;"></div>
 		<div class="plate5">
-			
+			<div class="plate5_item" @click="showMessage=true">
+				<div class="plate5_item_icon"></div>
+				<div class="plate5_item_text">发送短信</div>
+			</div>
+			<div class="plate5_item" @click="showCall=true">
+				<div class="plate5_item_icon"></div>
+				<div class="plate5_item_text">拨打电话</div>
+			</div>
+			<div class="plate5_item">
+				<div class="plate5_item_icon"></div>
+				<div class="plate5_item_text">登门拜访</div>
+			</div>
 		</div>
 		<van-overlay :show="changeScore">
 			<div class="plate6">
 				<div class="plate6_1">修改评分</div>
 				<div class="plate6_2">
-					<van-rate v-model="score" :size="27" color="#FFBA00" void-icon="star" void-color="#E0E0E0" allow-half />
+					<van-rate v-model="score_c" :size="27" color="#FFBA00" void-icon="star" void-color="#E0E0E0" allow-half />
 				</div>
 				<div class="plate6_3">
-					<span class="plate6_3_1">{{score}}</span>
-					<span class="plate6_3_2">较好</span>
+					<span class="plate6_3_1">{{score_c}}</span>
+					<span class="plate6_3_2" v-if="score_c<=1">很差</span>
+					<span class="plate6_3_2" v-else-if="score_c<=2">较差</span>
+					<span class="plate6_3_2" v-else-if="score_c<=3">一般</span>
+					<span class="plate6_3_2" v-else-if="score_c<=4">较好</span>
+					<span class="plate6_3_2" v-else-if="score_c<=5">很好</span>
 				</div>
 				<div class="plate6_4">
-					<div class="palte6_4_1">取消</div>
-					<div class="palte6_4_2">提交</div>
+					<div class="palte6_4_1" @click="changeScore=false">取消</div>
+					<div class="palte6_4_2" @click="saveScore">提交</div>
+				</div>
+			</div>
+		</van-overlay>
+		<van-overlay :show="showCall">
+			<div class="plate6">
+				<div class="plate6_1">提示</div>
+				<div class="plate6_5">是否拨打电话：{{baseMsg.ctcTel}}</div>
+				<div class="plate6_4">
+					<div class="palte6_4_1" @click="showCall=false">取消</div>
+					<div class="palte6_4_2" @click="callCust">确定</div>
+				</div>
+			</div>
+		</van-overlay>
+		<van-overlay :show="showMessage">
+			<div class="plate6">
+				<div class="plate6_1">短信发送</div>
+				<div class="plate6_4">
+					<div class="palte6_4_1" @click="showMessage=false">取消</div>
+					<div class="palte6_4_2" @click="callCust">发送</div>
 				</div>
 			</div>
 		</van-overlay>
@@ -139,7 +206,9 @@
 	import {
 		queryCmrcOpportunityDetail,
 		queryOpportPractialInfo,
-		saveOpportPractialInfo
+		saveOpportPractialInfo,
+		queryOpportCustServList,
+		queryCmrcOpportunityList
 	} from "../../request/market.js";
 	import {
 		Toast
@@ -156,41 +225,111 @@
 					loanBal: 0,
 				},
 				score: 0,
+				scoreId: "",
+				score_c: 0,
 				haveScore: false,
 				showScore: false,
 				changeScore: false,
+				showCall: false,
+				showMessage: false,
+				followMsg: [],
+				otherBusi: [],
 			}
 		},
 		methods: {
 			formatNum,
 			saveScore() {
+				Toast.loading({
+					message: "正在提交",
+					forbidClick: true,
+					duration: 0
+				});
 				saveOpportPractialInfo({
 					sysId: this.baseMsg.sysId,
+					scoreId: this.scoreId,
 					cmrcOpptId: this.baseMsg.cmrcOpptId,
-					score: this.score
+					score: this.score_c
 				}, (res) => {
 					if(res.data=="操作成功"){
 						this.haveScore = true;
-						Toast.success("操作成功");
+						Toast("发布成功~感谢您的评价");
+						this.changeScore = false;
+						this.getScore();
 					}
 				});
-			}
+			},
+			getBaseMsg() {
+				queryCmrcOpportunityDetail({
+					sysId: this.$route.params.sysId
+				}, (res) => {
+					this.baseMsg = res.data;
+				});
+			},
+			getScore() {
+				queryOpportPractialInfo({
+					sysId: this.$route.params.sysId
+				}, (res) => {
+					if(res.data&&res.data.score){
+						this.score = res.data.score;
+						this.scoreId = res.data.scoreId;
+						this.haveScore = true;
+					}
+					this.showScore = true;
+				});
+			},
+			getFollowMsg() {
+				queryOpportCustServList({
+					sysId: this.$route.params.sysId
+				}, (res)=>{
+					this.followMsg = res.data;
+					this.followMsg.forEach(item=>item.showDesc=false)
+				})
+			},
+			getOtherBusi() {
+				queryCmrcOpportunityList({
+					pageNm: "1",
+					pageSize: "999",
+					custNo: this.$route.params.custNo,
+					notSysId: this.$route.params.sysId
+				}, (res) => {
+					this.otherBusi = res.data.records;
+				});
+			},
+			openOther(item) {
+				this.baseMsg = {
+					aumDifVal: 0,
+					aumHistHestVal: 0,
+					aumBal: 0,
+					timeDpsitBal: 0,
+					currDpsitBal: 0,
+					loanBal: 0,
+				};
+				this.score = 0;
+				this.scoreId = "";
+				this.score_c = 0;
+				this.haveScore = false;
+				this.showScore = false;
+				this.followMsg = [];
+				this.otherBusi = [];
+				this.$route.params.custNo = item.custNo;
+				this.$route.params.sysId = item.sysId;
+				this.getBaseMsg();
+				this.getScore();
+				this.getFollowMsg();
+				this.getOtherBusi();
+			},
+			callCust() {
+				AlipayJSBridge.call('callHandler', {
+					phone:this.baseMsg.ctcTel
+				});
+				this.showCall = false;
+			},
 		},
 		mounted() {
-			queryCmrcOpportunityDetail({
-				sysId: this.$route.params.sysId
-			}, (res) => {
-				this.baseMsg = res.data;
-			});
-			queryOpportPractialInfo({
-				sysId: this.$route.params.sysId
-			}, (res) => {
-				if(res.data&&res.data.score){
-					this.score = res.data.score;
-					this.haveScore = true;
-				}
-				this.showScore = true;
-			});
+			this.getBaseMsg();
+			this.getScore();
+			this.getFollowMsg();
+			this.getOtherBusi();
 		}
 	}
 </script>
@@ -354,6 +493,33 @@
 		font-weight: 400;
 	}
 	
+	.plateTitle {
+		width: 100%;
+		height: 0.44rem;
+		box-shadow: inset 0 -0.005rem 0 0 rgba(0,0,0,0.04);
+		padding: 0 0.12rem;
+		display: flex;
+		flex-wrap: nowrap;
+		justify-content: flex-start;
+		align-items: center;
+	}
+	
+	.plateTitle1 {
+		width: 0.02rem;
+		height: 0.14rem;
+		background: #026DFF;
+		border-radius: 0.02rem;
+		margin-right: 0.05rem;
+	}
+	
+	.plateTitle2 {
+		font-family: PingFangSC-Medium;
+		font-size: 0.14rem;
+		color: #262626;
+		letter-spacing: 0;
+		font-weight: 500;
+	}
+	
 	.plate2 {
 		width: 100%;
 		background: #FFFFFF;
@@ -436,15 +602,14 @@
 	
 	.plate3 {
 		width: 100%;
-		height: 4.46rem;
 		background: #FFFFFF;
 		border-radius: 0.08rem;
 		margin-bottom: 0.1rem;
+		padding-bottom: 0.3rem;
 	}
 	
 	.plate4 {
 		width: 100%;
-		height: 1.77rem;
 		background: #FFFFFF;
 		border-radius: 0.08rem;
 	}
@@ -453,11 +618,38 @@
 		width: 100%;
 		height: calc(constant(safe-area-inset-bottom) + 0.56rem);
 		height: calc(env(safe-area-inset-bottom) + 0.56rem);
-		background: rgba(0,255,255,0.94);
+		background: rgba(255,255,255,0.94);
 		box-shadow: 0 -0.005rem 0 0 rgba(0,0,0,0.3);
 		position: fixed;
 		bottom: 0;
 		left: 0;
+		z-index: 1;
+		display: flex;
+		flex-wrap: nowrap;
+		justify-content: space-between;
+		align-items: flex-start;
+		padding: 0.05rem 0.4rem;
+	}
+	
+	.plate5_item_icon {
+		margin: 0 auto;
+		width: 0.24rem;
+		height: 0.24rem;
+		background-image: url(../../assets/image/business_detail_call.png);
+		background-size: cover;
+		background-position: center;
+		background-repeat: no-repeat;
+		margin-bottom: 0.04rem;
+	}
+	
+	.plate5_item_text {
+		height: 0.18rem;
+		font-family: PingFangSC-Regular;
+		font-size: 0.12rem;
+		color: #262626;
+		letter-spacing: 0;
+		line-height: 0.18rem;
+		font-weight: 400;
 	}
 	
 	.plate6 {
@@ -543,36 +735,186 @@
 		font-weight: 500;
 	}
 	
-
-
-
-
-
-	
-	.plateTitle {
+	.plate6_5 {
 		width: 100%;
-		height: 0.44rem;
-		box-shadow: inset 0 -0.005rem 0 0 rgba(0,0,0,0.04);
-		padding: 0 0.12rem;
-		display: flex;
-		flex-wrap: nowrap;
-		justify-content: flex-start;
-		align-items: center;
+		font-family: PingFangSC-Medium;
+		font-size: 0.14rem;
+		color: #262626;
+		text-align: center;
+		line-height: 0.22rem;
+		font-weight: 400;
+		margin-bottom: 0.24rem;
 	}
 	
-	.plateTitle1 {
-		width: 0.02rem;
-		height: 0.14rem;
-		background: #026DFF;
-		border-radius: 0.02rem;
-		margin-right: 0.05rem;
-	}
-	
-	.plateTitle2 {
+	.followItem1 {
+		width: calc(100% - 0.12rem);
+		height: 0.21rem;
+		line-height: 0.21rem;
+		margin-bottom: 0.04rem;
 		font-family: PingFangSC-Medium;
 		font-size: 0.14rem;
 		color: #262626;
 		letter-spacing: 0;
 		font-weight: 500;
+	}
+	
+	.followItem2_1 {
+		width: calc(100% - 0.12rem);
+		font-family: PingFangSC-Regular;
+		font-size: 0.12rem;
+		color: #595959;
+		letter-spacing: 0;
+		line-height: 0.18rem;
+		font-weight: 400;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		display: -webkit-box;
+		-webkit-box-orient: vertical;
+	}
+	
+	.followItem3 {
+		width: calc(100% - 0.12rem);
+		height: 0.01rem;
+		background: #EFEFEF;
+		margin-top: 0.15rem;
+	}
+	
+	:deep(.van-step--vertical:not(:last-child):after) {
+		border-bottom-width: 0;
+	}
+	
+	:deep(.van-step) {
+		padding: 0 0 0.15rem 0.05rem;
+		text-align: left;
+	}
+	
+	:deep(.van-steps__items) {
+		margin-left: 25%;
+	}
+	
+	:deep(.van-step__circle-container) {
+		position: absolute;
+		top: 0.1rem;
+		left: -0.14rem;
+		z-index: 1;
+		font-size: var(--van-step-icon-size);
+		line-height: 1;
+		transform: translate(-50%,-50%);
+	}
+	
+	:deep(.van-step__line) {
+		top: 0.1rem;
+		left: -0.15rem;
+		width: 0.02rem;
+		height: 100%;
+		background-color: #BFBFBF;
+	}
+
+	.followItem4 {
+		text-align: right;
+		position: absolute;
+		top: 0;
+		left: calc(-15% - var(--van-padding-xl));
+	}
+	
+	.followItem4_1 {
+		height: 0.2rem;
+		font-family: PingFangSC-Medium;
+		font-size: 0.14rem;
+		color: #262626;
+		letter-spacing: 0;
+		text-align: right;
+		line-height: 0.2rem;
+		font-weight: 500;
+	}
+	
+	.followItem4_2 {
+		height: 0.16rem;
+		font-family: PingFangSC-Regular;
+		font-size: 0.12rem;
+		color: #8C8C8C;
+		letter-spacing: 0;
+		text-align: right;
+		line-height: 0.16rem;
+		font-weight: 400;
+	}
+	
+	.inactive-icon {
+		width: 0.08rem;
+		height: 0.08rem;
+		border-radius: 0.04rem;
+		background-color: #BFBFBF;
+	}
+	
+	.active-icon-out {
+		width: 0.16rem;
+		height: 0.16rem;
+		padding: 0.04rem;
+		border-radius: 0.08rem;
+		background-color:  rgba(2,109,255,0.12);
+	}
+	
+	.active-icon-in {
+		width: 0.08rem;
+		height: 0.08rem;
+		border-radius: 0.04rem;
+		background-color: #026DFF;
+	}
+	
+	.otherBusi {
+		width: 100%;
+		padding: 0.12rem;
+		height: 0.66rem;
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: space-between;
+		align-items: center;
+		position: relative;
+	}
+	
+	.otherBusi1_1 {
+		height: 0.2rem;
+		line-height: 0.2rem;
+		font-family: PingFangSC-Regular;
+		font-size: 0.14rem;
+		color: #262626;
+		letter-spacing: 0;
+		font-weight: 400;
+		margin-bottom: 0.04rem;
+		text-align: left;
+	}
+	
+	.otherBusi1_2 {
+		text-align: left;
+		height: 0.18rem;
+		font-family: PingFangSC-Regular;
+		font-size: 0.12rem;
+		color: #8C8C8C;
+		letter-spacing: 0;
+		line-height: 0.18rem;
+		font-weight: 400;
+	}
+	
+	.otherBusi2 {
+		width: 0.83rem;
+		height: 0.3rem;
+		line-height: 0.3rem;
+		border: 0.01rem solid #026DFF;
+		border-radius: 0.15rem;
+		text-align: center;
+		font-family: PingFangSC-Medium;
+		font-size: 0.13rem;
+		color: #026DFF;
+		letter-spacing: 0.0023rem;
+		text-align: center;
+		font-weight: 500;
+	}
+	
+	.otherBusi3 {
+		width: calc(100% - 0.24rem);
+		height: 0.01rem;
+		box-shadow: inset 0px -0.005rem 0 0 rgba(0,0,0,0.04);
+		position: absolute;
+		bottom: 0;
 	}
 </style>

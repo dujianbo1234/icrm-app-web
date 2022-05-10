@@ -20,3 +20,5 @@ export const queryCmrcOpportunityDetail = (params,fun) => {request("market.query
 export const queryOpportPractialInfo = (params,fun) => {request("market.queryOpportPractialInfo", params, fun)}
 // 保存商机实用度
 export const saveOpportPractialInfo = (params,fun) => {request("market.saveOpportPractialInfo", params, fun)}
+// 查询商机跟进记录
+export const queryOpportCustServList = (params,fun) => {request("market.queryOpportCustServList", params, fun)}
