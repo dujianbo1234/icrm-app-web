@@ -1433,9 +1433,12 @@ export default {
 .userAvatar {
   width: 0.24rem;
   height: 0.24rem;
-  background-color: #ccc;
   border-radius: 50%;
-  overflow: hidden;
+	background: url(../../assets/image/mine_main_userIcon.png) no-repeat center;
+	background-size: contain;
+	overflow: hidden;
+	margin-right: 0.12rem;
+  
 }
 
 .userName {
