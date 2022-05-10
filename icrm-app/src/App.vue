@@ -92,19 +92,11 @@
 </script>
 
 <style>
-	* {
-		-webkit-touch-callout: none;
-		-webkit-user-select: none;
-		-khtml-user-select: none;
-		-moz-user-select: none;
-		-ms-user-select: none;
-		user-select: none;
-	}
-
 	.home {
 		background-color: #F5F5F5;
 		padding-bottom: constant(safe-area-inset-bottom);
 		padding-bottom: env(safe-area-inset-bottom);
+		user-select: none;
 	}
 
 	.van-dialog__header {

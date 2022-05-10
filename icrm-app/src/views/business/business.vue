@@ -147,11 +147,11 @@
 				this.onLoad();
 			},
 			openDetail(item) {
-				localStorage.setItem("lastPageParams", JSON.stringify(item));
+				localStorage.setItem("cmrcOpptId", item.cmrcOpptId);
 				this.$router.push({
 					name: 'chooseCust',
 					params: {
-						item: JSON.stringify(item)
+						cmrcOpptId: item.cmrcOpptId
 					}
 				})
 			},
@@ -201,7 +201,6 @@
 						}
 					})
 					this.kequnList = this.kequnList.concat(arr);
-					console.log(this.kequnList)
 				} else {
 					Toast.fail("商机大类数据为空")
 				}
