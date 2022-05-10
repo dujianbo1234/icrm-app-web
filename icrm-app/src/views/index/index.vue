@@ -229,7 +229,7 @@
       </div>
       <!-- AUM余额(万元) -->
       <div class="contentItem" style="margin-top: 0.12rem">
-        <TitleCard :title="['AUM余额','AUM日均']" :text="['AUM考核口径不包括储蓄存款','AUM考核口径不包括储蓄存款']" :arr="peCstAum"></TitleCard>
+        <TitleCard :title="['AUM余额','AUM日均']" :text="['AUM考核口径不包括储蓄存款','AUM考核口径不包括储蓄存款']" :arr="peCstAum" @change="peCstAumChange"></TitleCard>
       </div>
       <!-- 分割线 -->
       <div class="dividers"><van-divider :dashed="true"/></div>
@@ -244,7 +244,7 @@
         </div>
         <!-- 列表 -->
         <div v-show="aumFlag == 0">
-          <Table :listLabel="listLabel" :listData="listData"></Table>
+          <Table :listLabel="[listLabel,listLabels][listType]" :listData="[listData,listDatas][listType]" :listType="listType"></Table>
         </div>
         <echarts-pie v-show="aumFlag == 1" unit="万元" :data="aumDisDiaData" ref="aumDisDiaChart"/>
       </div>
@@ -386,7 +386,6 @@ export default {
       dataDate: "",
       weekList: [],
       shangjiNum: "",
-      // messageNum: "",
       messageNum: 0,
       showWeekDetial: false,
       showMessageNum: "",
@@ -396,6 +395,7 @@ export default {
         title: '测试',
         text: ['内容很随意']
       },
+      listType: 0,
       weekReportDetail: [],
       weekReportTitle: "",
       mainTab: [
@@ -493,14 +493,29 @@ export default {
         { label: '较上月(万元)', align: 'right' },
         { label: '较年初(万元)', align: 'right' },
       ],
+      listLabels: [
+        { label: '类型', align: 'left' },
+        { label: '金额(万元)', align: 'right' },
+        { label: '较上月(万元)', align: 'right' },
+        { label: '较年初(万元)', align: 'right' },
+      ],
       listData: [
-        { name: '活期存款余额', a: 1345234.65, b: -8037.51, c: '', d: '' },
-        { name: '定期存款余额', a: 1345234.65, b: 5460.36, c: '', d: '' },
-        { name: '理财余额', a: 1345234.65, b: '', c: '', d: '' },
-        { name: '基金余额', a: 1345234.65, b: '', c: '', d: '' },
-        { name: '保险余额', a: 1345234.65, b: '', c: '', d: '' },
-        { name: '信托余额', a: 1345234.65, b: '', c: '', d: '' },
-        { name: '合计', a: 1345234.65, b: '', c: '', d: '' },
+        { name: '活期存款余额', a: '', b: '', c: '', d: '' },
+        { name: '定期存款余额', a: '', b: '', c: '', d: '' },
+        { name: '理财余额', a: '', b: '', c: '', d: '' },
+        { name: '基金余额', a: '', b: '', c: '', d: '' },
+        { name: '保险余额', a: '', b: '', c: '', d: '' },
+        { name: '信托余额', a: '', b: '', c: '', d: '' },
+        { name: '合计', a: '', b: '', c: '', d: '' },
+      ],
+      listDatas: [
+        { name: '活期存款余额', a: '', b: '', c: '' },
+        { name: '定期存款余额', a: '', b: '', c: '' },
+        { name: '理财余额', a: '', b: '', c: '' },
+        { name: '基金余额', a: '', b: '', c: '' },
+        { name: '保险余额', a: '', b: '', c: '' },
+        { name: '信托余额', a: '', b: '', c: '' },
+        { name: '合计', a: '', b: '', c: '' }
       ],
       barData: {},
       aumData: {},
@@ -598,6 +613,15 @@ export default {
               { name: '保险余额', a: dataObj.insBal, b: dataObj.insBalToYstd, c: dataObj.insBalToLastMonth, d: dataObj.insBalToBegng },
               { name: '信托余额', a: dataObj.entrstBal, b: dataObj.entrstBalToYstd, c: dataObj.entrstBalToLastMonth, d: dataObj.entrstBalToBegng },
               { name: '合计', a: dataObj.aumBal, b: dataObj.aumBalToYstd, c: dataObj.aumBalToLastMonth, d: dataObj.aumBalToBegng },
+            ]
+            this.listDatas = [
+              { name: '活期存款余额', a: dataObj.currDpsitYearAvg, b: dataObj.currDpsitYearAvgToLm, c: dataObj.currDpsitYearAvgToLy },
+              { name: '定期存款余额', a: dataObj.timeDpsitYearAvg, b: dataObj.timeDpsitYearAvgToLm, c: dataObj.timeDpsitYearAvgToLy },
+              { name: '理财余额', a: dataObj.cftYearAvg, b: dataObj.cftYearAvgToLm, c: dataObj.cftYearAvgToLy },
+              { name: '基金余额', a: dataObj.fndYearAvgToLm, b: dataObj.fndYearAvgToLm, c: dataObj.fndYearAvgToLy },
+              { name: '保险余额', a: dataObj.insYearAvg, b: dataObj.insYearAvgToLm, c: dataObj.insYearAvgToLy },
+              { name: '信托余额', a: dataObj.entrstYearAvg, b: dataObj.entrstYearAvgToLm, c: dataObj.entrstYearAvgToLy },
+              { name: '合计', a: dataObj.aumYearAvg, b: dataObj.aumYearAvgToLm, c: dataObj.aumYearAvgToYy },
             ]
             for (let item of this.showData) {
               switch (item.title) {
@@ -1173,6 +1197,11 @@ export default {
         title: title,
         text: text
       }
+    },
+    /* 贷款余额/日均切换 */
+    peCstAumChange(v){
+      console.log(v)
+      this.listType = v ? 0 : 1
     }
   },
   mounted() {

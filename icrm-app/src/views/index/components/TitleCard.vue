@@ -61,6 +61,7 @@ export default {
     },
     clickBtn(){
       this.num = !this.num
+      this.$emit('change',this.num)
     }
   },
 };
