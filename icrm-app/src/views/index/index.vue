@@ -229,7 +229,7 @@
       </div>
       <!-- AUM余额(万元) -->
       <div class="contentItem" style="margin-top: 0.12rem">
-        <TitleCard :title="['AUM余额','AUM日均']" :arr="peCstAum"></TitleCard>
+        <TitleCard :title="['AUM余额','AUM日均']" :text="['AUM考核口径不包括储蓄存款','AUM考核口径不包括储蓄存款']" :arr="peCstAum"></TitleCard>
       </div>
       <!-- 分割线 -->
       <div class="dividers"><van-divider :dashed="true"/></div>
@@ -337,7 +337,7 @@
       <van-dialog v-model:show="clickDalongShow" :title="dalongShow.title" theme="round-button" confirmButtonColor="#026DFF" class="dialogBox">
         <div class="diloag">
           <div class="diloagItem">
-            {{dalongShow.text}}
+            <p v-for="(item, index) in dalongShow.text" :key="index">{{item}}</p>
           </div>
         </div>
       </van-dialog>
@@ -391,10 +391,10 @@ export default {
       showWeekDetial: false,
       showMessageNum: "",
       showWeekReportBox: false,
-      clickDalongShow: true,
+      clickDalongShow: false,
       dalongShow: {
         title: '测试',
-        text: '内容很随意'
+        text: ['内容很随意']
       },
       weekReportDetail: [],
       weekReportTitle: "",
@@ -414,58 +414,66 @@ export default {
         {
           title: "零售客户数",
           unit: "(人)",
-          text: '客户经理查看管户客户数据，管理岗查看辖内机构客户数据。',
+          text: ['客户经理查看管户客户数据，管理岗查看辖内机构客户数据。'],
           value0: "",
           value1: "",
           value2: "",
           value3: "",
-          // icon: require("../../assets/image/index_question.png")
         },
         {
           title: "财富客户数",
           unit: "(人)",
-          text: '客户经理查看管户客户数据，管理岗查看辖内机构客户数据。',
+          text: ['AUM资产上月月日均≥5万。'],
           value0: "",
           value1: "",
           value2: "",
           value3: "",
-          // icon: require("../../assets/image/index_main_yxkhs.png")
         },
         {
           title: "贷款客户数",
           unit: "(人)",
+          text: ['历史办理过贷款业务且贷款金额≥0。'],
           value0: "",
           value1: "",
           value2: "",
           value3: "",
-          // icon: require("../../assets/image/index_main_aum.png")
         },
         {
           title: "代发客户数",
           unit: "(人)",
+          text: ['本年度代发达三次且单笔金额≥500元。'],
           value0: "",
           value1: "",
           value2: "",
           value3: "",
-          // icon: require("../../assets/image/index_main_dqck.png")
         },
         {
           title: "基础客户数",
           unit: "(人)",
+          text: [
+            '（1）本机构新增AUM资产年日均≥1000元（含储蓄存款）或2022年前   AUM资产年日均＜1000元、2022年AUM资产年日均≥1000元的零售客户数按1个客户计算，满足以下条件，按系数计算：当年新增信用卡绑定借记卡还款客户并还款一次或2022年前绑定但未还款、2022年还款一次的，按新增0.1个客户计算；',
+            '（2）本机构本年代发的客户且满足代发次数≥3次、代发金额≥500元，按1个客户计算；',
+            '（3）同一客户同时满足第1点、第2点的，按2个客户计算；',
+            '（4）信用卡新激活的个人客户(1个客户新增多张激活卡仅按一个有效户计算，存量未激活客户新激活按一个有效户计算，存量已激活客户新办卡且激活不算新客户）。同一客户在多个机构开立账户的，按1个统计；   借钱花等虚拟信用卡业务新增客户有过取款按一个客户计算（不含虚拟随用金及虚拟爱购卡等非实体卡片）；若一个客户同时属于信用卡及虚拟信用卡业务有效客户，满足新户条件在后的按0.5个客户计算；',
+            '（5）网络进件、机构发展合伙人营销、机构自建信用卡直销团队营销的信用卡激活客户数全部计入激活机构或营销机构。'
+          ],
           value0: "",
           value1: "",
           value2: "",
           value3: "",
-          // icon: require("../../assets/image/index_main_dk.png")
         },
         {
           title: "商户客户数",
           unit: "(人)",
+          text: [
+            '（1）商户收款累计交易天数大于等于12天，且付款人不为同一人；',
+            '（2）商户年度累计交易金额大于等于2000元；',
+            '（3）结算账户为个人账户的，个人账户AUM资产（含储蓄存款）年日均大于等于1000元；结算账户为单位账户的，单位账户存款年日均大于等于1000元。'
+          ],
           value0: "",
           value1: "",
           value2: "",
           value3: "",
-          // icon: require("../../assets/image/index_main_lc.png")
         }
       ],
       aumDisDiaData: [],
@@ -1331,12 +1339,12 @@ export default {
     text-align: left;
     width: 90%;
     margin: auto;
-    padding: 0.12rem;
+    padding: 0.05rem;
     border-radius: 0.04rem;
     border: solid 1px #e6e6e6;
     .diloagItem {
-      display: flex;
-      flex-wrap: nowrap;
+      overflow-y: auto;
+      max-height: 4rem;
       line-height: 0.3rem;
       font-size: 0.13rem;
     }
