@@ -1,7 +1,8 @@
 <template>
   <div class="home">
-    <nav-bar/>
-    <div class="fixedPlace" :style="{height: $store.state.userMsg.roleId == '00000006' ? '1.44rem' : '2.14rem'}">
+    <!-- <nav-bar style=""/> -->
+    <div class="fixedPlace">
+      <div class="topBox"></div>
       <div class="topMsg">
         <div class="topUserMsg">
           <div class="topUserInfo">
@@ -16,17 +17,11 @@
           </div>
           <i class="msg-line"></i>
           <div class="msgBarItem">
-            <i class="msg-icon icon-todo"></i>必办<span class="msgCount1"
-              >1</span
-            >
+            <i class="msg-icon icon-todo"></i>必办<span class="msgCount1">1</span>
           </div>
           <i class="msg-line"></i>
           <div class="msgBarItem" @click="$router.push('/msgPage')">
-            <i class="msg-icon icon-message"></i>消息<span
-              v-if="messageNum > 0"
-              :class="messageNum > 9 ? 'msgCount2' : 'msgCount1'"
-              >{{ showMessageNum }}</span
-            >
+            <i class="msg-icon icon-message"></i>消息<span v-if="messageNum > 0" :class="messageNum > 9 ? 'msgCount2' : 'msgCount1'">{{ showMessageNum }}</span>
           </div>
           <!-- <div class="topRightMsgChild" @click="$router.push('/business')">
 						<span v-if="$store.state.userMsg.roleId=='00000004'">{{shangjiNum||"-"}} 条待跟进商机 </span>
@@ -42,10 +37,10 @@
     </div>
     <!-- <div style="width: 100%;background-color: #F8F8F8;"
 			:style="{height: $store.state.userMsg.roleId=='00000006'?'1.49rem':'2.19rem'}"></div> -->
-    <div style="width: 100%; height: 0.925rem; background-color: #f8f8f8"></div>
+    <div style="width: 100%; height: 0.5rem; background-color: #f8f8f8"></div>
     <div class="mainContent">
       <div class="selectTimebar">
-        <org-list :type="4" showText="请选择机构" @activeOrg="khgmActiveOrg" />
+        <org-list type="0" showText="请选择机构" v-if="$store.state.userMsg.roleId!='00000004'" @activeOrg="khgmActiveOrg" />
         <div class="currentDate">当前数据时间：{{ showDate }}</div>
       </div>
       <div class="contentItem week" :class="showWeekDetial ? 'open' : 'close'" v-if="$store.state.userMsg.roleId != '00000006'">
@@ -65,6 +60,64 @@
             <div class="weekDate" v-else>{{ week.showDate }}</div>
           </div>
         </div>
+        <div class="arrow" @click="showWeekDetial = !showWeekDetial">
+          <!-- 分割线 -->
+          <van-divider><van-icon :name="showWeekDetial ? 'arrow-up' : 'arrow-down'" size="0.22rem" color="#ccc"/></van-divider>
+        </div>
+        <div v-if="showWeekDetial">
+          <div class="hidePageT">
+            <div>
+              <div class="lText">
+                <p class="title">已跟进商机数</p>
+                <p class="num">{{titleData.cmrcOpptFollowUpCnt || 0}}</p>
+              </div>
+              <div class="rText"></div>
+            </div>
+            <div>
+              <div class="lText">
+                <p class="title">已成交商机数</p>
+                <p class="num">{{titleData.cmrcOpptTranxCnt || 0}}</p>
+              </div>
+              <div class="rText"></div>
+            </div>
+            <div>
+              <div class="lText">
+                <p class="title">已拜访客户数</p>
+                <p class="num">{{titleData.visitCustCnt || 0}}</p>
+              </div>
+            </div>
+          </div>
+          <div class="hidePageB">
+            <div>
+              <div class="lText">
+                <p class="title">新增贷款余额(万元)</p>
+                <p class="num">{{titleData.addLoanBal || 0}}</p>
+              </div>
+              <div class="rText"></div>
+            </div>
+            <div>
+              <div class="lText">
+                <p class="title">新增定期贷款余额(万元)</p>
+                <p class="num">{{titleData.addTimeDpsitBal || 0}}</p>
+              </div>
+            </div>
+          </div>
+          <div class="hidePageB">
+            <div>
+              <div class="lText">
+                <p class="title">新增贷款余额(万元)</p>
+                <p class="num">{{titleData.adCurrDpsitBal || 0}}</p>
+              </div>
+              <div class="rText"></div>
+            </div>
+            <div>
+              <div class="lText">
+                <p class="title">新增定期贷款余额(万元)</p>
+                <p class="num">{{titleData.addCftBal || 0}}</p>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
       <!-- <van-tabs v-model:active="mianTabActive" color="#3399FF" @change="changeMainTab" line-width="30%"
 				line-height="2px">
@@ -78,14 +131,14 @@
       <div class="contentItem khgm" v-if="mianTabActive == 0">
         <div class="contentHead">
           <van-icon :name="require('../../assets/image/index_main_lskhs.png')" size="0.2rem"/>
-          <h3>零售客户数</h3>
+          <h3>客户数</h3>
         </div>
         <!-- <org-list type="0" showText="请选择机构" v-if="$store.state.userMsg.roleId!='00000004'" @activeOrg="khgmActiveOrg" /> -->
         <div class="khgmBox">
           <div class="khgmItemBox" v-for="(item, i) in showData" :key="'khgm' + i">
             <div class="khgmMainTitle">
               {{ item.title }}{{ item.unit }}
-              <van-icon style="margin-left: 0.058rem" @click="showQuest(item.title)" :name="require('../../assets/image/index_question.png')" size="0.133rem"/>
+              <van-icon style="margin-left: 0.058rem" @click="clickDalong(item.title, item.text)" :name="require('../../assets/image/index_question.png')" size="0.133rem"/>
             </div>
             <div class="khgmValue">{{ item.value0 || "0" }}</div>
             <div class="khgmTitle">
@@ -275,13 +328,16 @@
       </div>
       <van-dialog v-model:show="showWeekReportBox" :title="weekReportTitle">
         <div class="weekReportList">
-          <div
-            class="weekReportItem"
-            v-for="(item, i) in weekReportDetail"
-            :key="'weekReportItem' + i"
-          >
+          <div class="weekReportItem" v-for="(item, i) in weekReportDetail" :key="'weekReportItem' + i">
             <div class="weekReportTitle">{{ item.title }}</div>
             <div class="weekReportValue">{{ item.value }}</div>
+          </div>
+        </div>
+      </van-dialog>
+      <van-dialog v-model:show="clickDalongShow" :title="dalongShow.title" theme="round-button" confirmButtonColor="#026DFF" class="dialogBox">
+        <div class="diloag">
+          <div class="diloagItem">
+            {{dalongShow.text}}
           </div>
         </div>
       </van-dialog>
@@ -290,7 +346,7 @@
 </template>
 
 <script>
-import { formatNum } from "../../api/common.js";
+import { formatNum, formatNums } from "../../api/common.js";
 import {
  queryBusiDt,
  queryHomeDayReportList,
@@ -306,7 +362,7 @@ import {
 } from "../../request/index.js";
 import { queryCommercialOpportunityCount } from "../../request/market.js";
 import { queryWarningRmdMgtSum } from "../../request/product.js";
-import { Toast } from "vant";
+import { Toast, Dialog } from "vant";
 import echartsPie from "../../components/common/echarts-pie.vue";
 import echartsLine from "../../components/common/echarts-line.vue";
 import echartsFunnel from "../../components/common/echarts-funnel.vue";
@@ -335,6 +391,11 @@ export default {
       showWeekDetial: false,
       showMessageNum: "",
       showWeekReportBox: false,
+      clickDalongShow: true,
+      dalongShow: {
+        title: '测试',
+        text: '内容很随意'
+      },
       weekReportDetail: [],
       weekReportTitle: "",
       mainTab: [
@@ -353,6 +414,7 @@ export default {
         {
           title: "零售客户数",
           unit: "(人)",
+          text: '客户经理查看管户客户数据，管理岗查看辖内机构客户数据。',
           value0: "",
           value1: "",
           value2: "",
@@ -360,8 +422,9 @@ export default {
           // icon: require("../../assets/image/index_question.png")
         },
         {
-          title: "有效客户数",
+          title: "财富客户数",
           unit: "(人)",
+          text: '客户经理查看管户客户数据，管理岗查看辖内机构客户数据。',
           value0: "",
           value1: "",
           value2: "",
@@ -369,8 +432,8 @@ export default {
           // icon: require("../../assets/image/index_main_yxkhs.png")
         },
         {
-          title: "AUM",
-          unit: "(万元)",
+          title: "贷款客户数",
+          unit: "(人)",
           value0: "",
           value1: "",
           value2: "",
@@ -378,8 +441,8 @@ export default {
           // icon: require("../../assets/image/index_main_aum.png")
         },
         {
-          title: "定期存款",
-          unit: "(万元)",
+          title: "代发客户数",
+          unit: "(人)",
           value0: "",
           value1: "",
           value2: "",
@@ -387,17 +450,8 @@ export default {
           // icon: require("../../assets/image/index_main_dqck.png")
         },
         {
-          title: "活期存款",
-          unit: "(万元)",
-          value0: "",
-          value1: "",
-          value2: "",
-          value3: "",
-          icon: require("../../assets/image/index_main_hqck.png"),
-        },
-        {
-          title: "贷款",
-          unit: "(万元)",
+          title: "基础客户数",
+          unit: "(人)",
           value0: "",
           value1: "",
           value2: "",
@@ -405,41 +459,14 @@ export default {
           // icon: require("../../assets/image/index_main_dk.png")
         },
         {
-          title: "理财",
-          unit: "(万元)",
+          title: "商户客户数",
+          unit: "(人)",
           value0: "",
           value1: "",
           value2: "",
           value3: "",
           // icon: require("../../assets/image/index_main_lc.png")
-        },
-        {
-          title: "信托",
-          unit: "(万元)",
-          value0: "",
-          value1: "",
-          value2: "",
-          value3: "",
-          // icon: require("../../assets/image/index_main_xt.png")
-        },
-        {
-          title: "保险",
-          unit: "(万元)",
-          value0: "",
-          value1: "",
-          value2: "",
-          value3: "",
-          // icon: require("../../assets/image/index_main_bx.png")
-        },
-        {
-          title: "基金",
-          unit: "(万元)",
-          value0: "",
-          value1: "",
-          value2: "",
-          value3: "",
-          // icon: require("../../assets/image/index_main_jj.png")
-        },
+        }
       ],
       aumDisDiaData: [],
       custLvDisDiaData: [],
@@ -477,6 +504,7 @@ export default {
       selectTime: [],
       peCstAum: [[],[]],
       peCstLoan: [[],[]],
+      titleData: {}
     };
   },
   computed: {
@@ -486,74 +514,38 @@ export default {
   },
   methods: {
     showWeek(week) {
-      Toast.loading({
-        message: "正在加载",
-        forbidClick: true,
-        duration: 0,
-      });
-      this.weekReportTitle = `${week.date.slice(0, 4)}-${week.date.slice(
-        4,
-        6
-      )}-${week.date.slice(6, 8)} 工作日报`;
+      this.weekReportTitle = `${week.date.slice(0, 4)}-${week.date.slice(4,6)}-${week.date.slice(6, 8)} 工作日报`;
+      this.queryReportDetail(week.date)
+    },
+    queryReportDetail(date){
+      Toast.loading({message: "正在加载",forbidClick: true,duration: 0});
       var setWeekReportDetail = (res) => {
+        console.log('res',res)
         if (res.data && res.data.records && res.data.records.length) {
           var weekReportDetail = res.data.records[0];
-          this.weekReportDetail = [
-            {
-              title: "商机跟进数",
-              value: weekReportDetail.cmrcOpptFollowUpCnt,
-            },
-            {
-              title: "商机成交数",
-              value: weekReportDetail.cmrcOpptTranxCnt,
-            },
-            {
-              title: "客户拜访数",
-              value: weekReportDetail.visitCustCnt + "人",
-            },
-            {
-              title: "新增贷款余额",
-              value: formatNum(weekReportDetail.addLoanBal / 10000) + "万元",
-            },
-            {
-              title: "新增定期存款余额",
-              value:
-                formatNum(weekReportDetail.addTimeDpsitBal / 10000) + "万元",
-            },
-            {
-              title: "新增活期存款余额",
-              value:
-                formatNum(weekReportDetail.adCurrDpsitBal / 10000) + "万元",
-            },
-            {
-              title: "新增理财余额",
-              value: formatNum(weekReportDetail.addCftBal / 10000) + "万元",
-            },
-          ];
+          this.titleData = {
+            cmrcOpptFollowUpCnt: weekReportDetail.cmrcOpptFollowUpCnt,             // 已跟进商机数
+            cmrcOpptTranxCnt: weekReportDetail.cmrcOpptTranxCnt,                   // 已成交商机数
+            visitCustCnt: weekReportDetail.visitCustCnt,                           // 已拜访商机数
+            addLoanBal: formatNum(weekReportDetail.addLoanBal / 10000),            // 新增贷款余额(万元)
+            addTimeDpsitBal: formatNum(weekReportDetail.addTimeDpsitBal / 10000),  // 新增定期余额(万元)
+            adCurrDpsitBal: formatNum(weekReportDetail.adCurrDpsitBal / 10000),    // 新增活期存款余额(万元)
+            addCftBal: formatNum(weekReportDetail.addCftBal / 10000),              // 新增理财余额(万元)
+          }
           Toast.clear();
-          this.showWeekReportBox = true;
+          this.showWeekDetial= true
         } else {
           Toast.fail("日报数据为空");
         }
       };
       if (this.$store.state.userMsg.roleId == "00000004") {
-        queryHomeDayReportList(
-          {
-            etlDt: week.date,
-          },
-          (res) => {
-            setWeekReportDetail(res);
-          }
-        );
+        queryHomeDayReportList({etlDt: date},(res) => {
+          setWeekReportDetail(res);
+        });
       } else {
-        queryHomeOrgDayReportList(
-          {
-            etlDt: week.date,
-          },
-          (res) => {
-            setWeekReportDetail(res);
-          }
-        );
+        queryHomeOrgDayReportList({etlDt: date},(res) => {
+          setWeekReportDetail(res);
+        });
       }
     },
     getKHGMMsg(dataEncode) {
@@ -607,118 +599,58 @@ export default {
                     dataObj.custCntToYstd,
                     dataObj.custCntToLastMonth,
                     dataObj.custCntToBegng,
-                  ].map((item) => {
-                    return item <= 0
-                      ? item.toLocaleString()
-                      : `+${item.toLocaleString()}`;
+                  ].map((item, index) => {
+                    return item <= 0 || index == 0 ? formatNums(item) : `+${formatNums(item)}`;
                   });
                   break;
-                case "有效客户数":
+                case "财富客户数":
                   [item.value0, item.value1, item.value2, item.value3] = [
-                    dataObj.efftCstCnt,
-                    dataObj.efftCstCntToYstd,
-                    dataObj.efftCstCntToLastMonth,
-                    dataObj.efftCstCntToBegng,
-                  ].map((item) => {
-                    return item <= 0
-                      ? item.toLocaleString()
-                      : `+${item.toLocaleString()}`;
+                    dataObj.vipCustCnt,
+                    dataObj.vipCustCntToYstd,
+                    dataObj.vipCustCntToLastMonth,
+                    dataObj.vipCustCntToBegng,
+                  ].map((item, index) => {
+                    return item <= 0 || index == 0 ? formatNums(item) : `+${formatNums(item)}`;
                   });
                   break;
-                case "AUM":
+                case "贷款客户数":
                   [item.value0, item.value1, item.value2, item.value3] = [
-                    dataObj.aumBal,
-                    dataObj.aumBalToYstd,
-                    dataObj.aumBalToLastMonth,
-                    dataObj.aumBalToBegng,
-                  ].map((item) => {
-                    return item <= 0
-                      ? formatNum(item / 10000)
-                      : `+${formatNum(item / 10000)}`;
+                    dataObj.loanCustCnt,
+                    dataObj.loanCustCntToYstd,
+                    dataObj.loanCustCntToLastMonth,
+                    dataObj.loanCustCntToBegng,
+                  ].map((item, index) => {
+                    return item <= 0 || index == 0 ? formatNums(item) : `+${formatNums(item)}`;
                   });
                   break;
-                case "定期存款":
+                case "代发客户数":
                   [item.value0, item.value1, item.value2, item.value3] = [
-                    dataObj.timeDpsitBal,
-                    dataObj.timeDpsitBalToYstd,
-                    dataObj.timeDpsitBalToLastMonth,
-                    dataObj.timeDpsitBalToBegng,
-                  ].map((item) => {
-                    return item <= 0
-                      ? formatNum(item / 10000)
-                      : `+${formatNum(item / 10000)}`;
+                    dataObj.agentCustCnt,
+                    dataObj.agentCustCntToYstd,
+                    dataObj.agentCustCntToLastMonth,
+                    dataObj.agentCustCntToBegng,
+                  ].map((item, index) => {
+                    return item <= 0 || index == 0 ? formatNums(item) : `+${formatNums(item)}`;
                   });
                   break;
-                case "活期存款":
+                case "基础客户数":
                   [item.value0, item.value1, item.value2, item.value3] = [
-                    dataObj.currDpsitBal,
-                    dataObj.currDpsitBalToYstd,
-                    dataObj.currDpsitBalToLastMonth,
-                    dataObj.currDpsitBalToBegng,
-                  ].map((item) => {
-                    return item <= 0
-                      ? formatNum(item / 10000)
-                      : `+${formatNum(item / 10000)}`;
+                    dataObj.basicCstCnt,
+                    dataObj.basicCstCntToYstd,
+                    dataObj.basicCstCntToLastMonth,
+                    dataObj.basicCstCntToBegng,
+                  ].map((item, index) => {
+                    return item <= 0 || index == 0 ? formatNums(item) : `+${formatNums(item)}`;
                   });
                   break;
-                case "贷款":
+                case "商户客户数":
                   [item.value0, item.value1, item.value2, item.value3] = [
-                    dataObj.loanBal,
-                    dataObj.loanBalToYstd,
-                    dataObj.loanBalToLastMonth,
-                    dataObj.loanBalToBegng,
-                  ].map((item) => {
-                    return item <= 0
-                      ? formatNum(item / 10000)
-                      : `+${formatNum(item / 10000)}`;
-                  });
-                  break;
-                case "理财":
-                  [item.value0, item.value1, item.value2, item.value3] = [
-                    dataObj.cftBal,
-                    dataObj.cftBalToYstd,
-                    dataObj.cftBalToLastMonth,
-                    dataObj.cftBalToBegng,
-                  ].map((item) => {
-                    return item <= 0
-                      ? formatNum(item / 10000)
-                      : `+${formatNum(item / 10000)}`;
-                  });
-                  break;
-                case "信托":
-                  [item.value0, item.value1, item.value2, item.value3] = [
-                    dataObj.entrstBal,
-                    dataObj.entrstBalToYstd,
-                    dataObj.entrstBalToLastMonth,
-                    dataObj.entrstBalToBegng,
-                  ].map((item) => {
-                    return item <= 0
-                      ? formatNum(item / 10000)
-                      : `+${formatNum(item / 10000)}`;
-                  });
-                  break;
-                case "保险":
-                  [item.value0, item.value1, item.value2, item.value3] = [
-                    dataObj.insBal,
-                    dataObj.insBalToYstd,
-                    dataObj.insBalToLastMonth,
-                    dataObj.insBalToBegng,
-                  ].map((item) => {
-                    return item <= 0
-                      ? formatNum(item / 10000)
-                      : `+${formatNum(item / 10000)}`;
-                  });
-                  break;
-                case "基金":
-                  [item.value0, item.value1, item.value2, item.value3] = [
-                    dataObj.fndBal,
-                    dataObj.fndBalToYstd,
-                    dataObj.fndBalToLastMonth,
-                    dataObj.fndBalToBegng,
-                  ].map((item) => {
-                    return item <= 0
-                      ? formatNum(item / 10000)
-                      : `+${formatNum(item / 10000)}`;
+                    dataObj.merntCstCnt,
+                    dataObj.merntCstCntToYstd,
+                    dataObj.merntCstCntToLastMonth,
+                    dataObj.merntCstCntToBegng,
+                  ].map((item, index) => {
+                    return item <= 0 || index == 0 ? formatNums(item) : `+${formatNums(item)}`;
                   });
                   break;
               }
@@ -937,9 +869,6 @@ export default {
           this.getServeLvDisDiaData(orgValue.value);
           break;
       }
-    },
-    showQuest(word) {
-      // 点击名词解释问号
     },
     /* 客户增长趋势/客户服务等级 */
     changeL(data){
@@ -1188,7 +1117,6 @@ export default {
             })
           }
         })
-        console.log('xData', xData)
         this.loanDataxData = xData
         this.xAxis = xAxis
         this.loanData = {
@@ -1230,20 +1158,14 @@ export default {
     loanChange2(v){
       this.loanGrowthTrend(this.selectTime[v].key)
     },
-    numFliter(value, tip, fixed){
-      if(value == undefined){
-        return '0'
+    /* 提示弹窗 */
+    clickDalong(title, text){
+      this.clickDalongShow = true
+      this.dalongShow = {
+        title: title,
+        text: text
       }
-      value = fixed ? (Number(value)/10000).toFixed(2) : Number(value)/10000
-      let n = value.toString().split('.')
-      let z = /\d{1,3}(?=(\d{3})+$)/g
-      let b = Number(value) > 0 && tip ? '+' : ''
-      if(value.toString().indexOf('.') >= 0){
-        return `${b}${n[0].replace(z, '$&,')}.${n[1]}`
-      }else{
-        return `${b}${value.toString().replace(z, '$&,')}`
-      }
-    },
+    }
   },
   mounted() {
     queryBusiDt({}, (res1) => {
@@ -1287,6 +1209,7 @@ export default {
           }
         );
         this.getKHGMMsg();
+        this.queryReportDetail(this.dataDate)
         this.customertrends(this.dataDate)
         this.aumGrowthTrend(this.dataDate)
         this.loanGrowthTrend(this.dataDate)
@@ -1346,14 +1269,86 @@ export default {
     // padding: 0.04rem;
   }
 }
-
+.arrow {
+  margin-top: 0.1rem;
+  width: 100%;
+  font-size: 0.12rem;
+}
+.hidePageT,
+.hidePageB {
+  display: flex;
+  justify-content: space-between;
+  &>div {
+    display: flex;
+    justify-content: space-between;
+    .lText {
+      text-align: left;
+    }
+    .rText {
+      margin: auto 0;
+      width: 0.01rem;
+      height: 0.24rem;
+      background: rgba(0,0,0,0.08);
+    }
+  }
+  .title {
+    font-size: 0.12rem;
+    color: #8C8C8C;
+    line-height: 0.18rem;
+    font-weight: 400;
+  }
+  .num {
+    font-size: 0.2rem;
+    color: rgba(0,0,0,0.85);
+    line-height: 0.3rem;
+    font-weight: 500;
+  }
+}
+.hidePageT {
+  padding: 0.12rem 0;
+  font-family: PingFangSC-Medium;
+  letter-spacing: 0;
+  &>div {
+    width: 33.33%;
+    &:nth-child(2),
+    &:nth-child(3) {
+      padding-left: 0.12rem;
+    }
+  }
+}
+.hidePageB {
+  box-shadow: inset 0px 1px 0px 0px rgba(0,0,0,0.04);
+  padding: 0.14rem 0;
+  &>div {
+    width: 50%;
+    &:nth-child(2) {
+      padding-left: 0.14rem;
+    }
+  }
+}
+.dialogBox {
+  .diloag {
+    text-align: left;
+    width: 90%;
+    margin: auto;
+    padding: 0.12rem;
+    border-radius: 0.04rem;
+    border: solid 1px #e6e6e6;
+    .diloagItem {
+      display: flex;
+      flex-wrap: nowrap;
+      line-height: 0.3rem;
+      font-size: 0.13rem;
+    }
+  }
+}
 </style>
 <style scoped>
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-  border: 0;
+  /* border: 0; */
 }
 
 .home {
@@ -1362,12 +1357,17 @@ export default {
 .fixedPlace {
   width: 100%;
   position: fixed;
-  top: calc(constant(safe-area-inset-top) + 0.46rem);
-  top: calc(env(safe-area-inset-top) + 0.46rem);
+  top: 0;
+  top: 0;
   left: 0;
   z-index: 9;
 }
-
+.fixedPlace .topBox {
+  width: 100%;
+  background: #fff;
+  height: constant(safe-area-inset-top);
+  height: env(safe-area-inset-top);
+}
 .topMsg {
   width: 100%;
   height: 0.925rem;
@@ -1503,7 +1503,6 @@ export default {
   width: 100%;
   height: 0.56rem;
 }
-
 .currentDate {
   font-size: 0.12rem;
   color: #bfbfbf;

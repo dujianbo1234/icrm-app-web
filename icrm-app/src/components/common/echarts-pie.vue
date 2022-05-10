@@ -148,13 +148,13 @@
 		background-color: #FFFFFF;
 		width: 100%;
 		position: relative;
-		padding: 0.1rem 0;
-		margin-bottom: 0.02rem;
+		/* padding: 0.1rem 0;
+		margin-bottom: 0.02rem; */
 		z-index: 1
 	}
 
 	.echartsTitle {
-		width: 88%;
+		width: 100%;
 		line-height: 0.28rem;
 		font-size: 0.18rem;
 		font-weight: 600;
@@ -164,8 +164,8 @@
 	}
 
 	.echartsBox {
-		box-shadow: 0rem 0.01rem 0.05rem -0.02rem #888888;
-		border-radius: 0.05rem;
+		/* box-shadow: 0rem 0.01rem 0.05rem -0.02rem #888888;
+		border-radius: 0.05rem; */
 		width: 100%;
 		height: 2rem;
 		margin: 0 auto;

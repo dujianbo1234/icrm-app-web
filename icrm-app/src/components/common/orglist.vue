@@ -211,6 +211,9 @@
 		display: flex;
 		flex-wrap: nowrap;
 		align-items: center;
+		min-width: 1.2rem;
+		border: 0.005rem solid rgba(0,0,0,0.12);
+		border-radius: 0.04rem;
 	}
 
 	.orgBtnType1 {
