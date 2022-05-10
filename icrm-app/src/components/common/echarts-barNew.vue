@@ -7,10 +7,10 @@
         <span class="timeText" v-if="timeUnit == 0">{{moment(axisValue).format('YYYY-MM-DD')}}</span>
         <span class="timeText" v-else>{{moment(axisValue).format('YYYY-MM')}}</span>
         <span :style="{'color': currentNum > 0 ? 'red' : (currentNum < 0 ? '#37cd37' : '#8C8C8C') }">
-          {{currentNum > 0 ? `+${currentNum}` : currentNum}}{{unit}}
+          {{currentNum > 0 ? `+${numFliter(currentNum)}` : numFliter(currentNum)}}{{unit}}
         </span>
       </span>
-      <span class="right">客户总数：<span class="text">{{pepoe}}</span></span>
+      <span class="right">{{numType}}：<span class="text">{{unit == '万元' ? numFliter(pepoe) : pepoe}}{{numUnit}}</span></span>
     </div>
     <span class="time">日期</span>
   </div>
@@ -32,6 +32,11 @@ export default {
     unit: {
       type: String,
       default: '人'
+    },
+    numType: String,
+    numUnit: {
+      type: String,
+      default: ''
     }
   },
   watch: {
@@ -61,7 +66,7 @@ export default {
             let string = 
             `<div style="display: flex;justify-content: space-between;align-items: center;">
               <span style="width: 0.05rem; height: 0.05rem; border-radius: 50%; background: ${params[0].color}; margin-right: 0.06rem"></span>
-              <span>${params[0].value}${this.unit}</span>
+              <span>${this.unit == '人' ? params[0].value : this.numFliter(params[0].value) }${this.unit}</span>
             </div>`
             return string
           },
@@ -74,7 +79,7 @@ export default {
 					},
         },
         grid: {
-          left: 10,
+          left: 15,
           right: 20,
           top: '20%',
           bottom: 14,
@@ -157,7 +162,21 @@ export default {
         }
       })
       return newArr
-    }
+    },
+    numFliter(value, tip){
+      if(value == undefined){
+        return '0'
+      }
+      value = Number(value).toFixed(0)
+      let n = value.toString().split('.')
+      let z = /\d{1,3}(?=(\d{3})+$)/g
+      let b = Number(value) > 0 && tip ? '+' : ''
+      if(value.toString().indexOf('.') >= 0){
+        return `${b}${n[0].replace(z, '$&,')}.${n[1]}`
+      }else{
+        return `${b}${value.toString().replace(z, '$&,')}`
+      }
+    },
   },
 };
 </script>

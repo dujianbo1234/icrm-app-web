@@ -1,13 +1,7 @@
 <template>
   <div class="home">
-    <nav-bar title="首页" />
-    <div
-      class="fixedPlace"
-      :style="{
-        height:
-          $store.state.userMsg.roleId == '00000006' ? '1.44rem' : '2.14rem',
-      }"
-    >
+    <nav-bar/>
+    <div class="fixedPlace" :style="{height: $store.state.userMsg.roleId == '00000006' ? '1.44rem' : '2.14rem'}">
       <div class="topMsg">
         <div class="topUserMsg">
           <div class="topUserInfo">
@@ -207,9 +201,9 @@
       <div class="contentItem">
         <div class="custStyle aumStyle">
           <span class="title">增长趋势</span>
-          <selectors :title="['日', '月']" :typeP="1"></selectors>
+          <selectors :title="['日', '月']" :typeP="1" @change="changeAum"></selectors>
         </div>
-        <echartHistogram :type="1" :dataArr="['全部','活期存款','定期存款','理财','基金','保险','信托']" :timeUnit="timeUnit"></echartHistogram>
+        <echartHistogram :type="1" ref="Histogram2" :dataArr="['全部','活期存款','定期存款','理财','基金','保险','信托']" :numType="'余额总计'" :selectTime="selectTime" :barData="aumData" @change="aumChange" @change2="aumChange2" :timeUnit="timeUnit2"></echartHistogram>
       </div>
       <!-- 贷款余额(万元) -->
       <div class="contentItem" style="margin-top: 0.12rem">
@@ -221,9 +215,9 @@
       <div class="contentItem">
         <div class="custStyle aumStyle">
           <span class="title">增长趋势</span>
-          <selectors :title="['日', '月']" :typeP="1"></selectors>
+          <selectors :title="['日', '月']" :typeP="1" @change="changeLoan"></selectors>
         </div>
-        <echartHistogram :type="1" :dataArr="['全部','按揭贷款','消费贷款','经营贷款']" :timeUnit="timeUnit"></echartHistogram>
+        <echartHistogram :type="1" ref="Histogram3" :dataArr="['全部','按揭贷款','消费贷款','经营贷款']" :numType="'余额总计'" :selectTime="selectTime" :barData="loanData" @change="loanChange" @change2="loanChange2" :timeUnit="timeUnit3"></echartHistogram>
       </div>
 
 
@@ -306,7 +300,9 @@ import {
  queryHomCusts,
  queryAst,
  queryHomPeCstSvrLvlDgrm,
- queryCustomertrends
+ queryCustomertrends,
+ queryAUMGrowthTrend,
+ queryLoanGrowthTrend
 } from "../../request/index.js";
 import { queryCommercialOpportunityCount } from "../../request/market.js";
 import { queryWarningRmdMgtSum } from "../../request/product.js";
@@ -451,6 +447,8 @@ export default {
       custNumDisDiaData: [],
       custNumDisDiaDate: [],
       timeUnit: 0,
+      timeUnit2: 0,
+      timeUnit3: 0,
       custType: 0,
       aumFlag: 0,
       listLabel: [
@@ -470,7 +468,11 @@ export default {
         { name: '合计', a: 1345234.65, b: '', c: '', d: '' },
       ],
       barData: {},
+      aumData: {},
+      loanData: {},
       barDataxData: [],
+      aumDataxData: [],
+      loanDataxData: [],
       xAxis: [],
       selectTime: [],
       peCstAum: [[],[]],
@@ -560,27 +562,27 @@ export default {
         dataEncode: dataEncode || "",
       }
       queryHomPeCstAum(body,(res) => {
-        console.log(res)
           if (res.data && res.data.records && res.data.records.length) {
             var dataObj = res.data.records[0];
-            console.log(dataObj)
             this.peCstAum = [ // 待测试
               [
-                dataObj.aumBbalKh,                // AUM余额
-                dataObj.aumBbalToYstdKh,          // AUM余额较上月
-                dataObj.aumBbalToLastMonthKh      // AUM余额较年初
+                dataObj.aumBal,                 // AUM余额
+                dataObj.aumBalToYstd,           // AUM余额较上日
+                dataObj.aumBalToLastMonth,      // AUM余额较上月
+                dataObj.aumBalToBegng           // AUM余额较年初
               ],
               [
-                dataObj.aumYearAvg,               // AUM日均
-                dataObj.aumYearAvgToLm,           // AUM日均较上月
-                dataObj.aumYearAvgToYy,           // AUM日均较年初
+                dataObj.aumYearAvg,             // AUM日均
+                dataObj.aumYearAvgToLm,         // AUM日均较上月
+                dataObj.aumYearAvgToYy,         // AUM日均较年初
               ]
             ]
             this.peCstLoan = [
               [
-                dataObj.loanMonthAvg,             // 贷款余额(暂无)
-                dataObj.loanMonthAvgToLm,         // 贷款余额较上月(暂无)
-                dataObj.loanMonthAvgToLy          // 贷款余额较年初(暂无)
+                dataObj.loanBal,                  // 贷款余额
+                dataObj.loanBalToYstd,            // 贷款余额较上日
+                dataObj.loanBalToLastMonth,       // 贷款余额较上月(暂无)
+                dataObj.loanBalToBegng            // 贷款余额较年初(暂无)
               ],
               [
                 dataObj.loanMonthAvg,             // 贷款月日均
@@ -595,12 +597,7 @@ export default {
               { name: '基金余额', a: dataObj.fndBal, b: dataObj.fndBalToYstd, c: dataObj.fndBalToLastMonth, d: dataObj.fndBalToBegng },
               { name: '保险余额', a: dataObj.insBal, b: dataObj.insBalToYstd, c: dataObj.insBalToLastMonth, d: dataObj.insBalToBegng },
               { name: '信托余额', a: dataObj.entrstBal, b: dataObj.entrstBalToYstd, c: dataObj.entrstBalToLastMonth, d: dataObj.entrstBalToBegng },
-              { 
-                name: '合计',
-                a: dataObj.currDpsitBal + dataObj.timeDpsitBal + dataObj.cftBal + dataObj.fndBal + dataObj.insBal + dataObj.entrstBal,
-                b: '',
-                c: '',
-                d: '' },
+              { name: '合计', a: dataObj.aumBal, b: dataObj.aumBalToYstd, c: dataObj.aumBalToLastMonth, d: dataObj.aumBalToBegng },
             ]
             for (let item of this.showData) {
               switch (item.title) {
@@ -962,6 +959,18 @@ export default {
       this.$refs.Histogram.init()
       this.customertrends(this.dataDate)
     },
+    /* AUM余额分部日月切换 */
+    changeAum(data){
+      this.timeUnit2 = data
+      this.$refs.Histogram2.init()
+      this.aumGrowthTrend(this.dataDate)
+    },
+    /* 贷款日月切换 */
+    changeLoan(data){
+      this.timeUnit3 = data
+      this.$refs.Histogram3.init()
+      this.loanGrowthTrend(this.dataDate)
+    },
     /* AUM余额分布图切换 */
     aumClick(){
       if(this.aumFlag == 0){
@@ -990,10 +999,8 @@ export default {
             value: moment(time).endOf('month').subtract(i, 'day').format('DD'), // 需要展示的时间
             time: moment(time).endOf('month').subtract(i, 'day').format('YYYYMMDD') // 保留原时间戳
           }
-          // xAxis.push(moment(time).subtract(i, 'day').format('YYYYMMDD'))
           xAxis.push(obj)
         }
-        console.log(xAxis)
       }else{
         body.etlDt = moment(time).format('YYYYMMDD')
         body.judge = '0'
@@ -1002,11 +1009,8 @@ export default {
             value: moment(time).subtract(i, 'month').format('MM'),  // 需要展示的时间
             time: moment(time).subtract(i, 'month').format('YYYYMM')    // 保留原时间戳 往前推12个月
           }
-          // xAxis.push(moment(time).subtract(i, 'day').format('YYYYMMDD'))
           xAxis.push(obj)
-          // xAxis.push(moment(time).subtract(i, 'month').format('YYYYMM')) 
         }
-        console.log(xAxis)
       }
       queryCustomertrends(body, (res) => {
         let data = res.data.records
@@ -1019,7 +1023,6 @@ export default {
           data.forEach(item => {
             if(itemX.time == item.etlDt){
               arr.forEach((name,index)=> {
-                // xData[index].push(item[name] || 0)
                 let obj = {
                   value: item[name] || 0,
                   toYstd: item[`${name}${['ToYstd','ToLastMonth'][this.timeUnit]}`] || 0,
@@ -1031,8 +1034,7 @@ export default {
             }
           })
           if(flag){
-            arr.forEach((name,index)=> {
-              // xData[index].push(0)
+            arr.forEach((n,index)=> {
                 let obj = {
                   value: 0,
                   toYstd: 0,
@@ -1050,6 +1052,151 @@ export default {
         }
       })
     },
+    /* 查询AUM增长趋势 */
+    aumGrowthTrend(time){
+      let body = {
+        judge: '', // 0的时候为月
+        pageNum: '1',
+        pageSize: '31'
+      }
+      let xAxis = []
+      // 根据查询日期 日/月 生成一条X轴
+      if(this.timeUnit2 == 0){
+        body.etlDt = moment(time).format('YYYYMM')
+        let lastDay = Number(moment(time).endOf('month').format('DD')) // 计算该月有多天
+        for(let i = lastDay - 1; i >= 0; i--){
+          let obj = {
+            value: moment(time).endOf('month').subtract(i, 'day').format('DD'), // 需要展示的时间
+            time: moment(time).endOf('month').subtract(i, 'day').format('YYYYMMDD') // 保留原时间戳
+          }
+          xAxis.push(obj)
+        }
+      }else{
+        body.etlDt = moment(time).format('YYYYMMDD')
+        body.judge = '0'
+        for(let i = 11; i >= 0; i--){
+          let obj = {
+            value: moment(time).subtract(i, 'month').format('MM'),  // 需要展示的时间
+            time: moment(time).subtract(i, 'month').format('YYYYMM')    // 保留原时间戳 往前推12个月
+          }
+          xAxis.push(obj)
+        }
+      }
+      queryAUMGrowthTrend(body, (res) => {
+        let data = res.data.records
+        // 全部, 活期存款, 定期存款, 理财, 基金, 保险, 信托
+        let arr = ['aumBal','currDpsitBal','timeDpsitBal','cftBal','fndBal','insBal','entrstBal']
+        let xData = [[],[],[],[],[],[],[]] 
+        // 根据生成的X轴去拿到接口返回的每一条X轴的数据
+        xAxis.forEach(itemX => {
+          let flag = true
+          data.forEach(item => {
+            if(itemX.time == item.etlDt){
+              arr.forEach((name,index)=> {
+                let obj = {
+                  value: item[name]/10000 || 0,
+                  toYstd: item[`${name}${['ToYstd','ToLastMonth'][this.timeUnit2]}`]/10000 || 0,
+                  time: itemX.time
+                }
+                xData[index].push(obj)
+              })
+              flag = false
+            }
+          })
+          if(flag){
+            arr.forEach((n,index)=> {
+                let obj = {
+                  value: 0,
+                  toYstd: 0,
+                  time: itemX.time
+                }
+                xData[index].push(obj)
+            })
+          }
+        })
+        this.aumDataxData = xData
+        this.xAxis = xAxis
+        this.aumData = {
+          series : xData[0],
+          xAxis: xAxis,
+        }
+      })
+    },
+    /* 贷款余额增长趋势 */
+    loanGrowthTrend(time){
+      let body = {
+        judge: '', // 0的时候为月
+        pageNum: '1',
+        pageSize: '31'
+      }
+      let xAxis = []
+      // 根据查询日期 日/月 生成一条X轴
+      if(this.timeUnit3 == 0){
+        body.etlDt = moment(time).format('YYYYMM')
+        let lastDay = Number(moment(time).endOf('month').format('DD')) // 计算该月有多天
+        for(let i = lastDay - 1; i >= 0; i--){
+          let obj = {
+            value: moment(time).endOf('month').subtract(i, 'day').format('DD'), // 需要展示的时间
+            time: moment(time).endOf('month').subtract(i, 'day').format('YYYYMMDD') // 保留原时间戳
+          }
+          xAxis.push(obj)
+        }
+      }else{
+        body.etlDt = moment(time).format('YYYYMMDD')
+        body.judge = '0'
+        for(let i = 11; i >= 0; i--){
+          let obj = {
+            value: moment(time).subtract(i, 'month').format('MM'),  // 需要展示的时间
+            time: moment(time).subtract(i, 'month').format('YYYYMM')    // 保留原时间戳 往前推12个月
+          }
+          xAxis.push(obj)
+        }
+      }
+      queryLoanGrowthTrend(body, (res) => {
+        let data = res.data.records
+        // 全部, 按揭贷款, 消费贷款, 经营贷款
+        let arr = ['loanBal','mrtgLoanBal','cnsmLoanBal','corprtnLoanBal']
+        let xData = [[],[],[],[]] 
+        // 根据生成的X轴去拿到接口返回的每一条X轴的数据
+        xAxis.forEach(itemX => {
+          let flag = true
+          data.forEach((item, index) => {
+            if(itemX.time == item.etlDt){
+              arr.forEach((name,index)=> {
+                let obj = {
+                  value: item[name]/10000 || 0,
+                  time: itemX.time
+                }
+                if(name == 'loanBal'){
+                  obj.toYstd = item[`${name}${['ToYstd','ToLastMonth'][this.timeUnit3]}`]/10000 || 0
+                }else{
+                  obj.toYstd = item[`${name.replace('Bal','')}${['ToYstd','ToLm'][this.timeUnit3]}`]/10000 || 0
+                }
+                xData[index].push(obj)
+              })
+              flag = false
+            }
+          })
+          if(flag){
+            arr.forEach((n,index)=> {
+                let obj = {
+                  value: 0,
+                  toYstd: 0,
+                  time: itemX.time
+                }
+                xData[index].push(obj)
+            })
+          }
+        })
+        console.log('xData', xData)
+        this.loanDataxData = xData
+        this.xAxis = xAxis
+        this.loanData = {
+          series : xData[0],
+          xAxis: xAxis,
+        }
+      })
+    },
     // 选择title
     barChange(v){
       this.barData = {
@@ -1060,7 +1207,43 @@ export default {
     // 查询选择的月份的数据
     barChange2(v){
       this.customertrends(this.selectTime[v].key)
-    }
+    },
+    // 选择title
+    aumChange(v){
+      this.aumData = {
+        series : this.aumDataxData[v],
+        xAxis: this.xAxis
+      }
+    },
+    // 查询选择的月份的数据
+    aumChange2(v){
+      this.aumGrowthTrend(this.selectTime[v].key)
+    },
+    // 贷款选择title
+    loanChange(v){
+      this.loanData = {
+        series : this.loanDataxData[v],
+        xAxis: this.xAxis
+      }
+    },
+    // 查询选择的月份的数据
+    loanChange2(v){
+      this.loanGrowthTrend(this.selectTime[v].key)
+    },
+    numFliter(value, tip, fixed){
+      if(value == undefined){
+        return '0'
+      }
+      value = fixed ? (Number(value)/10000).toFixed(2) : Number(value)/10000
+      let n = value.toString().split('.')
+      let z = /\d{1,3}(?=(\d{3})+$)/g
+      let b = Number(value) > 0 && tip ? '+' : ''
+      if(value.toString().indexOf('.') >= 0){
+        return `${b}${n[0].replace(z, '$&,')}.${n[1]}`
+      }else{
+        return `${b}${value.toString().replace(z, '$&,')}`
+      }
+    },
   },
   mounted() {
     queryBusiDt({}, (res1) => {
@@ -1105,6 +1288,8 @@ export default {
         );
         this.getKHGMMsg();
         this.customertrends(this.dataDate)
+        this.aumGrowthTrend(this.dataDate)
+        this.loanGrowthTrend(this.dataDate)
         let todayDate = new Date(`${this.dataDate.slice(0, 4)}-${this.dataDate.slice(4,6)}-${this.dataDate.slice(6, 8)}`);
         this.todayDate = todayDate;
         let sjc = todayDate.getTime();

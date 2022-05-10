@@ -11,24 +11,17 @@
         <span class="text">切换为{{title[num ? 1 : 0]}}</span>
       </span>
     </div>
-    <div class="titleNum">{{numFliter(arr[num ? 1 : 0][0], false)}}</div>
-    <div class="titleBot">
-      <template v-for="(item,index) in arr[num ? 1 : 0]" :key="index">
-        <div>
-          <p class="textF">{{['较上日','较上月','较年初'][index]}}</p>
-          <p class="textS">
-            <span>{{numFliter(item, true)}}</span>
-            <!-- 上升 -->
-            <van-icon :name="require('@/assets/image/index_arrow_top.png')" size="0.16rem" v-if="item > 0"/>
-            <!-- 下降png -->
-            <van-icon :name="require('@/assets/image/index_main_numDown.png')" size="0.16rem" v-else-if="item < 0"/>
-            <!-- 下降icon -->
-            <!-- <van-icon name="down" size="0.12rem" color="#37cd37"  v-else-if="item < 0"/> -->
-            <!-- 无数据 -->
-            <van-icon :name="require('@/assets/image/index_main_numLine.png')" size="0.16rem" v-else/>
-          </p>
-        </div>
-      </template>
+    <div class="titleNum">{{numFliter(arr[num ? 0 : 1][0], false)}}</div>
+    <div class="titleBot" :style="`justify-content: ${['space-between','space-around'][num ? 0 : 1]};`">
+      <div v-for="(item,index) in [['较上日','较上月','较年初'],['较上月','较年初']][num ? 0 : 1]" :key="index">
+        <p class="textF">{{item}}</p>
+        <p class="textS">
+          <span>{{numFliter(arr[num ? 0 : 1][index + 1], true)}}</span>
+          <van-icon :name="require('@/assets/image/index_arrow_top.png')" size="0.16rem" v-if="arr[num ? 0 : 1][index + 1] > 0"/>
+          <van-icon :name="require('@/assets/image/index_main_numDown.png')" size="0.16rem" v-else-if="arr[num ? 0 : 1][index + 1] < 0"/>
+          <van-icon :name="require('@/assets/image/index_main_numLine.png')" size="0.16rem" v-else/>
+        </p>
+      </div>
     </div>
   </div>
 </template>
@@ -117,7 +110,7 @@ export default {
   }
   .titleBot {
     display: flex;
-    justify-content: space-between;
+    // justify-content: space-between;
     text-align: left;
     letter-spacing: 0;
     font-weight: 400;
