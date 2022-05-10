@@ -8,13 +8,27 @@
 					<div class="plate1_2_childName">客户</div>
 					<div class="plate1_2_childValue" style="display: flex;">
 						<div class="plate1_2_childValue1">{{baseMsg.custNm}}</div>
-						<div class="plate1_2_childValue2" v-if="baseMsg.svcLvl=='1'" :style="{'background-image': 'url('+require('../../assets/image/business_chooseCust_type1.png')+')'}"></div>
-						<div class="plate1_2_childValue2" v-if="baseMsg.svcLvl=='2'" :style="{'background-image': 'url('+require('../../assets/image/business_chooseCust_type2.png')+')'}"></div>
-						<div class="plate1_2_childValue2" v-if="baseMsg.svcLvl=='3'" :style="{'background-image': 'url('+require('../../assets/image/business_chooseCust_type3.png')+')'}"></div>
-						<div class="plate1_2_childValue2" v-if="baseMsg.svcLvl=='4'" :style="{'background-image': 'url('+require('../../assets/image/business_chooseCust_type4.png')+')'}"></div>
-						<div class="plate1_2_childValue2" v-if="baseMsg.svcLvl=='5'" :style="{'background-image': 'url('+require('../../assets/image/business_chooseCust_type5.png')+')'}"></div>
-						<div class="plate1_2_childValue2" v-if="baseMsg.svcLvl=='6'" :style="{'background-image': 'url('+require('../../assets/image/business_chooseCust_type6.png')+')'}"></div>
-						<div class="plate1_2_childValue2" v-if="baseMsg.svcLvl=='7'" :style="{'background-image': 'url('+require('../../assets/image/business_chooseCust_type7.png')+')'}"></div>
+						<div class="plate1_2_childValue2" v-if="baseMsg.svcLvl=='1'"
+							:style="{'background-image': 'url('+require('../../assets/image/business_chooseCust_type1.png')+')'}">
+						</div>
+						<div class="plate1_2_childValue2" v-if="baseMsg.svcLvl=='2'"
+							:style="{'background-image': 'url('+require('../../assets/image/business_chooseCust_type2.png')+')'}">
+						</div>
+						<div class="plate1_2_childValue2" v-if="baseMsg.svcLvl=='3'"
+							:style="{'background-image': 'url('+require('../../assets/image/business_chooseCust_type3.png')+')'}">
+						</div>
+						<div class="plate1_2_childValue2" v-if="baseMsg.svcLvl=='4'"
+							:style="{'background-image': 'url('+require('../../assets/image/business_chooseCust_type4.png')+')'}">
+						</div>
+						<div class="plate1_2_childValue2" v-if="baseMsg.svcLvl=='5'"
+							:style="{'background-image': 'url('+require('../../assets/image/business_chooseCust_type5.png')+')'}">
+						</div>
+						<div class="plate1_2_childValue2" v-if="baseMsg.svcLvl=='6'"
+							:style="{'background-image': 'url('+require('../../assets/image/business_chooseCust_type6.png')+')'}">
+						</div>
+						<div class="plate1_2_childValue2" v-if="baseMsg.svcLvl=='7'"
+							:style="{'background-image': 'url('+require('../../assets/image/business_chooseCust_type7.png')+')'}">
+						</div>
 					</div>
 				</div>
 				<div class="plate1_2_child">
@@ -23,7 +37,8 @@
 				</div>
 				<div class="plate1_2_child">
 					<div class="plate1_2_childName">跟进人</div>
-					<div class="plate1_2_childValue plate1_2_childValue1">{{baseMsg.followUpPrsnNm}}（{{baseMsg.followUpPrsn}}）</div>
+					<div class="plate1_2_childValue plate1_2_childValue1">
+						{{baseMsg.followUpPrsnNm}}（{{baseMsg.followUpPrsn}}）</div>
 				</div>
 				<div class="plate1_2_child">
 					<div class="plate1_2_childName">归属机构</div>
@@ -67,10 +82,11 @@
 			</div>
 			<div class="plate1_5" v-if="haveScore">
 				<div class="plate1_5_1">我评</div>
-				<van-rate v-model="score" :size="18" color="#FFBA00" void-icon="star" readonly void-color="#E0E0E0" allow-half />
+				<van-rate v-model="score" :size="18" color="#FFBA00" void-icon="star" readonly void-color="#E0E0E0"
+					allow-half />
 				<div class="plate1_5_2">{{score}}</div>
 				<div class="plate1_5_3" @click="score_c=score;changeScore=true;">
-					<van-icon :name="require('../../assets/image/common_edit.png')" size="12"/>
+					<van-icon :name="require('../../assets/image/common_edit.png')" size="12" />
 					<span style="margin-left: 0.02rem;">修改</span>
 				</div>
 			</div>
@@ -86,7 +102,8 @@
 			<div class="plate2_1" :style="{'background': score_c?'#026DFF':'#B3D3FF'}" @click="saveScore">发布</div>
 			<div class="plate2_2">
 				<div class="plate2_2_1">实用度</div>
-				<van-rate v-model="score_c" :size="27" color="#FFBA00" void-icon="star" void-color="#E0E0E0" allow-half />
+				<van-rate v-model="score_c" :size="27" color="#FFBA00" void-icon="star" void-color="#E0E0E0"
+					allow-half />
 				<div class="plate2_2_2" v-if="score_c">{{score_c}}</div>
 				<span class="plate2_2_3" v-if="score_c&&score_c<=1">很差</span>
 				<span class="plate2_2_3" v-else-if="score_c&&score_c<=2">较差</span>
@@ -97,7 +114,7 @@
 			<div class="plate2_3"></div>
 			<div class="plate2_4" @click="setting">
 				<span style="margin-right: 0.02rem;">看看大家都怎么评</span>
-				<van-icon name="arrow" color="#026DFF"/>
+				<van-icon name="arrow" color="#026DFF" />
 			</div>
 		</div>
 		<div class="plate3" v-if="followMsg.length">
@@ -108,7 +125,8 @@
 			<van-steps direction="vertical" :active="0">
 				<van-step v-for="(followItem,i) in followMsg" :key="'followItem'+i">
 					<div class="followItem1">{{followItem.serviceTypeNm}}</div>
-					<div class="followItem2_1" :style="{'-webkit-line-clamp':followItem.showDesc?'100':'15'}" @click="followItem.showDesc=!followItem.showDesc">{{followItem.serviceContent}}</div>
+					<div class="followItem2_1" :style="{'-webkit-line-clamp':followItem.showDesc?'100':'15'}"
+						@click="followItem.showDesc=!followItem.showDesc">{{followItem.serviceContent}}</div>
 					<div class="followItem3" v-if="i!=followMsg.length-1"></div>
 					<div class="followItem4">
 						<div class="followItem4_1">
@@ -144,16 +162,22 @@
 		<div class="bottomZW"></div>
 		<div style="height: 0.66rem;"></div>
 		<div class="plate5">
-			<div class="plate5_item" @click="showMessage=true">
-				<div class="plate5_item_icon" :style="{'background-image': 'url('+require('../../assets/image/business_detail_message.png')+')'}"></div>
+			<div class="plate5_item" @click="openMbox">
+				<div class="plate5_item_icon"
+					:style="{'background-image': 'url('+require('../../assets/image/business_detail_message.png')+')'}">
+				</div>
 				<div class="plate5_item_text">发送短信</div>
 			</div>
 			<div class="plate5_item" @click="showCall=true">
-				<div class="plate5_item_icon" :style="{'background-image': 'url('+require('../../assets/image/business_detail_call.png')+')'}"></div>
+				<div class="plate5_item_icon"
+					:style="{'background-image': 'url('+require('../../assets/image/business_detail_call.png')+')'}">
+				</div>
 				<div class="plate5_item_text">拨打电话</div>
 			</div>
-			<div class="plate5_item">
-				<div class="plate5_item_icon" :style="{'background-image': 'url('+require('../../assets/image/business_detail_visit.png')+')'}"></div>
+			<div class="plate5_item" @click="setting">
+				<div class="plate5_item_icon"
+					:style="{'background-image': 'url('+require('../../assets/image/business_detail_visit.png')+')'}">
+				</div>
 				<div class="plate5_item_text">登门拜访</div>
 			</div>
 		</div>
@@ -161,7 +185,8 @@
 			<div class="plate6">
 				<div class="plate6_1">修改评分</div>
 				<div class="plate6_2">
-					<van-rate v-model="score_c" :size="27" color="#FFBA00" void-icon="star" void-color="#E0E0E0" allow-half />
+					<van-rate v-model="score_c" :size="27" color="#FFBA00" void-icon="star" void-color="#E0E0E0"
+						allow-half />
 				</div>
 				<div class="plate6_3">
 					<span class="plate6_3_1">{{score_c}}</span>
@@ -187,7 +212,7 @@
 				</div>
 			</div>
 		</van-overlay>
-		<send-message ref="sendMessage"/>
+		<send-message ref="sendMessage" @commitSuccess="sendSuccess" />
 	</div>
 </template>
 
@@ -200,7 +225,8 @@
 		queryOpportPractialInfo,
 		saveOpportPractialInfo,
 		queryOpportCustServList,
-		queryCmrcOpportunityList
+		queryCmrcOpportunityList,
+		saveOpportCustServInfo
 	} from "../../request/market.js";
 	import {
 		Toast
@@ -237,6 +263,7 @@
 				Toast("功能开发中");
 			},
 			saveScore() {
+				if (!this.score_c) return;
 				Toast.loading({
 					message: "正在提交",
 					forbidClick: true,
@@ -248,7 +275,7 @@
 					cmrcOpptId: this.baseMsg.cmrcOpptId,
 					score: this.score_c
 				}, (res) => {
-					if(res.data=="操作成功"){
+					if (res.data == "操作成功") {
 						this.haveScore = true;
 						Toast("发布成功~感谢您的评价");
 						this.changeScore = false;
@@ -267,7 +294,7 @@
 				queryOpportPractialInfo({
 					sysId: this.$route.params.sysId
 				}, (res) => {
-					if(res.data&&res.data.score){
+					if (res.data && res.data.score) {
 						this.score = res.data.score;
 						this.scoreId = res.data.scoreId;
 						this.haveScore = true;
@@ -278,9 +305,9 @@
 			getFollowMsg() {
 				queryOpportCustServList({
 					sysId: this.$route.params.sysId
-				}, (res)=>{
+				}, (res) => {
 					this.followMsg = res.data;
-					this.followMsg.forEach(item=>item.showDesc=false)
+					this.followMsg.forEach(item => item.showDesc = false)
 				})
 			},
 			getOtherBusi() {
@@ -317,10 +344,42 @@
 				this.getOtherBusi();
 			},
 			callCust() {
-				AlipayJSBridge.call('callHandler', {
-					phone:this.baseMsg.ctcTel
-				});
-				this.showCall = false;
+				saveOpportCustServInfo({
+					sysId: this.baseMsg.sysId,
+					custNum: this.baseMsg.custNo,
+					cstNam: this.baseMsg.custNm,
+					serviceType: "02",
+					custOrg: this.baseMsg.belongOrg,
+					custMgrNum: this.baseMsg.followUpPrsn,
+					mobileNum: this.baseMsg.ctcTel,
+				}, (res) => {
+					this.getFollowMsg();
+					AlipayJSBridge.call('callHandler', {
+						phone: this.baseMsg.ctcTel
+					});
+					this.showCall = false;
+				})
+			},
+			openMbox() {
+				this.$refs.sendMessage.openMbox({
+					type: "",
+					searchData: {},
+					list: [this.baseMsg]
+				})
+			},
+			sendSuccess(msg) {
+				saveOpportCustServInfo({
+					sysId: this.baseMsg.sysId,
+					custNum: this.baseMsg.custNo,
+					cstNam: this.baseMsg.custNm,
+					serviceType: "03",
+					serviceContent: msg,
+					custOrg: this.baseMsg.belongOrg,
+					custMgrNum: this.baseMsg.followUpPrsn,
+					mobileNum: this.baseMsg.ctcTel,
+				}, (res) => {
+					this.getFollowMsg();
+				})
 			},
 		},
 		mounted() {
@@ -339,21 +398,21 @@
 		padding: 0;
 		border: 0;
 	}
-	
+
 	.home {
 		background-color: #F8F8F8;
 	}
-	
+
 	.plate1 {
 		width: 93.6%;
 		margin: 0.12rem auto;
 		padding: 0.12rem;
 		background: #FFFFFF;
-		box-shadow: 0 0.02rem 0.2rem 0 rgba(217,229,242,0.6);
+		box-shadow: 0 0.02rem 0.2rem 0 rgba(217, 229, 242, 0.6);
 		border-radius: 0.08rem;
 		position: relative;
 	}
-	
+
 	.plate1_1 {
 		width: 85%;
 		height: 0.27rem;
@@ -366,17 +425,17 @@
 		font-weight: 500;
 		margin-bottom: 0.08rem;
 	}
-	
+
 	.plate1_2 {
 		width: 100%;
 		display: flex;
 		flex-wrap: wrap;
 	}
-	
+
 	.plate1_2_child {
 		width: 50%;
 	}
-	
+
 	.plate1_2_childName {
 		width: 100%;
 		text-align: left;
@@ -388,7 +447,7 @@
 		font-weight: 400;
 		margin-bottom: 0.02rem;
 	}
-	
+
 	.plate1_2_childValue {
 		width: 100%;
 		text-align: left;
@@ -400,11 +459,11 @@
 		font-weight: 400;
 		margin-bottom: 0.08rem;
 	}
-	
+
 	.plate1_2_childValue1 {
 		color: #026DFF;
 	}
-	
+
 	.plate1_2_childValue2 {
 		width: 0.6rem;
 		height: 0.16rem;
@@ -413,14 +472,14 @@
 		background-position: left center;
 		background-size: contain;
 	}
-	
+
 	.plate1_3 {
 		width: 100%;
 		height: 0.01rem;
-		box-shadow: inset 0 -0.005rem 0 0 rgba(0,0,0,0.04);
+		box-shadow: inset 0 -0.005rem 0 0 rgba(0, 0, 0, 0.04);
 		margin: 0.04rem 0 0.12rem;
 	}
-	
+
 	.plate1_4 {
 		width: 100%;
 		font-family: PingFangSC-Regular;
@@ -431,7 +490,7 @@
 		line-height: 0.18rem;
 		font-weight: 400;
 	}
-	
+
 	.plate1_5 {
 		width: 100%;
 		height: 0.32rem;
@@ -444,7 +503,7 @@
 		padding: 0 0.12rem;
 		position: relative;
 	}
-	
+
 	.plate1_5_1 {
 		font-family: PingFangSC-Regular;
 		font-size: 0.12rem;
@@ -453,7 +512,7 @@
 		font-weight: 400;
 		margin-right: 0.12rem;
 	}
-	
+
 	.plate1_5_2 {
 		font-family: PingFangSC-Medium;
 		font-size: 0.14rem;
@@ -462,7 +521,7 @@
 		font-weight: 500;
 		margin-left: 0.12rem;
 	}
-	
+
 	.plate1_5_3 {
 		font-family: PingFangSC-Regular;
 		font-size: 0.12rem;
@@ -475,7 +534,7 @@
 		flex-wrap: nowrap;
 		align-items: center;
 	}
-	
+
 	.plate1_6 {
 		position: absolute;
 		top: 0.18rem;
@@ -490,18 +549,18 @@
 		color: #FFFFFF;
 		font-weight: 400;
 	}
-	
+
 	.plateTitle {
 		width: 100%;
 		height: 0.44rem;
-		box-shadow: inset 0 -0.005rem 0 0 rgba(0,0,0,0.04);
+		box-shadow: inset 0 -0.005rem 0 0 rgba(0, 0, 0, 0.04);
 		padding: 0 0.12rem;
 		display: flex;
 		flex-wrap: nowrap;
 		justify-content: flex-start;
 		align-items: center;
 	}
-	
+
 	.plateTitle1 {
 		width: 0.02rem;
 		height: 0.14rem;
@@ -509,7 +568,7 @@
 		border-radius: 0.02rem;
 		margin-right: 0.05rem;
 	}
-	
+
 	.plateTitle2 {
 		font-family: PingFangSC-Medium;
 		font-size: 0.14rem;
@@ -517,7 +576,7 @@
 		letter-spacing: 0;
 		font-weight: 500;
 	}
-	
+
 	.plate2 {
 		width: 100%;
 		background: #FFFFFF;
@@ -526,7 +585,7 @@
 		position: relative;
 		padding-bottom: 0.12rem;
 	}
-	
+
 	.plate2_1 {
 		position: absolute;
 		top: 0.09rem;
@@ -541,7 +600,7 @@
 		letter-spacing: 0;
 		font-weight: 400;
 	}
-	
+
 	.plate2_2 {
 		width: 100%;
 		height: 0.72rem;
@@ -551,7 +610,7 @@
 		justify-content: flex-start;
 		padding: 0 0.12rem;
 	}
-	
+
 	.plate2_2_1 {
 		font-family: PingFangSC-Regular;
 		font-size: 0.14rem;
@@ -560,8 +619,9 @@
 		font-weight: 400;
 		margin-right: 0.12rem;
 	}
-	
-	.plate2_2_2,.plate6_3_1 {
+
+	.plate2_2_2,
+	.plate6_3_1 {
 		font-family: PingFangSC-Medium;
 		font-size: 0.18rem;
 		color: #FFBA00;
@@ -569,8 +629,9 @@
 		font-weight: 500;
 		margin-left: 0.09rem;
 	}
-	
-	.plate2_2_3,.plate6_3_2 {
+
+	.plate2_2_3,
+	.plate6_3_2 {
 		font-family: PingFangSC-Regular;
 		font-size: 0.14rem;
 		color: #595959;
@@ -578,14 +639,14 @@
 		font-weight: 400;
 		margin-left: 0.09rem;
 	}
-	
+
 	.plate2_3 {
 		width: 93.6%;
 		height: 0.01rem;
 		margin: 0 auto 0.12rem;
-		box-shadow: inset 0 -0.005rem 0 0 rgba(0,0,0,0.04);
+		box-shadow: inset 0 -0.005rem 0 0 rgba(0, 0, 0, 0.04);
 	}
-	
+
 	.plate2_4 {
 		height: 0.18rem;
 		font-family: PingFangSC-Regular;
@@ -597,7 +658,7 @@
 		padding: 0 0.12rem;
 		text-align: left;
 	}
-	
+
 	.plate3 {
 		width: 100%;
 		background: #FFFFFF;
@@ -605,19 +666,19 @@
 		margin-bottom: 0.1rem;
 		padding-bottom: 0.3rem;
 	}
-	
+
 	.plate4 {
 		width: 100%;
 		background: #FFFFFF;
 		border-radius: 0.08rem;
 	}
-	
+
 	.plate5 {
 		width: 100%;
 		height: calc(constant(safe-area-inset-bottom) + 0.56rem);
 		height: calc(env(safe-area-inset-bottom) + 0.56rem);
-		background: rgba(255,255,255,0.94);
-		box-shadow: 0 -0.005rem 0 0 rgba(0,0,0,0.3);
+		background: rgba(255, 255, 255, 0.94);
+		box-shadow: 0 -0.005rem 0 0 rgba(0, 0, 0, 0.3);
 		position: fixed;
 		bottom: 0;
 		left: 0;
@@ -628,7 +689,7 @@
 		align-items: flex-start;
 		padding: 0.05rem 0.4rem;
 	}
-	
+
 	.plate5_item_icon {
 		margin: 0 auto;
 		width: 0.24rem;
@@ -638,7 +699,7 @@
 		background-repeat: no-repeat;
 		margin-bottom: 0.04rem;
 	}
-	
+
 	.plate5_item_text {
 		height: 0.18rem;
 		font-family: PingFangSC-Regular;
@@ -648,7 +709,7 @@
 		line-height: 0.18rem;
 		font-weight: 400;
 	}
-	
+
 	.plate6 {
 		width: 74.7%;
 		background: #FFFFFF;
@@ -658,7 +719,7 @@
 		left: 12.65%;
 		padding: 0.2rem 0.12rem;
 	}
-	
+
 	.plate6_1 {
 		width: 100%;
 		height: 0.22rem;
@@ -670,7 +731,7 @@
 		font-weight: 500;
 		margin-bottom: 0.24rem;
 	}
-	
+
 	.plate6_2 {
 		width: 100%;
 		height: 0.24rem;
@@ -678,7 +739,7 @@
 		justify-content: center;
 		align-items: center;
 	}
-	
+
 	.plate6_3 {
 		width: 100%;
 		height: 0.27rem;
@@ -687,15 +748,15 @@
 		justify-content: center;
 		margin-top: 0.08rem;
 	}
-	
+
 	.plate6_3_1 {
 		margin-left: 0;
 	}
-	
+
 	.plate6_3_2 {
 		margin-left: 0.125rem;
 	}
-	
+
 	.plate6_4 {
 		width: 100%;
 		height: 0.3rem;
@@ -705,7 +766,7 @@
 		justify-content: space-around;
 		align-items: center;
 	}
-	
+
 	.palte6_4_1 {
 		width: 1.08rem;
 		height: 0.3rem;
@@ -718,7 +779,7 @@
 		line-height: 0.3rem;
 		font-weight: 500;
 	}
-	
+
 	.palte6_4_2 {
 		width: 1.08rem;
 		height: 0.3rem;
@@ -731,7 +792,7 @@
 		line-height: 0.3rem;
 		font-weight: 500;
 	}
-	
+
 	.plate6_5 {
 		width: 100%;
 		font-family: PingFangSC-Medium;
@@ -742,7 +803,7 @@
 		font-weight: 400;
 		margin-bottom: 0.24rem;
 	}
-	
+
 	.followItem1 {
 		width: calc(100% - 0.12rem);
 		height: 0.21rem;
@@ -754,7 +815,7 @@
 		letter-spacing: 0;
 		font-weight: 500;
 	}
-	
+
 	.followItem2_1 {
 		width: calc(100% - 0.12rem);
 		font-family: PingFangSC-Regular;
@@ -768,27 +829,27 @@
 		display: -webkit-box;
 		-webkit-box-orient: vertical;
 	}
-	
+
 	.followItem3 {
 		width: calc(100% - 0.12rem);
 		height: 0.01rem;
 		background: #EFEFEF;
 		margin-top: 0.15rem;
 	}
-	
+
 	:deep(.van-step--vertical:not(:last-child):after) {
 		border-bottom-width: 0;
 	}
-	
+
 	:deep(.van-step) {
 		padding: 0 0 0.15rem 0.05rem;
 		text-align: left;
 	}
-	
+
 	:deep(.van-steps__items) {
 		margin-left: 25%;
 	}
-	
+
 	:deep(.van-step__circle-container) {
 		position: absolute;
 		top: 0.1rem;
@@ -796,9 +857,9 @@
 		z-index: 1;
 		font-size: var(--van-step-icon-size);
 		line-height: 1;
-		transform: translate(-50%,-50%);
+		transform: translate(-50%, -50%);
 	}
-	
+
 	:deep(.van-step__line) {
 		top: 0.1rem;
 		left: -0.15rem;
@@ -813,7 +874,7 @@
 		top: 0;
 		left: calc(-15% - var(--van-padding-xl));
 	}
-	
+
 	.followItem4_1 {
 		height: 0.2rem;
 		font-family: PingFangSC-Medium;
@@ -824,7 +885,7 @@
 		line-height: 0.2rem;
 		font-weight: 500;
 	}
-	
+
 	.followItem4_2 {
 		height: 0.16rem;
 		font-family: PingFangSC-Regular;
@@ -835,29 +896,29 @@
 		line-height: 0.16rem;
 		font-weight: 400;
 	}
-	
+
 	.inactive-icon {
 		width: 0.08rem;
 		height: 0.08rem;
 		border-radius: 0.04rem;
 		background-color: #BFBFBF;
 	}
-	
+
 	.active-icon-out {
 		width: 0.16rem;
 		height: 0.16rem;
 		padding: 0.04rem;
 		border-radius: 0.08rem;
-		background-color:  rgba(2,109,255,0.12);
+		background-color: rgba(2, 109, 255, 0.12);
 	}
-	
+
 	.active-icon-in {
 		width: 0.08rem;
 		height: 0.08rem;
 		border-radius: 0.04rem;
 		background-color: #026DFF;
 	}
-	
+
 	.otherBusi {
 		width: 100%;
 		padding: 0.12rem;
@@ -868,7 +929,7 @@
 		align-items: center;
 		position: relative;
 	}
-	
+
 	.otherBusi1_1 {
 		height: 0.2rem;
 		line-height: 0.2rem;
@@ -880,7 +941,7 @@
 		margin-bottom: 0.04rem;
 		text-align: left;
 	}
-	
+
 	.otherBusi1_2 {
 		text-align: left;
 		height: 0.18rem;
@@ -891,7 +952,7 @@
 		line-height: 0.18rem;
 		font-weight: 400;
 	}
-	
+
 	.otherBusi2 {
 		width: 0.83rem;
 		height: 0.3rem;
@@ -906,13 +967,12 @@
 		text-align: center;
 		font-weight: 500;
 	}
-	
+
 	.otherBusi3 {
 		width: calc(100% - 0.24rem);
 		height: 0.01rem;
-		box-shadow: inset 0px -0.005rem 0 0 rgba(0,0,0,0.04);
+		box-shadow: inset 0px -0.005rem 0 0 rgba(0, 0, 0, 0.04);
 		position: absolute;
 		bottom: 0;
 	}
-	
 </style>

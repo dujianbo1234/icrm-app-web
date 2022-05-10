@@ -10,6 +10,8 @@ export const approveMessageSendApply = (params,fun) => {request("market.approveM
 export const queryMessageApproveList = (params,fun) => {request("market.queryMessageApproveList", params, fun)}
 // 查询商机汇总
 export const queryCmrcOpportunitySum = (params,fun) => {request("market.queryCmrcOpportunitySum", params, fun)}
+// 查询商机汇总信息
+export const queryCmrcOpportunitySumInfo = (params,fun) => {request("market.queryCmrcOpportunitySumInfo", params, fun)}
 // 查询商机汇总列表
 export const queryCmrcOpportunitySumList = (params,fun) => {request("market.queryCmrcOpportunitySumList", params, fun)}
 // 查询商机列表
@@ -22,3 +24,5 @@ export const queryOpportPractialInfo = (params,fun) => {request("market.queryOpp
 export const saveOpportPractialInfo = (params,fun) => {request("market.saveOpportPractialInfo", params, fun)}
 // 查询商机跟进记录
 export const queryOpportCustServList = (params,fun) => {request("market.queryOpportCustServList", params, fun)}
+// 保存商机跟进记录
+export const saveOpportCustServInfo = (params,fun) => {request("market.saveOpportCustServInfo", params, fun)}

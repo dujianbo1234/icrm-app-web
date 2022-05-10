@@ -169,7 +169,8 @@
 		formatNum
 	} from "../../api/common.js";
 	import {
-		queryCmrcOpportunityList
+		queryCmrcOpportunityList,
+		queryCmrcOpportunitySumInfo
 	} from "../../request/market.js";
 	import {
 		Toast
@@ -301,12 +302,14 @@
 			},
 		},
 		mounted() {
-			try {
-				this.baseMsg = JSON.parse(this.$route.params.item);
-			} catch (e) {
-				this.baseMsg = JSON.parse(localStorage.getItem("lastPageParams"));
-			}
-			this.resetTop();
+			this.baseMsg.cmrcOpptId = this.$route.params.cmrcOpptId||localStorage.getItem("cmrcOpptId");
+			queryCmrcOpportunitySumInfo({
+				cmrcOpptId: this.baseMsg.cmrcOpptId
+			},(res)=>{
+				console.log(res)
+				this.baseMsg = res.data;
+				this.resetTop();
+			})
 			getSysCodeByType({
 				codeType: "SVC_LVL_SHOW"
 			}, (res) => {

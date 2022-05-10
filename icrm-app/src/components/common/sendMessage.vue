@@ -1,28 +1,68 @@
 <template>
 	<div class="outBox">
-		<van-dialog v-model="showMBox" title="短信发送" :showCancelButton="true" :confirmButtonText="haveTest?'提交':'发送'"
-			:before-close="upMessage">
-			<van-field readonly clickable name="picker" :left-icon="x_icon" :value="MBLXName" label="模板类型"
-				placeholder="点击选择模板类型" @click="showMBLX = true" />
-			<van-field readonly clickable name="picker" :left-icon="x_icon" :value="GMParams.tplNm" label="模板名称"
-				placeholder="点击选择模板名称" @click="Boolean(mbList.length)?(showMBMC = true):''" />
-			<van-field :left-icon="x_icon" rows="1" readonly label="短信内容" type="text" />
-			<div class="msgValuePlace" ref="messageValue"></div>
-			<van-field v-show="!haveTest" v-model="testTel" :left-icon="x_icon" label="发送本人确认" type="number"
-				maxlength="11" placeholder="请输入联系电话" />
-			<div style="width: 85%;margin: 10px auto;color: #999999;font-size: 13px;display: flex;">
-				<div style="color: red;padding: 0 5px;">*</div>系统会自动添加“如需退订，请回复TD”，无需人工填写
+		<van-popup v-model:show="showMBox"
+			style="width: 91.5%;background: #FFFFFF;border-radius: 0.08rem;padding-bottom: 0.15rem;">
+			<div class="plate1">短信发送</div>
+			<div class="plate2"></div>
+			<div class="plate3">
+				<div class="plate3_1">
+					<span style="font-size: 0.16rem;color: #026DFF;margin-top: 0.03rem;margin-right: 0.04rem;">*</span>
+					<span>模板类型</span>
+				</div>
+				<div class="plate3_2" @click="showMBLX = true">
+					<span v-if="MBLXName">{{MBLXName}}</span>
+					<span v-else style="color: #C7C7C7;">点击选择模板类型</span>
+				</div>
 			</div>
-		</van-dialog>
-		<van-popup v-model="showMBLX" position="bottom" style="max-height: 50%;">
-			<div class="MBLXItem" v-for="(mblx,i) of mbTypeList" :key="'mblx'+i" @click="selectMBLX(mblx)">{{mblx.text}}
+			<div class="plate3">
+				<div class="plate3_1">
+					<span style="font-size: 0.16rem;color: #026DFF;margin-top: 0.03rem;margin-right: 0.02rem;">*</span>
+					<span>模板名称</span>
+				</div>
+				<div class="plate3_2">
+					<span v-if="!MBLXName" style="color: #C7C7C7;">请先选择模板类型</span>
+					<span v-else-if="GMParams.tplNm" @click="showMBMC=true">{{GMParams.tplNm}}</span>
+					<span v-else style="color: #C7C7C7;" @click="showMBMC=true">点击选择模板名称</span>
+				</div>
+			</div>
+			<div class="plate3">
+				<div class="plate3_1">
+					<span style="font-size: 0.16rem;color: #026DFF;margin-top: 0.03rem;margin-right: 0.02rem;">*</span>
+					<span>短信内容</span>
+				</div>
+				<div class="msgValue" ref="messageValue"></div>
+			</div>
+			<div class="plate3" style="flex-wrap: nowrap;" v-if="!haveTest">
+				<div class="plate3_1" style="flex-shrink: 0;">
+					<span style="font-size: 0.16rem;color: #026DFF;margin-top: 0.03rem;margin-right: 0.02rem;">*</span>
+					<span>发送本人确认</span>
+				</div>
+				<van-field v-model="testTel" type="number" input-align="right" maxlength="11" placeholder="请输入联系电话" />
+			</div>
+			<div class="plate3" style="box-shadow: 0 0 0 0;">
+				<div class="plate3_1">
+					<span style="font-size: 0.16rem;color: #026DFF;margin-top: 0.03rem;margin-right: 0.02rem;">*</span>
+					<span style="color: #BFBFBF;">系统会自动添加“如需退订，请回复TD”，无需人工填写</span>
+				</div>
+			</div>
+			<div class="plate4">
+				<div class="palte4_1" @click="showMBox=false">取消</div>
+				<div class="palte4_2" v-if="haveTest" @click="sendMsg">提交</div>
+				<div class="palte4_2" v-else @click="testMsg">发送</div>
 			</div>
 		</van-popup>
-		<van-popup v-model="showMBMC" position="bottom" style="max-height: 50%;">
+		<van-popup v-model:show="showMBLX" position="bottom" style="max-height: 50%;">
+			<div class="MBLXItem" v-for="(mblx,i) of mbTypeList" :key="'mblx'+i" @click="selectMBLX(mblx)">
+				{{mblx.text}}
+			</div>
+			<div class="bottomZW"></div>
+		</van-popup>
+		<van-popup v-model:show="showMBMC" position="bottom" style="max-height: 50%;">
 			<div class="MBItem" v-for="(mb,i) of mbList" :key="'mblx'+i" @click="selectMBMC(mb)">
 				<div class="MBItemTitle">{{mb.text}}</div>
 				<div class="MBItemValue">{{mb.value.split("$param$").join("**").split("$phone$").join("**")}}</div>
 			</div>
+			<div class="bottomZW"></div>
 		</van-popup>
 	</div>
 </template>
@@ -37,7 +77,9 @@
 	 * @variable: addEsbMessageSendInfo ESB短信发送
 	 */
 	import {
-		getSysCodeByType,
+		getSysCodeByType
+	} from "../../request/common.js";
+	import {
 		queryMessageTemplateListForOption,
 		addMessageSendInfo,
 		queryMessageKeyWordCheck,
@@ -51,29 +93,19 @@
 		Toast
 	} from "vant";
 	export default {
-		name: "sendMessage",
-		props: {
-			title: {
-				type: String,
-				required: false,
-				default: () => {
-					return "短信发送"
-				}
-			}
-		},
 		data() {
 			return {
 				mbTypeList: [],
 				mbList: [],
-				showMBox: true,
+				showMBox: false,
 				showMBLX: false,
 				showMBMC: false,
-				MBLXName: "请选择模板类型",
+				MBLXName: "",
 				baseValue: "",
 				GMParams: {
 					tplTp: "",
 					tplNo: "",
-					tplNm: "请先选择模板类型",
+					tplNm: "",
 					shrtmsgCntnt: "",
 					shrtmsgCnl: "5",
 					custList: [],
@@ -81,21 +113,27 @@
 				},
 				haveTest: false,
 				testTel: "",
-				x_icon: require('../../assets/image/tabbar_cust_main_messagePoint.png'),
 				messageValue: "",
 				msgType: ""
 			}
 		},
 		methods: {
+			/**
+			 * @param {Object} msg
+			 * 调用该方法打开短信发送弹框
+			 * msg.type 类型值，用于判断发送短信用于何处
+			 * msg.searchData 筛选条件，用于全部发送时的条件筛选
+			 * msg.list 批量发送时的item数组，单个发送时传入长度为1的数组即可
+			 */
 			openMbox(msg) {
 				this.msgType = msg.type;
 				this.mbList = [];
-				this.MBLXName = "请选择模板类型";
+				this.MBLXName = "";
 				this.baseValue = "";
 				this.GMParams = {
 					tplTp: "",
 					tplNo: "",
-					tplNm: "请先选择模板类型",
+					tplNm: "",
 					shrtmsgCntnt: "",
 					shrtmsgCnl: "5",
 					custList: [],
@@ -118,7 +156,7 @@
 						this.GMParams.custList = msg.list.map((item) => {
 							return {
 								custNum: item.custNo || item.custNum,
-								cstName: item.custName || item.cstName,
+								cstName: item.custName || item.cstName|| item.custNm,
 								mobileNum: item.ctcTel || item.phoneNo || item.telPhone
 							}
 						});
@@ -128,7 +166,7 @@
 				this.testTel = "";
 				this.showMBox = true;
 			},
-			async selectMBLX(action) {
+			selectMBLX(action) {
 				Toast.loading({
 					message: "正在获取短信模板",
 					forbidClick: true,
@@ -142,200 +180,281 @@
 					tplTp: action.value,
 					pageNum: "1",
 					pageSize: "10000"
-				},(res)=>{
+				}, (res) => {
 					Toast.clear();
-					if (res.data.records.length) {
-						this.mbList = [];
-						for (let item of res.data.records) {
-							let obj = {
-								text: item.tplNm,
-								code: item.sysId,
-								value: item.tplCntnt,
-								ioinAdr: item.ioinAdr,
-								ioinCtcTel: item.ioinCtcTel,
-								ioinCustMgr: item.ioinCustMgr,
-								ioinDtl: item.ioinDtl
-							};
-							this.mbList.push(obj)
+					this.mbList = res.data.records.map((item) => {
+						return {
+							text: item.tplNm,
+							code: item.sysId,
+							value: item.tplCntnt,
+							ioinAdr: item.ioinAdr,
+							ioinCtcTel: item.ioinCtcTel,
+							ioinCustMgr: item.ioinCustMgr,
+							ioinDtl: item.ioinDtl
 						}
-						this.GMParams.tplNm = "请选择短信模板";
-					} else {
-						this.GMParams.tplNm = "该模板类型为空";
-						this.mbList = [];
+					})
+					if (!this.mbList.length) {
+						this.mbList = [{
+							text: "",
+							code: "",
+							value: "该模板类型为空",
+							ioinAdr: "",
+							ioinCtcTel: "",
+							ioinCustMgr: "",
+							ioinDtl: ""
+						}]
 					}
 				})
 			},
 			selectMBMC(action) {
+				if (!action.code) {
+					this.showMBMC = false;
+					return;
+				};
 				this.GMParams.tplNm = action.text;
 				this.GMParams.tplNo = action.code;
 				this.baseValue = action.value;
 				let outTelValue = this.baseValue.split("$phone$").join(
 					"<input id='custTel' type='number' maxlength='11'>");
-				let outInputValue = outTelValue.split("$param$").join("<input class='msgInput' type='text'>");
+				let outInputValue = outTelValue.split("$param$").join("<input class='msgInput' name='aaa' type='text'>");
 				this.$refs.messageValue.innerHTML = outInputValue;
-				this.$refs.messageValue.getElementsByTagName("input").forEach((item) => {
-					item.style.width = '96%';
-					item.style.margin = '0.133262rem 2%';
-					item.style.padding = '0 0.133262rem';
-					item.style.height = '0.666311rem';
-					item.style.border = 'solid 1px #666666';
-				});
+				var doms = this.$refs.messageValue.getElementsByTagName("input");
+				for (let dom of doms) {
+					dom.style.width = '90%';
+					dom.style.margin = '0.05rem 2%';
+					dom.style.padding = '0 0.05rem';
+					dom.style.height = '0.25rem';
+					dom.style.border = 'solid 0.01rem #666666';
+				}
 				this.showMBMC = false;
 			},
-
-			async upMessage(action, done) {
-				if (action === "confirm") {
-					if (this.haveTest) {
-						Toast.loading({
-							message: "正在提交",
-							forbidClick: true,
-							duration: 0
-						});
-						addMessageSendInfo(this.GMParams,(res)=>{
-							Toast.success("提交成功");
-							this.$refs.messageValue.innerHTML = "";
-							this.$emit("closeBatchSendBtn");
-							return done();
-						})
+			cancle() {
+				this.$refs.messageValue.innerHTML = "";
+				this.showMBox = false;
+			},
+			testMsg() {
+				if (this.GMParams.tplTp && this.GMParams.tplNo && this.testTel) {
+					let telValue = document.getElementById("custTel");
+					let outTelValue = "";
+					if (telValue) {
+						outTelValue = this.baseValue.split("$phone$").join(telValue.value);
 					} else {
-						if (this.GMParams.tplTp && this.GMParams.tplNo && this.testTel) {
-							let telValue = document.getElementById("custTel");
-							let outTelValue = "";
-							if (telValue) {
-								outTelValue = this.baseValue.split("$phone$").join(telValue.value);
-							} else {
-								outTelValue = this.baseValue;
-							}
-							let inputHtml = this.$refs.messageValue.getElementsByClassName("msgInput");
-							let outInputValue = outTelValue.split("$param$");
-							this.messageValue = "";
-							for (var i = 0; i < inputHtml.length; i++) {
-								if (!inputHtml[i].value || inputHtml[i].value == "") {
-									Toast.fail("请先完善短信内容");
-									return done(false);
-								}
-								this.messageValue += outInputValue[i] + inputHtml[i].value;
-							}
-							if (outInputValue.length > inputHtml.length) this.messageValue += outInputValue[
-								outInputValue.length - 1];
-							this.GMParams.shrtmsgCntnt = this.messageValue + "如需退订，请回复TD。";
-							Toast.loading("正在发送");
-							var res1 = await queryMessageKeyWordCheck({
-								shrtmsgCntnt: this.messageValue + "如需退订，请回复TD。"
-							});
-							if (res1.code == 0) {
-								if (res1.data) {
-			  				Toast.fail("短信内容包含敏感词，请修改！");
-									return done(false);
-								} else {
-									var res2 = await addEsbMessageSendInfo({
-										shrtmsgCntnt: this.messageValue + "如需退订，请回复TD。",
-										mobileNum: this.testTel
-									});
-									if (res2.code == 0) {
-										Toast.success("短信已发送至当前号码，请查收并确认是否符合预期！");
-										this.haveTest = true;
-										return done(false);
-									} else {
-										Toast.fail("发送失败：" + res.msg);
-			 					}
-									return done(false);
-								}
-							} else {
-								Toast.fail("发送失败：" + res.msg);
-			  			return done(false);
-							}
-						} else {
-			 			Toast.fail("请先完善信息");
+						outTelValue = this.baseValue;
+					}
+					let inputHtml = this.$refs.messageValue.getElementsByClassName("msgInput");
+					let outInputValue = outTelValue.split("$param$");
+					this.messageValue = "";
+					for (var i = 0; i < inputHtml.length; i++) {
+						if (!inputHtml[i].value || inputHtml[i].value == "") {
+							Toast.fail("请先完善短信内容");
 							return done(false);
 						}
+						this.messageValue += outInputValue[i] + inputHtml[i].value;
 					}
+					if (outInputValue.length > inputHtml.length) this.messageValue += outInputValue[outInputValue.length - 1];
+					this.GMParams.shrtmsgCntnt = this.messageValue + "如需退订，请回复TD。";
+					Toast.loading({
+						message: "正在发送",
+						forbidClick: true,
+						duration: 0
+					});
+					queryMessageKeyWordCheck({
+						shrtmsgCntnt: this.messageValue + "如需退订，请回复TD。"
+					},(res1)=>{
+						if (res1.data) {
+							Toast.fail("短信内容包含敏感词，请修改！");
+						} else {
+							addEsbMessageSendInfo({
+								shrtmsgCntnt: this.messageValue + "如需退订，请回复TD。",
+								mobileNum: this.testTel
+							},(res2)=>{
+								Toast.success("短信已发送至当前号码，请查收并确认是否符合预期！");
+								this.haveTest = true;
+							})
+						}
+					})
 				} else {
+					Toast.fail("请先完善信息");
+				}
+			},
+			sendMsg() {
+				Toast.loading({
+					message: "正在提交",
+					forbidClick: true,
+					duration: 0
+				});
+				addMessageSendInfo(this.GMParams,(res)=>{
+					Toast.success("提交成功");
 					this.$refs.messageValue.innerHTML = "";
-					return done()
-				}
-			}
+					this.$emit("closeBatchSendBtn");
+					this.$emit("commitSuccess",this.messageValue + "如需退订，请回复TD。");
+					this.showMBox = false;
+				})
+			},
 		},
-
-		async mounted() {
-			let res = await getSysCodeByType({
+		mounted() {
+			getSysCodeByType({
 				codeType: "TPL_TP"
-			});
-			if (res && res.code == 0) {
-				for (let i in res.data) {
-					let obj = {
-						text: res.data[i].codeName,
-						value: res.data[i].codeValue
-					};
-					this.mbTypeList.push(obj)
+			}, (res) => {
+				if (res.data) {
+					this.mbTypeList = res.data.map((item) => {
+						return {
+							text: item.codeName,
+							value: item.codeValue
+						}
+					})
+				} else {
+					Toast.fail("模板类型数据为空")
 				}
-			} else {
-				Toast.fail('查询参数出错');
-			}
+			})
 		}
 	}
 </script>
 
 <style scoped>
-	/deep/ .van-cell::before {
-		content: normal;
+	* {
+		margin: 0;
+		padding: 0;
+		border: 0;
+		box-sizing: border-box;
 	}
 
-	/deep/ .van-cell::after {
-		content: normal;
+	.mainBox {
+		width: 91.5%;
+		height: 4.73rem;
+		background: #FFFFFF;
+		border-radius: 0.08rem;
 	}
 
-	/deep/ .van-cell {
+	.plate1 {
 		width: 100%;
-		border-bottom: 1px solid rgba(90, 90, 90, 0.2);
+		height: 0.5rem;
+		font-family: PingFangSC-Regular;
+		font-size: 0.16rem;
+		color: #262626;
+		text-align: center;
+		line-height: 0.5rem;
+		font-weight: 400;
 	}
 
-	/deep/ .van-popover__wrapper {
+	.plate2 {
 		width: 100%;
+		height: 0.01rem;
+		background: #EFEFEF;
+	}
+
+	.plate3 {
+		width: 91.8%;
+		padding: 0.15rem 0;
+		margin: 0 auto;
+		box-shadow: inset 0 -0.005rem 0 0 rgba(229, 229, 229, 1);
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		justify-content: space-between;
+	}
+
+	.plate3_1,
+	.plate3_2 {
+		font-family: PingFangSC-Regular;
+		font-size: 0.14rem;
+		color: #262626;
+		letter-spacing: 0;
+		font-weight: 400;
+		display: flex;
+		flex-wrap: nowrap;
+		align-items: flex-start;
+		line-height: 0.22rem;
+		height: 0.22rem;
+		text-align: left;
+	}
+
+	.msgValue {
+		width: 100%;
+		min-height: 0.4rem;
+		max-height: 1.2rem;
+		font-family: PingFangSC-Regular;
+		font-size: 0.14rem;
+		color: #262626;
+		letter-spacing: 0;
+		font-weight: 400;
+		margin-left: 0.1rem;
+		margin-top: 0.03rem;
+		line-height: 0.22rem;
+		text-align: left;
+		overflow: auto;
+		word-break: break-all;
+	}
+
+	.plate4 {
+		width: 100%;
+		padding: 0 0.52rem;
+		height: 0.3rem;
+		margin-top: 0.12rem;
+		display: flex;
+		flex-wrap: nowrap;
+		justify-content: space-between;
+		align-items: center;
+	}
+
+	.palte4_1 {
+		width: 1.08rem;
+		height: 0.3rem;
+		border: 0.01rem solid #026DFF;
+		border-radius: 0.15rem;
+		font-family: PingFangSC-Medium;
+		font-size: 0.13rem;
+		color: #026DFF;
+		text-align: center;
+		line-height: 0.3rem;
+		font-weight: 500;
+	}
+
+	.palte4_2 {
+		width: 1.08rem;
+		height: 0.3rem;
+		background: #026DFF;
+		border-radius: 0.15rem;
+		font-family: PingFangSC-Medium;
+		font-size: 0.13rem;
+		color: #FFFFFF;
+		text-align: center;
+		line-height: 0.3rem;
+		font-weight: 500;
 	}
 
 	.MBLXItem {
 		width: 90%;
 		margin: 0 auto;
-		padding: 0.399786rem 0;
-		border-bottom: solid 1px #F6F6F6;
-		font-size: 0.373134rem;
+		padding: 0.15rem 0;
+		border-bottom: solid 0.01rem #F6F6F6;
+		font-size: 0.14rem;
 		text-align: center;
 	}
 
 	.MBItem {
 		width: 90%;
-		margin: 0.213219rem auto 0;
-		padding: 0.213219rem;
-		border-radius: 0.133262rem;
-		box-shadow: 0 0 0.213219rem 0 rgba(223, 223, 223, 0.7);
+		margin: 0.08rem auto 0;
+		padding: 0.08rem;
+		border-radius: 0.04rem;
+		box-shadow: 0 0 0.08rem 0 rgba(223, 223, 223, 0.7);
 	}
 
 	.MBItemTitle {
-		font-size: 0.373134rem;
+		font-size: 0.14rem;
 		color: #333333;
 		font-weight: 600;
-		margin-bottom: 0.079957rem;
+		margin-bottom: 0.03rem;
+		text-align: left;
 	}
 
 	.MBItemValue {
-		font-size: 0.319829rem;
+		font-size: 0.12rem;
 		color: #888888;
 		display: -webkit-box;
 		-webkit-box-orient: vertical;
 		-webkit-line-clamp: 3;
 		overflow: hidden;
-	}
-
-	.msgValuePlace {
-		width: 88%;
-		margin: 0 auto;
-		padding: 0.266524rem;
-		border-bottom: 1px solid rgba(90, 90, 90, 0.2);
-		font-size: 0.319829rem;
-		line-height: 0.533049rem;
-		max-height: 3.997867rem;
-		min-height: 1.066098rem;
-		overflow: auto;
+		text-align: left;
 	}
 </style>
