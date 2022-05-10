@@ -22,3 +22,13 @@ export const deleteCustomersMarketing = (params,fun) => {request("custinfo.delet
 export const queryPoteCustomersMarketing = (params,fun) => {request("custinfo.queryPoteCustomersMarketing", params, fun)}
 // 新增重要潜客营销信息
 export const saveCustomersMarketing = (params,fun) => {request("custinfo.saveCustomersMarketing", params, fun)}
+// 查询短信模板列表
+export const queryMessageTemplateListForOption = (params,fun) => {request("custinfo.queryMessageTemplateListForOption", params, fun)}
+// 查询短信敏感词列表
+export const queryMessageKeyWordList = (params,fun) => {request("custinfo.queryMessageKeyWordList", params, fun)}
+// 查询短信关键字校验
+export const queryMessageKeyWordCheck = (params,fun) => {request("custinfo.queryMessageKeyWordCheck", params, fun)}
+// 添加实时短信发送信息
+export const addEsbMessageSendInfo = (params,fun) => {request("custinfo.addEsbMessageSendInfo", params, fun)}
+// 添加短信发送信息
+export const addMessageSendInfo = (params,fun) => {request("custinfo.addMessageSendInfo", params, fun)}

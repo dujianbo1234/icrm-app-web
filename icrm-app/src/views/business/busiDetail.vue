@@ -95,7 +95,7 @@
 				<span class="plate2_2_3" v-else-if="score_c&&score_c<=5">很好</span>
 			</div>
 			<div class="plate2_3"></div>
-			<div class="plate2_4">
+			<div class="plate2_4" @click="setting">
 				<span style="margin-right: 0.02rem;">看看大家都怎么评</span>
 				<van-icon name="arrow" color="#026DFF"/>
 			</div>
@@ -145,15 +145,15 @@
 		<div style="height: 0.66rem;"></div>
 		<div class="plate5">
 			<div class="plate5_item" @click="showMessage=true">
-				<div class="plate5_item_icon"></div>
+				<div class="plate5_item_icon" :style="{'background-image': 'url('+require('../../assets/image/business_detail_message.png')+')'}"></div>
 				<div class="plate5_item_text">发送短信</div>
 			</div>
 			<div class="plate5_item" @click="showCall=true">
-				<div class="plate5_item_icon"></div>
+				<div class="plate5_item_icon" :style="{'background-image': 'url('+require('../../assets/image/business_detail_call.png')+')'}"></div>
 				<div class="plate5_item_text">拨打电话</div>
 			</div>
 			<div class="plate5_item">
-				<div class="plate5_item_icon"></div>
+				<div class="plate5_item_icon" :style="{'background-image': 'url('+require('../../assets/image/business_detail_visit.png')+')'}"></div>
 				<div class="plate5_item_text">登门拜访</div>
 			</div>
 		</div>
@@ -187,15 +187,7 @@
 				</div>
 			</div>
 		</van-overlay>
-		<van-overlay :show="showMessage">
-			<div class="plate6">
-				<div class="plate6_1">短信发送</div>
-				<div class="plate6_4">
-					<div class="palte6_4_1" @click="showMessage=false">取消</div>
-					<div class="palte6_4_2" @click="callCust">发送</div>
-				</div>
-			</div>
-		</van-overlay>
+		<send-message ref="sendMessage"/>
 	</div>
 </template>
 
@@ -213,6 +205,7 @@
 	import {
 		Toast
 	} from "vant";
+	import sendMessage from "../../components/common/sendMessage.vue";
 	export default {
 		data() {
 			return {
@@ -231,13 +224,18 @@
 				showScore: false,
 				changeScore: false,
 				showCall: false,
-				showMessage: false,
 				followMsg: [],
 				otherBusi: [],
 			}
 		},
+		components: {
+			sendMessage
+		},
 		methods: {
 			formatNum,
+			setting() {
+				Toast("功能开发中");
+			},
 			saveScore() {
 				Toast.loading({
 					message: "正在提交",
@@ -635,7 +633,6 @@
 		margin: 0 auto;
 		width: 0.24rem;
 		height: 0.24rem;
-		background-image: url(../../assets/image/business_detail_call.png);
 		background-size: cover;
 		background-position: center;
 		background-repeat: no-repeat;
@@ -917,4 +914,5 @@
 		position: absolute;
 		bottom: 0;
 	}
+	
 </style>
