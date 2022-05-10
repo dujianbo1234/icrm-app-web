@@ -97,7 +97,7 @@
 		data() {
 			return {
 				sumMsg: {},
-				orderIndex: 3,
+				orderIndex: -1,
 				orderType: true,
 				orderList: [{
 					text: "跟进率",
@@ -136,14 +136,16 @@
 					this.orderIndex = i;
 					this.orderType = true;
 				}
-				this.msgList = [];
 				this.pageIndex = 0;
+				this.loading = true;
+				this.msgList = [];
 				this.onLoad();
 			},
 			changeKequn(i) {
 				this.kequnIndex = i;
-				this.msgList = [];
 				this.pageIndex = 0;
+				this.loading = true;
+				this.msgList = [];
 				this.onLoad();
 			},
 			openDetail(item) {
@@ -168,7 +170,7 @@
 					pageSize: "10",
 					pageNum: this.pageIndex,
 					cmrcOpptBclass: this.kequnList[this.kequnIndex].value,
-					orderField: this.orderList[this.orderIndex].value,
+					orderField: this.orderIndex>=0?this.orderList[this.orderIndex].value:"",
 					orderType: this.orderType ? "DESC" : "ASC"
 				}, (res) => {
 					if (res.data && res.data.records) {

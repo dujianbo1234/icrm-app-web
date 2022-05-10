@@ -219,8 +219,9 @@
 			},
 			onSearch() {
 				this.pageIndex = 0;
+				this.loading = true;
 				this.custList = [];
-				this.finished = false;
+				this.onLoad();
 			},
 			onCancel() {
 				this.openSearch = false;
@@ -237,8 +238,9 @@
 				};
 				this.openOrgList = false;
 				this.pageIndex = 0;
+				this.loading = true;
 				this.custList = [];
-				this.finished = false;
+				this.onLoad();
 			},
 			activeCust(custValue) {
 				if (custValue.empId) {
@@ -251,14 +253,16 @@
 				};
 				this.openCustList = false;
 				this.pageIndex = 0;
+				this.loading = true;
 				this.custList = [];
-				this.finished = false;
+				this.onLoad();
 			},
 			changeLevel(i) {
 				this.levelIndex = i;
 				this.pageIndex = 0;
+				this.loading = true;
 				this.custList = [];
-				this.finished = false;
+				this.onLoad();
 			},
 			openDetail(item) {
 				this.$router.push({
@@ -306,7 +310,6 @@
 			queryCmrcOpportunitySumInfo({
 				cmrcOpptId: this.baseMsg.cmrcOpptId
 			},(res)=>{
-				console.log(res)
 				this.baseMsg = res.data;
 				this.resetTop();
 			})

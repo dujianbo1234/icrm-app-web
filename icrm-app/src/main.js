@@ -4,10 +4,10 @@ import changePwd from './changePwd.vue';
 import router from './router';
 import store from './store';
 
-import VConsole from 'vconsole'
-const vConsole = new VConsole()
-const app = createApp();
-app.use(vConsole)
+// import VConsole from 'vconsole'
+// const vConsole = new VConsole()
+// const app = createApp();
+// app.use(vConsole)
 
 import Vant from 'vant';
 import 'vant/lib/index.css';

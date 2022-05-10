@@ -2,14 +2,14 @@
 	<div class="home">
 		<div class="custBtnType"></div>
 		<van-popup v-model:show="show" v-if="show" round duration="0" position="bottom" :style="{ height: '70%' }" z-index="99999"
-			teleport="#app" :close-on-click-overlay="false">
+			:close-on-click-overlay="false">
 			<div class="popTitle">
 				<div class="popTitle1" @click="cancle">取消</div>
 				<div class="popTitle2">客户经理</div>
 				<div class="popTitle3" @click="checkAll">全部选择</div>
 			</div>
 			<van-search class="searchBox" shape="round" v-model="searchValue" show-action placeholder="请输入工号、姓名"
-				@search="search">
+				@search="search" :left-icon="require('../../assets/image/common_search.png')">
 				<template #action>
 					<div @click="search" style="color: #026DFF;margin: 0 0.05rem;">搜索</div>
 				</template>
@@ -230,5 +230,9 @@
 	.itemTitle3 {
 		width: 40%;
 		text-align: center;
+	}
+	
+	:deep(.van-search__field) {
+		align-items: center;
 	}
 </style>
