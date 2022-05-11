@@ -78,7 +78,7 @@ export default {
       border-bottom: 0.005rem solid rgba(0,0,0,0.08);
       .textS {
         display: flex;
-        justify-content: end;
+        justify-content: flex-end;
       }
     }
   }

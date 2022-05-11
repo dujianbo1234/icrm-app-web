@@ -74,7 +74,7 @@ export default {
     align-items: center;
     .titleL {
       display: flex;
-      justify-content: start;
+      justify-content: flex-start;
       align-items: center;
       height: 0.2rem;
       text-align: left;
@@ -121,7 +121,7 @@ export default {
     }
     .textS {
       display: flex;
-      justify-content: start;
+      justify-content: flex-start;
       align-items: center;
       color: #262626;
     }
