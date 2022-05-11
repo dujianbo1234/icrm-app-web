@@ -129,7 +129,6 @@
           <van-icon :name="require('../../assets/image/index_main_lskhs.png')" size="0.2rem"/>
           <h3>客户数</h3>
         </div>
-        <!-- <org-list type="0" showText="请选择机构" v-if="$store.state.userMsg.roleId!='00000004'" @activeOrg="khgmActiveOrg" /> -->
         <div class="khgmBox">
           <div class="khgmItemBox" v-for="(item, i) in showData" :key="'khgm' + i">
             <div class="khgmMainTitle">
@@ -239,10 +238,10 @@
           </span>
         </div>
         <!-- 列表 -->
-        <div v-show="aumFlag == 0">
+        <div v-if="aumFlag == 0">
           <Table :listLabel="[listLabel,listLabels][listType]" :listData="[listData,listDatas][listType]" :listType="listType"></Table>
         </div>
-        <echarts-pie v-show="aumFlag == 1" unit="万元" :data="aumDisDiaData" ref="aumDisDiaChart"/>
+        <echarts-pie v-if="aumFlag == 1" unit="万元" :data="aumDisDiaData" ref="aumDisDiaChart"/>
       </div>
       <!-- 分割线 -->
       <div class="dividers"><van-divider :dashed="true"/></div>
@@ -1273,10 +1272,10 @@ export default {
     /* 贷款余额/日均切换 */
     peCstAumChange(v){
       this.listType = v ? 0 : 1
-      this.aumDisDiaData = v ? this.aumYe : this.aumRj
-      this.$nextTick(() => {
-        this.$refs.aumDisDiaChart.drawEcharts();
-      });
+        this.aumDisDiaData = v ? this.aumYe : this.aumRj
+        this.$nextTick(() => {
+          this.$refs.aumDisDiaChart.drawEcharts();
+        });
     },
     /* 近七天日期生成 */
     lastSevenDays(time){
