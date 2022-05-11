@@ -138,7 +138,7 @@ export default {
       // 使用刚指定的配置项和数据显示图表
       this.option.xAxis.data = xAxis
       this.option.series[0].data = this.setNum(series)
-      myChart.clear()
+      // myChart.clear()
       myChart.setOption(this.option);
     },
     /* 判断每条数据显示的颜色 */

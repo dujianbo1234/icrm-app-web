@@ -45,19 +45,15 @@
       </div>
       <div class="contentItem week" :class="showWeekDetial ? 'open' : 'close'" v-if="$store.state.userMsg.roleId != '00000006'">
         <div class="weekListTitle">
-          <h2>工作日报(3月)</h2>
+          <h2>工作日报({{currentMonth}}月)</h2>
           <span>* 只展示近7天的数据</span>
         </div>
-        <div class="weekList">
+        <div class="weekList" ref="weekList">
           <div class="weekItem" v-for="(item, i) in weekList" :key="'week' + i" @click="showWeek(item)">
-            <div class="weekWeek">{{ item.week }}</div>
-            <div class="weekDate today" v-if="item.timeStamp === item.todayTimeStamp">
-              {{ item.showDate }}
+            <div class="dateTitle">
+              <div class="weekWeek">{{ item.week }}</div>
+              <div :class="item.toDay ? 'today' : item.disabe ? 'future' : 'weekDate'">{{ item.showDate }}</div>
             </div>
-            <div class="weekDate future" v-else-if="item.timeStamp > item.todayTimeStamp">
-              {{ item.showDate }}
-            </div>
-            <div class="weekDate" v-else>{{ item.showDate }}</div>
           </div>
         </div>
         <div class="arrow" @click="showWeekDetial = !showWeekDetial">
@@ -237,7 +233,7 @@
       <div class="contentItem">
         <div class="custStyle aumStyle">
           <span class="title">AUM余额分布图</span>
-          <span class="btn" @click="aumClick">
+          <span @click="aumClick">
             <van-icon :name="require('@/assets/image/list_1.png')" size="0.32rem" v-if="aumFlag == 0"/>
             <van-icon :name="require('@/assets/image/list_2.png')" size="0.32rem" v-else/>
           </span>
@@ -383,6 +379,7 @@ export default {
   },
   data() {
     return {
+      currentMonth: '-',
       dataDate: "",
       weekList: [],
       shangjiNum: "",
@@ -476,6 +473,8 @@ export default {
           value3: "",
         }
       ],
+      aumYe: [],
+      aumRj: [],
       aumDisDiaData: [],
       custLvDisDiaData: [],
       serveLvDisDiaData: [],
@@ -540,9 +539,12 @@ export default {
       Toast.fail("正在开发中")
     },
     showWeek(week) {
-      console.log(week)
-      // this.weekReportTitle = `${week.date.slice(0, 4)}-${week.date.slice(4,6)}-${week.date.slice(6, 8)} 工作日报`;
-      // this.queryReportDetail(week.date)
+      if(week.timeStamp > week.todayTimeStamp){
+        Toast.fail("大于当前数据时间")
+        return
+      }
+      this.weekReportTitle = `${week.date} 工作日报`;
+      this.queryReportDetail(week.date)
     },
     queryReportDetail(date){
       Toast.loading({message: "正在加载",forbidClick: true,duration: 0});
@@ -558,6 +560,14 @@ export default {
             adCurrDpsitBal: formatNum(weekReportDetail.adCurrDpsitBal / 10000),    // 新增活期存款余额(万元)
             addCftBal: formatNum(weekReportDetail.addCftBal / 10000),              // 新增理财余额(万元)
           }
+          this.weekList.forEach(item => {
+            if(item.date == moment(date).format('YYYY-MM-DD')){
+              item.toDay = true
+            }else{
+              item.toDay = false
+            }
+          })
+          this.currentMonth = moment(date).format('M')
           Toast.clear();
           this.showWeekDetial= true
         } else {
@@ -710,51 +720,86 @@ export default {
                 color: ["#488BFF", "#26CEBA", "#FFC069", "#FD6865", "#836DE4", "#FF9C6E"][item]
               }
             }
-            let theSum = dataObj.currDpsitBal + dataObj.timeDpsitBal + dataObj.cftBal + dataObj.fndBal + dataObj.insBal + dataObj.entrstBal // 总和
+            // let theSum = dataObj.currDpsitBal + dataObj.timeDpsitBal + dataObj.cftBal + dataObj.fndBal + dataObj.insBal + dataObj.entrstBal // 总和
             let percentage = (num) => {
-              if(Number(num) == 0){
+              if(num == undefined || Number(num) == 0){
                 return '0.00'
               }
-              return (Number(num)/Number(theSum)*100).toFixed(2)
+              return (Number(num)*100).toFixed(2)
             }
-            this.aumDisDiaData = [
+            // 余额
+            this.aumYe = [
               {
                 name: "活期存款余额",
                 value: Number((dataObj.currDpsitBal / 10000).toFixed(2)),
-                percentage: percentage(dataObj.currDpsitBal),
+                percentage: percentage(dataObj.currDpsitBalPct),
                 itemStyle: itemStyle(0)
               },
               {
                 name: "定期存款余额",
                 value: Number((dataObj.timeDpsitBal / 10000).toFixed(2)),
-                percentage: percentage(dataObj.timeDpsitBal),
+                percentage: percentage(dataObj.timeDpsitBalPct),
                 itemStyle: itemStyle(1)
               },
               {
                 name: "理财余额",
                 value: Number((dataObj.cftBal / 10000).toFixed(2)),
-                percentage: percentage(dataObj.cftBal),
+                percentage: percentage(dataObj.cftBalPct),
                 itemStyle: itemStyle(2)
               },
               {
                 name: "基金余额",
                 value: Number((dataObj.fndBal / 10000).toFixed(2)),
-                percentage: percentage(dataObj.fndBal),
+                percentage: percentage(dataObj.fndBalPct),
                 itemStyle: itemStyle(3)
               },
               {
                 name: "保险余额",
                 value: Number((dataObj.insBal / 10000).toFixed(2)),
-                percentage: percentage(dataObj.insBal),
+                percentage: percentage(dataObj.insBalPct),
                 itemStyle: itemStyle(4)
               },
               {
                 name: "信托余额",
                 value: Number((dataObj.entrstBal / 10000).toFixed(2)),
-                percentage: percentage(dataObj.entrstBal),
+                percentage: percentage(dataObj.entrstBalPct),
                 itemStyle: itemStyle(5)
               },
             ];
+            // 日均
+            this.aumRj = [
+              {
+                name: "活期存款余额",
+                value: Number((dataObj.currDpsitYearAvg / 10000).toFixed(2)),
+                percentage: percentage(dataObj.currDpsitYearAvgPct),
+                itemStyle: itemStyle(0)
+              },
+              {
+                name: "定期存款余额",
+                value: Number((dataObj.timeDpsitYearAvg / 10000).toFixed(2)),
+                percentage: percentage(dataObj.timeDpsitYearAvgPct),
+                itemStyle: itemStyle(1)
+              },
+              {
+                name: "理财余额",
+                value: Number((dataObj.cftYearAvg / 10000).toFixed(2)),
+                percentage: percentage(dataObj.cftYearAvgPct),
+                itemStyle: itemStyle(2)
+              },
+              {
+                name: "基金余额",
+                value: Number((dataObj.fndYearAvg / 10000).toFixed(2)),
+                percentage: percentage(dataObj.fndYearAvgPct),
+                itemStyle: itemStyle(3)
+              },
+              {
+                name: "信托余额",
+                value: Number((dataObj.entrstYearAvg / 10000).toFixed(2)),
+                percentage: percentage(dataObj.entrstYearAvgPct),
+                itemStyle: itemStyle(5)
+              },
+            ];
+            this.aumDisDiaData = [this.aumYe,this.aumRj][this.listType]
             this.$nextTick(() => {
               this.$refs.aumDisDiaChart.drawEcharts();
             });
@@ -1228,6 +1273,35 @@ export default {
     /* 贷款余额/日均切换 */
     peCstAumChange(v){
       this.listType = v ? 0 : 1
+      this.aumDisDiaData = v ? this.aumYe : this.aumRj
+      this.$nextTick(() => {
+        this.$refs.aumDisDiaChart.drawEcharts();
+      });
+    },
+    /* 近七天日期生成 */
+    lastSevenDays(time){
+      // 获取当前默认日期
+      let initTime = moment(time).format('YYYY-MM-DD')
+      // 默认日期三天后
+      let lastTime = moment(time).add(3, 'day').format('YYYY-MM-DD')
+      this.currentMonth = moment(time).format('M')
+      let timeArr = []
+      for (var i = 9; i >= 0; i--) {
+        let obj = {
+          week: ["天", "一", "二", "三", "四", "五", "六"][moment(lastTime).subtract(i, 'day').format('d')],      // 星期几
+          date: moment(lastTime).subtract(i, 'day').format('YYYY-MM-DD'),                                       // 日期YYYY-MM-DD
+          showDate: moment(lastTime).subtract(i, 'day').format('DD'),                                           // 日
+          timeStamp: moment(lastTime).subtract(i, 'day').format('YYYY-MM-DD'),                                  // 日期的时间戳
+          todayTimeStamp: initTime,                                                                             // 默认日期的时间戳
+          toDay: moment(lastTime).subtract(i, 'day').format('YYYY-MM-DD') == initTime,                          // 是否为当前选择的日期
+          disabe: moment(lastTime).subtract(i, 'day').format('YYYY-MM-DD') > initTime,                          // 大于当前默认时间的日期禁用
+        }
+        timeArr.push(obj)
+      }
+      this.weekList = timeArr
+      this.$nextTick(()=>{
+        this.$refs.weekList.scrollLeft = 1000
+      })
     }
   },
   mounted() {
@@ -1276,36 +1350,37 @@ export default {
         this.customertrends(this.dataDate)
         this.aumGrowthTrend(this.dataDate)
         this.loanGrowthTrend(this.dataDate)
+        this.lastSevenDays(this.dataDate)
         /* 根据数据日期处理时间轴 */
-        let todayDate = new Date(moment(this.dataDate).format('YYYY-MM-DD')); // 获取默认时间的时间戳2022-01-31
-        let sjc = todayDate.getTime();                
-        this.weekList = [];
-        for (var i = 6; i >= 0; i--) {
-          var todaySjc = sjc - i * 24 * 60 * 60 * 1000;
-          var b = new Date(todaySjc);
-          const timeStamp = b.getTime();
-          var year = b.getFullYear();   // 年
-          var month = b.getMonth() + 1; // 月
-          var date = b.getDate();       // 日
-          var day = b.getDay();         // 星期几
-          var weeks = ["天", "一", "二", "三", "四", "五", "六"];
-          if (month < 10) {
-            month = "0" + (b.getMonth() + 1);
-          } else {
-            month = b.getMonth() + 1;
-          }
-          if (date < 10) {
-            date = "0" + b.getDate();
-          }
-          let obj = {
-            week: weeks[day],                                   // 星期几
-            date: String(year) + String(month) + String(date),  // 日期YYYY-MM-DD
-            showDate: String(date),                             // 日
-            timeStamp,                                          // 日期的时间戳
-            todayTimeStamp: sjc,                                // 默认日期的时间戳
-          }
-          this.weekList.push(obj);
-        }
+        // let todayDate = new Date(moment(this.dataDate).format('YYYY-MM-DD')); // 获取默认时间的时间戳2022-01-31
+        // let sjc = todayDate.getTime();                
+        // this.weekList = [];
+        // for (var i = 6; i >= 0; i--) {
+        //   var todaySjc = sjc - i * 24 * 60 * 60 * 1000;
+        //   var b = new Date(todaySjc);
+        //   const timeStamp = b.getTime();
+        //   var year = b.getFullYear();   // 年
+        //   var month = b.getMonth() + 1; // 月
+        //   var date = b.getDate();       // 日
+        //   var day = b.getDay();         // 星期几
+        //   var weeks = ["天", "一", "二", "三", "四", "五", "六"];
+        //   if (month < 10) {
+        //     month = "0" + (b.getMonth() + 1);
+        //   } else {
+        //     month = b.getMonth() + 1;
+        //   }
+        //   if (date < 10) {
+        //     date = "0" + b.getDate();
+        //   }
+        //   let obj = {
+        //     week: weeks[day],                                   // 星期几
+        //     date: String(year) + String(month) + String(date),  // 日期YYYY-MM-DD
+        //     showDate: String(date),                             // 日
+        //     timeStamp,                                          // 日期的时间戳
+        //     todayTimeStamp: sjc,                                // 默认日期的时间戳
+        //   }
+        //   this.weekList.push(obj);
+        // }
       } else {
         Toast.fail("数据日期数据为空");
       }
@@ -1322,14 +1397,6 @@ export default {
     color: rgba(0,0,0,0.85);
     letter-spacing: 0;
     font-weight: 500;
-  }
-  .btn {
-    // width: 0.32rem;
-    // height: 0.32rem;
-    // background: #EDEFF2;
-    // border: 1px solid rgba(0,0,0,0.02);
-    // border-radius: 0.04rem;
-    // padding: 0.04rem;
   }
 }
 .arrow {
@@ -1402,6 +1469,68 @@ export default {
       max-height: 4rem;
       line-height: 0.3rem;
       font-size: 0.13rem;
+    }
+  }
+}
+// 隐藏滚动条
+.weekList::-webkit-scrollbar {
+  display: none;
+ }
+.weekList {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 0.155rem;
+  overflow-x: auto;
+  .weekItem {
+    min-width: 14.285%;
+    height: 100%;
+    padding: 0 0.09rem;
+    text-align: center;
+    .dateTitle {
+      // width: 100%;
+      .weekWeek {
+        width: 100%;
+        // height: 0.2rem;
+        margin-bottom: 0.13rem;
+        font-size: 0.14rem;
+        line-height: 1;
+        color: #bfbfbf;
+      }
+      .weekDate,
+      .today,
+      .future{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 0.28rem;
+        text-align: center;
+        font-size: 0.16rem;
+        font-family: PingFangSC-Medium;
+        font-weight: 500;
+        color: #262626;
+        line-height: 0.2rem;
+      }
+      .weekDate {
+        position: relative;
+        &:before {
+          position: absolute;
+          bottom: 0;
+          content: '';
+          width: 0.04rem;
+          height: 0.04rem;
+          border-radius: 50%;
+          background:#37CD37;
+        }
+      }
+      .today {
+        border-radius: 50%;
+        background-color: rgba(2, 109, 255, 1);
+        color: #fff;
+      }
+      .future {
+        color: #bfbfbf;
+      }
     }
   }
 }
@@ -1632,51 +1761,6 @@ export default {
 
 .weekListTitle span {
   font-size: 0.12rem;
-  color: #bfbfbf;
-}
-
-.weekList {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 0.155rem;
-}
-
-.weekItem {
-  width: 0.28rem;
-  height: 100%;
-  text-align: center;
-}
-
-.weekWeek {
-  width: 100%;
-  height: 0.2rem;
-  margin-bottom: 0.13rem;
-  font-size: 0.14rem;
-  line-height: 1;
-  color: #bfbfbf;
-}
-
-.weekDate {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 0.28rem;
-  height: 0.28rem;
-  text-align: center;
-  font-size: 0.16rem;
-  font-family: PingFangSC-Medium;
-  font-weight: 500;
-  color: #262626;
-  line-height: 0.2rem;
-}
-
-.weekDate.today {
-  border-radius: 50%;
-  background-color: rgba(2, 109, 255, 1);
-  color: #fff;
-}
-
-.weekDate.future {
   color: #bfbfbf;
 }
 
