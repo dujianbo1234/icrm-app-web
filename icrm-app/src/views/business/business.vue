@@ -171,7 +171,7 @@
 					pageNum: this.pageIndex,
 					cmrcOpptBclass: this.kequnList[this.kequnIndex].value,
 					orderField: this.orderIndex>=0?this.orderList[this.orderIndex].value:"",
-					orderType: this.orderType ? "DESC" : "ASC"
+					orderType: this.orderIndex>=0?this.orderType ? "DESC" : "ASC" : ""
 				}, (res) => {
 					if (res.data && res.data.records) {
 						this.msgList = this.msgList.concat(res.data.records);
