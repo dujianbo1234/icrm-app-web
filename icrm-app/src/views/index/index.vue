@@ -573,12 +573,15 @@ export default {
           Toast.fail("日报数据为空");
         }
       };
+      let body = {
+        etlDt: moment(date).format('YYYYMMDD')
+      }
       if (this.$store.state.userMsg.roleId == "00000004") {
-        queryHomeDayReportList({etlDt: date},(res) => {
+        queryHomeDayReportList(body,(res) => {
           setWeekReportDetail(res);
         });
       } else {
-        queryHomeOrgDayReportList({etlDt: date},(res) => {
+        queryHomeOrgDayReportList(body,(res) => {
           setWeekReportDetail(res);
         });
       }
