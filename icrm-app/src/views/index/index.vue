@@ -1351,36 +1351,6 @@ export default {
         this.aumGrowthTrend(this.dataDate)
         this.loanGrowthTrend(this.dataDate)
         this.lastSevenDays(this.dataDate)
-        /* 根据数据日期处理时间轴 */
-        // let todayDate = new Date(moment(this.dataDate).format('YYYY-MM-DD')); // 获取默认时间的时间戳2022-01-31
-        // let sjc = todayDate.getTime();                
-        // this.weekList = [];
-        // for (var i = 6; i >= 0; i--) {
-        //   var todaySjc = sjc - i * 24 * 60 * 60 * 1000;
-        //   var b = new Date(todaySjc);
-        //   const timeStamp = b.getTime();
-        //   var year = b.getFullYear();   // 年
-        //   var month = b.getMonth() + 1; // 月
-        //   var date = b.getDate();       // 日
-        //   var day = b.getDay();         // 星期几
-        //   var weeks = ["天", "一", "二", "三", "四", "五", "六"];
-        //   if (month < 10) {
-        //     month = "0" + (b.getMonth() + 1);
-        //   } else {
-        //     month = b.getMonth() + 1;
-        //   }
-        //   if (date < 10) {
-        //     date = "0" + b.getDate();
-        //   }
-        //   let obj = {
-        //     week: weeks[day],                                   // 星期几
-        //     date: String(year) + String(month) + String(date),  // 日期YYYY-MM-DD
-        //     showDate: String(date),                             // 日
-        //     timeStamp,                                          // 日期的时间戳
-        //     todayTimeStamp: sjc,                                // 默认日期的时间戳
-        //   }
-        //   this.weekList.push(obj);
-        // }
       } else {
         Toast.fail("数据日期数据为空");
       }
