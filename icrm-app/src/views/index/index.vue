@@ -16,7 +16,7 @@
             <i class="msg-icon icon-meeting"></i>晨夕会
           </div>
           <i class="msg-line"></i>
-          <div class="msgBarItem">
+          <div class="msgBarItem" @click="kaifazhong">
             <i class="msg-icon icon-todo"></i>必办<span class="msgCount1">1</span>
           </div>
           <i class="msg-line"></i>
@@ -49,15 +49,15 @@
           <span>* 只展示近7天的数据</span>
         </div>
         <div class="weekList">
-          <div class="weekItem" v-for="(week, i) in weekList" :key="'week' + i" @click="showWeek(week)">
-            <div class="weekWeek">{{ week.week }}</div>
-            <div class="weekDate today" v-if="week.timeStamp === week.todayTimeStamp">
-              {{ week.showDate }}
+          <div class="weekItem" v-for="(item, i) in weekList" :key="'week' + i" @click="showWeek(item)">
+            <div class="weekWeek">{{ item.week }}</div>
+            <div class="weekDate today" v-if="item.timeStamp === item.todayTimeStamp">
+              {{ item.showDate }}
             </div>
-            <div class="weekDate future" v-else-if="week.timeStamp > week.todayTimeStamp">
-              {{ week.showDate }}
+            <div class="weekDate future" v-else-if="item.timeStamp > item.todayTimeStamp">
+              {{ item.showDate }}
             </div>
-            <div class="weekDate" v-else>{{ week.showDate }}</div>
+            <div class="weekDate" v-else>{{ item.showDate }}</div>
           </div>
         </div>
         <div class="arrow" @click="showWeekDetial = !showWeekDetial">
@@ -536,14 +536,17 @@ export default {
     },
   },
   methods: {
+    kaifazhong(){
+      Toast.fail("正在开发中")
+    },
     showWeek(week) {
-      this.weekReportTitle = `${week.date.slice(0, 4)}-${week.date.slice(4,6)}-${week.date.slice(6, 8)} 工作日报`;
-      this.queryReportDetail(week.date)
+      console.log(week)
+      // this.weekReportTitle = `${week.date.slice(0, 4)}-${week.date.slice(4,6)}-${week.date.slice(6, 8)} 工作日报`;
+      // this.queryReportDetail(week.date)
     },
     queryReportDetail(date){
       Toast.loading({message: "正在加载",forbidClick: true,duration: 0});
       var setWeekReportDetail = (res) => {
-        console.log('res',res)
         if (res.data && res.data.records && res.data.records.length) {
           var weekReportDetail = res.data.records[0];
           this.titleData = {
@@ -619,7 +622,7 @@ export default {
               { name: '定期存款余额', a: dataObj.timeDpsitYearAvg, b: dataObj.timeDpsitYearAvgToLm, c: dataObj.timeDpsitYearAvgToLy },
               { name: '理财余额', a: dataObj.cftYearAvg, b: dataObj.cftYearAvgToLm, c: dataObj.cftYearAvgToLy },
               { name: '基金余额', a: dataObj.fndYearAvgToLm, b: dataObj.fndYearAvgToLm, c: dataObj.fndYearAvgToLy },
-              { name: '保险余额', a: dataObj.insYearAvg, b: dataObj.insYearAvgToLm, c: dataObj.insYearAvgToLy },
+              // { name: '保险余额', a: dataObj.insYearAvg, b: dataObj.insYearAvgToLm, c: dataObj.insYearAvgToLy },
               { name: '信托余额', a: dataObj.entrstYearAvg, b: dataObj.entrstYearAvgToLm, c: dataObj.entrstYearAvgToLy },
               { name: '合计', a: dataObj.aumYearAvg, b: dataObj.aumYearAvgToLm, c: dataObj.aumYearAvgToYy },
             ]
@@ -702,30 +705,54 @@ export default {
         (res) => {
           if (res.data && res.data.records && res.data.records.length) {
             var dataObj = res.data.records[0];
+            let itemStyle = function (item) {
+              return {
+                color: ["#488BFF", "#26CEBA", "#FFC069", "#FD6865", "#836DE4", "#FF9C6E"][item]
+              }
+            }
+            let theSum = dataObj.currDpsitBal + dataObj.timeDpsitBal + dataObj.cftBal + dataObj.fndBal + dataObj.insBal + dataObj.entrstBal // 总和
+            let percentage = (num) => {
+              if(Number(num) == 0){
+                return '0.00'
+              }
+              return (Number(num)/Number(theSum)*100).toFixed(2)
+            }
             this.aumDisDiaData = [
-              {
-                name: "定期存款余额",
-                value: Number((dataObj.timeDpsitBal / 10000).toFixed(2)),
-              },
               {
                 name: "活期存款余额",
                 value: Number((dataObj.currDpsitBal / 10000).toFixed(2)),
+                percentage: percentage(dataObj.currDpsitBal),
+                itemStyle: itemStyle(0)
+              },
+              {
+                name: "定期存款余额",
+                value: Number((dataObj.timeDpsitBal / 10000).toFixed(2)),
+                percentage: percentage(dataObj.timeDpsitBal),
+                itemStyle: itemStyle(1)
               },
               {
                 name: "理财余额",
                 value: Number((dataObj.cftBal / 10000).toFixed(2)),
-              },
-              {
-                name: "信托余额",
-                value: Number((dataObj.entrstBal / 10000).toFixed(2)),
+                percentage: percentage(dataObj.cftBal),
+                itemStyle: itemStyle(2)
               },
               {
                 name: "基金余额",
                 value: Number((dataObj.fndBal / 10000).toFixed(2)),
+                percentage: percentage(dataObj.fndBal),
+                itemStyle: itemStyle(3)
               },
               {
                 name: "保险余额",
                 value: Number((dataObj.insBal / 10000).toFixed(2)),
+                percentage: percentage(dataObj.insBal),
+                itemStyle: itemStyle(4)
+              },
+              {
+                name: "信托余额",
+                value: Number((dataObj.entrstBal / 10000).toFixed(2)),
+                percentage: percentage(dataObj.entrstBal),
+                itemStyle: itemStyle(5)
               },
             ];
             this.$nextTick(() => {
@@ -748,31 +775,31 @@ export default {
             var dataObj = res.data.records[0];
             this.custLvDisDiaData = [
               {
-                name: "未达标客户数",
+                name: "未达标客户",
                 value: dataObj.norchStdCustCnt.toLocaleString(),
               },
               {
-                name: "大众客户数",
+                name: "大众客户",
                 value: dataObj.ordnryCustCnt.toLocaleString(),
               },
               {
-                name: "理财客户数",
+                name: "理财客户",
                 value: dataObj.cftCustCnt.toLocaleString(),
               },
               {
-                name: "金卡客户数",
+                name: "金卡客户",
                 value: dataObj.gdCardCustCnt.toLocaleString(),
               },
               {
-                name: "白金客户数",
+                name: "白金客户",
                 value: dataObj.platinumCustCnt.toLocaleString(),
               },
               {
-                name: "钻石客户数",
+                name: "钻石客户",
                 value: dataObj.diamdCustCnt.toLocaleString(),
               },
               {
-                name: "私行客户数",
+                name: "私行客户",
                 value: dataObj.pbssCustCnt.toLocaleString(),
               },
             ];
@@ -1200,7 +1227,6 @@ export default {
     },
     /* 贷款余额/日均切换 */
     peCstAumChange(v){
-      console.log(v)
       this.listType = v ? 0 : 1
     }
   },
@@ -1250,18 +1276,18 @@ export default {
         this.customertrends(this.dataDate)
         this.aumGrowthTrend(this.dataDate)
         this.loanGrowthTrend(this.dataDate)
-        let todayDate = new Date(`${this.dataDate.slice(0, 4)}-${this.dataDate.slice(4,6)}-${this.dataDate.slice(6, 8)}`);
-        this.todayDate = todayDate;
-        let sjc = todayDate.getTime();
+        /* 根据数据日期处理时间轴 */
+        let todayDate = new Date(moment(this.dataDate).format('YYYY-MM-DD')); // 获取默认时间的时间戳2022-01-31
+        let sjc = todayDate.getTime();                
         this.weekList = [];
         for (var i = 6; i >= 0; i--) {
           var todaySjc = sjc - i * 24 * 60 * 60 * 1000;
           var b = new Date(todaySjc);
           const timeStamp = b.getTime();
-          var year = b.getFullYear();
-          var month = b.getMonth() + 1;
-          var date = b.getDate();
-          var day = b.getDay();
+          var year = b.getFullYear();   // 年
+          var month = b.getMonth() + 1; // 月
+          var date = b.getDate();       // 日
+          var day = b.getDay();         // 星期几
           var weeks = ["天", "一", "二", "三", "四", "五", "六"];
           if (month < 10) {
             month = "0" + (b.getMonth() + 1);
@@ -1271,14 +1297,14 @@ export default {
           if (date < 10) {
             date = "0" + b.getDate();
           }
-          // alert(todayDate);
-          this.weekList.push({
-            week: weeks[day],
-            date: String(year) + String(month) + String(date),
-            showDate: String(date),
-            timeStamp,
-            todayTimeStamp: sjc,
-          });
+          let obj = {
+            week: weeks[day],                                   // 星期几
+            date: String(year) + String(month) + String(date),  // 日期YYYY-MM-DD
+            showDate: String(date),                             // 日
+            timeStamp,                                          // 日期的时间戳
+            todayTimeStamp: sjc,                                // 默认日期的时间戳
+          }
+          this.weekList.push(obj);
         }
       } else {
         Toast.fail("数据日期数据为空");
@@ -1501,7 +1527,7 @@ export default {
 }
 
 .icon-meeting {
-  background-image: url(../../assets/image/index_main_todoMessage.png);
+  background-image: url(../../assets/image/home_cxh.png);
 }
 
 .icon-todo {
@@ -1509,7 +1535,7 @@ export default {
 }
 
 .icon-message {
-  background-image: url(../../assets/image/index_main_todoMessage.png);
+  background-image: url(../../assets/image/home_xx.png);
 }
 
 .msgCount1 {

@@ -24,14 +24,7 @@ export default {
       type: Array,
       required: false,
       default: () => {
-        return [
-          "#5F88DB",
-          "#266B9A",
-          "#29A488",
-          "#62DFCE",
-          "#FFB445",
-          "#BDA29A",
-        ];
+        return [ "#5F88DB", "#266B9A", "#29A488", "#62DFCE", "#FFB445", "#BDA29A"];
       },
     },
     data: {
@@ -74,13 +67,11 @@ export default {
           orient: "vertical",
           // right: 0,
           // top: 30,
-          itemWidth: 12,
+          itemWidth: 8,
           itemHeight: 8,
-          // textStyle:{
-          //  lineHeight:20,
-          // },
+          borderRadius: 4,
           padding: 0,
-          formatter: function (params) {
+          formatter: (params) => {
             let tip1 = "";
             let tip = "";
             let le = params.length; //图例文本的长度
@@ -97,32 +88,34 @@ export default {
                   tip = tip1 + params.slice((l - 1) * 6, le); //最后的拼接在最后
                 }
               }
-              return tip;
             } else {
               tip = params; //前面定义了tip为空，这里要重新赋值，不然会替换为空
-              return tip;
             }
+            let percentage = ''
+            this.data.forEach((item)=>{
+              if (item.name == params) {
+                percentage = item.percentage;
+              }
+            })
+            return `${tip} ${percentage}%`;
           },
           // orient : 'vertical',
-          x: "66%",
+          x: "55%",
           y: "center",
           data: this.data.map((item) => {
             return item.name;
           }),
-          // itemWidth : 8,
-          // itemHeight : 8,
-          // textStyle : {
-          // color : "#888888"
-          // }
         },
         series: [
           {
             startAngle: 130,
             center: ["34%", "50%"],
             type: "pie",
+            left: -30,
             radius: ["52%", "75%"],
             itemStyle: {
               normal: {
+                borderRadius: 3,
                 borderColor: "#FFFFFF",
                 borderWidth: "1",
                 label: {
