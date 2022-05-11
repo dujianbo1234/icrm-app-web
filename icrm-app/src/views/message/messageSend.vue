@@ -1,6 +1,6 @@
 <template>
 	<div class="home">
-		<nav-bar title="短信审批列表" leftIcon />
+		<nav-bar type="2" title="短信审批列表" leftIcon />
 		<van-list v-model:loading="loading" :finished="finished" finished-text="没有更多了" @load="onLoad" class="vanList">
 			<div v-for="(msgItem, i) in msgList" :key="'msgItem' + i" class="msgCardOutBox">
 				<div class="msgCardBox" @click="openDetail(msgItem)">
@@ -20,7 +20,7 @@
 						<div class="msgValue2">
 							<div class="msgValue2Left ycsl">
 								<span class="msgTitleColor">短信条数：</span>
-								<span>{{ msgItem.shrtmsgNum }}</span>
+								<span class="msgContent">{{ msgItem.shrtmsgNum }}条</span>
 							</div>
 							<div class="msgValue3Right">{{ msgItem.aplyTm }}</div>
 						</div>
@@ -28,11 +28,11 @@
 						<div class="msgValue4">
 							<div class="msgValue4Left ycsl">
 								<span class="msgTitleColor">机构名称：</span>
-								<span>{{ msgItem.belongOrgName }}</span>
+								<span class="msgContent">{{ msgItem.belongOrgName }}</span>
 							</div>
 							<div class="msgValue4Right ycsl">
 								<span class="msgTitleColor">客户经理：</span>
-								<span>{{ msgItem.aplyUsrName }}</span>
+								<span class="msgContent">{{ msgItem.aplyUsrName }}</span>
 							</div>
 						</div>
 					</div>
@@ -188,7 +188,7 @@
 					pageNum: this.pageIndex.toString(),
 					pageSize: "10",
 					tplNo: "",
-					exapSt: "",
+					exapSt: "1",
 					belongOrg: "",
 					userId: "",
 				};
@@ -227,7 +227,7 @@
 	}
 
 	.vanList {
-		margin-top: 0.2rem;
+		margin-top: 0.09rem;
 	}
 
 	.msgCardOutBox {
@@ -263,7 +263,7 @@
 	}
 
 	.msgValue1Left {
-		font-size: 0.18rem;
+		font-size: 0.16rem;
 		font-weight: 500;
 		flex-shrink: 1;
 	}
@@ -276,7 +276,7 @@
 	.msgValue1RightItem {
 		background-color: #2c3e50;
 		color: #ffffff;
-		font-size: 0.1rem;
+		font-size: 0.11rem;
 		padding: 0.01rem 0.05rem;
 		margin-left: 0.05rem;
 		border-top-left-radius: 0.05rem;
@@ -307,8 +307,11 @@
 		text-align: left;
 		width: 40%;
 		flex-shrink: 1;
+		font-weight: 400;
 	}
-
+	.msgContent{
+		font-weight: 400;
+	}
 	.msgValue3 {
 		border-bottom: solid 0.01rem #f5f5f5;
 		padding-bottom: 0.08rem;
@@ -325,6 +328,7 @@
 	}
 
 	.msgTitleColor {
+		font-size: 00.12rem;
 		color: #999999;
 	}
 
