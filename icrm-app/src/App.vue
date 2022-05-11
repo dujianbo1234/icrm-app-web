@@ -29,7 +29,8 @@
 <script>
 	import {
 		updateFirstSignFlag,
-		loginout
+		loginout,
+		getIcrmConfigInfo
 	} from "./request/login.js";
 	import {
 		Toast,
@@ -72,6 +73,10 @@
 					this.showSecret = AES.decrypt(JSON.parse(res.data).firstSignFlag) == "0";
 				}
 			});
+			
+			getIcrmConfigInfo({},(res)=>{
+				this.$store.commit("setBaseUrl", res.data.icrmUrl);
+			})
 
 			document.addEventListener('back', (e) => {
 				e.preventDefault();

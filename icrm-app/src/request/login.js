@@ -18,3 +18,5 @@ export const getEmpMultLoginFlag = (params,fun) => {request("login.getEmpMultLog
 export const updateEmpMultLoginFlag = (params,fun) => {request("login.updateEmpMultLoginFlag", params, fun)}
 // 更新首次签约保密协议标识
 export const updateFirstSignFlag = (params,fun) => {request("login.updateFirstSignFlag", params, fun)}
+// 获取系统配置信息
+export const getIcrmConfigInfo = (params,fun) => {request("login.getIcrmConfigInfo", params, fun)}

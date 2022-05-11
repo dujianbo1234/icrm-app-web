@@ -38,7 +38,8 @@
 				<div class="plate1_2_child">
 					<div class="plate1_2_childName">跟进人</div>
 					<div class="plate1_2_childValue plate1_2_childValue1">
-						{{baseMsg.followUpPrsnNm}}（{{baseMsg.followUpPrsn}}）</div>
+						{{baseMsg.followUpPrsnNm}}（{{baseMsg.followUpPrsn}}）
+					</div>
 				</div>
 				<div class="plate1_2_child">
 					<div class="plate1_2_childName">归属机构</div>
@@ -80,7 +81,7 @@
 				<span style="color: #026DFF;font-weight: 500;">#推荐理由#</span>
 				<span>{{baseMsg.recomRea}}</span>
 			</div>
-			<div class="plate1_5" v-if="haveScore">
+			<div class="plate1_5" v-if="haveScore&&$store.state.userMsg.roleId=='00000004'">
 				<div class="plate1_5_1">我评</div>
 				<van-rate v-model="score" :size="18" color="#FFBA00" void-icon="star" readonly void-color="#E0E0E0"
 					allow-half />
@@ -94,7 +95,7 @@
 			<div class="plate1_6" v-if="baseMsg.cmrcOpptSt=='4'" style="background-color: #FFBA00;">已跟进</div>
 			<div class="plate1_6" v-if="baseMsg.cmrcOpptSt=='5'" style="background-color: #52C41A;">已成交</div>
 		</div>
-		<div class="plate2" v-if="!haveScore&&showScore">
+		<div class="plate2" v-if="!haveScore&&showScore&&$store.state.userMsg.roleId=='00000004'">
 			<div class="plateTitle">
 				<div class="plateTitle1"></div>
 				<div class="plateTitle2">请您对该商机实用度进行评价</div>
@@ -117,16 +118,37 @@
 				<van-icon name="arrow" color="#026DFF" />
 			</div>
 		</div>
-		<div class="plate3" v-if="followMsg.length">
+		<div class="plate3">
 			<div class="plateTitle" style="margin-bottom: 0.2rem;">
 				<div class="plateTitle1"></div>
 				<div class="plateTitle2">跟进记录</div>
 			</div>
+			<div class="empty" v-if="!followMsg.length">-暂无跟进记录-</div>
 			<van-steps direction="vertical" :active="0">
 				<van-step v-for="(followItem,i) in followMsg" :key="'followItem'+i">
 					<div class="followItem1">{{followItem.serviceTypeNm}}</div>
-					<div class="followItem2_1" :style="{'-webkit-line-clamp':followItem.showDesc?'100':'15'}"
+					<div class="followItem2" :style="{'-webkit-line-clamp':followItem.showDesc?'100':'15'}"
 						@click="followItem.showDesc=!followItem.showDesc">{{followItem.serviceContent}}</div>
+					<div class="followItem5" v-if="followItem.serviceType=='01'&&followItem.fileList.length">
+						<div class="followItem5_1"
+							v-for="(file,j) in followItem.fileList.length>4&&!followItem.showAllPhoto?followItem.fileList.slice(0,3):followItem.fileList"
+							:key="'file'+j" @click="openPhoto(this.$store.state.baseUrl.split('jjbank').join('icrmmap') + file.fileServerPath)">
+							<img :src="this.$store.state.baseUrl.split('jjbank').join('icrmmap') + file.fileServerPath">
+						</div>
+						<div class="followItem5_2" v-if="followItem.fileList.length>4&&!followItem.showAllPhoto"
+							@click="followItem.showAllPhoto=true">
+							<van-icon :name="require('../../assets/image/common_more.png')" color="##8C8C8C"
+								size="21" />
+						</div>
+					</div>
+					<div class="followItem6" v-if="followItem.serviceType=='01'&&followItem.visitAddress">
+						<div class="followItem6_1">
+							<van-icon :name="require('../../assets/image/common_dingwei_blue.png')" size="12"
+								style="margin-right: 0.04rem;flex-shrink: 0;padding: 0.03rem 0;" />
+							<span>{{followItem.visitAddress.split(",")[0]}}</span>
+						</div>
+						<div class="followItem6_2">{{followItem.visitAddress.split(",")[1]}}</div>
+					</div>
 					<div class="followItem3" v-if="i!=followMsg.length-1"></div>
 					<div class="followItem4">
 						<div class="followItem4_1">
@@ -161,7 +183,7 @@
 		</div>
 		<div class="bottomZW"></div>
 		<div style="height: 0.66rem;"></div>
-		<div class="plate5">
+		<div class="plate5" v-if="$store.state.userMsg.roleId=='00000004'">
 			<div class="plate5_item" @click="openMbox">
 				<div class="plate5_item_icon"
 					:style="{'background-image': 'url('+require('../../assets/image/business_detail_message.png')+')'}">
@@ -174,7 +196,7 @@
 				</div>
 				<div class="plate5_item_text">拨打电话</div>
 			</div>
-			<div class="plate5_item" @click="setting">
+			<div class="plate5_item" @click="openVisit">
 				<div class="plate5_item_icon"
 					:style="{'background-image': 'url('+require('../../assets/image/business_detail_visit.png')+')'}">
 				</div>
@@ -213,6 +235,44 @@
 			</div>
 		</van-overlay>
 		<send-message ref="sendMessage" @commitSuccess="sendSuccess" />
+		<van-popup v-model:show="showVisit" round position="bottom" z-index="99999" :close-on-click-overlay="false"
+			style="background-color: #F8F8F8;height: 80%;">
+			<div class="popTitle">
+				<div class="popTitle1" @click="cancle">取消</div>
+				<div class="popTitle2">登门拜访</div>
+				<div class="popTitle3" @click="addVisit">添加</div>
+			</div>
+			<div class="popPlate1">
+				<van-field v-model="followValue" type="textarea" placeholder="请输入拜访记录（非必填）" rows="5" autosize
+					maxlength="150" />
+			</div>
+			<div class="popPlate2">
+				<div class="cameraBox" v-for="(photo,i) in photoList" :key="'photo'+i">
+					<van-icon class="delBtn" :name="require('../../assets/image/common_delete.png')" color="##8C8C8C"
+						size="20" @click="delPhoto(i)" />
+					<div class="imgBox" @click="openPhoto('data:image/jpeg;base64,' + photo.url)">
+						<img :src="'data:image/jpeg;base64,' + photo.url">
+					</div>
+				</div>
+				<div class="cameraBox" v-if="photoList.length<9" @click="openCamera">
+					<van-icon name="photograph" color="#BFBFBF" size="32" />
+				</div>
+			</div>
+			<div class="popPlate3">
+				<van-icon :name="require('../../assets/image/common_dingwei_blue.png')" size="15"
+					style="margin-right: 0.04rem;flex-shrink: 0;padding: 0.03rem 0;" />
+				<div class="popPlate3_1" v-if="openLocation">
+					<div class="popPlate3_1_1">{{dingwei[0]}}</div>
+					<div class="popPlate3_1_2">{{dingwei[1]}}</div>
+				</div>
+				<div class="popPlate3_1" v-else>
+					<div class="popPlate3_1_1">未获取到定位权限！</div>
+					<div class="popPlate3_1_2">请在手机设置中授予APP定位权限后重试</div>
+				</div>
+				<van-icon class="popPlate3_2" :name="require('../../assets/image/common_reset.png')" size="20"
+					@click="getLocation" />
+			</div>
+		</van-popup>
 	</div>
 </template>
 
@@ -229,9 +289,13 @@
 		saveOpportCustServInfo
 	} from "../../request/market.js";
 	import {
-		Toast
+		Toast,
+		ImagePreview
 	} from "vant";
 	import sendMessage from "../../components/common/sendMessage.vue";
+	import {
+		opportCustServUpload
+	} from "../../api/api.js";
 	export default {
 		data() {
 			return {
@@ -252,6 +316,11 @@
 				showCall: false,
 				followMsg: [],
 				otherBusi: [],
+				showVisit: false,
+				followValue: "",
+				photoList: [],
+				dingwei: [],
+				openLocation: true,
 			}
 		},
 		components: {
@@ -307,7 +376,10 @@
 					sysId: this.$route.params.sysId
 				}, (res) => {
 					this.followMsg = res.data;
-					this.followMsg.forEach(item => item.showDesc = false)
+					this.followMsg.forEach((item) => {
+						item.showDesc = false;
+						item.showAllPhoto = false;
+					});
 				})
 			},
 			getOtherBusi() {
@@ -381,6 +453,91 @@
 					this.getFollowMsg();
 				})
 			},
+			openVisit() {
+				this.followValue = "";
+				this.photoList = [];
+				this.dingwei = [];
+				this.showVisit = true;
+				this.getLocation();
+			},
+			cancle() {
+				this.showVisit = false;
+			},
+			openCamera() {
+				AlipayJSBridge.call('openPickerV', {
+					openType: "0",
+				}, (res1) => {
+					if (res1.status == "000000") {
+						Toast.loading({
+							message: "正在上传",
+							forbidClick: true,
+							duration: 0
+						});
+						opportCustServUpload({
+							file: res1.result
+						}).then((res2) => {
+							if (res2.code == 0) {
+								Toast.success("上传成功");
+								this.photoList.push({
+									url: res1.result,
+									tableKey: res2.data[0].tableKey
+								})
+							} else {
+								Toast.fail(res.msg)
+							}
+						})
+					} else if (res.status != "000004") {
+						Toast.fail(res.msg)
+					}
+				});
+			},
+			delPhoto(i) {
+				this.photoList.splice(i, 1)
+			},
+			getLocation() {
+				this.openLocation = true;
+				this.dingwei = ["正在获取位置信息..."];
+				AlipayJSBridge.call('getLocation', {}, (res) => {
+					if (res.status == "000000") {
+						this.dingwei = [res.result]
+					} else {
+						this.openLocation = false;
+					}
+				});
+			},
+			addVisit() {
+				if (this.photoList.length < 1) {
+					Toast.fail("请至少上传一张照片");
+					return;
+				}
+				Toast.loading({
+					message: "正在提交",
+					forbidClick: true,
+					duration: 0
+				});
+				saveOpportCustServInfo({
+					sysId: this.baseMsg.sysId,
+					custNum: this.baseMsg.custNo,
+					cstNam: this.baseMsg.custNm,
+					serviceType: "01",
+					serviceContent: this.followValue,
+					visitAddress: this.dingwei.join(","),
+					custOrg: this.baseMsg.belongOrg,
+					custMgrNum: this.baseMsg.followUpPrsn,
+					mobileNum: this.baseMsg.ctcTel,
+					uploadIds: this.photoList.map(item => item.tableKey)
+				}, (res) => {
+					this.getFollowMsg();
+					this.showVisit = false;
+					Toast.clear();
+				})
+			},
+			openPhoto(file) {
+				ImagePreview({
+					images: [file],
+					showIndex: false
+				});
+			}
 		},
 		mounted() {
 			this.getBaseMsg();
@@ -816,7 +973,7 @@
 		font-weight: 500;
 	}
 
-	.followItem2_1 {
+	.followItem2 {
 		width: calc(100% - 0.12rem);
 		font-family: PingFangSC-Regular;
 		font-size: 0.12rem;
@@ -975,4 +1132,207 @@
 		position: absolute;
 		bottom: 0;
 	}
+
+	.popTitle {
+		width: 100%;
+		height: 0.51rem;
+		background: #F8F8F8;
+		display: flex;
+		flex-wrap: nowrap;
+		justify-content: center;
+		align-items: center;
+		font-family: PingFangSC-Regular;
+		font-size: 0.16rem;
+		letter-spacing: 0;
+		font-weight: 400;
+		position: relative;
+	}
+
+	.popTitle1 {
+		position: absolute;
+		left: 0.16rem;
+		color: #8C8C8C;
+	}
+
+	.popTitle2 {
+		color: #262626;
+		font-size: 0.18rem;
+		font-weight: 500;
+	}
+
+	.popTitle3 {
+		position: absolute;
+		right: 0.16rem;
+		color: #026DFF;
+	}
+
+	.popPlate1 {
+		width: calc(100% - 0.24rem);
+		padding: 0.12rem;
+		margin: 0.08rem 0.12rem 0;
+		background: #FFFFFF;
+		border-radius: 0.08rem;
+	}
+
+	.popPlate2 {
+		width: calc(100% - 0.24rem);
+		padding: 0.12rem 0.12rem 0;
+		margin: 0.12rem;
+		background: #FFFFFF;
+		border-radius: 0.08rem;
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: flex-start;
+	}
+
+	.popPlate3 {
+		width: calc(100% - 0.24rem);
+		padding: 0.12rem;
+		margin: 0.12rem;
+		background: #FFFFFF;
+		border-radius: 0.08rem;
+		display: flex;
+		flex-wrap: nowrap;
+		position: relative;
+	}
+
+	.popPlate3_1 {
+		max-width: 85%;
+	}
+
+	.popPlate3_1_1 {
+		font-family: PingFangSC-Medium;
+		font-size: 0.14rem;
+		color: #262626;
+		letter-spacing: 0;
+		line-height: 0.21rem;
+		font-weight: 500;
+		text-align: left;
+		margin-bottom: 0.02rem;
+	}
+
+	.popPlate3_1_2 {
+		font-family: PingFangSC-Regular;
+		font-size: 0.12rem;
+		color: #8C8C8C;
+		letter-spacing: 0;
+		line-height: 0.18rem;
+		font-weight: 400;
+		text-align: left;
+	}
+
+	.popPlate3_2 {
+		position: absolute;
+		top: 0.12rem;
+		right: 0.12rem;
+	}
+
+	.cameraBox {
+		width: 0.73rem;
+		height: 0.73rem;
+		background: #F8F8F8;
+		border-radius: 0.08rem;
+		display: flex;
+		flex-wrap: nowrap;
+		justify-content: center;
+		align-items: center;
+		margin-bottom: 0.12rem;
+		margin-right: calc(calc(100% - 2.92rem) / 3);
+		position: relative;
+	}
+
+	.cameraBox:nth-child(4n) {
+		margin-right: 0;
+	}
+
+	.imgBox {
+		width: 100%;
+		height: 100%;
+		border-radius: 0.08rem;
+		overflow: hidden;
+		display: flex;
+		align-items: center;
+	}
+
+	.imgBox>img {
+		width: 100%;
+	}
+
+	.delBtn {
+		position: absolute;
+		top: -0.06rem;
+		right: -0.06rem;
+	}
+
+	.empty {
+		width: 100%;
+		height: 0.38rem;
+		line-height: 0.5rem;
+		font-size: 0.12rem;
+		color: #E0E0E0;
+		font-family: PingFangSC-Regular;
+		letter-spacing: 0;
+		font-weight: 400;
+	}
+
+	.followItem5 {
+		width: calc(100% - 0.2rem);
+		margin-top: 0.12rem;
+		display: flex;
+		flex-wrap: wrap;
+		margin-bottom: -0.12rem;
+	}
+
+	.followItem5_1 {
+		width: 0.5rem;
+		height: 0.5rem;
+		margin-right: calc(calc(100% - 2rem) / 3);
+		margin-bottom: 0.12rem;
+		overflow: hidden;
+		display: flex;
+		align-items: center;
+	}
+
+	.followItem5_1:nth-child(4n) {
+		margin-right: 0;
+	}
+
+	.followItem5_1>img {
+		width: 100%;
+	}
+
+	.followItem5_2 {
+		width: 0.5rem;
+		height: 0.5rem;
+		display: flex;
+		flex-wrap: nowrap;
+		justify-content: center;
+		align-items: center;
+	}
+	
+	.followItem6 {
+		width: calc(100% - 0.12rem);
+		margin-top: 0.12rem;
+	}
+	
+	.followItem6_1 {
+		font-family: PingFangSC-Regular;
+		font-size: 0.12rem;
+		color: #595959;
+		letter-spacing: 0;
+		line-height: 0.21rem;
+		font-weight: 400;
+		display: flex;
+		flex-wrap: nowrap;
+	}
+	
+	.followItem6_2 {
+		font-family: PingFangSC-Regular;
+		font-size: 0.12rem;
+		color: #595959;
+		letter-spacing: 0;
+		line-height: 0.18rem;
+		font-weight: 400;
+	}
+	
 </style>
