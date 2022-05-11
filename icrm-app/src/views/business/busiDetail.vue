@@ -182,7 +182,7 @@
 			</div>
 		</div>
 		<div class="bottomZW"></div>
-		<div style="height: 0.66rem;"></div>
+		<div style="height: 0.66rem;" v-if="$store.state.userMsg.roleId=='00000004'"></div>
 		<div class="plate5" v-if="$store.state.userMsg.roleId=='00000004'">
 			<div class="plate5_item" @click="openMbox">
 				<div class="plate5_item_icon"
