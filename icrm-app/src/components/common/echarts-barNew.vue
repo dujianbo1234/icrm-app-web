@@ -74,11 +74,11 @@ export default {
 					},
         },
         grid: {
-          left: 15,
+          left: '17%',
           right: 20,
           top: '20%',
-          bottom: 14,
-          containLabel: true
+          bottom: '17%',
+          // containLabel: true
         },
         axisLabel: {
           show: true,
