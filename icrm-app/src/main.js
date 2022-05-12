@@ -1,4 +1,6 @@
-import {createApp} from 'vue';
+import {
+	createApp
+} from 'vue';
 import App from './App.vue';
 import router from './router';
 import store from './store';
@@ -34,3 +36,15 @@ if(process.env.NODE_ENV == 'development'){
 	const vConsole = new VConsole()
 	app.use(vConsole)
 }
+
+// import AMapLoader from '@amap/amap-jsapi-loader';
+
+// AMapLoader.load({
+// 	"key": "72d1649946bff1cf01ae6511543e985a", // 申请好的Web端开发者Key，首次调用 load 时必填
+// 	"version": "2.0", // 指定要加载的 JSAPI 的版本，缺省时默认为 1.4.15
+// 	"plugins": [], // 需要使用的的插件列表，如比例尺'AMap.Scale'等
+// }).then((AMap) => {
+// 	map = new AMap.Map('container');
+// }).catch(e => {
+// 	console.log(e);
+// })
