@@ -573,7 +573,7 @@ export default {
           })
           this.currentMonth = moment(date).format('M')
           Toast.clear();
-          this.showWeekDetial= true
+          // this.showWeekDetial= true
         } else {
           Toast.fail("日报数据为空");
         }
