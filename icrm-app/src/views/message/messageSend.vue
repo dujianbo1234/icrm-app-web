@@ -127,8 +127,6 @@
 		components: {},
 		methods: {
 			saveApprove() {
-				console.log(' this.approveIndex', this.approveIndex)
-
 				let params = {
 					id: this.formData.id,
 					aplyRl: this.formData.aplyRl,
@@ -144,7 +142,6 @@
 					return false;
 				}
 				this.params = JSON.stringify(params);
-				console.log('params', params)
 				approveMessageSendApply(params, (res) => {
 					if (res.data) {
 						this.showApprove = false;
@@ -165,12 +162,9 @@
 				});
 			},
 			openDetail(elment) {
-				console.log('elment', elment)
 				if (elment.exapSt == '审批中') {
 					this.showApprove = true;
 				} else {
-					// this.showApprove = true;
-
 					return false
 				}
 				this.formData = elment
@@ -192,7 +186,6 @@
 					belongOrg: "",
 					userId: "",
 				};
-				console.log('params2', params)
 				this.params = JSON.stringify(params);
 				queryMessageApproveList(params, (res) => {
 					if (res.data && res.data.records) {
@@ -200,7 +193,6 @@
 						this.allNum = res.data.total.toLocaleString();
 						this.msgList = this.msgList.concat(res.data.records);
 						if (this.msgList.length >= this.allNum) this.finished = true;
-						console.log("this.msgList", this.msgList);
 					} else {
 						Toast.fail("短信审批列表为空");
 						this.finished = true;
@@ -342,7 +334,7 @@
 		width: 100%;
 	}
 
-	.flexWrap /deep/ .van-field__body {
+	.flexWrap :deep(.van-field__body) {
 		overflow: auto;
 	}
 
@@ -422,16 +414,11 @@
 		overflow: auto;
 	}
 
-	/* .block /deep/ .van-cell-group{
-    height: 80%;
-    overflow: auto;
-  } */
-	.block /deep/ .van-hairline--top-bottom:after,
-	.van-hairline-unset--top-bottom:after {
+	.block :deep(.van-hairline--top-bottom:after,.van-hairline-unset--top-bottom:after) {
 		border-width: 0px;
 	}
 
-	.block /deep/ .van-cell-group__title {
+	.block :deep(.van-cell-group__title) {
 		font-size: 0.16rem;
 		color: #262626;
 	}
@@ -444,14 +431,13 @@
 		bottom: 00.16rem;
 	}
 
-	.btnStyle /deep/ .van-button--primary {
+	.btnStyle :deep(.van-button--primary) {
 		width: 1.08rem;
 		height: 0.3rem;
-		/* background: #026DFF; */
 		border-radius: 0.15rem;
 	}
 
-	.btnStyle /deep/.van-button--plain.van-button--primary {
+	.btnStyle :deep(.van-button--plain.van-button--primary) {
 		border: 0.01rem solid #026aff;
 	}
 </style>

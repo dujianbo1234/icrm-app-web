@@ -291,7 +291,6 @@
 		},
 		mounted() {
 			getEmpInfo({}, (res) => {
-				console.log(res)
 				if (res.data) {
 					this.userInfo = res.data;
 				} else {
