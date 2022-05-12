@@ -18,7 +18,7 @@
         <p class="textS">
           <span>{{numFliter(arr[num ? 0 : 1][index + 1], true)}}</span>
           <van-icon :name="require('@/assets/image/index_arrow_top.png')" size="0.16rem" v-if="arr[num ? 0 : 1][index + 1] > 0"/>
-          <van-icon :name="require('@/assets/image/index_main_numDown.png')" size="0.16rem" v-else-if="arr[num ? 0 : 1][index + 1] < 0"/>
+          <van-icon :name="require('@/assets/image/index_arrow_dowm.png')" size="0.16rem" v-else-if="arr[num ? 0 : 1][index + 1] < 0"/>
           <van-icon :name="require('@/assets/image/index_main_numLine.png')" size="0.16rem" v-else/>
         </p>
       </div>

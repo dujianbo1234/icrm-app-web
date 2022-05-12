@@ -42,12 +42,6 @@ export default {
   watch: {
     barData(newData, oldData){
       this.initData(newData.xAxis, newData.series)
-      // let myChart = this.$echarts.init(this.$refs.echarts);
-      // // 使用刚指定的配置项和数据显示图表
-      // this.option.xAxis.data = newData.xAxis
-      // this.option.series[0].data = this.setNum(newData.series)
-      // myChart.clear()
-      // myChart.setOption(this.option);
     }
   },
   data() {
@@ -59,6 +53,7 @@ export default {
         tooltip: {
           show: true,
           trigger: 'axis',
+          padding: [0,2.5],
 					formatter: params => {
             this.axisValue = params[0].data.time
             this.currentNum = params[0].data.toYstd
@@ -182,7 +177,6 @@ export default {
 </script>
 <style lang="less" scoped>
 .echarts-barNew {
-  // border: 0.005rem solid #000;
   position: relative;
   width: 100%;
   height: 1.87rem;

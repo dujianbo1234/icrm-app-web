@@ -149,7 +149,7 @@
                 />
                 <van-icon
                   v-else-if="item.value1[0] == '-'"
-                  :name="require('../../assets/image/index_main_numDown.png')"
+                  :name="require('../../assets/image/index_arrow_dowm.png')"
                   size="0.16rem"
                 />
                 <van-icon
@@ -172,7 +172,7 @@
                 />
                 <van-icon
                   v-else-if="item.value2[0] == '-'"
-                  :name="require('../../assets/image/index_main_numDown.png')"
+                  :name="require('../../assets/image/index_arrow_dowm.png')"
                   size="0.16rem"
                 />
                 <van-icon
@@ -195,7 +195,7 @@
                 />
                 <van-icon
                   v-else-if="item.value3[0] == '-'"
-                  :name="require('../../assets/image/index_main_numDown.png')"
+                  :name="require('../../assets/image/index_arrow_dowm.png')"
                   size="0.16rem"
                 />
                 <van-icon
