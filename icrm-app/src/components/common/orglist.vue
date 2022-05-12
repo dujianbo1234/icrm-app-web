@@ -9,7 +9,7 @@
 			<van-icon :name="show?'arrow-up':'arrow-down'" color="#999999" size="0.16rem" />
 		</div>
 		<div class="orgBtnType2" v-else-if="type==2"></div>
-		<van-popup v-model:show="show" position="bottom" :style="{ height: '55%' }" teleport="#app" :overlay="overlay">
+		<van-popup v-model:show="show" position="bottom" duration="0" :style="{ height: '55%' }" teleport="#app" :overlay="overlay">
 			<div class="topBtn">
 				<div class="cancle" @click="cancle">取消</div>
 				<div class="title">选择机构</div>

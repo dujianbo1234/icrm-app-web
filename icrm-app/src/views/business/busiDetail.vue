@@ -8,6 +8,9 @@
 					<div class="plate1_2_childName">客户</div>
 					<div class="plate1_2_childValue" style="display: flex;">
 						<div class="plate1_2_childValue1">{{baseMsg.custNm}}</div>
+						<div class="plate1_2_childValue2" v-if="baseMsg.svcLvl=='0'"
+							:style="{'background-image': 'url('+require('../../assets/image/business_chooseCust_type0.png')+')'}">
+						</div>
 						<div class="plate1_2_childValue2" v-if="baseMsg.svcLvl=='1'"
 							:style="{'background-image': 'url('+require('../../assets/image/business_chooseCust_type1.png')+')'}">
 						</div>
@@ -25,9 +28,6 @@
 						</div>
 						<div class="plate1_2_childValue2" v-if="baseMsg.svcLvl=='6'"
 							:style="{'background-image': 'url('+require('../../assets/image/business_chooseCust_type6.png')+')'}">
-						</div>
-						<div class="plate1_2_childValue2" v-if="baseMsg.svcLvl=='7'"
-							:style="{'background-image': 'url('+require('../../assets/image/business_chooseCust_type7.png')+')'}">
 						</div>
 					</div>
 				</div>
@@ -132,8 +132,8 @@
 					<div class="followItem5" v-if="followItem.serviceType=='01'&&followItem.fileList.length">
 						<div class="followItem5_1"
 							v-for="(file,j) in followItem.fileList.length>4&&!followItem.showAllPhoto?followItem.fileList.slice(0,3):followItem.fileList"
-							:key="'file'+j" @click="openPhoto(this.$store.state.baseUrl.split('jjbank').join('icrmmap') + file.fileServerPath)">
-							<img :src="this.$store.state.baseUrl.split('jjbank').join('icrmmap') + file.fileServerPath">
+							:key="'file'+j" @click="openPhoto(this.$store.state.baseUrl + file.fileServerPath)">
+							<img :src="this.$store.state.baseUrl + file.fileServerPath">
 						</div>
 						<div class="followItem5_2" v-if="followItem.fileList.length>4&&!followItem.showAllPhoto"
 							@click="followItem.showAllPhoto=true">
@@ -416,21 +416,30 @@
 				this.getOtherBusi();
 			},
 			callCust() {
-				saveOpportCustServInfo({
-					sysId: this.baseMsg.sysId,
-					custNum: this.baseMsg.custNo,
-					cstNam: this.baseMsg.custNm,
-					serviceType: "02",
-					custOrg: this.baseMsg.belongOrg,
-					custMgrNum: this.baseMsg.followUpPrsn,
-					mobileNum: this.baseMsg.ctcTel,
-				}, (res) => {
-					this.getFollowMsg();
-					AlipayJSBridge.call('callHandler', {
-						phone: this.baseMsg.ctcTel
-					});
-					this.showCall = false;
-				})
+				if(isNaN(this.baseMsg.ctcTel)){
+					Toast.fail("电话号码格式有误");
+					return;
+				}
+				AlipayJSBridge.call('callHandler', {
+					phone: this.baseMsg.ctcTel
+				},(res1)=>{
+					if(res1.status=="000000"){
+						saveOpportCustServInfo({
+							sysId: this.baseMsg.sysId,
+							custNum: this.baseMsg.custNo,
+							cstNam: this.baseMsg.custNm,
+							serviceType: "02",
+							custOrg: this.baseMsg.belongOrg,
+							custMgrNum: this.baseMsg.followUpPrsn,
+							mobileNum: this.baseMsg.ctcTel,
+						}, (res2) => {
+							this.getFollowMsg();
+							this.showCall = false;
+						})
+					}else{
+						Toast.fail(res1.msg)
+					}
+				});
 			},
 			openMbox() {
 				this.$refs.sendMessage.openMbox({

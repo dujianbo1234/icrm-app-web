@@ -220,11 +220,14 @@
 				this.$refs.messageValue.innerHTML = outInputValue;
 				var doms = this.$refs.messageValue.getElementsByTagName("input");
 				for (let dom of doms) {
-					dom.style.width = '90%';
-					dom.style.margin = '0.05rem 2%';
-					dom.style.padding = '0 0.05rem';
+					dom.style.width = '92%';
+					dom.style.margin = '0.05rem 4%';
+					dom.style.padding = '0 0.15rem';
 					dom.style.height = '0.25rem';
-					dom.style.border = 'solid 0.01rem #666666';
+					dom.style.border = 'solid 0.01rem #F8F8F8';
+					dom.style.borderRadius = '0.25rem';
+					dom.style.backgroundColor = '#F8F8F8';
+					dom.style.boxSizing = 'border-box';
 				}
 				this.showMBMC = false;
 			},

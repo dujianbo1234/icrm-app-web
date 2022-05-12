@@ -63,6 +63,9 @@
 					<div class="custItem1_1"></div>
 					<div class="custItem1_2">
 						<div class="custItem1_2_1">{{item.custNm}}</div>
+						<div class="custItem1_2_2" v-if="item.svcLvl=='0'"
+							:style="{'background-image': 'url('+require('../../assets/image/business_chooseCust_type0.png')+')'}">
+						</div>
 						<div class="custItem1_2_2" v-if="item.svcLvl=='1'"
 							:style="{'background-image': 'url('+require('../../assets/image/business_chooseCust_type1.png')+')'}">
 						</div>
@@ -81,19 +84,16 @@
 						<div class="custItem1_2_2" v-if="item.svcLvl=='6'"
 							:style="{'background-image': 'url('+require('../../assets/image/business_chooseCust_type6.png')+')'}">
 						</div>
-						<div class="custItem1_2_2" v-if="item.svcLvl=='7'"
-							:style="{'background-image': 'url('+require('../../assets/image/business_chooseCust_type7.png')+')'}">
-						</div>
 						<div class="custItem1_2_3">
-							<div class="custItem1_2_3_item" v-if="item.cmrcOpptBclass=='70000'"
+							<div class="custItem1_2_3_item" v-if="item.vipCstFlg=='1'"
 								style="background-color: rgba(2,109,255,0.08);color: #026DFF;">财</div>
-							<div class="custItem1_2_3_item" v-if="item.cmrcOpptBclass=='99999'"
+							<div class="custItem1_2_3_item" v-if="item.agentPayCstFlg=='1'"
 								style="background-color: rgba(255,133,0,0.08);color: #FF8500;">代</div>
-							<div class="custItem1_2_3_item" v-if="item.cmrcOpptBclass=='99999'"
+							<div class="custItem1_2_3_item" v-if="item.basicCstCnt=='1'"
 								style="background-color: rgba(255,58,58,0.08);color: #FF3A3A;">新</div>
-							<div class="custItem1_2_3_item" v-if="item.cmrcOpptBclass=='80000'"
+							<div class="custItem1_2_3_item" v-if="item.merntCstFlg=='1'"
 								style="background-color: rgba(68,107,161,0.08);color: #446BA1;">商</div>
-							<div class="custItem1_2_3_item" v-if="item.cmrcOpptBclass=='99999'"
+							<div class="custItem1_2_3_item" v-if="item.ioinHoldLoan=='1'"
 								style="background-color: rgba(55,205,55,0.08);color: #13AD13;">贷</div>
 							<van-icon v-if="item.value08=='1'"
 								:name="require('../../assets/image/business_chooseCust_zfb_a.png')" size="16"

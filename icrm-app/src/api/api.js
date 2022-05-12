@@ -14,4 +14,4 @@ export const saveJcInfo = function(params) {
 	return https.post('/api/saveJcInfo', params)
 }
 
-export const opportCustServUpload = (params) => {return https.post('/api/marketing/opportCustServUpload', params)}
+export const opportCustServUpload = (params) => {return https.post('/jjbank/api/marketing/opportCustServUpload', params)}
