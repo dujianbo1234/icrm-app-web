@@ -631,7 +631,7 @@ export default {
             ]
             this.listDatas = [
               { name: '活期存款余额', a: dataObj.currDpsitYearAvg, b: dataObj.currDpsitYearAvgToLm, c: dataObj.currDpsitYearAvgToLy },
-              { name: '定期存款余额', a: dataObj.timeDpsitYearAvg, b: dataObj.timeDpsitYearAvgToLm, c: dataObj.timeDpsitYearAvgToLy },
+              { name: '定期存款余额', a: dataObj.timeDpsitMonthAvg, b: dataObj.timeDpsitMonthAvgToLm, c: dataObj.timeDpsitMonthAvgToLy },
               { name: '理财余额', a: dataObj.cftYearAvg, b: dataObj.cftYearAvgToLm, c: dataObj.cftYearAvgToLy },
               { name: '基金余额', a: dataObj.fndYearAvgToLm, b: dataObj.fndYearAvgToLm, c: dataObj.fndYearAvgToLy },
               // { name: '保险余额', a: dataObj.insYearAvg, b: dataObj.insYearAvgToLm, c: dataObj.insYearAvgToLy },

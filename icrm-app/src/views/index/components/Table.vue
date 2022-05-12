@@ -50,7 +50,7 @@ export default {
   methods: {
     numFliter(value, tip){
       if(value == undefined){
-        return '0'
+        return '0.00'
       }
       value = (Number(value)/10000).toFixed(2)
       let n = value.toString().split('.')
