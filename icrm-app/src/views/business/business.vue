@@ -1,6 +1,6 @@
 <template>
 	<div class="home">
-		<nav-bar title="我的商机" type="2" />
+		<div class="topZW"></div>
 		<div class="fixedPlace">
 			<div class="plate1">
 				<div class="palte1_1">商机进度：{{toPercent(sumMsg.thenFollowRate||0)}}</div>
@@ -45,7 +45,7 @@
 				</div>
 			</div>
 		</div>
-		<div style="height: 2.33rem;"></div>
+		<div style="height: 1.87rem;"></div>
 		<van-list v-model:loading="loading" :finished="finished" finished-text="已加载全部数据" @load="onLoad">
 			<div class="businessItem" v-for="(item,i) in msgList" :key="'item'+i" @click="openDetail(item)">
 				<div class="itemPlate1">{{item.cmrcOpptSubclassNm}}</div>
@@ -218,6 +218,15 @@
 		padding: 0;
 		border: 0;
 	}
+	
+	.topZW {
+		width: 100%;
+		height: constant(safe-area-inset-top);
+		height: env(safe-area-inset-top);
+		background-color: #F8F8F8;
+		position: fixed;
+		top: 0;
+	}
 
 	.home {
 		background-color: #FFFFFF;
@@ -227,6 +236,8 @@
 		width: 100%;
 		position: fixed;
 		background-color: #F8F8F8;
+		top: constant(safe-area-inset-top);
+		top: env(safe-area-inset-top);
 		z-index: 9;
 	}
 
