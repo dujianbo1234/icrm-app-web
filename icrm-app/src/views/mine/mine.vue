@@ -1,6 +1,6 @@
 <template>
 	<div class="home">
-		<nav-bar title="我的" type="2" />
+		<div class="topZW"></div>
 		<div class="plate1">
 			<div class="plate1_1">
 				<van-icon :name="require('../../assets/image/mine_main_userIcon.png')" size="60" />
@@ -24,7 +24,7 @@
 				</div>
 			</div>
 		</div>
-		<div style="height: 1.47rem;"></div>
+		<div style="height: 1.01rem;"></div>
 		<div class="plate2">
 			<van-cell center title="指纹/人脸登录" :icon="require('../../assets/image/mine_main_item1.png')"
 				v-if="touchType=='1'||touchType=='2'">
@@ -60,7 +60,7 @@
 			<div class="bottomBtn" style="color: #026DFF;background: #FFFFFF;" @click="logOut">退出登录</div>
 			<div class="bottomZW"></div>
 		</div>
-		<van-popup v-model:show="showPopup1" round z-index="100002" :close-on-click-overlay="false">
+		<van-popup v-model:show="showPopup1" round :close-on-click-overlay="false">
 			<div class="popPlate yjfk">
 				<div class="popPlate1">意见反馈</div>
 				<van-field v-model="advice" type="textarea" placeholder="请输入..." />
@@ -70,7 +70,7 @@
 				</div>
 			</div>
 		</van-popup>
-		<van-popup v-model:show="showPopup2" round z-index="100002" :close-on-click-overlay="false">
+		<van-popup v-model:show="showPopup2" round :close-on-click-overlay="false">
 			<div class="popPlate">
 				<div class="popPlate1">工作宣言</div>
 				<van-field v-model="manifesto" type="textarea" maxlength="15" show-word-limit placeholder="请输入工作宣言" />
@@ -80,7 +80,7 @@
 				</div>
 			</div>
 		</van-popup>
-		<van-popup v-model:show="showRole" position="bottom" z-index="100002">
+		<van-popup v-model:show="showRole" position="bottom">
 			<div class="roleBox">
 				<div class="roleItem" :class="item.roleId==roleId_a?'roleItem_a':''" v-for="(item,i) in roleList"
 					:key="'roleItem'+i" @click="roleId_a=item.roleId">{{item.roleName}}</div>
@@ -92,7 +92,6 @@
 			</div>
 			<div class="bottomZW"></div>
 		</van-popup>
-		<!-- <van-popup v-model:show="pageShow" :overlay-style="{'background-color': 'rgba(255, 255, 255, 0.5)', 'z-index': '100002'}"/> -->
 	</div>
 </template>
 
@@ -127,7 +126,6 @@
 				showRole: false,
 				roleList: [],
 				roleId_a: "",
-				// pageShow: true
 			}
 		},
 		methods: {
@@ -288,7 +286,6 @@
 			},
 		},
 		mounted() {
-			// this.pageShow = false;
 			getEmpInfo({}, (res) => {
 				if (res.data) {
 					this.userInfo = res.data;
@@ -335,17 +332,23 @@
 		border: 0;
 	}
 	
-	:deep(.van-overlay) {
-		z-index: 100002;
+	.topZW {
+		width: 100%;
+		height: constant(safe-area-inset-top);
+		height: env(safe-area-inset-top);
+		background-color: #FFFFFF;
+		position: fixed;
+		top: 0;
 	}
 
 	.plate1 {
+		position: fixed;
+		top: constant(safe-area-inset-top);
+		top: env(safe-area-inset-top);
 		width: 100%;
 		height: 1.37rem;
 		background: #FFFFFF;
 		box-shadow: 0 0.01rem 0.02rem 0 rgba(244, 244, 244, 0.66);
-		position: fixed;
-		z-index: 100000;
 		padding: 0 0.26rem;
 	}
 
