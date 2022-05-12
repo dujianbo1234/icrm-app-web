@@ -55,7 +55,6 @@ export default {
           trigger: 'axis',
           padding: [0,2.5],
 					formatter: params => {
-            console.log(params)
             this.axisValue = params[0].data.time
             this.currentNum = params[0].value
             this.pepoe = params[0].data.totalBalance
