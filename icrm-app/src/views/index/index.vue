@@ -538,6 +538,7 @@ export default {
       Toast.fail("正在开发中")
     },
     showWeek(week) {
+      // this.$refs.weekList.scrollLeft = 0
       if(week.timeStamp > week.todayTimeStamp){
         Toast.fail("大于当前数据时间")
         return
@@ -725,7 +726,7 @@ export default {
             // let theSum = dataObj.currDpsitBal + dataObj.timeDpsitBal + dataObj.cftBal + dataObj.fndBal + dataObj.insBal + dataObj.entrstBal // 总和
             let percentage = (num) => {
               if(num == undefined || Number(num) == 0){
-                return '0.00'
+                return 0.00
               }
               return (Number(num)*100).toFixed(2)
             }
@@ -778,8 +779,8 @@ export default {
               },
               {
                 name: "定期存款余额",
-                value: Number((dataObj.timeDpsitYearAvg / 10000).toFixed(2)),
-                percentage: percentage(dataObj.timeDpsitYearAvgPct),
+                value: Number((dataObj.timeDpsitMonthAvg / 10000).toFixed(2)),
+                percentage: percentage(dataObj.timeDpsitMonthAvgPct),
                 itemStyle: itemStyle(1)
               },
               {
@@ -1564,8 +1565,6 @@ export default {
 	background: url(../../assets/image/mine_main_userIcon.png) no-repeat center;
 	background-size: contain;
 	overflow: hidden;
-	margin-right: 0.12rem;
-  
 }
 
 .userName {
