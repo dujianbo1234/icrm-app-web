@@ -1066,7 +1066,7 @@ export default {
                   value: item[`${name}${['ToYstd','ToLastMonth'][this.timeUnit]}`] || 0,
                   toYstd: item[`${name}${['ToYstd','ToLastMonth'][this.timeUnit]}`] || 0,
                   time: itemX.time,
-                  totalBalance: item[name] || 0
+                  totalBalance: item[name] || 0,
                 }
                 xData[index].push(obj)
               })
@@ -1085,6 +1085,7 @@ export default {
             })
           }
         })
+        console.log('',xData)
         this.barDataxData = xData
         this.xAxis = xAxis
         this.barData = {

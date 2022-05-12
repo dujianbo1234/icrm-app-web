@@ -55,6 +55,7 @@ export default {
           trigger: 'axis',
           padding: [0,2.5],
 					formatter: params => {
+            console.log(params)
             this.axisValue = params[0].data.time
             this.currentNum = params[0].value
             this.pepoe = params[0].data.totalBalance
@@ -144,6 +145,7 @@ export default {
           value: item.value,
           toYstd: item.toYstd,
           time: item.time,
+          totalBalance: item.totalBalance,
           itemStyle: {
             color: item.value < 0 ? '#8C8C8C' : '#026DFF'
           }
@@ -153,7 +155,7 @@ export default {
         if(index == 0){
           this.axisValue = item.time
           this.currentNum = item.toYstd   // 较上日
-          this.pepoe = item.value         // 总数
+          this.pepoe = item.totalBalance  // 总数
         }
       })
       return newArr
