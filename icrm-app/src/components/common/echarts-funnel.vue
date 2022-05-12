@@ -74,8 +74,8 @@ export default {
                   },
                 },
                 labelLine: {
-                  show: true,
-                  length: 8,
+                  show: false, // 开启或者关闭线
+                  length: 5,
                 },
               },
             },

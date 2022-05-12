@@ -41,6 +41,7 @@
     <div class="mainContent">
       <div class="selectTimebar">
         <org-list type="0" showText="请选择机构" v-if="$store.state.userMsg.roleId!='00000004'" @activeOrg="khgmActiveOrg" />
+        <div v-else></div>
         <div class="currentDate">当前数据时间：{{ showDate }}</div>
       </div>
       <div class="contentItem week" :class="showWeekDetial ? 'open' : 'close'" v-if="$store.state.userMsg.roleId != '00000006'">
@@ -249,13 +250,13 @@
       <div class="contentItem">
         <div class="custStyle aumStyle">
           <span class="title">增长趋势</span>
-          <selectors :title="['日', '月']" :typeP="1" @change="changeAum"></selectors>
+          <selectors :title="['日', '月']" :typeP="1" @change="changeAum" v-if="listType == 0"></selectors>
         </div>
         <echartHistogram :type="1" ref="Histogram2" :dataArr="['全部','活期存款','定期存款','理财','基金','保险','信托']" :numType="'余额总计'" :selectTime="selectTime" :barData="aumData" @change="aumChange" @change2="aumChange2" :timeUnit="timeUnit2"></echartHistogram>
       </div>
       <!-- 贷款余额(万元) -->
       <div class="contentItem" style="margin-top: 0.12rem">
-        <TitleCard :title="['贷款余额','贷款日均']" :arr="peCstLoan" @clickDalong="clickDalong(' ',['零售贷款余额'])"></TitleCard>
+        <TitleCard :title="['贷款余额','贷款日均']" :arr="peCstLoan" @change="peCstLoanChange" @clickDalong="clickDalong(' ',['零售贷款余额'])"></TitleCard>
       </div>
       <!-- 分割线 -->
       <div class="dividers"><van-divider :dashed="true"/></div>
@@ -263,7 +264,7 @@
       <div class="contentItem">
         <div class="custStyle aumStyle">
           <span class="title">增长趋势</span>
-          <selectors :title="['日', '月']" :typeP="1" @change="changeLoan"></selectors>
+          <selectors :title="['日', '月']" :typeP="1" @change="changeLoan" v-if="loanType == 0"></selectors>
         </div>
         <echartHistogram :type="1" ref="Histogram3" :dataArr="['全部','按揭贷款','消费贷款','经营贷款']" :numType="'余额总计'" :selectTime="selectTime" :barData="loanData" @change="loanChange" @change2="loanChange2" :timeUnit="timeUnit3"></echartHistogram>
       </div>
@@ -337,6 +338,11 @@
           </div>
         </div>
       </van-dialog>
+      <div class="bottomLine">
+        <span></span>
+        <div class="bottomText">到底啦，我是有底线的</div>
+        <span></span>
+      </div>
     </div>
   </div>
 </template>
@@ -397,6 +403,7 @@ export default {
         text: ['内容很随意']
       },
       listType: 0,
+      loanType: 0,
       weekReportDetail: [],
       weekReportTitle: "",
       mainTab: [
@@ -1138,7 +1145,7 @@ export default {
                   value: item[`${name}${['ToYstd','ToLastMonth'][this.timeUnit2]}`]/10000 || 0,
                   toYstd: item[`${name}${['ToYstd','ToLastMonth'][this.timeUnit2]}`]/10000 || 0,
                   time: itemX.time,
-                  totalBalance: item[name] || 0
+                  totalBalance: item[name]/10000 || 0
                 }
                 xData[index].push(obj)
               })
@@ -1284,13 +1291,19 @@ export default {
         text: text
       }
     },
-    /* 贷款余额/日均切换 */
+    /* AUM余额/日均切换 */
     peCstAumChange(v){
       this.listType = v ? 0 : 1
-        this.aumDisDiaData = v ? this.aumYe : this.aumRj
-        this.$nextTick(() => {
-          this.$refs.aumDisDiaChart.drawEcharts();
-        });
+      this.aumDisDiaData = v ? this.aumYe : this.aumRj
+      this.$nextTick(() => {
+        this.$refs.aumDisDiaChart.drawEcharts();
+      });
+      this.changeAum(this.listType) // 切换时,调用增长趋势也要一起联动
+    },
+    /* 贷款余额/日均切换 */
+    peCstLoanChange(v){
+      this.loanType =  v ? 0 : 1
+      this.changeLoan(this.loanType) // 切换时,调用增长趋势也要一起联动
     },
     /* 近七天日期生成 */
     lastSevenDays(time){
@@ -1527,6 +1540,27 @@ export default {
     }
   }
 }
+	.bottomLine {
+		width: 60%;
+		margin: 0.2rem auto;
+    padding-bottom: 0.2rem;
+		display: flex;
+		justify-content: space-between;
+    align-items: center;
+    &>span {
+      width: 10.7%;
+      height: 0.005rem;
+      opacity: 0.7;
+      border-top: 0.005rem solid rgba(191,191,191,1);
+    }
+    .bottomText {
+      margin: 0 2.7%;
+      font-size: 0.12rem;
+      padding: 0 0.1rem;
+      color: #BFBFBF;
+    }
+	}
+
 </style>
 <style scoped>
 * {
