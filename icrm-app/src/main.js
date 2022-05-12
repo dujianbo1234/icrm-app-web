@@ -5,11 +5,12 @@ import router from './router';
 import store from './store';
 
 const app = createApp(App)
-
-// import VConsole from 'vconsole'
-// const vConsole = new VConsole()
-// app.use(vConsole)
-
+import VConsole from 'vconsole'
+// 添加环境变量的判断
+if(process.env.NODE_ENV == 'development'){
+	const vConsole = new VConsole()
+	app.use(vConsole)
+}
 import Vant from 'vant';
 import 'vant/lib/index.css';
 
