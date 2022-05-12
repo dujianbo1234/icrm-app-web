@@ -549,15 +549,15 @@ export default {
       Toast.loading({message: "正在加载",forbidClick: true,duration: 0});
       var setWeekReportDetail = (res) => {
         if (res.data && res.data.records && res.data.records.length) {
-          var weekReportDetail = res.data.records[0];
+          var data = res.data.records[0];
           this.titleData = {
-            cmrcOpptFollowUpCnt: weekReportDetail.cmrcOpptFollowUpCnt,             // 已跟进商机数
-            cmrcOpptTranxCnt: weekReportDetail.cmrcOpptTranxCnt,                   // 已成交商机数
-            visitCustCnt: weekReportDetail.visitCustCnt,                           // 已拜访商机数
-            addLoanBal: formatNum(weekReportDetail.addLoanBal / 10000),            // 新增贷款余额(万元)
-            addTimeDpsitBal: formatNum(weekReportDetail.addTimeDpsitBal / 10000),  // 新增定期余额(万元)
-            adCurrDpsitBal: formatNum(weekReportDetail.adCurrDpsitBal / 10000),    // 新增活期存款余额(万元)
-            addCftBal: formatNum(weekReportDetail.addCftBal / 10000),              // 新增理财余额(万元)
+            cmrcOpptFollowUpCnt: formatNums(data.cmrcOpptFollowUpCnt), // 已跟进商机数
+            cmrcOpptTranxCnt:formatNums(data.cmrcOpptTranxCnt),        // 已成交商机数
+            visitCustCnt: formatNums(data.visitCustCnt),               // 已拜访商机数
+            addLoanBal: formatNum(data.addLoanBal / 10000),            // 新增贷款余额(万元)
+            addTimeDpsitBal: formatNum(data.addTimeDpsitBal / 10000),  // 新增定期余额(万元)
+            adCurrDpsitBal: formatNum(data.adCurrDpsitBal / 10000),    // 新增活期存款余额(万元)
+            addCftBal: formatNum(data.addCftBal / 10000),              // 新增理财余额(万元)
           }
           this.weekList.forEach(item => {
             if(item.date == moment(date).format('YYYY-MM-DD')){
