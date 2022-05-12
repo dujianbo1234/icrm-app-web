@@ -544,7 +544,6 @@ export default {
     },
     showWeek(week) {
       if(week.timeStamp > week.todayTimeStamp){
-        Toast.fail("大于当前数据时间")
         return
       }
       this.weekReportTitle = `${week.date} 工作日报`;
@@ -1302,7 +1301,7 @@ export default {
       let timeArr = []
       for (var i = 9; i >= 0; i--) {
         let obj = {
-          week: ["天", "一", "二", "三", "四", "五", "六"][moment(lastTime).subtract(i, 'day').format('d')],      // 星期几
+          week: ["日", "一", "二", "三", "四", "五", "六"][moment(lastTime).subtract(i, 'day').format('d')],      // 星期几
           date: moment(lastTime).subtract(i, 'day').format('YYYY-MM-DD'),                                       // 日期YYYY-MM-DD
           showDate: moment(lastTime).subtract(i, 'day').format('DD'),                                           // 日
           timeStamp: moment(lastTime).subtract(i, 'day').format('YYYY-MM-DD'),                                  // 日期的时间戳
