@@ -255,7 +255,7 @@
       </div>
       <!-- 贷款余额(万元) -->
       <div class="contentItem" style="margin-top: 0.12rem">
-        <TitleCard :title="['贷款余额','贷款日均']" :arr="peCstLoan" @clickDalong="clickDalong(' ',['待定'])"></TitleCard>
+        <TitleCard :title="['贷款余额','贷款日均']" :arr="peCstLoan" @clickDalong="clickDalong(' ',['零售贷款余额'])"></TitleCard>
       </div>
       <!-- 分割线 -->
       <div class="dividers"><van-divider :dashed="true"/></div>
@@ -1085,7 +1085,6 @@ export default {
             })
           }
         })
-        console.log('',xData)
         this.barDataxData = xData
         this.xAxis = xAxis
         this.barData = {

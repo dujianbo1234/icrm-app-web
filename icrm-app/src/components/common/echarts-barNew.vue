@@ -7,7 +7,7 @@
         <span class="timeText" v-if="timeUnit == 0">{{moment(axisValue).format('YYYY-MM-DD')}}</span>
         <span class="timeText" v-else>{{moment(axisValue).format('YYYY-MM')}}</span>
         <span :style="{'color': currentNum > 0 ? 'red' : (currentNum < 0 ? '#37cd37' : '#8C8C8C') }">
-          {{currentNum > 0 ? `+${numFliter(currentNum)}` : numFliter(currentNum)}}{{unit}}
+          {{`${currentNum > 0 ? '+' : ''}${numFliter(currentNum)}${unit}`}}
         </span>
       </span>
       <span class="right">{{numType}}：<span class="text">{{unit == '万元' ? numFliter(pepoe) : pepoe}}{{numUnit}}</span></span>
@@ -142,7 +142,7 @@ export default {
       arr.forEach((item, index) => {
         let obj = {
           value: item.value,
-          toYstd: item.toYstd,
+          // toYstd: item.toYstd,
           time: item.time,
           totalBalance: item.totalBalance,
           itemStyle: {
@@ -153,7 +153,7 @@ export default {
         // 初始化顶部展示
         if(index == 0){
           this.axisValue = item.time
-          this.currentNum = item.toYstd   // 较上日
+          this.currentNum = item.value   // 较上日
           this.pepoe = item.totalBalance  // 总数
         }
       })
