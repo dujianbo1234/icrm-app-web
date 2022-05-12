@@ -9,7 +9,7 @@
             <div class="userAvatar"></div>
             <div class="userName">{{ $store.state.userMsg.empname }}</div>
           </div>
-          <div class="topTips">慎在于畏小，智在于治大。</div>
+          <div class="topTips">{{manifesto}}</div>
         </div>
         <div class="topMsgBar">
           <div class="msgBarItem" @click="$router.push('/chenxihui')">
@@ -343,6 +343,9 @@
 <script>
 import { formatNum, formatNums } from "../../api/common.js";
 import {
+	getEmpInfo,
+} from "../../request/theme.js";
+import {
  queryBusiDt,
  queryHomeDayReportList,
  queryHomeOrgDayReportList,
@@ -378,6 +381,7 @@ export default {
   },
   data() {
     return {
+      manifesto: '',
       currentMonth: '-',
       dataDate: "",
       weekList: [],
@@ -1305,6 +1309,14 @@ export default {
       this.$nextTick(()=>{
         this.$refs.weekList.scrollLeft = 1000
       })
+    },
+    /* 查询工作宣言 */
+    queryManifesto(){
+      getEmpInfo({}, (res)=>{
+        if (res.data) {
+          this.manifesto = res.data.manifesto
+        }
+      })
     }
   },
   mounted() {
@@ -1349,6 +1361,7 @@ export default {
           }
         );
         this.getKHGMMsg();
+        this.queryManifesto()
         this.queryReportDetail(this.dataDate)
         this.customertrends(this.dataDate)
         this.aumGrowthTrend(this.dataDate)
