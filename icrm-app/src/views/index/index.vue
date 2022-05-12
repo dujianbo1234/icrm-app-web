@@ -232,7 +232,7 @@
       <!-- AUM余额分布图 -->
       <div class="contentItem">
         <div class="custStyle aumStyle">
-          <span class="title">{{`AUM${['余额','日均'][listType]}分布图`}}</span>
+          <span class="title">{{`资产${['余额','日均'][listType]}分布`}}</span>
           <span @click="aumClick">
             <van-icon :name="require('@/assets/image/list_1.png')" size="0.32rem" v-if="aumFlag == 0"/>
             <van-icon :name="require('@/assets/image/list_2.png')" size="0.32rem" v-else/>
@@ -604,17 +604,17 @@ export default {
       queryHomPeCstAum(body,(res) => {
           if (res.data && res.data.records && res.data.records.length) {
             var dataObj = res.data.records[0];
-            this.peCstAum = [ // 待测试
+            this.peCstAum = [
               [
-                dataObj.aumBal,                 // AUM余额
-                dataObj.aumBalToYstd,           // AUM余额较上日
-                dataObj.aumBalToLastMonth,      // AUM余额较上月
-                dataObj.aumBalToBegng           // AUM余额较年初
+                dataObj.aumBbalKh,              // AUM余额(考核)
+                dataObj.aumBbalToYstdKh,        // AUM余额(考核)较上日
+                dataObj.aumBbalToLastMonthKh,   // AUM余额(考核)较上月
+                dataObj.aumBbalToBegngKh        // AUM余额(考核)较年初
               ],
               [
-                dataObj.aumYearAvg,             // AUM日均
-                dataObj.aumYearAvgToLm,         // AUM日均较上月
-                dataObj.aumYearAvgToYy,         // AUM日均较年初
+                dataObj.aumYearAvgKh,           // AUM日均(考核)
+                dataObj.aumYearAvgKhToLm,       // AUM日均(考核)较上月
+                dataObj.aumYearAvgKhToLy,       // AUM日均(考核)较年初
               ]
             ]
             this.peCstLoan = [
@@ -640,7 +640,7 @@ export default {
               { name: '合计', a: dataObj.aumBal, b: dataObj.aumBalToYstd, c: dataObj.aumBalToLastMonth, d: dataObj.aumBalToBegng },
             ]
             this.listDatas = [
-              { name: '活期存款余额', a: dataObj.currDpsitYearAvg, b: dataObj.currDpsitYearAvgToLm, c: dataObj.currDpsitYearAvgToLy },
+              { name: '活期存款余额', a: dataObj.currDpsitMonthAvg, b: dataObj.currDpsitMonthAvgToLm, c: dataObj.currDpsitMonthAvgToLy },
               { name: '定期存款余额', a: dataObj.timeDpsitMonthAvg, b: dataObj.timeDpsitMonthAvgToLm, c: dataObj.timeDpsitMonthAvgToLy },
               { name: '理财余额', a: dataObj.cftYearAvg, b: dataObj.cftYearAvgToLm, c: dataObj.cftYearAvgToLy },
               { name: '基金余额', a: dataObj.fndYearAvgToLm, b: dataObj.fndYearAvgToLm, c: dataObj.fndYearAvgToLy },
@@ -782,8 +782,8 @@ export default {
             this.aumRj = [
               {
                 name: "活期存款余额",
-                value: Number((dataObj.currDpsitYearAvg / 10000).toFixed(2)),
-                percentage: percentage(dataObj.currDpsitYearAvgPct),
+                value: Number((dataObj.currDpsitMonthAvg / 10000).toFixed(2)),
+                percentage: percentage(dataObj.currDpsitMonthAvgPct),
                 itemStyle: itemStyle(0)
               },
               {
@@ -1070,7 +1070,7 @@ export default {
               arr.forEach((name,index)=> {
                 let obj = {
                   value: item[`${name}${['ToYstd','ToLastMonth'][this.timeUnit]}`] || 0,
-                  toYstd: item[`${name}${['ToYstd','ToLastMonth'][this.timeUnit]}`] || 0,
+                  // toYstd: item[`${name}${['ToYstd','ToLastMonth'][this.timeUnit]}`] || 0,
                   time: itemX.time,
                   totalBalance: item[name] || 0,
                 }
@@ -1083,7 +1083,7 @@ export default {
             arr.forEach((n,index)=> {
                 let obj = {
                   value: 0,
-                  toYstd: 0,
+                  // toYstd: 0,
                   time: itemX.time,
                   totalBalance: 0
                 }
@@ -1107,7 +1107,7 @@ export default {
         pageSize: '31'
       }
       let xAxis = []
-      // 根据查询日期 日/月 生成一条X轴
+      // 根据查询日期 日/月0/日均1 生成一条X轴
       if(this.timeUnit2 == 0){
         body.etlDt = moment(time).format('YYYYMM')
         let lastDay = Number(moment(time).endOf('month').format('DD')) // 计算该月有多天
@@ -1120,7 +1120,7 @@ export default {
         }
       }else{
         body.etlDt = moment(time).format('YYYYMMDD')
-        body.judge = '0'
+        body.judge = this.listType.toString()
         for(let i = 11; i >= 0; i--){
           let obj = {
             value: moment(time).subtract(i, 'month').format('MM'),  // 需要展示的时间
@@ -1132,7 +1132,10 @@ export default {
       queryAUMGrowthTrend(body, (res) => {
         let data = res.data.records
         // 全部, 活期存款, 定期存款, 理财, 基金, 保险, 信托
-        let arr = ['aumBal','currDpsitBal','timeDpsitBal','cftBal','fndBal','insBal','entrstBal']
+        let arr = [
+          ['aumBal','currDpsitBal','timeDpsitBal','cftBal','fndBal','insBal','entrstBal'], // 余额
+          ['aumYearAvgKh','currDpsitYearAvg','timeDpsitMonthAvg','cftYearAvg','fndYearAvg','insYearAvg','entrstYearAvg'] // 日均
+        ][this.listType]
         let xData = [[],[],[],[],[],[],[]] 
         // 根据生成的X轴去拿到接口返回的每一条X轴的数据
         xAxis.forEach(itemX => {
@@ -1141,8 +1144,8 @@ export default {
             if(itemX.time == item.etlDt){
               arr.forEach((name,index)=> {
                 let obj = {
-                  value: item[`${name}${['ToYstd','ToLastMonth'][this.timeUnit2]}`]/10000 || 0,
-                  toYstd: item[`${name}${['ToYstd','ToLastMonth'][this.timeUnit2]}`]/10000 || 0,
+                  value: item[`${name}${[['ToYstd','ToLastMonth'][this.timeUnit2],'ToLm'][this.listType]}`]/10000 || 0,
+                  // toYstd: item[`${name}${['ToYstd','ToLastMonth'][this.timeUnit2]}`]/10000 || 0,
                   time: itemX.time,
                   totalBalance: item[name]/10000 || 0
                 }
@@ -1155,7 +1158,7 @@ export default {
             arr.forEach((n,index)=> {
                 let obj = {
                   value: 0,
-                  toYstd: 0,
+                  // toYstd: 0,
                   time: itemX.time,
                   totalBalance: 0
                 }
@@ -1192,7 +1195,7 @@ export default {
         }
       }else{
         body.etlDt = moment(time).format('YYYYMMDD')
-        body.judge = '0'
+        body.judge = this.loanType.toString()
         for(let i = 11; i >= 0; i--){
           let obj = {
             value: moment(time).subtract(i, 'month').format('MM'),  // 需要展示的时间
@@ -1201,10 +1204,14 @@ export default {
           xAxis.push(obj)
         }
       }
+      //贷款余额月日均-趋势图
       queryLoanGrowthTrend(body, (res) => {
         let data = res.data.records
         // 全部, 按揭贷款, 消费贷款, 经营贷款
-        let arr = ['loanBal','mrtgLoanBal','cnsmLoanBal','corprtnLoanBal']
+        let arr = [
+          ['loanBal','mrtgLoanBal','cnsmLoanBal','corprtnLoanBal'],
+          ['loanMonthAvg','mrtgLoanYearAvg','cnsmLoanYearAvg','corprtnLoanYearAvg']
+        ][this.loanType]
         let xData = [[],[],[],[]] 
         // 根据生成的X轴去拿到接口返回的每一条X轴的数据
         xAxis.forEach(itemX => {
@@ -1213,16 +1220,21 @@ export default {
             if(itemX.time == item.etlDt){
               arr.forEach((name,index)=> {
                 let obj = {
-                  // value: item[name]/10000 || 0,
                   time: itemX.time,
                   totalBalance :  item[name]/10000 || 0
                 }
-                if(name == 'loanBal'){
-                  obj.value = item[`${name}${['ToYstd','ToLastMonth'][this.timeUnit3]}`]/10000 || 0
-                  obj.toYstd = item[`${name}${['ToYstd','ToLastMonth'][this.timeUnit3]}`]/10000 || 0
+                if(this.loanType == 0){
+                  if(name == 'loanBal'){
+                    obj.value = item[`${name}${['ToYstd','ToLastMonth'][this.timeUnit3]}`]/10000 || 0
+                  }else{
+                    obj.value = item[`${name.replace('Bal','')}${['ToYstd','ToLm'][this.timeUnit3]}`]/10000 || 0
+                  }
                 }else{
-                  obj.value = item[`${name.replace('Bal','')}${['ToYstd','ToLm'][this.timeUnit3]}`]/10000 || 0
-                  obj.toYstd = item[`${name.replace('Bal','')}${['ToYstd','ToLm'][this.timeUnit3]}`]/10000 || 0
+                  if(name == 'loanMonthAvg' || name == 'corprtnLoanYearAvg'){
+                    obj.value = item[`${name}}ToLm`]/10000 || 0
+                  }else{
+                    obj.value = item[`${name}}_to_lm`]/10000 || 0
+                  }
                 }
                 xData[index].push(obj)
               })
@@ -1233,7 +1245,7 @@ export default {
             arr.forEach((n,index)=> {
                 let obj = {
                   value: 0,
-                  toYstd: 0,
+                  // toYstd: 0,
                   time: itemX.time,
                   totalBalance: 0
                 }
