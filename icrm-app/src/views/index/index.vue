@@ -577,7 +577,7 @@ export default {
         }
       };
       let body = {
-        etlDt: moment(date).format('YYYYMMDD')
+        etlDt: moment(time).format('YYYYMMDD')
       }
       if (this.$store.state.userMsg.roleId == "00000004") {
         queryHomeDayReportList(body,(res) => {
