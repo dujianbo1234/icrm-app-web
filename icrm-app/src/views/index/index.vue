@@ -65,21 +65,21 @@
             <div>
               <div class="lText">
                 <p class="title">已跟进商机数</p>
-                <p class="num">{{titleData.cmrcOpptFollowUpCnt || 0}}</p>
+                <p class="num">{{titleData.cmrcOpptFollowUpCntApp || 0}}</p>
               </div>
               <div class="rText"></div>
             </div>
             <div>
               <div class="lText">
                 <p class="title">已成交商机数</p>
-                <p class="num">{{titleData.cmrcOpptTranxCnt || 0}}</p>
+                <p class="num">{{titleData.cmrcOpptTranxCntApp || 0}}</p>
               </div>
               <div class="rText"></div>
             </div>
             <div>
               <div class="lText">
                 <p class="title">已拜访客户数</p>
-                <p class="num">{{titleData.visitCustCnt || 0}}</p>
+                <p class="num">{{titleData.visitCustCntApp || 0}}</p>
               </div>
             </div>
           </div>
@@ -556,9 +556,9 @@ export default {
         if (res.data && res.data.records && res.data.records.length) {
           var data = res.data.records[0];
           this.titleData = {
-            cmrcOpptFollowUpCnt: formatNums(data.cmrcOpptFollowUpCnt), // 已跟进商机数
-            cmrcOpptTranxCnt:formatNums(data.cmrcOpptTranxCnt),        // 已成交商机数
-            visitCustCnt: formatNums(data.visitCustCnt),               // 已拜访商机数
+            cmrcOpptFollowUpCntApp: formatNums(data.cmrcOpptFollowUpCntApp), // 已跟进商机数
+            cmrcOpptTranxCntApp:formatNums(data.cmrcOpptTranxCntApp),        // 已成交商机数
+            visitCustCntApp: formatNums(data.visitCustCntApp),               // 已拜访商机数
             addLoanBal: formatNum(data.addLoanBal / 10000),            // 新增贷款余额(万元)
             addTimeDpsitBal: formatNum(data.addTimeDpsitBal / 10000),  // 新增定期存款余额(万元)
             adCurrDpsitBal: formatNum(data.adCurrDpsitBal / 10000),    // 新增活期存款余额(万元)
