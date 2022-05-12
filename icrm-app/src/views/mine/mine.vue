@@ -7,10 +7,6 @@
 				<div class="plate1_1_msgBox">
 					<div class="plate1_1_empname">
 						<span>{{$store.state.userMsg.empname}}</span>
-						<van-icon v-if="userInfo.sex==1" :name="require('../../assets/image/mine_main_sex0.png')"
-							style="margin-left: 0.06rem;" size="12" />
-						<van-icon v-if="userInfo.sex==2" :name="require('../../assets/image/mine_main_sex1.png')"
-							style="margin-left: 0.06rem;" size="12" />
 					</div>
 					<div class="plate1_1_roleName">{{$store.state.userMsg.roleName}}岗</div>
 				</div>
@@ -80,11 +76,11 @@
 				<van-field v-model="manifesto" type="textarea" maxlength="15" show-word-limit placeholder="请输入工作宣言" />
 				<div class="popPlate3">
 					<div class="popPlate3_1" @click="showPopup2=false;manifesto=''">取消</div>
-					<div class="popPlate3_2" @click="commitAdvice">保存</div>
+					<div class="popPlate3_2" @click="commitManifesto">保存</div>
 				</div>
 			</div>
 		</van-popup>
-		<van-popup v-model:show="showRole" position="bottom">
+		<van-popup v-model:show="showRole" position="bottom" z-index="100002">
 			<div class="roleBox">
 				<div class="roleItem" :class="item.roleId==roleId_a?'roleItem_a':''" v-for="(item,i) in roleList"
 					:key="'roleItem'+i" @click="roleId_a=item.roleId">{{item.roleName}}</div>
@@ -96,6 +92,7 @@
 			</div>
 			<div class="bottomZW"></div>
 		</van-popup>
+		<!-- <van-popup v-model:show="pageShow" :overlay-style="{'background-color': 'rgba(255, 255, 255, 0.5)', 'z-index': '100002'}"/> -->
 	</div>
 </template>
 
@@ -129,7 +126,8 @@
 				manifesto: "",
 				showRole: false,
 				roleList: [],
-				roleId_a: ""
+				roleId_a: "",
+				// pageShow: true
 			}
 		},
 		methods: {
@@ -230,7 +228,7 @@
 				}
 			},
 			commitManifesto() {
-				if (this.advice) {
+				if (this.manifesto) {
 					Toast.loading({
 						message: "正在保存",
 						forbidClick: true,
@@ -290,6 +288,7 @@
 			},
 		},
 		mounted() {
+			// this.pageShow = false;
 			getEmpInfo({}, (res) => {
 				if (res.data) {
 					this.userInfo = res.data;
@@ -335,6 +334,10 @@
 		padding: 0;
 		border: 0;
 	}
+	
+	:deep(.van-overlay) {
+		z-index: 100002;
+	}
 
 	.plate1 {
 		width: 100%;
@@ -370,9 +373,6 @@
 		text-align: center;
 		font-weight: 500;
 		text-align: left;
-		display: flex;
-		flex-wrap: nowrap;
-		align-items: center;
 	}
 
 	.plate1_1_roleName {
