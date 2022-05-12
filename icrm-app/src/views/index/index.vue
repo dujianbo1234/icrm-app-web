@@ -93,7 +93,7 @@
             </div>
             <div>
               <div class="lText">
-                <p class="title">新增定期贷款余额(万元)</p>
+                <p class="title">新增定期存款余额(万元)</p>
                 <p class="num">{{titleData.addTimeDpsitBal || 0}}</p>
               </div>
             </div>
@@ -101,14 +101,14 @@
           <div class="hidePageB">
             <div>
               <div class="lText">
-                <p class="title">新增贷款余额(万元)</p>
+                <p class="title">新增活期存款余额(万元)</p>
                 <p class="num">{{titleData.adCurrDpsitBal || 0}}</p>
               </div>
               <div class="rText"></div>
             </div>
             <div>
               <div class="lText">
-                <p class="title">新增定期贷款余额(万元)</p>
+                <p class="title">新增理财余额(万元)</p>
                 <p class="num">{{titleData.addCftBal || 0}}</p>
               </div>
             </div>
@@ -542,7 +542,6 @@ export default {
       Toast.fail("正在开发中")
     },
     showWeek(week) {
-      // this.$refs.weekList.scrollLeft = 0
       if(week.timeStamp > week.todayTimeStamp){
         Toast.fail("大于当前数据时间")
         return
@@ -550,7 +549,7 @@ export default {
       this.weekReportTitle = `${week.date} 工作日报`;
       this.queryReportDetail(week.date)
     },
-    queryReportDetail(date){
+    queryReportDetail(time){
       Toast.loading({message: "正在加载",forbidClick: true,duration: 0});
       var setWeekReportDetail = (res) => {
         if (res.data && res.data.records && res.data.records.length) {
@@ -560,20 +559,19 @@ export default {
             cmrcOpptTranxCnt:formatNums(data.cmrcOpptTranxCnt),        // 已成交商机数
             visitCustCnt: formatNums(data.visitCustCnt),               // 已拜访商机数
             addLoanBal: formatNum(data.addLoanBal / 10000),            // 新增贷款余额(万元)
-            addTimeDpsitBal: formatNum(data.addTimeDpsitBal / 10000),  // 新增定期余额(万元)
+            addTimeDpsitBal: formatNum(data.addTimeDpsitBal / 10000),  // 新增定期存款余额(万元)
             adCurrDpsitBal: formatNum(data.adCurrDpsitBal / 10000),    // 新增活期存款余额(万元)
             addCftBal: formatNum(data.addCftBal / 10000),              // 新增理财余额(万元)
           }
           this.weekList.forEach(item => {
-            if(item.date == moment(date).format('YYYY-MM-DD')){
+            if(item.date == moment(time).format('YYYY-MM-DD')){
               item.toDay = true
             }else{
               item.toDay = false
             }
           })
-          this.currentMonth = moment(date).format('M')
+          this.currentMonth = moment(time).format('M')
           Toast.clear();
-          // this.showWeekDetial= true
         } else {
           Toast.fail("日报数据为空");
         }
@@ -1015,6 +1013,10 @@ export default {
     aumClick(){
       if(this.aumFlag == 0){
         this.aumFlag = 1
+        // this.aumDisDiaData = [this.aumYe,this.aumRj][this.listType]
+        // this.$nextTick(() => {
+        //   this.$refs.aumDisDiaChart.drawEcharts();
+        // });
         this.$nextTick(()=>{
           this.getAumDisDiaData()
         })
