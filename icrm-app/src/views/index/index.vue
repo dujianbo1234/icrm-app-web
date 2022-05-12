@@ -1013,10 +1013,6 @@ export default {
     aumClick(){
       if(this.aumFlag == 0){
         this.aumFlag = 1
-        // this.aumDisDiaData = [this.aumYe,this.aumRj][this.listType]
-        // this.$nextTick(() => {
-        //   this.$refs.aumDisDiaChart.drawEcharts();
-        // });
         this.$nextTick(()=>{
           this.getAumDisDiaData()
         })
