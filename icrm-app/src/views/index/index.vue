@@ -232,7 +232,7 @@
       <!-- AUM余额分布图 -->
       <div class="contentItem">
         <div class="custStyle aumStyle">
-          <span class="title">AUM余额分布图</span>
+          <span class="title">{{`AUM${['余额','日均'][listType]}分布图`}}</span>
           <span @click="aumClick">
             <van-icon :name="require('@/assets/image/list_1.png')" size="0.32rem" v-if="aumFlag == 0"/>
             <van-icon :name="require('@/assets/image/list_2.png')" size="0.32rem" v-else/>
