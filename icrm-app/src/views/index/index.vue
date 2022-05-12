@@ -224,7 +224,7 @@
       </div>
       <!-- AUM余额(万元) -->
       <div class="contentItem" style="margin-top: 0.12rem">
-        <TitleCard :title="['AUM余额','AUM日均']" :text="['AUM考核口径不包括储蓄存款','AUM考核口径不包括储蓄存款']" :arr="peCstAum" @change="peCstAumChange"></TitleCard>
+        <TitleCard :title="['AUM余额','AUM日均']" :arr="peCstAum" @change="peCstAumChange" @clickDalong="clickDalong(' ',['AUM考核口径不包括储蓄存款'])"></TitleCard>
       </div>
       <!-- 分割线 -->
       <div class="dividers"><van-divider :dashed="true"/></div>
@@ -255,7 +255,7 @@
       </div>
       <!-- 贷款余额(万元) -->
       <div class="contentItem" style="margin-top: 0.12rem">
-        <TitleCard :title="['贷款余额','贷款日均']" :arr="peCstLoan"></TitleCard>
+        <TitleCard :title="['贷款余额','贷款日均']" :arr="peCstLoan" @clickDalong="clickDalong(' ',['待定'])"></TitleCard>
       </div>
       <!-- 分割线 -->
       <div class="dividers"><van-divider :dashed="true"/></div>
@@ -329,6 +329,7 @@
           </div>
         </div>
       </van-dialog>
+
       <van-dialog v-model:show="clickDalongShow" :title="dalongShow.title" theme="round-button" confirmButtonColor="#026DFF" class="dialogBox">
         <div class="diloag">
           <div class="diloagItem">
@@ -1062,9 +1063,10 @@ export default {
             if(itemX.time == item.etlDt){
               arr.forEach((name,index)=> {
                 let obj = {
-                  value: item[name] || 0,
+                  value: item[`${name}${['ToYstd','ToLastMonth'][this.timeUnit]}`] || 0,
                   toYstd: item[`${name}${['ToYstd','ToLastMonth'][this.timeUnit]}`] || 0,
-                  time: itemX.time
+                  time: itemX.time,
+                  totalBalance: item[name] || 0
                 }
                 xData[index].push(obj)
               })
@@ -1076,7 +1078,8 @@ export default {
                 let obj = {
                   value: 0,
                   toYstd: 0,
-                  time: itemX.time
+                  time: itemX.time,
+                  totalBalance: 0
                 }
                 xData[index].push(obj)
             })
@@ -1132,9 +1135,10 @@ export default {
             if(itemX.time == item.etlDt){
               arr.forEach((name,index)=> {
                 let obj = {
-                  value: item[name]/10000 || 0,
+                  value: item[`${name}${['ToYstd','ToLastMonth'][this.timeUnit2]}`]/10000 || 0,
                   toYstd: item[`${name}${['ToYstd','ToLastMonth'][this.timeUnit2]}`]/10000 || 0,
-                  time: itemX.time
+                  time: itemX.time,
+                  totalBalance: item[name] || 0
                 }
                 xData[index].push(obj)
               })
@@ -1146,7 +1150,8 @@ export default {
                 let obj = {
                   value: 0,
                   toYstd: 0,
-                  time: itemX.time
+                  time: itemX.time,
+                  totalBalance: 0
                 }
                 xData[index].push(obj)
             })
@@ -1202,12 +1207,15 @@ export default {
             if(itemX.time == item.etlDt){
               arr.forEach((name,index)=> {
                 let obj = {
-                  value: item[name]/10000 || 0,
-                  time: itemX.time
+                  // value: item[name]/10000 || 0,
+                  time: itemX.time,
+                  totalBalance :  item[name]/10000 || 0
                 }
                 if(name == 'loanBal'){
+                  obj.value = item[`${name}${['ToYstd','ToLastMonth'][this.timeUnit3]}`]/10000 || 0
                   obj.toYstd = item[`${name}${['ToYstd','ToLastMonth'][this.timeUnit3]}`]/10000 || 0
                 }else{
+                  obj.value = item[`${name.replace('Bal','')}${['ToYstd','ToLm'][this.timeUnit3]}`]/10000 || 0
                   obj.toYstd = item[`${name.replace('Bal','')}${['ToYstd','ToLm'][this.timeUnit3]}`]/10000 || 0
                 }
                 xData[index].push(obj)
@@ -1220,7 +1228,8 @@ export default {
                 let obj = {
                   value: 0,
                   toYstd: 0,
-                  time: itemX.time
+                  time: itemX.time,
+                  totalBalance: 0
                 }
                 xData[index].push(obj)
             })

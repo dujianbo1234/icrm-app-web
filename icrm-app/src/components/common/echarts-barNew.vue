@@ -56,8 +56,8 @@ export default {
           padding: [0,2.5],
 					formatter: params => {
             this.axisValue = params[0].data.time
-            this.currentNum = params[0].data.toYstd
-            this.pepoe = params[0].value
+            this.currentNum = params[0].value
+            this.pepoe = params[0].data.totalBalance
             let string = 
             `<div style="display: flex;justify-content: space-between;align-items: center;">
               <span style="width: 0.05rem; height: 0.05rem; border-radius: 50%; background: ${params[0].color}; margin-right: 0.06rem"></span>

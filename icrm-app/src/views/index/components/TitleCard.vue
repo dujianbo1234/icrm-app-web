@@ -2,9 +2,9 @@
   <div class="TitleCard">
     <div class="titleTop">
       <div class="titleL">
-        <van-icon :name="require('@/assets/image/AUM_img.png')" size="0.2rem" />
+        <van-icon :name="require('@/assets/image/AUM_img.png')" size="0.2rem"/>
         <h3>{{title[num ? 0 : 1]}}(万元)</h3>
-        <van-icon name="question-o" size="0.16rem" color="#BFBFBF"/>
+        <van-icon name="question-o" size="0.16rem" color="#BFBFBF" @click="clickDalong"/>
       </div>
       <span class="titleR" @click="clickBtn">
         <van-icon :name="require('@/assets/image/AUM_YE.png')" size="0.16rem"/>
@@ -62,6 +62,9 @@ export default {
     clickBtn(){
       this.num = !this.num
       this.$emit('change',this.num)
+    },
+    clickDalong(){
+      this.$emit('clickDalong')
     }
   },
 };
