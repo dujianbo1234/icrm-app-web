@@ -145,9 +145,9 @@
 						<div class="followItem6_1">
 							<van-icon :name="require('../../assets/image/common_dingwei_blue.png')" size="12"
 								style="margin-right: 0.04rem;flex-shrink: 0;padding: 0.03rem 0;" />
-							<span>{{followItem.visitAddress.split(",")[0]}}</span>
+							<span>{{followItem.visitAddress.split("------")[1]?followItem.visitAddress.split("------")[1]:followItem.visitAddress.split("------")[0]}}</span>
 						</div>
-						<div class="followItem6_2">{{followItem.visitAddress.split(",")[1]}}</div>
+						<div class="followItem6_2">{{followItem.visitAddress.split("------")[1]?followItem.visitAddress.split("------")[0]:""}}</div>
 					</div>
 					<div class="followItem3" v-if="i!=followMsg.length-1"></div>
 					<div class="followItem4">
@@ -262,12 +262,12 @@
 				<van-icon :name="require('../../assets/image/common_dingwei_blue.png')" size="15"
 					style="margin-right: 0.04rem;flex-shrink: 0;padding: 0.03rem 0;" />
 				<div class="popPlate3_1" v-if="openLocation">
-					<div class="popPlate3_1_1">{{dingwei[0]}}</div>
-					<div class="popPlate3_1_2">{{dingwei[1]}}</div>
+					<div class="popPlate3_1_1">{{dingwei.split("------")[1]?dingwei.split("------")[1]:dingwei.split("------")[0]}}</div>
+					<div class="popPlate3_1_2">{{dingwei.split("------")[1]?dingwei.split("------")[0]:""}}</div>
 				</div>
 				<div class="popPlate3_1" v-else>
-					<div class="popPlate3_1_1">未获取到定位权限！</div>
-					<div class="popPlate3_1_2">请在手机设置中授予APP定位权限后重试</div>
+					<div class="popPlate3_1_1">未获取到定位信息！</div>
+					<div class="popPlate3_1_2">请确认设备是否已开启APP定位权限及GPS信号是否正常</div>
 				</div>
 				<van-icon class="popPlate3_2" :name="require('../../assets/image/common_reset.png')" size="20"
 					@click="getLocation" />
@@ -286,7 +286,8 @@
 		saveOpportPractialInfo,
 		queryOpportCustServList,
 		queryCmrcOpportunityList,
-		saveOpportCustServInfo
+		saveOpportCustServInfo,
+		opportCustServUploadMpaas
 	} from "../../request/market.js";
 	import {
 		Toast,
@@ -319,7 +320,7 @@
 				showVisit: false,
 				followValue: "",
 				photoList: [],
-				dingwei: [],
+				dingwei: "",
 				openLocation: true,
 			}
 		},
@@ -445,10 +446,12 @@
 				this.$refs.sendMessage.openMbox({
 					type: "",
 					searchData: {},
-					list: [this.baseMsg]
+					list: [this.baseMsg],
+					shrtmsgCnl: "8"
 				})
 			},
 			sendSuccess(msg) {
+				return;
 				saveOpportCustServInfo({
 					sysId: this.baseMsg.sysId,
 					custNum: this.baseMsg.custNo,
@@ -465,7 +468,7 @@
 			openVisit() {
 				this.followValue = "";
 				this.photoList = [];
-				this.dingwei = [];
+				this.dingwei = "";
 				this.showVisit = true;
 				this.getLocation();
 			},
@@ -476,25 +479,35 @@
 				AlipayJSBridge.call('openPickerV', {
 					openType: "0",
 				}, (res1) => {
+					console.log("000",res1)
 					if (res1.status == "000000") {
 						Toast.loading({
 							message: "正在上传",
 							forbidClick: true,
 							duration: 0
 						});
-						opportCustServUpload({
+						opportCustServUploadMpaas({
 							file: res1.result
-						}).then((res2) => {
-							if (res2.code == 0) {
-								Toast.success("上传成功");
-								this.photoList.push({
-									url: res1.result,
-									tableKey: res2.data[0].tableKey
-								})
-							} else {
-								Toast.fail(res.msg)
-							}
+						},(res2)=>{
+							Toast.success("上传成功");
+							this.photoList.push({
+								url: res1.result,
+								tableKey: res2.data[0].tableKey
+							})
 						})
+						// opportCustServUpload({
+						// 	file: res1.result
+						// }).then((res2) => {
+						// 	if (res2.code == 0) {
+						// 		Toast.success("上传成功");
+						// 		this.photoList.push({
+						// 			url: res1.result,
+						// 			tableKey: res2.data[0].tableKey
+						// 		})
+						// 	} else {
+						// 		Toast.fail(res.msg)
+						// 	}
+						// })
 					} else if (res.status != "000004") {
 						Toast.fail(res.msg)
 					}
@@ -505,10 +518,10 @@
 			},
 			getLocation() {
 				this.openLocation = true;
-				this.dingwei = ["正在获取位置信息..."];
+				this.dingwei = "正在获取位置信息...";
 				AlipayJSBridge.call('getLocation', {}, (res) => {
 					if (res.status == "000000") {
-						this.dingwei = [res.result]
+						this.dingwei = res.result;
 					} else {
 						this.openLocation = false;
 					}
@@ -519,6 +532,11 @@
 					Toast.fail("请至少上传一张照片");
 					return;
 				}
+				if (this.dingwei == "") {
+					Toast.fail("请先获取定位信息");
+					return;
+				}
+				if (this.dingwei == "正在获取位置信息...") return;
 				Toast.loading({
 					message: "正在提交",
 					forbidClick: true,
@@ -530,7 +548,7 @@
 					cstNam: this.baseMsg.custNm,
 					serviceType: "01",
 					serviceContent: this.followValue,
-					visitAddress: this.dingwei.join(","),
+					visitAddress: this.dingwei,
 					custOrg: this.baseMsg.belongOrg,
 					custMgrNum: this.baseMsg.followUpPrsn,
 					mobileNum: this.baseMsg.ctcTel,

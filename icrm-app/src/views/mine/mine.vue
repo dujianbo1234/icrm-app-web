@@ -332,6 +332,14 @@
 		border: 0;
 	}
 	
+	.home {
+		box-sizing: border-box;
+		width: 100vw;
+		height: calc(100vh - calc(constant(safe-area-inset-top) + 1.3rem));
+		height: calc(100vh - calc(env(safe-area-inset-top) + 1.3rem));
+		background-color: #F4F4F4;
+	}
+	
 	.topZW {
 		width: 100%;
 		height: constant(safe-area-inset-top);
