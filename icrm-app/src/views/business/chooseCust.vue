@@ -145,7 +145,7 @@
 				<div class="custItem3"></div>
 				<div class="custItem4">
 					<div class="custItem4_1" :class="item.openRecomRea?'':'ycsl'">
-						<span style="color: #026DFF;font-weight: 500;">#推荐理由#</span>
+						<span style="color: #026DFF;font-weight: 600;">#推荐理由#</span>
 						<span>{{item.recomRea}}</span>
 					</div>
 					<div class="custItem4_2" @click.stop="item.openRecomRea=!item.openRecomRea">
