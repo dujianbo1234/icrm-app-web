@@ -195,7 +195,7 @@
 				searchValue: "",
 				levelIndex: 0,
 				levelList: [{
-					text: "全部",
+					text: "全部客户",
 					value: ""
 				}],
 				custList: [],
@@ -510,7 +510,6 @@
 	}
 
 	.plate4_2_2 {
-		width: 0.28rem;
 		height: 0.2rem;
 		font-family: PingFangSC-Regular;
 		font-size: 0.14rem;
@@ -558,7 +557,7 @@
 	.plate5_child_a {
 		background: rgba(2, 109, 255, 0.12);
 		color: #026DFF;
-		font-weight: 500;
+		font-weight: 600;
 	}
 
 	.plate5::-webkit-scrollbar {
