@@ -4,8 +4,8 @@
       <div class="left">
         <!-- 表头 -->
         <tr height="32" valign="middle">
-          <template v-for="(item,index) in listLabel">
-            <th :align="item.align" :key="item" v-if="index == 0">
+          <template v-for="item in listLabel">
+            <th :align="item.align" :key="item" v-if="item.fixed">
               <span class="text">{{ item.label }}</span>
             </th>
           </template>
@@ -21,8 +21,8 @@
         <div class="text">
           <!-- 表头 -->
           <tr height="32" valign="middle">
-            <template v-for="(item,index) in listLabel">
-              <th :align="item.align" :key="item" v-if="index > 0"><span class="content">{{ item.label }}</span></th>
+            <template v-for="item in listLabel">
+              <th :align="item.align" :key="item" v-if="!item.fixed"><span class="content">{{ item.label }}</span></th>
             </template>
           </tr>
           <!-- 除第一列 -->
@@ -60,11 +60,6 @@ export default {
   },
   watch: {
     listType(n, l){
-      // if(n == 1){
-      //   this.listArr = ['a','b','c']
-      // }else{
-      //   this.listArr = ['a','b','c', 'd']
-      // }
       this.$refs['right'].scrollLeft = 0
     }
   },

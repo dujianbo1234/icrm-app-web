@@ -503,14 +503,14 @@ export default {
       custType: 0,
       aumFlag: 0,
       listLabel: [
-        { label: '类型', align: 'left' },
+        { label: '类型', align: 'left', fixed: true },
         { label: '金额(万元)', align: 'right' },
         { label: '较上日(万元)', align: 'right' },
         { label: '较上月(万元)', align: 'right' },
         { label: '较年初(万元)', align: 'right' },
       ],
       listLabels: [
-        { label: '类型', align: 'left' },
+        { label: '类型', align: 'left', fixed: true },
         { label: '金额(万元)', align: 'right' },
         { label: '较上月(万元)', align: 'right' },
         { label: '较年初(万元)', align: 'right' },
@@ -543,7 +543,7 @@ export default {
       selectTime: [],
       peCstAum: [[],[]],
       peCstLoan: [[],[]],
-      titleData: {}
+      titleData: {},
     };
   },
   computed: {
@@ -1012,12 +1012,18 @@ export default {
     },
     /* AUM余额分部日月切换 */
     changeAum(data){
+      this.setAum(data)
+    },
+    setAum(data){
       this.timeUnit2 = data
       this.$refs.Histogram2.init()
       this.aumGrowthTrend(this.dataDate)
     },
     /* 贷款日月切换 */
     changeLoan(data){
+      this.setLoan(data)
+    },
+    setLoan(data){
       this.timeUnit3 = data
       this.$refs.Histogram3.init()
       this.loanGrowthTrend(this.dataDate)
@@ -1222,12 +1228,12 @@ export default {
         // 根据生成的X轴去拿到接口返回的每一条X轴的数据
         xAxis.forEach(itemX => {
           let flag = true
-          data.forEach((item, index) => {
+          data.forEach((item, i) => {
             if(itemX.time == item.etlDt){
               arr.forEach((name,index)=> {
                 let obj = {
                   time: itemX.time,
-                  totalBalance :  item[name]/10000 || 0
+                  totalBalance : item[name]/10000 || 0
                 }
                 if(this.loanType == 0){
                   if(name == 'loanBal'){
@@ -1237,9 +1243,9 @@ export default {
                   }
                 }else{
                   if(name == 'loanMonthAvg' || name == 'corprtnLoanYearAvg'){
-                    obj.value = item[`${name}}ToLm`]/10000 || 0
+                    obj.value = item[`${name}ToLm`]/10000 || 0
                   }else{
-                    obj.value = item[`${name}}_to_lm`]/10000 || 0
+                    obj.value = item[`${name}_to_lm`]/10000 || 0
                   }
                 }
                 xData[index].push(obj)
@@ -1315,12 +1321,12 @@ export default {
       this.$nextTick(() => {
         this.$refs.aumDisDiaChart.drawEcharts();
       });
-      this.changeAum(this.listType) // 切换时,调用增长趋势也要一起联动
+      this.setAum(this.listType) // 切换时,调用增长趋势也要一起联动
     },
     /* 贷款余额/日均切换 */
     peCstLoanChange(v){
       this.loanType =  v ? 0 : 1
-      this.changeLoan(this.loanType) // 切换时,调用增长趋势也要一起联动
+      this.setLoan(this.loanType) // 切换时,调用增长趋势也要一起联动
     },
     /* 近七天日期生成 */
     lastSevenDays(time){

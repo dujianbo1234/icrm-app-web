@@ -65,7 +65,7 @@ export default {
       this.active = 0
       this.active2 = 11
       this.$emit('change', 0)
-      this.$emit('change2', 11)
+      // this.$emit('change2', 11)
     }
   },
 };

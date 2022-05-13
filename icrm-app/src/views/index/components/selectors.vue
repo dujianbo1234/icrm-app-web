@@ -24,7 +24,8 @@ export default {
         'background': '#fff',
         'color': '#026DFF'
       },
-      type: 0
+      type: 0,
+      num: 0
     }
   },
   methods: {
