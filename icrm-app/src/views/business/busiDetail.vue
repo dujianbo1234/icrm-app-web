@@ -531,6 +531,10 @@
 					Toast.fail("请至少上传一张照片");
 					return;
 				}
+				if (this.dingwei == "") {
+					Toast.fail("请先获取定位信息");
+					return;
+				}
 				if (this.dingwei == "正在获取位置信息...") return;
 				Toast.loading({
 					message: "正在提交",
