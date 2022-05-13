@@ -136,10 +136,10 @@
 					tplNo: "",
 					tplNm: "",
 					shrtmsgCntnt: "",
-					shrtmsgCnl: "5",
+					shrtmsgCnl: msg.shrtmsgCnl,
 					custList: [],
 					searchData: {},
-					acsry: msg.sysId
+					acsry: msg.list[0].sysId
 				};
 				switch (msg.type) {
 					case "CLCustListSendAll":

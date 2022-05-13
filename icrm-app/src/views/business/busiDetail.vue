@@ -446,7 +446,8 @@
 				this.$refs.sendMessage.openMbox({
 					type: "",
 					searchData: {},
-					list: [this.baseMsg]
+					list: [this.baseMsg],
+					shrtmsgCnl: "8"
 				})
 			},
 			sendSuccess(msg) {
