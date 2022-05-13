@@ -216,7 +216,7 @@
       <div class="contentItem">
         <div class="custStyle">
           <selectors :title="['客户增长趋势', '客户服务等级']" @change="changeL"></selectors>
-          <selectors :title="['日', '月']" :typeP="1" @change="changeR" v-show="custType == 0"></selectors>
+          <selectors :title="['日', '月']" :typeP="1" @change="changeR" v-if="custType == 0"></selectors>
         </div>
         <!-- 客户增长趋势-图 -->
         <echartHistogram ref="Histogram" :dataArr="['全部','财富客群','贷款客群','代发客群','基础客群','商户客群']" :selectTime="selectTime" :barData="barData" @change="barChange" @change2="barChange2" :timeUnit="timeUnit" v-show="custType === 0"></echartHistogram>
@@ -1000,9 +1000,9 @@ export default {
           this.getCustLvDisDiaData()
         })
       }else{
-        this.customertrends(this.dataDate)
+        this.timeUnit = 0
         this.$refs.Histogram.init()
-        // this.timeUnit = 0
+        this.customertrends(this.dataDate)
       }
     },
     /* 日0/月1 */
