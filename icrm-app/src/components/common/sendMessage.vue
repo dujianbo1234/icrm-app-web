@@ -107,9 +107,10 @@
 					tplNo: "",
 					tplNm: "",
 					shrtmsgCntnt: "",
-					shrtmsgCnl: "5",
+					shrtmsgCnl: "8",
 					custList: [],
-					searchData: {}
+					searchData: {},
+					acsry: ""
 				},
 				haveTest: false,
 				testTel: "",
@@ -137,7 +138,8 @@
 					shrtmsgCntnt: "",
 					shrtmsgCnl: "5",
 					custList: [],
-					searchData: {}
+					searchData: {},
+					acsry: msg.sysId
 				};
 				switch (msg.type) {
 					case "CLCustListSendAll":

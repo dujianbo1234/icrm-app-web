@@ -26,3 +26,5 @@ export const saveOpportPractialInfo = (params,fun) => {request("market.saveOppor
 export const queryOpportCustServList = (params,fun) => {request("market.queryOpportCustServList", params, fun)}
 // 保存商机跟进记录
 export const saveOpportCustServInfo = (params,fun) => {request("market.saveOpportCustServInfo", params, fun)}
+// 商机跟进上传图片
+export const opportCustServUploadMpaas = (params,fun) => {request("market.opportCustServUpload", params, fun)}
