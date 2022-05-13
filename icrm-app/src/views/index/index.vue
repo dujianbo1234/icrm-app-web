@@ -268,7 +268,10 @@
         </div>
         <echartHistogram :type="1" ref="Histogram3" :dataArr="['全部','按揭贷款','消费贷款','经营贷款']" :numType="'余额总计'" :selectTime="selectTime" :barData="loanData" @change="loanChange" @change2="loanChange2" :timeUnit="timeUnit3"></echartHistogram>
       </div>
-
+      <!-- 地图测试 -->
+      <!-- <div class="contentItem" style="margin-top: 0.12rem">
+        <MapContainer></MapContainer>
+      </div> -->
 
       <!-- 另外一半 -->
       <div class="zbst" v-if="mianTabActive == 1">
@@ -375,6 +378,8 @@ import selectors from "./components/selectors.vue"
 import echartHistogram from "./components/echart-Histogram.vue"
 import TitleCard from "@/views/index/components/TitleCard.vue"
 import Table from "@/views/index/components/Table.vue"
+import MapContainer from "@/components/common/MapContainer.vue"
+
 import moment from "moment"
 export default {
   components: {
@@ -384,7 +389,8 @@ export default {
     selectors,
     echartHistogram,
     TitleCard,
-    Table
+    Table,
+    MapContainer
   },
   data() {
     return {
