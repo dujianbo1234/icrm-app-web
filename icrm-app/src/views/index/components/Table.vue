@@ -93,7 +93,7 @@ export default {
     display: flex;
     .left {
       width: 24%;
-      box-shadow: 0.005rem 0.005rem 0.03rem 0 rgba(0,0,0,0.1);
+      box-shadow: 0.05rem 0.05rem 0.1rem rgba(125, 123, 123, 0.1);
       th, th {
         min-width: 0.8rem;
       }
