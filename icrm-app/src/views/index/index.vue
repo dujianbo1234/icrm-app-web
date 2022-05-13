@@ -1000,7 +1000,7 @@ export default {
           this.getCustLvDisDiaData()
         })
       }else{
-        this.customertrends(this.dataDate)
+        // this.customertrends(this.dataDate)
         // this.timeUnit = 0
       }
     },
