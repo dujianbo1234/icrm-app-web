@@ -240,7 +240,7 @@
         </div>
         <!-- 列表 -->
         <div v-if="aumFlag == 0">
-          <Table :listLabel="[listLabel,listLabels][listType]" :listData="[listData,listDatas][listType]" :listType="listType"></Table>
+          <Table :listLabel="[listLabel,listLabels][listType]" :listData="[listData,listDatas][listType]" :listType="listType" :lableArr="[['a','b','c', 'd'],['a','b','c']][listType]"></Table>
         </div>
         <echarts-pie v-if="aumFlag == 1" unit="万元" :data="aumDisDiaData" ref="aumDisDiaChart"/>
       </div>

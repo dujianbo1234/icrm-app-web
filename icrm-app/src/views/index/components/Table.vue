@@ -27,7 +27,7 @@
           </tr>
           <!-- 除第一列 -->
           <tr v-for="item in listData" :key="item.name" height="32">
-            <td align="right" valign="middle" v-for="name in listArr" :key="name">
+            <td align="right" valign="middle" v-for="name in lableArr" :key="name">
               <span class="textS">
                 <span class="content" :style="{'color' : (item[name] > 0 && name != 'a') ? '#FF3A3A' : (item[name] < 0 ? ' #37CD37' : '#595959')}">{{numFliter(item[name], name != 'a')}}</span>
                 <template v-if="name != 'a'">
@@ -50,7 +50,8 @@ export default {
   props: {
     listLabel: Array,
     listData: Array,
-    listType: Number
+    listType: Number,
+    lableArr: Array
   },
   data() {
     return {
@@ -59,11 +60,11 @@ export default {
   },
   watch: {
     listType(n, l){
-      if(n == 1){
-        this.listArr = ['a','b','c']
-      }else{
-        this.listArr = ['a','b','c', 'd']
-      }
+      // if(n == 1){
+      //   this.listArr = ['a','b','c']
+      // }else{
+      //   this.listArr = ['a','b','c', 'd']
+      // }
       this.$refs['right'].scrollLeft = 0
     }
   },
