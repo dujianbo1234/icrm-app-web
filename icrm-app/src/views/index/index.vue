@@ -1105,7 +1105,6 @@ export default {
         })
         this.barDataxData = xData
         this.xAxis = xAxis
-        console.log(body,xData[0])
         this.barData = {
           series : xData[0],
           xAxis: xAxis,
