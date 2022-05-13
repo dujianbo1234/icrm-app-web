@@ -99,13 +99,13 @@ export default {
       }
     }
     .right {
-      width: 71%;
+      width: 76%;
       overflow-x: scroll;
       &::-webkit-scrollbar {
         display: none;
       }
       .content {
-        min-width: 0.85rem;
+        min-width: 0.75rem;
       }
     }
     th, td{
