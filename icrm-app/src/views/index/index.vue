@@ -1000,7 +1000,8 @@ export default {
           this.getCustLvDisDiaData()
         })
       }else{
-        // this.customertrends(this.dataDate)
+        this.customertrends(this.dataDate)
+        this.$refs.Histogram.init()
         // this.timeUnit = 0
       }
     },
