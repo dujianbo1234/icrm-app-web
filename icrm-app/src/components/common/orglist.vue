@@ -21,7 +21,7 @@
 					:style="{'padding-left':((orgItem.level-1)*0.26)+0.12+'rem'}"
 					:class="orgItem.value==chooseOrg.value?'orgItem_a':''" @click="checkOrg(orgItem)">
 					<van-icon :name="orgItem.open?'arrow-down':'arrow'"
-						:color="(orgItem.level+startLevel)<4?'#0088FF':orgItem.value==chooseOrg.value?'#DFDFDF':'#FFFFFF'"
+						:color="(orgItem.level+startLevel)<4?orgItem.value==chooseOrg.value?'#026DFF':'#999999':orgItem.value==chooseOrg.value?'#DFDFDF':'#FFFFFF'"
 						style="margin-right: 0.1rem;" size="0.16rem" />
 					<span :style="{color: orgItem.value=='-1'?'#AAAAAA':''}">{{orgItem.text}}</span>
 				</div>
@@ -295,6 +295,7 @@
 		line-height: 0.45rem;
 		text-align: center;
 		color: #0088FF;
+		font-weight: 500;
 	}
 
 	.orgItem {
