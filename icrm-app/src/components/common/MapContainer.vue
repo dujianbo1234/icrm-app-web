@@ -1,5 +1,5 @@
 <template>
-  <div id="container"></div>
+  <div id="container" style="width: 100%; height: 100%;"></div>
 </template>
 <script>
 import AMapLoader from "@amap/amap-jsapi-loader";
@@ -26,7 +26,7 @@ export default {
       AMapLoader.load({
         key: "7a99edf895f5e8731615ce02b091bd18", // 申请好的Web端开发者Key，首次调用 load 时必填
         version: "2.0", // 指定要加载的 JSAPI 的版本，缺省时默认为 1.4.15
-        plugins: [""], // 需要使用的的插件列表，如比例尺'AMap.Scale'等
+        plugins: ["AMap.Geolocation"], // 需要使用的的插件列表，如比例尺'AMap.Scale'等
       })
         .then((AMap) => {
           this.map = new AMap.Map("container", {

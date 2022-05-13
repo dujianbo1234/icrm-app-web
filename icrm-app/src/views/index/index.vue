@@ -66,21 +66,21 @@
             <div>
               <div class="lText">
                 <p class="title">已跟进商机数</p>
-                <p class="num">{{titleData.cmrcOpptFollowUpCntApp || 0}}</p>
+                <p class="num">{{titleData.cmrcOpptFollowUpCntApp}}</p>
               </div>
               <div class="rText"></div>
             </div>
             <div>
               <div class="lText">
                 <p class="title">已成交商机数</p>
-                <p class="num">{{titleData.cmrcOpptTranxCntApp || 0}}</p>
+                <p class="num">{{titleData.cmrcOpptTranxCntApp}}</p>
               </div>
               <div class="rText"></div>
             </div>
             <div>
               <div class="lText">
                 <p class="title">已拜访客户数</p>
-                <p class="num">{{titleData.visitCustCntApp || 0}}</p>
+                <p class="num">{{titleData.visitCustCntApp}}</p>
               </div>
             </div>
           </div>
@@ -269,7 +269,7 @@
         <echartHistogram :type="1" ref="Histogram3" :dataArr="['全部','按揭贷款','消费贷款','经营贷款']" :numType="'余额总计'" :selectTime="selectTime" :barData="loanData" @change="loanChange" @change2="loanChange2" :timeUnit="timeUnit3"></echartHistogram>
       </div>
       <!-- 地图测试 -->
-      <!-- <div class="contentItem" style="margin-top: 0.12rem">
+      <!-- <div class="contentItem" style="margin-top: 0.12rem;width: 100%; height: 5rem;">
         <MapContainer></MapContainer>
       </div> -->
 
@@ -568,13 +568,13 @@ export default {
         if (res.data && res.data.records && res.data.records.length) {
           var data = res.data.records[0];
           this.titleData = {
-            cmrcOpptFollowUpCntApp: formatNums(data.cmrcOpptFollowUpCntApp), // 已跟进商机数
-            cmrcOpptTranxCntApp:formatNums(data.cmrcOpptTranxCntApp),        // 已成交商机数
-            visitCustCntApp: formatNums(data.visitCustCntApp),               // 已拜访商机数
-            addLoanBal: formatNum(data.addLoanBal / 10000),            // 新增贷款余额(万元)
-            addTimeDpsitBal: formatNum(data.addTimeDpsitBal / 10000),  // 新增定期存款余额(万元)
-            adCurrDpsitBal: formatNum(data.adCurrDpsitBal / 10000),    // 新增活期存款余额(万元)
-            addCftBal: formatNum(data.addCftBal / 10000),              // 新增理财余额(万元)
+            cmrcOpptFollowUpCntApp: formatNums(data.cmrcOpptFollowUpCntApp || 0), // 已跟进商机数
+            cmrcOpptTranxCntApp:formatNums(data.cmrcOpptTranxCntApp || 0),        // 已成交商机数
+            visitCustCntApp: formatNums(data.visitCustCntApp || 0),               // 已拜访商机数
+            addLoanBal: formatNum((data.addLoanBal || 0) / 10000),                // 新增贷款余额(万元)
+            addTimeDpsitBal: formatNum((data.addTimeDpsitBal || 0) / 10000),      // 新增定期存款余额(万元)
+            adCurrDpsitBal: formatNum((data.adCurrDpsitBal || 0) / 10000),        // 新增活期存款余额(万元)
+            addCftBal: formatNum((data.addCftBal || 0) / 10000),                  // 新增理财余额(万元)
           }
           this.weekList.forEach(item => {
             if(item.date == moment(time).format('YYYY-MM-DD')){
