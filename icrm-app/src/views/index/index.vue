@@ -457,7 +457,8 @@ export default {
         });
       }
     },
-    getKHGMMsg() {
+    /* 首页概览 */
+    homPeCstAum() {
       let body = {
         etlDt: this.dataDate,
         dataEncode: this.dataEncode
@@ -579,6 +580,7 @@ export default {
         }
       );
     },
+    /* AUM余额分布图 */
     getAumDisDiaData() {
       let body = {
         etlDt: this.dataDate,
@@ -727,9 +729,10 @@ export default {
         }
       });
     },
+    /* 机构选取 */
     khgmActiveOrg(orgValue) {
       this.dataEncode = orgValue.value || ''
-      this.getKHGMMsg()
+      this.homPeCstAum()
       this.queryReportDetail(this.dataDate)   // 工作日报
       this.changeL(0)                         // 客户增长趋势初始化
       this.setAum(0)                          // AUM增长趋势初始化
@@ -1127,7 +1130,7 @@ export default {
             Toast.fail("消息数据为空");
           }
         });
-        this.getKHGMMsg();
+        this.homPeCstAum();
         this.queryManifesto() // 工作宣言
         this.lastSevenDays()  // 生成顶部近7天列表
         this.queryReportDetail(this.dataDate)  // 工作日报

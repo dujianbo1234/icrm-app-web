@@ -74,11 +74,11 @@ export default {
 					},
         },
         grid: {
-          left: '16.5%',
+          left: '0%',
           right: 20,
           top: '20%',
-          bottom: '17%',
-          // containLabel: true
+          bottom: '9%',
+          containLabel: true, // 是否包含XY轴的文字
         },
         axisLabel: {
           show: true,
