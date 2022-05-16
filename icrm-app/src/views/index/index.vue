@@ -23,20 +23,9 @@
           <div class="msgBarItem" @click="$router.push('/msgPage')">
             <i class="msg-icon icon-message"></i>消息<span v-if="messageNum > 0" :class="messageNum > 9 ? 'msgCount2' : 'msgCount1'">{{ showMessageNum }}</span>
           </div>
-          <!-- <div class="topRightMsgChild" @click="$router.push('/business')">
-						<span v-if="$store.state.userMsg.roleId=='00000004'">{{shangjiNum||"-"}} 条待跟进商机 </span>
-						<span v-else>{{shangjiNum||"-"}} 条待分配商机 </span>
-						<van-icon name="arrow" />
-					</div>
-					<div class="topRightMsgChild" @click="$router.push('/msgPage')">
-						<span>{{messageNum||"-"}} 条待阅读消息 </span>
-						<van-icon name="arrow" />
-					</div> -->
         </div>
       </div>
     </div>
-    <!-- <div style="width: 100%;background-color: #F8F8F8;"
-			:style="{height: $store.state.userMsg.roleId=='00000006'?'1.49rem':'2.19rem'}"></div> -->
     <div style="width: 100%; height: 0.5rem; background-color: #f8f8f8"></div>
     <div class="mainContent">
       <div class="selectTimebar">
@@ -116,16 +105,7 @@
           </div>
         </div>
       </div>
-      <!-- <van-tabs v-model:active="mianTabActive" color="#3399FF" @change="changeMainTab" line-width="30%"
-				line-height="2px">
-				<van-tab v-for="(item,i) in mainTab" :key="'mainTab'+i">
-					<template #title>
-						<van-icon :name="item.icon" size="64" />
-						<span>{{item.title}}</span>
-					</template>
-				</van-tab>
-			</van-tabs> -->
-      <div class="contentItem khgm" v-if="mianTabActive == 0">
+      <div class="contentItem khgm">
         <div class="contentHead">
           <van-icon :name="require('../../assets/image/index_main_lskhs.png')" size="0.2rem"/>
           <h3>客户数</h3>
@@ -141,77 +121,34 @@
               <span class="khgmSubTitle">较上日</span>
               <div class="khgmSubValue">
                 <p>{{ item.value1 || "0" }}</p>
-                <van-icon
-                  v-if="
-                    !item.value1 || item.value1 == '0' || item.value1 == '0.00'
-                  "
-                  :name="require('../../assets/image/index_main_numLine.png')"
-                  size="0.16rem"
-                />
-                <van-icon
-                  v-else-if="item.value1[0] == '-'"
-                  :name="require('../../assets/image/index_arrow_dowm.png')"
-                  size="0.16rem"
-                />
-                <van-icon
-                  v-else
-                  :name="require('../../assets/image/index_arrow_top.png')"
-                  size="0.16rem"
-                />
+                <van-icon v-if="   !item.value1 || item.value1 == '0' || item.value1 == '0.00' " :name="require('../../assets/image/index_main_numLine.png')" size="0.16rem"/>
+                <van-icon v-else-if="item.value1[0] == '-'" :name="require('../../assets/image/index_arrow_dowm.png')" size="0.16rem"/>
+                <van-icon v-else :name="require('../../assets/image/index_arrow_top.png')" size="0.16rem"/>
               </div>
             </div>
             <div class="khgmTitle">
               <span class="khgmSubTitle">较上月</span>
               <div class="khgmSubValue">
                 <p>{{ item.value2 || "0" }}</p>
-                <van-icon
-                  v-if="
-                    !item.value2 || item.value2 == '0' || item.value2 == '0.00'
-                  "
-                  :name="require('../../assets/image/index_main_numLine.png')"
-                  size="0.16rem"
-                />
-                <van-icon
-                  v-else-if="item.value2[0] == '-'"
-                  :name="require('../../assets/image/index_arrow_dowm.png')"
-                  size="0.16rem"
-                />
-                <van-icon
-                  v-else
-                  :name="require('../../assets/image/index_arrow_top.png')"
-                  size="0.16rem"
-                />
+                <van-icon v-if="!item.value2 || item.value2 == '0' || item.value2 == '0.00'" :name="require('../../assets/image/index_main_numLine.png')" size="0.16rem"/>
+                <van-icon v-else-if="item.value2[0] == '-'" :name="require('../../assets/image/index_arrow_dowm.png')" size="0.16rem"/>
+                <van-icon v-else :name="require('../../assets/image/index_arrow_top.png')" size="0.16rem"/>
               </div>
             </div>
             <div class="khgmTitle">
               <span class="khgmSubTitle">较年初</span>
               <div class="khgmSubValue">
                 <p>{{ item.value3 || "0" }}</p>
-                <van-icon
-                  v-if="
-                    !item.value3 || item.value3 == '0' || item.value3 == '0.00'
-                  "
-                  :name="require('../../assets/image/index_main_numLine.png')"
-                  size="0.16rem"
-                />
-                <van-icon
-                  v-else-if="item.value3[0] == '-'"
-                  :name="require('../../assets/image/index_arrow_dowm.png')"
-                  size="0.16rem"
-                />
-                <van-icon
-                  v-else
-                  :name="require('../../assets/image/index_arrow_top.png')"
-                  size="0.16rem"
-                />
+                <van-icon v-if="!item.value3 || item.value3 == '0' || item.value3 == '0.00'" :name="require('../../assets/image/index_main_numLine.png')" size="0.16rem"/>
+                <van-icon v-else-if="item.value3[0] == '-'" :name="require('../../assets/image/index_arrow_dowm.png')" size="0.16rem"/>
+                <van-icon v-else :name="require('../../assets/image/index_arrow_top.png')" size="0.16rem"/>
               </div>
             </div>
-            <!-- <van-icon class="khgmIcon" :name="item.icon" size="0.24rem" /> -->
           </div>
         </div>
       </div>
       <!-- 分割线 -->
-      <div class="dividers"><van-divider :dashed="true"/></div>
+      <div class="dividers"><van-divider :dashed="true" /></div>
       <!-- 客户增长趋势 -->
       <div class="contentItem">
         <div class="custStyle">
@@ -228,7 +165,7 @@
         <TitleCard :title="['AUM余额','AUM日均']" :arr="peCstAum" @change="peCstAumChange" @clickDalong="clickDalong(' ',['AUM考核口径不包括储蓄存款'])"></TitleCard>
       </div>
       <!-- 分割线 -->
-      <div class="dividers"><van-divider :dashed="true"/></div>
+      <div class="dividers"><van-divider :dashed="true" /></div>
       <!-- AUM余额分布图 -->
       <div class="contentItem">
         <div class="custStyle aumStyle">
@@ -245,7 +182,7 @@
         <echarts-pie v-if="aumFlag == 1" unit="万元" :data="aumDisDiaData" ref="aumDisDiaChart"/>
       </div>
       <!-- 分割线 -->
-      <div class="dividers"><van-divider :dashed="true"/></div>
+      <div class="dividers"><van-divider :dashed="true" /></div>
       <!-- AUM余额-增长趋势 -->
       <div class="contentItem">
         <div class="custStyle aumStyle">
@@ -259,7 +196,7 @@
         <TitleCard :title="['贷款余额','贷款日均']" :arr="peCstLoan" @change="peCstLoanChange" @clickDalong="clickDalong(' ',['零售贷款余额'])"></TitleCard>
       </div>
       <!-- 分割线 -->
-      <div class="dividers"><van-divider :dashed="true"/></div>
+      <div class="dividers"><van-divider :dashed="true" /></div>
       <!-- 贷款余额-增长趋势 -->
       <div class="contentItem">
         <div class="custStyle aumStyle">
@@ -272,67 +209,6 @@
       <!-- <div class="contentItem" style="margin-top: 0.12rem;width: 100%; height: 5rem;">
         <MapContainer></MapContainer>
       </div> -->
-
-      <!-- 另外一半 -->
-      <div class="zbst" v-if="mianTabActive == 1">
-        <org-list
-          class="zbstChooseOrg"
-          ref="zbstOrg"
-          type="1"
-          showText="选择机构"
-          v-if="$store.state.userMsg.roleId != '00000004'"
-          @activeOrg="zbstActiveOrg"
-        />
-        <van-tabs
-          v-model:active="zbstTabActive"
-          @change="changeZBSTTab"
-          type="card"
-          color="#3399FF"
-        >
-          <van-tab
-            v-for="(item, i) in [
-              'AUM分布图(单位:万元)',
-              '客户等级分布图(单位:人)',
-              '客户服务等级分布图(单位:人)',
-            ]"
-            :key="'zbstTab' + i"
-            :title="item"
-          />
-        </van-tabs>
-        <echarts-pie
-          v-show="zbstTabActive == 0"
-          title="AUM分布图"
-          :data="aumDisDiaData"
-          unit="万元"
-          ref="aumDisDiaChart"
-        />
-        <echarts-funnel
-          v-show="zbstTabActive == 1"
-          title="客户等级分布图"
-          :data="custLvDisDiaData"
-          ref="custLvDisDiaChart"
-        />
-        <echarts-funnel
-          v-show="zbstTabActive == 2"
-          title="客户服务等级分布图"
-          :data="serveLvDisDiaData"
-          ref="serveLvDisDiaChart"
-        />
-        <echarts-line
-          title="客户数分布图(单位:人)"
-          :data="custNumDisDiaData"
-          :date="custNumDisDiaDate"
-          ref="custNumDisDiaChart"
-        />
-      </div>
-      <van-dialog v-model:show="showWeekReportBox" :title="weekReportTitle">
-        <div class="weekReportList">
-          <div class="weekReportItem" v-for="(item, i) in weekReportDetail" :key="'weekReportItem' + i">
-            <div class="weekReportTitle">{{ item.title }}</div>
-            <div class="weekReportValue">{{ item.value }}</div>
-          </div>
-        </div>
-      </van-dialog>
 
       <van-dialog v-model:show="clickDalongShow" :title="dalongShow.title" theme="round-button" confirmButtonColor="#026DFF" class="dialogBox">
         <div class="diloag">
@@ -352,25 +228,10 @@
 
 <script>
 import { formatNum, formatNums } from "../../api/common.js";
-import {
-	getEmpInfo,
-} from "../../request/theme.js";
-import {
- queryBusiDt,
- queryHomeDayReportList,
- queryHomeOrgDayReportList,
- queryHomPeCstAum,
- queryHomPeCstBalDgrm,
- queryHomCusts,
- queryAst,
- queryHomPeCstSvrLvlDgrm,
- queryCustomertrends,
- queryAUMGrowthTrend,
- queryLoanGrowthTrend
-} from "../../request/index.js";
-import { queryCommercialOpportunityCount } from "../../request/market.js";
+import { getEmpInfo } from "../../request/theme.js";
+import { queryBusiDt, queryHomeDayReportList, queryHomeOrgDayReportList, queryHomPeCstAum, queryHomPeCstBalDgrm, queryAst, queryCustomertrends, queryAUMGrowthTrend, queryLoanGrowthTrend } from "../../request/index.js";
 import { queryWarningRmdMgtSum } from "../../request/product.js";
-import { Toast, Dialog } from "vant";
+import { Toast } from "vant";
 import echartsPie from "../../components/common/echarts-pie.vue";
 import echartsLine from "../../components/common/echarts-line.vue";
 import echartsFunnel from "../../components/common/echarts-funnel.vue";
@@ -379,7 +240,6 @@ import echartHistogram from "./components/echart-Histogram.vue"
 import TitleCard from "@/views/index/components/TitleCard.vue"
 import Table from "@/views/index/components/Table.vue"
 import MapContainer from "@/components/common/MapContainer.vue"
-
 import moment from "moment"
 export default {
   components: {
@@ -398,11 +258,9 @@ export default {
       currentMonth: '-',
       dataDate: "",
       weekList: [],
-      shangjiNum: "",
       messageNum: 0,
       showWeekDetial: false,
       showMessageNum: "",
-      showWeekReportBox: false,
       clickDalongShow: false,
       dalongShow: {
         title: '测试',
@@ -410,8 +268,6 @@ export default {
       },
       listType: 0,
       loanType: 0,
-      weekReportDetail: [],
-      weekReportTitle: "",
       mainTab: [
         {
           title: "客户概貌",
@@ -422,8 +278,6 @@ export default {
           icon: require("../../assets/image/index_main_zbst.png"),
         },
       ],
-      mianTabActive: 0,
-      zbstTabActive: 0,
       showData: [
         {
           title: "零售客户数",
@@ -480,9 +334,9 @@ export default {
           title: "商户客户数",
           unit: "(人)",
           text: [
-            '（1）商户收款累计交易天数大于等于12天，且付款人不为同一人；',
-            '（2）商户年度累计交易金额大于等于2000元；',
-            '（3）结算账户为个人账户的，个人账户AUM资产（含储蓄存款）年日均大于等于1000元；结算账户为单位账户的，单位账户存款年日均大于等于1000元。'
+            '（1）商户收款累计交易天数≥12天，且付款人不为同一人；',
+            '（2）商户年度累计交易金额≥2000元；',
+            '（3）结算账户为个人账户的，个人账户AUM资产（含储蓄存款）年日均≥1000元；结算账户为单位账户的，单位账户存款年日均≥1000元。'
           ],
           value0: "",
           value1: "",
@@ -494,9 +348,6 @@ export default {
       aumRj: [],
       aumDisDiaData: [],
       custLvDisDiaData: [],
-      serveLvDisDiaData: [],
-      custNumDisDiaData: [],
-      custNumDisDiaDate: [],
       timeUnit: 0,
       timeUnit2: 0,
       timeUnit3: 0,
@@ -544,24 +395,27 @@ export default {
       peCstAum: [[],[]],
       peCstLoan: [[],[]],
       titleData: {},
+      dataEncode: '',
     };
   },
   computed: {
     showDate() {
-      return `${this.dataDate.slice(0, 4)}.${this.dataDate.slice(4,6)}.${this.dataDate.slice(6, 8)}`;
+      return moment(this.dataDate).format('YYYY.MM.DD')
     },
   },
   methods: {
+    /* 开发中提示 */
     kaifazhong(){
       Toast.fail("正在开发中")
     },
+    /* 选择日期 */
     showWeek(week) {
       if(week.timeStamp > week.todayTimeStamp){
         return
       }
-      this.weekReportTitle = `${week.date} 工作日报`;
       this.queryReportDetail(week.date)
     },
+    /* 工作日报 */
     queryReportDetail(time){
       Toast.loading({message: "正在加载",forbidClick: true,duration: 0});
       var setWeekReportDetail = (res) => {
@@ -590,7 +444,8 @@ export default {
         }
       };
       let body = {
-        etlDt: moment(time).format('YYYYMMDD')
+        etlDt: moment(time).format('YYYYMMDD'),
+        dataEncode: this.dataEncode
       }
       if (this.$store.state.userMsg.roleId == "00000004") {
         queryHomeDayReportList(body,(res) => {
@@ -602,10 +457,10 @@ export default {
         });
       }
     },
-    getKHGMMsg(dataEncode) {
+    getKHGMMsg() {
       let body = {
         etlDt: this.dataDate,
-        dataEncode: dataEncode || "",
+        dataEncode: this.dataEncode
       }
       queryHomPeCstAum(body,(res) => {
           if (res.data && res.data.records && res.data.records.length) {
@@ -724,273 +579,164 @@ export default {
         }
       );
     },
-    getAumDisDiaData(dataEncode) {
-      queryHomPeCstBalDgrm(
-        {
-          etlDt: this.dataDate,
-          dataEncode: dataEncode || "",
-        },
-        (res) => {
-          if (res.data && res.data.records && res.data.records.length) {
-            var dataObj = res.data.records[0];
-            let itemStyle = function (item) {
-              return {
-                color: ["#488BFF", "#26CEBA", "#FFC069", "#FD6865", "#836DE4", "#FF9C6E"][item]
-              }
-            }
-            // let theSum = dataObj.currDpsitBal + dataObj.timeDpsitBal + dataObj.cftBal + dataObj.fndBal + dataObj.insBal + dataObj.entrstBal // 总和
-            let percentage = (num) => {
-              if(num == undefined || Number(num) == 0){
-                return 0.00
-              }
-              return (Number(num)*100).toFixed(2)
-            }
-            // 余额
-            this.aumYe = [
-              {
-                name: "活期存款余额",
-                value: Number((dataObj.currDpsitBal / 10000).toFixed(2)),
-                percentage: percentage(dataObj.currDpsitBalPct),
-                itemStyle: itemStyle(0)
-              },
-              {
-                name: "定期存款余额",
-                value: Number((dataObj.timeDpsitBal / 10000).toFixed(2)),
-                percentage: percentage(dataObj.timeDpsitBalPct),
-                itemStyle: itemStyle(1)
-              },
-              {
-                name: "理财余额",
-                value: Number((dataObj.cftBal / 10000).toFixed(2)),
-                percentage: percentage(dataObj.cftBalPct),
-                itemStyle: itemStyle(2)
-              },
-              {
-                name: "基金余额",
-                value: Number((dataObj.fndBal / 10000).toFixed(2)),
-                percentage: percentage(dataObj.fndBalPct),
-                itemStyle: itemStyle(3)
-              },
-              {
-                name: "保险余额",
-                value: Number((dataObj.insBal / 10000).toFixed(2)),
-                percentage: percentage(dataObj.insBalPct),
-                itemStyle: itemStyle(4)
-              },
-              {
-                name: "信托余额",
-                value: Number((dataObj.entrstBal / 10000).toFixed(2)),
-                percentage: percentage(dataObj.entrstBalPct),
-                itemStyle: itemStyle(5)
-              },
-            ];
-            // 日均
-            this.aumRj = [
-              {
-                name: "活期存款余额",
-                value: Number((dataObj.currDpsitMonthAvg / 10000).toFixed(2)),
-                percentage: percentage(dataObj.currDpsitMonthAvgPct),
-                itemStyle: itemStyle(0)
-              },
-              {
-                name: "定期存款余额",
-                value: Number((dataObj.timeDpsitMonthAvg / 10000).toFixed(2)),
-                percentage: percentage(dataObj.timeDpsitMonthAvgPct),
-                itemStyle: itemStyle(1)
-              },
-              {
-                name: "理财余额",
-                value: Number((dataObj.cftYearAvg / 10000).toFixed(2)),
-                percentage: percentage(dataObj.cftYearAvgPct),
-                itemStyle: itemStyle(2)
-              },
-              {
-                name: "基金余额",
-                value: Number((dataObj.fndYearAvg / 10000).toFixed(2)),
-                percentage: percentage(dataObj.fndYearAvgPct),
-                itemStyle: itemStyle(3)
-              },
-              {
-                name: "信托余额",
-                value: Number((dataObj.entrstYearAvg / 10000).toFixed(2)),
-                percentage: percentage(dataObj.entrstYearAvgPct),
-                itemStyle: itemStyle(5)
-              },
-            ];
-            this.aumDisDiaData = [this.aumYe,this.aumRj][this.listType]
-            this.$nextTick(() => {
-              this.$refs.aumDisDiaChart.drawEcharts();
-            });
-          } else {
-            Toast.fail("AUM分布图数据为空");
-          }
-        }
-      );
-    },
-    getCustLvDisDiaData(dataEncode) {
-      queryAst(
-        {
-          etlDt: this.dataDate,
-          dataEncode: dataEncode || "",
-        },
-        (res) => {
-          if (res.data && res.data.records && res.data.records.length) {
-            var dataObj = res.data.records[0];
-            this.custLvDisDiaData = [
-              {
-                name: "未达标客户",
-                value: dataObj.norchStdCustCnt.toLocaleString(),
-              },
-              {
-                name: "大众客户",
-                value: dataObj.ordnryCustCnt.toLocaleString(),
-              },
-              {
-                name: "理财客户",
-                value: dataObj.cftCustCnt.toLocaleString(),
-              },
-              {
-                name: "金卡客户",
-                value: dataObj.gdCardCustCnt.toLocaleString(),
-              },
-              {
-                name: "白金客户",
-                value: dataObj.platinumCustCnt.toLocaleString(),
-              },
-              {
-                name: "钻石客户",
-                value: dataObj.diamdCustCnt.toLocaleString(),
-              },
-              {
-                name: "私行客户",
-                value: dataObj.pbssCustCnt.toLocaleString(),
-              },
-            ];
-            this.$nextTick(() => {
-              this.$refs.custLvDisDiaChart.drawEcharts();
-            });
-          } else {
-            Toast.fail("客户等级分布图数据为空");
-          }
-        }
-      );
-    },
-    getServeLvDisDiaData(dataEncode) {
-      queryHomPeCstSvrLvlDgrm(
-        {
-          etlDt: this.dataDate,
-          dataEncode: dataEncode || "",
-        },
-        (res) => {
-          if (res.data && res.data.records && res.data.records.length) {
-            var dataObj = res.data.records[0];
-            this.serveLvDisDiaData = [
-              {
-                name: "未达标客户数",
-                value: dataObj.norchStdCustCnt.toLocaleString(),
-              },
-              {
-                name: "大众客户数",
-                value: dataObj.ordnryCustCnt.toLocaleString(),
-              },
-              {
-                name: "理财客户数",
-                value: dataObj.cftCustCnt.toLocaleString(),
-              },
-              {
-                name: "金卡客户数",
-                value: dataObj.gdCardCustCnt.toLocaleString(),
-              },
-              {
-                name: "白金客户数",
-                value: dataObj.platinumCustCnt.toLocaleString(),
-              },
-              {
-                name: "钻石客户数",
-                value: dataObj.diamdCustCnt.toLocaleString(),
-              },
-              {
-                name: "私行客户数",
-                value: dataObj.pbssCustCnt.toLocaleString(),
-              },
-            ];
-            this.$nextTick(() => {
-              this.$refs.serveLvDisDiaChart.drawEcharts();
-            });
-          } else {
-            Toast.fail("客户服务等级分布图数据为空");
-          }
-        }
-      );
-    },
-    getCustNumDisDiaData() {
-      queryHomCusts({etlDt: this.dataDate},(res) => {
-          if (res.data && res.data.records && res.data.records.length) {
-            var dataObj = res.data.records.reverse();
-            this.custNumDisDiaData = [
-              {
-                name: "VIP客户数",
-                value: dataObj.map((item) => item.vipCustCnt),
-              },
-              {
-                name: "代发客户数",
-                value: dataObj.map((item) => item.agentCustCnt),
-              },
-              {
-                name: "贷款客户数",
-                value: dataObj.map((item) => item.loanCustCnt),
-              },
-              {
-                name: "新客客户数",
-                value: dataObj.map((item) => item.newCustCnt),
-              },
-            ];
-            this.custNumDisDiaDate = dataObj.map((item) =>
-              item.etlDt.slice(4, 8)
-            );
-            this.$nextTick(() => {
-              this.$refs.custNumDisDiaChart.drawEcharts();
-            });
-          } else {
-            Toast.fail("客户数分布图数据为空");
-          }
-        }
-      );
-    },
-    changeMainTab() {
-      this.zbstTabActive = 0;
-      switch (this.mianTabActive) {
-        case 0:
-          this.getKHGMMsg();
-          break;
-        case 1:
-          this.getAumDisDiaData();
-          this.getCustNumDisDiaData();
-          break;
+    getAumDisDiaData() {
+      let body = {
+        etlDt: this.dataDate,
+        dataEncode: this.dataEncode
       }
+      queryHomPeCstBalDgrm(body,(res) => {
+        if (res.data && res.data.records && res.data.records.length) {
+          var dataObj = res.data.records[0];
+          let itemStyle = function (item) {
+            return {
+              color: ["#488BFF", "#26CEBA", "#FFC069", "#FD6865", "#836DE4", "#FF9C6E"][item]
+            }
+          }
+          // let theSum = dataObj.currDpsitBal + dataObj.timeDpsitBal + dataObj.cftBal + dataObj.fndBal + dataObj.insBal + dataObj.entrstBal // 总和
+          let percentage = (num) => {
+            if(num == undefined || Number(num) == 0){
+              return 0.00
+            }
+            return (Number(num)*100).toFixed(2)
+          }
+          // 余额
+          this.aumYe = [
+            {
+              name: "活期存款余额",
+              value: Number((dataObj.currDpsitBal / 10000).toFixed(2)),
+              percentage: percentage(dataObj.currDpsitBalPct),
+              itemStyle: itemStyle(0)
+            },
+            {
+              name: "定期存款余额",
+              value: Number((dataObj.timeDpsitBal / 10000).toFixed(2)),
+              percentage: percentage(dataObj.timeDpsitBalPct),
+              itemStyle: itemStyle(1)
+            },
+            {
+              name: "理财余额",
+              value: Number((dataObj.cftBal / 10000).toFixed(2)),
+              percentage: percentage(dataObj.cftBalPct),
+              itemStyle: itemStyle(2)
+            },
+            {
+              name: "基金余额",
+              value: Number((dataObj.fndBal / 10000).toFixed(2)),
+              percentage: percentage(dataObj.fndBalPct),
+              itemStyle: itemStyle(3)
+            },
+            {
+              name: "保险余额",
+              value: Number((dataObj.insBal / 10000).toFixed(2)),
+              percentage: percentage(dataObj.insBalPct),
+              itemStyle: itemStyle(4)
+            },
+            {
+              name: "信托余额",
+              value: Number((dataObj.entrstBal / 10000).toFixed(2)),
+              percentage: percentage(dataObj.entrstBalPct),
+              itemStyle: itemStyle(5)
+            },
+          ];
+          // 日均
+          this.aumRj = [
+            {
+              name: "活期存款余额",
+              value: Number((dataObj.currDpsitMonthAvg / 10000).toFixed(2)),
+              percentage: percentage(dataObj.currDpsitMonthAvgPct),
+              itemStyle: itemStyle(0)
+            },
+            {
+              name: "定期存款余额",
+              value: Number((dataObj.timeDpsitMonthAvg / 10000).toFixed(2)),
+              percentage: percentage(dataObj.timeDpsitMonthAvgPct),
+              itemStyle: itemStyle(1)
+            },
+            {
+              name: "理财余额",
+              value: Number((dataObj.cftYearAvg / 10000).toFixed(2)),
+              percentage: percentage(dataObj.cftYearAvgPct),
+              itemStyle: itemStyle(2)
+            },
+            {
+              name: "基金余额",
+              value: Number((dataObj.fndYearAvg / 10000).toFixed(2)),
+              percentage: percentage(dataObj.fndYearAvgPct),
+              itemStyle: itemStyle(3)
+            },
+            {
+              name: "信托余额",
+              value: Number((dataObj.entrstYearAvg / 10000).toFixed(2)),
+              percentage: percentage(dataObj.entrstYearAvgPct),
+              itemStyle: itemStyle(5)
+            },
+          ];
+          this.aumDisDiaData = [this.aumYe,this.aumRj][this.listType]
+          this.$nextTick(() => {
+            this.$refs.aumDisDiaChart.drawEcharts();
+          });
+        } else {
+          Toast.fail("AUM分布图数据为空");
+        }
+      });
     },
-    changeZBSTTab() {
-      if (this.$refs.zbstOrg) {
-        this.$refs.zbstOrg.activeOrg();
-      } else {
-        this.zbstActiveOrg({value: ""});
+    /* 客户服务等级 */
+    getCustLvDisDiaData() {
+      let body = {
+        etlDt: this.dataDate,
+        dataEncode: this.dataEncode
       }
+      queryAst(body, (res) => {
+        if (res.data && res.data.records && res.data.records.length) {
+          var dataObj = res.data.records[0];
+          this.custLvDisDiaData = [
+            {
+              name: "未达标客户",
+              value: dataObj.norchStdCustCnt.toLocaleString(),
+            },
+            {
+              name: "大众客户",
+              value: dataObj.ordnryCustCnt.toLocaleString(),
+            },
+            {
+              name: "理财客户",
+              value: dataObj.cftCustCnt.toLocaleString(),
+            },
+            {
+              name: "金卡客户",
+              value: dataObj.gdCardCustCnt.toLocaleString(),
+            },
+            {
+              name: "白金客户",
+              value: dataObj.platinumCustCnt.toLocaleString(),
+            },
+            {
+              name: "钻石客户",
+              value: dataObj.diamdCustCnt.toLocaleString(),
+            },
+            {
+              name: "私行客户",
+              value: dataObj.pbssCustCnt.toLocaleString(),
+            },
+          ];
+          this.$nextTick(() => {
+            this.$refs.custLvDisDiaChart.drawEcharts();
+          });
+        } else {
+          Toast.fail("客户等级分布图数据为空");
+        }
+      });
     },
     khgmActiveOrg(orgValue) {
-      this.getKHGMMsg(orgValue.value);
-    },
-    zbstActiveOrg(orgValue) {
-      switch (this.zbstTabActive) {
-        case 0:
-          this.getAumDisDiaData(orgValue.value);
-          break;
-        case 1:
-          this.getCustLvDisDiaData(orgValue.value);
-          break;
-        case 2:
-          this.getServeLvDisDiaData(orgValue.value);
-          break;
-      }
+      this.dataEncode = orgValue.value || ''
+      this.getKHGMMsg()
+      this.queryReportDetail(this.dataDate)   // 工作日报
+      this.changeL(0)                         // 客户增长趋势初始化
+      this.setAum(0)                          // AUM增长趋势初始化
+      this.setLoan(0)                         // 贷款增长趋势初始化
+      // this.customertrends(this.dataDate)     // 客户增长趋势
+      // this.aumGrowthTrend(this.dataDate)     // AUM增长趋势
+      // this.loanGrowthTrend(this.dataDate)    // 贷款增长趋势
     },
     /* 客户增长趋势/客户服务等级 */
     changeL(data){
@@ -1045,7 +791,8 @@ export default {
       let body = {
         judge: '', // 0的时候为月
         pageNum: '1',
-        pageSize: '31'
+        pageSize: '31',
+        dataEncode: this.dataEncode, // 机构号
       }
       let xAxis = []
       // 根据查询日期 日/月 生成一条X轴
@@ -1064,7 +811,7 @@ export default {
         body.judge = '0'
         for(let i = 11; i >= 0; i--){
           let obj = {
-            value: moment(time).subtract(i, 'month').format('MM'),  // 需要展示的时间
+            value: moment(time).subtract(i, 'month').format('MM'),      // 需要展示的时间
             time: moment(time).subtract(i, 'month').format('YYYYMM')    // 保留原时间戳 往前推12个月
           }
           xAxis.push(obj)
@@ -1083,7 +830,6 @@ export default {
               arr.forEach((name,index)=> {
                 let obj = {
                   value: item[`${name}${['ToYstd','ToLastMonth'][this.timeUnit]}`] || 0,
-                  // toYstd: item[`${name}${['ToYstd','ToLastMonth'][this.timeUnit]}`] || 0,
                   time: itemX.time,
                   totalBalance: item[name] || 0,
                 }
@@ -1096,7 +842,6 @@ export default {
             arr.forEach((n,index)=> {
                 let obj = {
                   value: 0,
-                  // toYstd: 0,
                   time: itemX.time,
                   totalBalance: 0
                 }
@@ -1117,7 +862,8 @@ export default {
       let body = {
         judge: '', // 0的时候为月
         pageNum: '1',
-        pageSize: '31'
+        pageSize: '31',
+        dataEncode: this.dataEncode, // 机构号
       }
       let xAxis = []
       // 根据查询日期 日/月0/日均1 生成一条X轴
@@ -1158,7 +904,6 @@ export default {
               arr.forEach((name,index)=> {
                 let obj = {
                   value: item[`${name}${[['ToYstd','ToLastMonth'][this.timeUnit2],'ToLm'][this.listType]}`]/10000 || 0,
-                  // toYstd: item[`${name}${['ToYstd','ToLastMonth'][this.timeUnit2]}`]/10000 || 0,
                   time: itemX.time,
                   totalBalance: item[name]/10000 || 0
                 }
@@ -1171,7 +916,6 @@ export default {
             arr.forEach((n,index)=> {
                 let obj = {
                   value: 0,
-                  // toYstd: 0,
                   time: itemX.time,
                   totalBalance: 0
                 }
@@ -1192,7 +936,8 @@ export default {
       let body = {
         judge: '', // 0的时候为月
         pageNum: '1',
-        pageSize: '31'
+        pageSize: '31',
+        dataEncode: this.dataEncode, // 机构号
       }
       let xAxis = []
       // 根据查询日期 日/月 生成一条X轴
@@ -1258,7 +1003,6 @@ export default {
             arr.forEach((n,index)=> {
                 let obj = {
                   value: 0,
-                  // toYstd: 0,
                   time: itemX.time,
                   totalBalance: 0
                 }
@@ -1330,12 +1074,12 @@ export default {
       this.setLoan(this.loanType) // 切换时,调用增长趋势也要一起联动
     },
     /* 近七天日期生成 */
-    lastSevenDays(time){
+    lastSevenDays(){
       // 获取当前默认日期
-      let initTime = moment(time).format('YYYY-MM-DD')
+      let initTime = moment(this.dataDate).format('YYYY-MM-DD')
       // 默认日期三天后
-      let lastTime = moment(time).add(3, 'day').format('YYYY-MM-DD')
-      this.currentMonth = moment(time).format('M')
+      let lastTime = moment(this.dataDate).add(3, 'day').format('YYYY-MM-DD')
+      this.currentMonth = moment(this.dataDate).format('M')
       let timeArr = []
       for (var i = 9; i >= 0; i--) {
         let obj = {
@@ -1375,42 +1119,21 @@ export default {
           }
           this.selectTime.push(obj)
         }
-        if (this.$store.state.userMsg.roleId == "00000004") {
-          var queryCommercialOpportunityCountPostMsg = {
-            followUpLab: "2",
-          };
-        } else {
-          var queryCommercialOpportunityCountPostMsg = {
-            alctLab: "1",
-          };
-        }
-        queryCommercialOpportunityCount(
-          queryCommercialOpportunityCountPostMsg,
-          (res2) => {
-            this.shangjiNum = res2.data.toLocaleString();
+        queryWarningRmdMgtSum({stat: "0"},(res3) => {
+          if (res3.data && res3.data.length) {
+            this.messageNum = res3.data[0].allSum;
+            this.showMessageNum = res3.data[0].allSum > 99 ? "99+" : res3.data[0].allSum;
+          } else {
+            Toast.fail("消息数据为空");
           }
-        );
-        queryWarningRmdMgtSum(
-          {
-            stat: "0",
-          },
-          (res3) => {
-            if (res3.data && res3.data.length) {
-              this.messageNum = res3.data[0].allSum;
-              this.showMessageNum =
-                res3.data[0].allSum > 99 ? "99+" : res3.data[0].allSum;
-            } else {
-              Toast.fail("消息数据为空");
-            }
-          }
-        );
+        });
         this.getKHGMMsg();
-        this.queryManifesto()
-        this.queryReportDetail(this.dataDate)
-        this.customertrends(this.dataDate)
-        this.aumGrowthTrend(this.dataDate)
-        this.loanGrowthTrend(this.dataDate)
-        this.lastSevenDays(this.dataDate)
+        this.queryManifesto() // 工作宣言
+        this.lastSevenDays()  // 生成顶部近7天列表
+        this.queryReportDetail(this.dataDate)  // 工作日报
+        this.customertrends(this.dataDate)     // 客户增长趋势
+        this.aumGrowthTrend(this.dataDate)     // AUM增长趋势
+        this.loanGrowthTrend(this.dataDate)    // 贷款增长趋势
       } else {
         Toast.fail("数据日期数据为空");
       }
@@ -1752,14 +1475,6 @@ export default {
   color: #bfbfbf;
 }
 
-.topRightMsgChild {
-  width: 100%;
-  line-height: 0.32rem;
-  font-size: 0.13rem;
-  text-align: right;
-  white-space: nowrap;
-}
-
 .contentItem {
   width: 100%;
   padding: 0.12rem;
@@ -1862,9 +1577,9 @@ export default {
   margin-right: 0.1rem;
 }
 .dividers:deep(.van-divider) {
-  border: 0 dashed rgba(0, 0, 0, 0.04);
-  padding: 0 0.02rem;
-  margin: 0.005rem 0;
+  border: 0 dashed rgba(255, 255, 255, 1);
+  padding: 0 0.3rem;
+  /* margin: 0.005rem 0; */
 }
 .custStyle {
   font-size: 0.14rem;
@@ -1937,12 +1652,6 @@ export default {
   font-weight: 400;
   color: #262626;
 }
-
-/* .khgmIcon {
-		position: absolute;
-		top: 0.09rem;
-		right: 0.09rem;
-	} */
 
 .zbst:deep(.van-tabs__nav--card) {
   margin: 0 3.5%;
