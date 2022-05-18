@@ -6,4 +6,4 @@ export default [{
 	path: '/busiDetail',
 	name: 'busiDetail',
 	component: () => import('@/views/business/busiDetail.vue')
-}];
+},];

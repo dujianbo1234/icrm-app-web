@@ -32,5 +32,10 @@ export default [{
 		path: '/messageSend',
 		name: 'messageSend',
 		component: () => import('@/views/message/messageSend.vue')
+	},
+	{
+		path: '/shangJiHot',
+		name: 'shangJiHot',
+		component: () => import('@/views/business/shangJiHot.vue')
 	}
 ];
