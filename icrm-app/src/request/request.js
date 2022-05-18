@@ -17,6 +17,9 @@ export const request = (url, params, fun) => {
 		if (res.code == 0) {
 			fun(res)
 		} else if (res.code == 1) {
+			if(process.env.NODE_ENV == 'development'){
+				console.log('传值',params,'报错信息',res)
+			}
 			Toast.fail(res.msg)
 			return;
 		} else if (res.code == 2) {

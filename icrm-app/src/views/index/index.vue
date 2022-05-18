@@ -971,7 +971,7 @@ export default {
         // 全部, 按揭贷款, 消费贷款, 经营贷款
         let arr = [
           ['loanBal','mrtgLoanBal','cnsmLoanBal','corprtnLoanBal'],
-          ['loanMonthAvg','mrtgLoanYearAvg','cnsmLoanYearAvg','corprtnLoanYearAvg']
+          ['loanMonthAvg','mrtgLoanMonthAvg','cnsmLoanMonthAvg','corprtnLoanMonthAvg']
         ][this.loanType]
         let xData = [[],[],[],[]] 
         // 根据生成的X轴去拿到接口返回的每一条X轴的数据
@@ -991,11 +991,7 @@ export default {
                     obj.value = item[`${name.replace('Bal','')}${['ToYstd','ToLm'][this.timeUnit3]}`]/10000 || 0
                   }
                 }else{
-                  if(name == 'loanMonthAvg' || name == 'corprtnLoanYearAvg'){
-                    obj.value = item[`${name}ToLm`]/10000 || 0
-                  }else{
-                    obj.value = item[`${name}_to_lm`]/10000 || 0
-                  }
+                  obj.value = item[`${name}ToLm`]/10000 || 0
                 }
                 xData[index].push(obj)
               })

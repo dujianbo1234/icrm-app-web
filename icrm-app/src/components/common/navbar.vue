@@ -99,7 +99,7 @@
 	.rightBtn {
 		line-height: 0.46rem;
 		padding: 0 0.16rem;
-		font-size: 0.16rem;
+		font-size: 0.14rem;
 		position: absolute;
 		top: constant(safe-area-inset-top);
 		top: env(safe-area-inset-top);
