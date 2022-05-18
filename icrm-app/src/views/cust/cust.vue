@@ -411,8 +411,7 @@
 	}
 
 	.busiTitle {
-		w0.width: ;
-		: 100%;
+		width: 100%;
 		font-size: 0.18rem;
 		text-align: left;
 		padding: 0.08rem 0.12rem;

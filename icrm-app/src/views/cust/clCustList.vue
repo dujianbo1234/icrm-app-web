@@ -176,12 +176,16 @@ export default {
 				orgId: ""
 			},
       tageList: [
-        { key: 0, title: "全部" },
-        { key: 1, title: "私行级" },
-        { key: 2, title: "钻石级" },
-        { key: 3, title: "白金卡级" },
+        { key: '', title: "全部" },
+        { key: 6, title: "私行级" },
+        { key: 5, title: "钻石级" },
+        { key: 4, title: "白金卡级" },
+        { key: 3, title: "金卡级" },
+        { key: 2, title: "理财级" },
+        { key: 1, title: "大众级" },
+        { key: 0, title: "未达标" }
       ],
-      tageListActive: 0,
+      tageListActive: '',
 			orderIndex: null,
 			orderType: true,
     };
