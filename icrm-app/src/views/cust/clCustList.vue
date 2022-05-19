@@ -28,7 +28,7 @@
       <!-- 筛选结果 -->
       <div class="listNum">
         <div class="total">
-          <span>筛选结果：共{{total}}条数据 </span>
+          <span>筛选结果：共{{formatNums(total)}}条数据 </span>
         </div>
         <div class="sendAll" v-if="msgOrPhone" @click="sendFrom">
           <span v-if="showBatchSend">取消</span>
@@ -75,14 +75,15 @@
                 <template v-for="(text, j) in ['vipCstFlg','agentPayCstFlg', 'basicCstCnt', 'merntCstFlg', 'ioinHoldLoan']">
                   <div :class="text" v-if="item[text] =='1'" :key="j">{{['财','代','新','商','贷'][j]}}</div>
                 </template>
-                <template v-for="(ioinSgn, s) in ['ioinSgnAlpy','ioinSgnWchtPymt', 'ioinSgnYsf']" :key="s">
-                  <van-icon :name="require(`@/assets/image/business_chooseCust_${['zfb','wx','ysf'][s]}${['.png','_a.png'][item[ioinSgn] || 0]}`)" size="16" style="margin-right: 0.04rem;" />
+                <template v-for="(text, s) in ['ioinSgnAlpy','ioinSgnWchtPymt', 'ioinSgnYsf']" :key="s">
+                  <van-icon :name="require(`@/assets/image/business_chooseCust_${['zfb','wx','ysf'][s]}${['.png','_a.png'][item[text] || 0]}`)" size="16" style="margin-right: 0.04rem;" />
                 </template>
               </div>
             </div>
             <div class="playFrom" v-if="!showBatchSend">
-              <van-icon :name="require(`@/assets/image/callPhone${item.ctcTel ? '.png' : '_gray.png'}`)" size="0.22rem" style="margin-right: 0.2rem;" @click="gaveCall(item, true)"/>
-              <van-icon :name="require(`@/assets/image/sendMessage${item.ctcTel ? '.png' : '_gray.png'}`)" size="0.22rem" style="margin-right: 0.15rem;" @click="gaveCall(item, false)"/>
+              <template  v-for="(text, s) in ['callPhone','sendMessage']" :key="s">
+                <van-icon :name="require(`@/assets/image/${text}${item.ctcTel ? '.png' : '_gray.png'}`)" size="0.22rem" :style="`margin-right: ${['0.2','0.15'][s]}rem;`" @click="gaveCall(item, [true,false][s])"/>
+              </template>
             </div>
           </div>
           <div class="custItem2">
@@ -114,7 +115,7 @@
 </template>
 <script>
 import { getSysCodeByType } from "../../request/common.js";
-import { formatNum } from "@/api/common.js";
+import { formatNum, formatNums } from "@/api/common.js";
 import { queryCustSearchList } from "../../request/custinfo.js";
 import { Toast } from "vant";
 import sendMessage from "../../components/common/sendMessage.vue";
@@ -124,9 +125,7 @@ export default {
   },
   data() {
     return {
-      // cstLvl: "",
       checkAll: false,
-      // cstLvlList: [],
       orderList: [
         { key: 'aumDifVal', value: '极差值', status: '' },
         { key: 'aumBal', value: 'AUM余额', status: '' },
@@ -141,10 +140,6 @@ export default {
         { key: 'loanBal', value: '贷款' },
       ],
       svcLvlList: [],
-      // chooseOrg: {
-      //   text: "归属机构",
-      //   value: "",
-      // },
       searchValue: "",
       loading: true,
       finished: false,
@@ -153,7 +148,6 @@ export default {
       total: 0,
       msgOrPhone: false,
       showBatchSend: false,
-      // toggleAll: false,
       chooseItems: [],
       // custNum        客户编号
       // cstName        客户名称
@@ -248,6 +242,7 @@ export default {
   },
   methods: {
     formatNum,
+    formatNums,
     /* 存量客户查询接口 */
     queryList(){
       this.finished = false;
@@ -262,9 +257,6 @@ export default {
         if (res.data && res.data.records) {
           this.total = res.data.total;
           this.custList = this.custList.concat(res.data.records);
-          // if(this.showBatchSend && this.toggleAll){
-          //   this.chooseItems = this.custList
-          // }
           if (this.custList.length >= this.total) this.finished = true;
         } else {
           this.finished = true;
@@ -294,21 +286,10 @@ export default {
     activeOrg(orgValue) {
       this.initParams()
       this.params.belongOrg = orgValue.value || ''
-      // if (orgValue.value) {
-      //   this.chooseOrg = orgValue;
-      // } else {
-      //   this.chooseOrg = {
-      //     text: "归属机构",
-      //     value: "",
-      //   };
-      // }
-      // this.$refs.orgDrop.toggle(false);
       this.reload();
     },
     /* 点击搜索 */
     reload() {
-      // this.loading = true;
-      // this.finished = false;
       this.initParams()
       this.pageIndex = 0;
       this.custList = [];
@@ -319,8 +300,6 @@ export default {
     getCustList() {
       this.pageIndex++;
       this.params.pageNum = this.pageIndex.toString()
-      // this.params.cstLvl = this.cstLvl
-      // this.params.belongOrg = this.chooseOrg.value
       if (this.searchValue) {
         if (this.searchValue.length == 11) {
           this.params.ctcTel = this.searchValue;
@@ -330,21 +309,7 @@ export default {
           this.params.cstName = this.searchValue;
         }
       }
-      // this.params = JSON.stringify(params);
-      // this.params = params
       this.queryList()
-      // queryCustSearchList(params, (res) => {
-      //   if (res.data && res.data.records) {
-      //     Toast.clear();
-      //     this.total = res.data.total.toLocaleString();
-      //     this.custList = this.custList.concat(res.data.records);
-      //     if (this.custList.length >= this.total) this.finished = true;
-      //   } else {
-      //     Toast.fail("存量客户列表数据为空");
-      //     this.finished = true;
-      //   }
-      //   this.loading = false;
-      // });
     },
     gaveCall(item, type) {
       if(item.ctcTel){
@@ -380,8 +345,6 @@ export default {
           list: [{}],
           shrtmsgCnl: "1"
         }
-        // this.$refs.checkboxGroup.toggleAll(true)
-        // this.toggleAll = true
       }else{
         let list = this.chooseItems.map(item => {
           return {
@@ -414,8 +377,6 @@ export default {
         item.status = 'Z'
       }
       this.params.orderType = `${item.key}${item.status}`
-      // this.params.pageNum = (++this.pageIndex).toString();
-      // this.params.orgId = this.chooseOrg.value;
       this.initQueryList()
     },
     /* 选择服务等级 */
@@ -433,12 +394,11 @@ export default {
     /* 批量发送 */
     sendFrom(){
       this.showBatchSend=!this.showBatchSend;
-      // this.toggleAll = false
       this.chooseItems = []
     },
     /* 跳转详情 */
     openDetails(item){
-      console.log(item)
+      // console.log(item)
     }
   },
 };
