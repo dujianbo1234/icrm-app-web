@@ -145,16 +145,7 @@
 				};
 				switch (msg.type) {
 					case "CLCustListSendAll":
-            this.GMParams.pageSize  = msg.searchData.pageSize
-            this.GMParams.pageNum = msg.searchData.pageNum
-            this.GMParams.cstName = msg.searchData.cstName
-            this.GMParams.certNum = msg.searchData.certNum
-            this.GMParams.svcLvl  = msg.searchData.svcLvl
-            this.GMParams.ctcTel  = msg.searchData.ctcTel
-            this.GMParams.cstLvl  = msg.searchData.cstLvl
-            this.GMParams.orderType = msg.searchData.orderType
-            this.GMParams.belongOrg = msg.searchData.belongOrg
-						// this.GMParams.searchData = msg.searchData;
+            this.GMParams = Object.assign(this.GMParams, msg.searchData)
 						break;
 					case "QZCustListSendAll":
 						this.GMParams.searchData = msg.searchData;
