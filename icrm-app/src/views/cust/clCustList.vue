@@ -257,7 +257,6 @@ export default {
         duration: 0,
       });
       queryCustSearchList(this.params, (res) => {
-        console.log(res)
         if (res.data && res.data.records) {
           this.total = res.data.total;
           this.custList = this.custList.concat(res.data.records);
@@ -371,8 +370,12 @@ export default {
     },
     msgBatchSend(sendAll) {
       if(sendAll){
-        let body = this.params
-        console.log(body)
+        this.$refs.sendMessage.openMbox({
+          type: "CLCustListSendAll",
+          searchData: this.params,
+          list:[{}],
+          shrtmsgCnl: "1"
+        })
         // this.$refs.checkboxGroup.toggleAll(true)
         // this.toggleAll = true
       }else{

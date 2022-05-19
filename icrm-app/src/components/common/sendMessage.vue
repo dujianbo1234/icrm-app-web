@@ -85,6 +85,7 @@
 		addMessageSendInfo,
 		queryMessageKeyWordCheck,
 		addEsbMessageSendInfo,
+    addCustSearchMessageSend
 	} from "../../request/custinfo.js";
 	/**
 	 * 引入vant组件
@@ -144,7 +145,16 @@
 				};
 				switch (msg.type) {
 					case "CLCustListSendAll":
-						this.GMParams.searchData = msg.searchData;
+            this.GMParams.pageSize  = msg.searchData.pageSize
+            this.GMParams.pageNum = msg.searchData.pageNum
+            this.GMParams.orderType = msg.searchData.orderType
+            this.GMParams.cstName = msg.searchData.cstName
+            this.GMParams.svcLvl  = msg.searchData.svcLvl
+            this.GMParams.ctcTel  = msg.searchData.ctcTel
+            this.GMParams.certNum = msg.searchData.certNum
+            this.GMParams.cstLvl  = msg.searchData.cstLvl
+            this.GMParams.belongOrg = msg.searchData.belongOrg
+						// this.GMParams.searchData = msg.searchData;
 						break;
 					case "QZCustListSendAll":
 						this.GMParams.searchData = msg.searchData;
@@ -289,14 +299,24 @@
 					forbidClick: true,
 					duration: 0
 				});
-				addMessageSendInfo(this.GMParams,(res)=>{
+				switch (this.msgType) {
+					case "CLCustListSendAll":
+            this.sendMessage(addCustSearchMessageSend)
+						break;
+					default:
+            this.sendMessage(addMessageSendInfo)
+						break;
+				}
+			},
+      sendMessage(type){
+				type(this.GMParams,(res)=>{
 					Toast.success("提交成功");
 					this.$refs.messageValue.innerHTML = "";
 					this.$emit("closeBatchSendBtn");
 					this.$emit("commitSuccess",this.messageValue + "如需退订，请回复TD。");
 					this.showMBox = false;
 				})
-			},
+      }
 		},
 		mounted() {
 			getSysCodeByType({
