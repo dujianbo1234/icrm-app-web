@@ -46,7 +46,7 @@
 				</div>
 			</div>
 			<div class="plate4">
-				<div class="palte4_1" @click="showMBox=false">取消</div>
+				<div class="palte4_1" @click="cancle">取消</div>
 				<div class="palte4_2" v-if="haveTest" @click="sendMsg">提交</div>
 				<div class="palte4_2" v-else @click="testMsg">发送</div>
 			</div>
@@ -147,12 +147,12 @@
 					case "CLCustListSendAll":
             this.GMParams.pageSize  = msg.searchData.pageSize
             this.GMParams.pageNum = msg.searchData.pageNum
-            this.GMParams.orderType = msg.searchData.orderType
             this.GMParams.cstName = msg.searchData.cstName
+            this.GMParams.certNum = msg.searchData.certNum
             this.GMParams.svcLvl  = msg.searchData.svcLvl
             this.GMParams.ctcTel  = msg.searchData.ctcTel
-            this.GMParams.certNum = msg.searchData.certNum
             this.GMParams.cstLvl  = msg.searchData.cstLvl
+            this.GMParams.orderType = msg.searchData.orderType
             this.GMParams.belongOrg = msg.searchData.belongOrg
 						// this.GMParams.searchData = msg.searchData;
 						break;

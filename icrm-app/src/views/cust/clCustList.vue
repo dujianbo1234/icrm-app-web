@@ -63,7 +63,7 @@
     -->
     <van-list class="vanListStyle" v-model:loading="loading" :finished="finished" finished-text="没有更多了" @load="getCustList">
       <van-checkbox-group v-model="chooseItems" ref="checkboxGroup">
-        <div class="custItem" v-for="(item,i) in custList" :key="'item'+i" :style="{'margin-left':showBatchSend?'10%':'0%'}">
+        <div class="custItem" v-for="(item,i) in custList" :key="'item'+i" :style="{'margin-left':showBatchSend?'10%':'0%'}" @click="openDetails(item)">
 					<div class="leftCheckBox">
 						<van-checkbox :name="item" @click="checkAll=false"></van-checkbox>
 					</div>
@@ -106,7 +106,9 @@
       <div class="sendMsgBtn" @click="msgBatchSend(true)">全部发送</div>
       <div class="sendMsgBtn" @click="msgBatchSend(false)">批量发送</div>
     </div>
+    <!-- 选择机构组件 -->
     <org-list ref="orgList" type="2" @close="closeOrg" @activeOrg="activeOrg" />
+    <!-- 发送短信组件 -->
     <send-message ref="sendMessage" @commitSuccess="sendSuccess" />
   </div>
 </template>
@@ -151,7 +153,7 @@ export default {
       total: 0,
       msgOrPhone: false,
       showBatchSend: false,
-      toggleAll: false,
+      // toggleAll: false,
       chooseItems: [],
       // custNum        客户编号
       // cstName        客户名称
@@ -260,9 +262,9 @@ export default {
         if (res.data && res.data.records) {
           this.total = res.data.total;
           this.custList = this.custList.concat(res.data.records);
-          if(this.showBatchSend && this.toggleAll){
-            this.chooseItems = this.custList
-          }
+          // if(this.showBatchSend && this.toggleAll){
+          //   this.chooseItems = this.custList
+          // }
           if (this.custList.length >= this.total) this.finished = true;
         } else {
           this.finished = true;
@@ -368,14 +370,16 @@ export default {
         }
       }
     },
+    /* 批量发送短信的按钮 */
     msgBatchSend(sendAll) {
+      let obj = {}
       if(sendAll){
-        this.$refs.sendMessage.openMbox({
+        obj = {
           type: "CLCustListSendAll",
           searchData: this.params,
-          list:[{}],
+          list: [{}],
           shrtmsgCnl: "1"
-        })
+        }
         // this.$refs.checkboxGroup.toggleAll(true)
         // this.toggleAll = true
       }else{
@@ -386,14 +390,16 @@ export default {
             ctcTel: item.ctcTel
           }
         })
-        this.$refs.sendMessage.openMbox({
+        obj = {
           type: "",
           searchData: {},
-          list:list,
+          list: list,
           shrtmsgCnl: "1"
-        })
+        }
       }
+      this.$refs.sendMessage.openMbox(obj)
     },
+    /* 短信发送成功的反馈 */
     sendSuccess(v){
       this.showBatchSend = false
     },
@@ -427,8 +433,12 @@ export default {
     /* 批量发送 */
     sendFrom(){
       this.showBatchSend=!this.showBatchSend;
-      this.toggleAll = false
+      // this.toggleAll = false
       this.chooseItems = []
+    },
+    /* 跳转详情 */
+    openDetails(item){
+      console.log(item)
     }
   },
 };
