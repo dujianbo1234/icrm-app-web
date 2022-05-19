@@ -24,15 +24,17 @@ export function formatNums(num) {
 }
 export function numFliter(num, tip, fixed) {
   if (num == undefined) {
-    return '0'
+    return '0.00'
   }
-  let value = fixed ? (Number(value)).toFixed(2) : Number(value)
+  let value = fixed ? (Number(value)/10000).toFixed(2) : Number(value)/10000
   let n = value.toString().split('.')
   let z = /\d{1,3}(?=(\d{3})+$)/g
   let b = Number(value) > 0 && tip ? '+' : ''
+  let text = ''
   if (value.toString().indexOf('.') >= 0) {
-    return `${b}${n[0].replace(z, '$&,')}.${n[1]}`
+    text = `${b}${n[0].replace(z, '$&,')}.${n[1]}`
   } else {
-    return `${b}${value.toString().replace(z, '$&,')}`
+    text = `${b}${value.toString().replace(z, '$&,')}`
   }
+  return text
 }

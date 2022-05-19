@@ -32,3 +32,5 @@ export const queryMessageKeyWordCheck = (params,fun) => {request("custinfo.query
 export const addEsbMessageSendInfo = (params,fun) => {request("custinfo.addEsbMessageSendInfo", params, fun)}
 // 添加短信发送信息
 export const addMessageSendInfo = (params,fun) => {request("custinfo.addMessageSendInfo", params, fun)}
+// 添加短信全部发送
+export const addCustSearchMessageSend = (params,fun) => {request("custinfo.addCustSearchMessageSend", params, fun)}

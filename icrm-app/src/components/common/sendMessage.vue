@@ -73,6 +73,7 @@
 	 * @variable: getSysCodeByType 码值查询
 	 * @variable: queryMessageTemplateListForOption 获取短信模板列表
 	 * @variable: addMessageSendInfo 添加短信发送
+	 * @variable: addCustSearchMessageSend 发送全部
 	 * @variable: queryMessageKeyWordCheck 短信关键字校验
 	 * @variable: addEsbMessageSendInfo ESB短信发送
 	 */
