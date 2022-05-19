@@ -40,7 +40,7 @@
 						<div class="tabItem" v-for="(tabItem,i) in busiBdList" :key="'tab1Item'+i"
 							:class="i==busiBdIndex?'tabItem_a':''" @click="changeBusiBdTab(i)">{{tabItem}}</div>
 					</div>
-					<div class="titleMore" @click="openModel">
+					<div class="titleMore" @click="showMore">
 						<span>更多</span>
 						<van-icon name="arrow" color="#48616B" />
 					</div>
@@ -255,6 +255,10 @@
 			changeBusiBdTab(i) {
 				if (this.busiBdIndex == i) return;
 				this.busiBdIndex = i;
+			},
+			// 打开商机热榜
+			showMore(){
+				this.$router.push('shangJiHot')
 			},
 			openModel(val) {
 				switch (val.title) {
