@@ -45,9 +45,23 @@
 						<van-icon name="arrow" color="#48616B" />
 					</div>
 				</div>
-				<div class="bdItem" v-for="(busiBdItem,i) in busiBdValue" :key="'busiBdItem'+i">
-					<van-icon :name="require('../../assets/image/tabbar_cust_main_bdTop'+(i+1)+'.png')" size="12" />
-					<span style="margin-left: 0.08rem;">{{busiBdItem}}</span>
+				<div v-for="(shangJiItem, i) in busiBdValue" :key="'shangJiItem' + i" class="shangJiCardOutBox">
+					<div style="display:flex;justify-content: space-between;align-items: center;">
+						<div class="shangJiHeader">
+							<van-icon style="margin-left:0.04rem" :name="require('../../assets/image/tabbar_cust_main_bdTop'+(i+1)+'.png')" size="12" />
+							<span style="margin-left: 0.12rem;">{{shangJiItem}}</span>
+							<van-icon style="margin-left:0.04rem" :name="require('../../assets/image/up.png')" size="12" />
+						</div>
+						<div style="display:flex">
+							<van-icon v-if="reBang" style="margin-right:0.04rem;margin-top: 0.02rem;" :name="require('../../assets/image/huore.png')" size="12" />
+							<van-icon  v-if="chengJiaoBang" style="margin-right:0.04rem;margin-top: 0.02rem;" :name="require('../../assets/image/chengjiao.png')" size="12" />
+							<van-icon  v-if="haoPingBang" style="margin-right:0.04rem;margin-top: 0.02rem;" :name="require('../../assets/image/dianzan.png')" size="12" />
+							<span class="textStyle">3.99</span>
+						</div>
+					</div>
+					<div class="shangJiCreator">
+						创建人：零售管理部-小雪
+					</div>
 				</div>
 			</div>
 		</div>
@@ -127,6 +141,9 @@
 	export default {
 		data() {
 			return {
+				reBang:true,
+				chengJiaoBang:false,
+				haoPingBang:false,
 				swipeImg: [
 					require('../../assets/image/tabbar_cust_main_swipe1.png'),
 					require('../../assets/image/tabbar_cust_main_swipe1.png'),
@@ -258,6 +275,20 @@
 			changeBusiBdTab(i) {
 				if (this.busiBdIndex == i) return;
 				this.busiBdIndex = i;
+				console.log(this.busiBdIndex)
+				if(this.busiBdIndex=='0'){
+					this.reBang=true
+					this.chengJiaoBang=false
+					this.haoPingBang=false
+				}else if(this.busiBdIndex=='1'){
+					this.reBang=false
+					this.chengJiaoBang=true
+					this.haoPingBang=false
+				}else{
+					this.reBang=false
+					this.chengJiaoBang=false
+					this.haoPingBang=true
+				}
 			},
 			// 打开商机热榜
 			showMore() {
@@ -694,5 +725,38 @@
 		position: absolute;
 		top: 0.15rem;
 		right: 0.25rem;
+	}
+	.shangJiCardOutBox {
+		border-bottom: solid 1px #F2F2F2;
+		padding: 0.15rem 0;
+		width: 90%;
+		margin: 0 auto;
+        
+	}
+
+	.shangJiCardOutBox:last-child {
+		border: 0;
+	}
+	.shangJiHeader{
+		display: flex;
+        align-items: center;
+		font-size: 0.15rem;
+		text-align: left;
+		max-width: 80%;
+	}
+	.textStyle{
+		font-size: 0.11rem;
+		font-family: PingFangSC-Medium, PingFang SC;
+		font-weight: 500;
+		color: #E6494E;
+	}
+	.shangJiCreator{
+		/* height: 0.28rem; */
+		margin-top: 0.06rem;
+		/* margin-bottom: 0.0rem; */
+		text-align: left;
+		margin-left: 0.26rem;
+		font-size: 0.11rem;
+		color:#BFBFBF ;
 	}
 </style>
