@@ -55,6 +55,7 @@
 					<div class="itemPlate2_value">{{item.practialScore}}</div>
 				</div>
 				<div class="itemPlate3">{{item.keyWords}}</div>
+				<div class="itemPlate3">创建人：{{item.crtUsrName}}</div>
 				<div class="itemPlate4">
 					<div class="itemPlate4_child">
 						<span class="itemPlate4_childName">客户数：</span>
@@ -411,13 +412,15 @@
 		line-height: 0.18rem;
 		font-weight: 400;
 		margin-top: 0.05rem;
+		margin-bottom: 0.07rem;
 	}
 
 	.itemPlate4 {
 		display: flex;
 		flex-wrap: wrap;
-		margin-top: 0.17rem;
+		padding-top: 0.07rem;
 		margin-bottom: -0.04rem;
+		border-top: solid 0.01rem rgba(0, 0, 0, 0.04);
 	}
 
 	.itemPlate4_child {
