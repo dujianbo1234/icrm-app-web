@@ -20,7 +20,7 @@
             <i class="msg-icon icon-todo"></i>必办<span class="msgCount1">1</span>
           </div>
           <i class="msg-line"></i>
-          <div class="msgBarItem" @click="$router.push('/msgPage')">
+          <div class="msgBarItem" @click="$router.push('/message')">
             <i class="msg-icon icon-message"></i>消息<span v-if="messageNum > 0" :class="messageNum > 9 ? 'msgCount2' : 'msgCount1'">{{ showMessageNum }}</span>
           </div>
         </div>
