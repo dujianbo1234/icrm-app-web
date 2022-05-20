@@ -28,6 +28,9 @@ export const request = (url, params, fun) => {
 			AlipayJSBridge.call('popWindow');
 			return;
 		}else{
+			if(process.env.NODE_ENV == 'development'){
+				console.log('传值',params,'报错信息',res)
+			}
 			Toast.fail("当前接口出错")
 		}
 	})

@@ -2,6 +2,10 @@ import { request } from "./request.js";
 
 // 查询存量客户列表
 export const queryCustSearchList = (params,fun) => {request("custinfo.queryCustSearchList", params, fun)}
+// 客户基础信息查询
+export const queryCustBaseInfo = (params,fun) => {request("custinfo.queryCustBaseInfo", params, fun)}
+// 客户标签信息查询
+export const queryCustTagInfo = (params,fun) => {request("custinfo.queryCustTagInfo", params, fun)}
 // 查询潜在客户列表
 export const queryCustBaseInfoList = (params,fun) => {request("custinfo.queryCustBaseInfoList", params, fun)}
 // 查询客户经理

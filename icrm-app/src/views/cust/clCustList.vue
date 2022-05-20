@@ -398,7 +398,12 @@ export default {
     },
     /* 跳转详情 */
     openDetails(item){
-      // console.log(item)
+      if(!this.showBatchSend){
+        this.$router.push({
+					name: 'clCustomerView',
+					query: {custNum: item.custNum}
+				})
+      }
     }
   },
 };
