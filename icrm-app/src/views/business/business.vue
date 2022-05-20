@@ -158,21 +158,14 @@
 					}
 				})
 			},
-			onLoad() {
-				this.loading = true;
-				this.finished = false;
-				Toast.loading({
-					message: "正在加载",
-					forbidClick: true,
-					duration: 0
-				});
+			getList() {
 				this.pageIndex++;
 				queryCmrcOpportunitySumList({
 					pageSize: "10",
 					pageNum: this.pageIndex,
 					cmrcOpptBclass: this.kequnList[this.kequnIndex].value,
-					orderField: this.orderIndex>=0?this.orderList[this.orderIndex].value:"",
-					orderType: this.orderIndex>=0?this.orderType ? "DESC" : "ASC" : ""
+					orderField: this.orderIndex >= 0 ? this.orderList[this.orderIndex].value : "",
+					orderType: this.orderIndex >= 0 ? this.orderType ? "DESC" : "ASC" : ""
 				}, (res) => {
 					if (res.data && res.data.records) {
 						this.msgList = this.msgList.concat(res.data.records);
@@ -184,8 +177,29 @@
 					this.loading = false;
 				})
 			},
+			onLoad() {
+				this.loading = true;
+				this.finished = false;
+				Toast.loading({
+					message: "正在加载",
+					forbidClick: true,
+					duration: 0
+				});
+				if(this.kequnList[this.kequnIndex]){
+					this.getList()
+				}else{
+					var timer = setInterval(()=>{
+						if(this.kequnList[this.kequnIndex]) {
+							clearInterval(timer);
+							timer = "";
+							this.getList();
+						}
+					},100)
+				}
+			},
 		},
 		mounted() {
+			this.kequnIndex = Number(this.$route.params.pageType) || 0;
 			queryCmrcOpportunitySum({}, (res) => {
 				if (res.data) {
 					this.sumMsg = res.data;
@@ -219,7 +233,7 @@
 		padding: 0;
 		border: 0;
 	}
-	
+
 	.topZW {
 		width: 100%;
 		height: constant(safe-area-inset-top);

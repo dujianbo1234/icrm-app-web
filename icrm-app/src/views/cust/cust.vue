@@ -26,7 +26,7 @@
 		<div class="menuOutBox">
 			<div class="menuBox" style="flex-wrap: nowrap;">
 				<div class="menuItem" v-for="(menuItem,i) in menuList2" :key="'menu2Item'+i" :style="{width:'18.5%'}"
-					@click="openModel" style="flex-shrink: 0;">
+					@click="openModel(menuItem)" style="flex-shrink: 0;">
 					<div class="menuIcon" :style="{'background-image':'url('+menuItem.icon+')'}"></div>
 					<div class="menuName">{{menuItem.title}}</div>
 				</div>
@@ -188,7 +188,7 @@
 				menuList2: [{
 						title: "全部客群",
 						icon: require('../../assets/image/tabbar_cust_main_menu16.png')
-					},{
+					}, {
 						title: "财富客群",
 						icon: require('../../assets/image/tabbar_cust_main_menu11.png')
 					},
@@ -272,7 +272,53 @@
 						this.$router.push('./clCustList');
 						break;
 					case "短信审批":
-						this.$router.push('messageSend')
+						this.$router.push('messageSend');
+						break;
+					case "提醒":
+						this.$router.push('./message');
+						break;
+					case "全部客群":
+						this.$router.push('./business');
+						break;
+					case "财富客群":
+						this.$router.push({
+							name: 'business',
+							params: {
+								pageType: 1
+							}
+						});
+						break;
+					case "贷款客群":
+						this.$router.push({
+							name: 'business',
+							params: {
+								pageType: 4
+							}
+						});
+						break;
+					case "商户客群":
+						this.$router.push({
+							name: 'business',
+							params: {
+								pageType: 2
+							}
+						});
+						break;
+					case "代发客群":
+						this.$router.push({
+							name: 'business',
+							params: {
+								pageType: 3
+							}
+						});
+						break;
+					case "新客客群":
+						this.$router.push({
+							name: 'business',
+							params: {
+								pageType: 5
+							}
+						});
 						break;
 					default:
 						Toast("功能开发中");
@@ -338,31 +384,31 @@
 				// case "00000008":menu = ["存量客户管理","潜在客户管理","统计报表","客户公共池管理","短信审批","VIP客户群","贷款客户群","收单客户群"];break;// 二级支行管理员
 				// case "00000009":menu = ["存量客户管理","潜在客户管理","统计报表","客户公共池管理","VIP客户群","贷款客户群","收单客户群"];break;// 理财经理
 				case "00000001":
-					menu = ["重要潜客","我的群组", "条件群组", "动态分析", "鱼骨图", "提醒", "存量客户", "短信审批", "更多"];
+					menu = ["重要潜客", "我的群组", "条件群组", "动态分析", "鱼骨图", "提醒", "存量客户", "短信审批", "更多"];
 					break; // 总行管理员（业务）
 				case "00000002":
-					menu = ["重要潜客","我的群组", "条件群组", "动态分析", "鱼骨图", "提醒", "存量客户", "短信审批", "更多"];
+					menu = ["重要潜客", "我的群组", "条件群组", "动态分析", "鱼骨图", "提醒", "存量客户", "短信审批", "更多"];
 					break; // 分行管理员
 				case "00000003":
-					menu = ["重要潜客","我的群组", "条件群组", "动态分析", "鱼骨图", "提醒", "存量客户", "客户公共池", "短信审批", "更多"];
+					menu = ["重要潜客", "我的群组", "条件群组", "动态分析", "鱼骨图", "提醒", "存量客户", "客户公共池", "短信审批", "更多"];
 					break; // 支行管理员
 				case "00000004":
-					menu = ["重要潜客","我的群组", "条件群组", "动态分析", "鱼骨图", "提醒", "存量客户", "客户公共池", "更多"];
+					menu = ["重要潜客", "我的群组", "条件群组", "动态分析", "鱼骨图", "提醒", "存量客户", "客户公共池", "更多"];
 					break; // 客户经理
 				case "00000005":
-					menu = ["重要潜客","我的群组", "条件群组", "动态分析", "鱼骨图", "提醒", "存量客户", "更多"];
+					menu = ["重要潜客", "我的群组", "条件群组", "动态分析", "鱼骨图", "提醒", "存量客户", "更多"];
 					break; // 系统管理员（科技）
 				case "00000006":
-					menu = ["重要潜客","我的群组", "条件群组", "动态分析", "鱼骨图", "提醒", "存量客户", "更多"];
+					menu = ["重要潜客", "我的群组", "条件群组", "动态分析", "鱼骨图", "提醒", "存量客户", "更多"];
 					break; // 总行领导
 				case "00000007":
-					menu = ["重要潜客","我的群组", "条件群组", "动态分析", "鱼骨图", "提醒", "存量客户", "更多"];
+					menu = ["重要潜客", "我的群组", "条件群组", "动态分析", "鱼骨图", "提醒", "存量客户", "更多"];
 					break; // 分行领导
 				case "00000008":
-					menu = ["重要潜客","我的群组", "条件群组", "动态分析", "鱼骨图", "提醒", "存量客户", "客户公共池", "短信审批", "更多"];
+					menu = ["重要潜客", "我的群组", "条件群组", "动态分析", "鱼骨图", "提醒", "存量客户", "客户公共池", "短信审批", "更多"];
 					break; // 二级支行管理员
 				case "00000009":
-					menu = ["重要潜客","我的群组", "条件群组", "动态分析", "鱼骨图", "提醒", "存量客户", "客户公共池", "更多"];
+					menu = ["重要潜客", "我的群组", "条件群组", "动态分析", "鱼骨图", "提醒", "存量客户", "客户公共池", "更多"];
 					break; // 理财经理
 			}
 			menu.forEach((mItem) => {
@@ -406,13 +452,13 @@
 		margin-top: calc(calc(env(safe-area-inset-top) + 0.5rem) * -1);
 		padding-bottom: 0.2rem;
 	}
-	
+
 	.menuOutBox {
 		width: 100%;
 		padding: 0 0.05rem;
 		overflow-y: auto;
 	}
-	
+
 	.menuOutBox::-webkit-scrollbar {
 		display: none;
 	}
@@ -466,7 +512,7 @@
 		background-size: 100%;
 		margin-right: 0.07rem;
 	}
-	
+
 	.msgValue {
 		font-size: 0.13rem;
 		font-family: PingFangSC-Regular, PingFang SC;
@@ -613,7 +659,7 @@
 		justify-content: flex-start;
 		overflow-x: auto;
 	}
-	
+
 	.dataBox::-webkit-scrollbar {
 		display: none;
 	}

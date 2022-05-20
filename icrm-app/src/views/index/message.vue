@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<nav-bar title="页面标题" />
+		<nav-bar title="提醒消息" type="2" leftIcon />
 	</div>
 </template>
 
