@@ -19,14 +19,16 @@
 			<div class="listBox">
 				<div class="listTitle" style="width: 0.4rem;">排序</div>
 				<div class="orderList">
-					<div class="orderItem" v-for="(orderItem,i) in orderList" :key="'orderItem'+i"
-						@click="changeOrder(i)">
-						<span>{{orderItem}}</span>
-						<van-icon v-if="i!=orderIndex" :name="require('../../assets/image/cust_zyqk_order0.png')"
-							size="10" />
-						<van-icon v-else-if="orderType" :name="require('../../assets/image/cust_zyqk_order1.png')"
-							size="10" />
-						<van-icon v-else :name="require('../../assets/image/cust_zyqk_order2.png')" size="10" />
+					<div class="orderItemBox">
+						<div class="orderItem" v-for="(orderItem,i) in orderList" :key="'orderItem'+i"
+							@click="changeOrder(i)">
+							<span>{{orderItem}}</span>
+							<van-icon v-if="i!=orderIndex" :name="require('../../assets/image/cust_zyqk_order0.png')"
+								size="10" />
+							<van-icon v-else-if="orderType" :name="require('../../assets/image/cust_zyqk_order1.png')"
+								size="10" />
+							<van-icon v-else :name="require('../../assets/image/cust_zyqk_order2.png')" size="10" />
+						</div>
 					</div>
 				</div>
 				<div class="boxBottom"></div>
@@ -203,7 +205,7 @@
 				searchValue: "",
 				orderIndex: null,
 				orderType: true,
-				orderList: ["创建时间", "当前阶段", "预估成交额", "预估获客数"],
+				orderList: ["创建时间", "当前阶段", "预估成交额", "预估获客数", "总用时"],
 				tageIndex: 0,
 				tageList: [],
 				busiIndex: 0,
@@ -286,6 +288,10 @@
 					case 3:
 						if (this.orderType) this.params.orderType = "estCstD"
 						else this.params.orderType = "estCstZ";
+						break;
+					case 4:
+						if (this.orderType) this.params.orderType = "totalTimeD"
+						else this.params.orderType = "totalTimeZ";
 						break;
 				}
 				this.pageIndex = 0;
@@ -577,9 +583,19 @@
 
 	.orderList {
 		width: calc(100% - 0.4rem);
+		overflow-x: auto;
+	}
+
+	.orderItemBox {
+		width: 130%;
 		display: flex;
 		flex-wrap: nowrap;
 		justify-content: space-around;
+		align-items: center;
+	}
+	
+	.orderList::-webkit-scrollbar {
+		display: none;
 	}
 
 	.orderItem {

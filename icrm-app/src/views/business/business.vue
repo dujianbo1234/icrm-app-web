@@ -55,6 +55,7 @@
 					<div class="itemPlate2_value">{{item.practialScore}}</div>
 				</div>
 				<div class="itemPlate3">{{item.keyWords}}</div>
+				<div class="itemPlate3">创建人：{{item.crtUsrName}}</div>
 				<div class="itemPlate4">
 					<div class="itemPlate4_child">
 						<span class="itemPlate4_childName">客户数：</span>
@@ -157,21 +158,14 @@
 					}
 				})
 			},
-			onLoad() {
-				this.loading = true;
-				this.finished = false;
-				Toast.loading({
-					message: "正在加载",
-					forbidClick: true,
-					duration: 0
-				});
+			getList() {
 				this.pageIndex++;
 				queryCmrcOpportunitySumList({
 					pageSize: "10",
 					pageNum: this.pageIndex,
 					cmrcOpptBclass: this.kequnList[this.kequnIndex].value,
-					orderField: this.orderIndex>=0?this.orderList[this.orderIndex].value:"",
-					orderType: this.orderIndex>=0?this.orderType ? "DESC" : "ASC" : ""
+					orderField: this.orderIndex >= 0 ? this.orderList[this.orderIndex].value : "",
+					orderType: this.orderIndex >= 0 ? this.orderType ? "DESC" : "ASC" : ""
 				}, (res) => {
 					if (res.data && res.data.records) {
 						this.msgList = this.msgList.concat(res.data.records);
@@ -183,8 +177,29 @@
 					this.loading = false;
 				})
 			},
+			onLoad() {
+				this.loading = true;
+				this.finished = false;
+				Toast.loading({
+					message: "正在加载",
+					forbidClick: true,
+					duration: 0
+				});
+				if(this.kequnList[this.kequnIndex]){
+					this.getList()
+				}else{
+					var timer = setInterval(()=>{
+						if(this.kequnList[this.kequnIndex]) {
+							clearInterval(timer);
+							timer = "";
+							this.getList();
+						}
+					},100)
+				}
+			},
 		},
 		mounted() {
+			this.kequnIndex = Number(this.$route.params.pageType) || 0;
 			queryCmrcOpportunitySum({}, (res) => {
 				if (res.data) {
 					this.sumMsg = res.data;
@@ -218,7 +233,7 @@
 		padding: 0;
 		border: 0;
 	}
-	
+
 	.topZW {
 		width: 100%;
 		height: constant(safe-area-inset-top);
@@ -411,13 +426,15 @@
 		line-height: 0.18rem;
 		font-weight: 400;
 		margin-top: 0.05rem;
+		margin-bottom: 0.07rem;
 	}
 
 	.itemPlate4 {
 		display: flex;
 		flex-wrap: wrap;
-		margin-top: 0.17rem;
+		padding-top: 0.07rem;
 		margin-bottom: -0.04rem;
+		border-top: solid 0.01rem rgba(0, 0, 0, 0.04);
 	}
 
 	.itemPlate4_child {

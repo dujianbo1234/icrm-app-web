@@ -97,7 +97,7 @@
 				var mainHeight = document.documentElement.clientHeight;
 				var listHeight = document.getElementById('listHeight');
 				var toTop =  listHeight.offsetTop;
-				this.listHeight = mainHeight-toTop-50
+				this.listHeight = mainHeight-toTop
 				console.log('列表的高度',this.listHeight)
 
 			},

@@ -195,7 +195,7 @@
 				searchValue: "",
 				levelIndex: 0,
 				levelList: [{
-					text: "全部客户",
+					text: "全部",
 					value: ""
 				}],
 				custList: [],

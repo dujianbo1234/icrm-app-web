@@ -6,30 +6,30 @@
 			</van-swipe-item>
 		</van-swipe>
 		<div class="menuBox">
-			<div class="menuItem" v-for="(menuItem,i) in menuList1" :key="'menu1Item'+i"
-				v-show="!(!management&&menuItem.management)" :style="{width:management?'20%':'25%'}"
-				@click="openModel(menuItem)">
+			<div class="menuItem" v-for="(menuItem,i) in menuList1" v-show="menuItem.show" :key="'menu1Item'+i"
+				@click="openModel(menuItem)" :style="{width:fiveMenu?'20%':'25%'}">
 				<div class="menuIcon" :style="{'background-image':'url('+menuItem.icon+')'}"></div>
 				<div class="menuName">{{menuItem.title}}</div>
 			</div>
 		</div>
-		<van-notice-bar color="#969696" background="#FFFFFF" mode="link"
-			:left-icon="require('../../assets/image/tabbar_cust_main_message.png')" @click="openModel">
+		<van-notice-bar color="#969696" background="#FFFFFF" mode="link" @click="openModel">
 			<template #left-icon>
 				<div class="messageIcon"></div>
 			</template>
-			<span>没有新客怎么办？数据告诉你答案</span>
+			<span class="msgValue">没有新客怎么办？数据告诉你答案</span>
 			<template #right-icon>
-				<van-icon :name="require('../../assets/image/tabbar_cust_main_messagePoint.png')" size="20" />
+				<van-icon :name="require('../../assets/image/tabbar_cust_main_messagePoint.png')" size="8" />
 				<van-icon name="arrow" color="#969696" />
 			</template>
 		</van-notice-bar>
 		<div class="busiTitle">商机专区</div>
-		<div class="menuBox">
-			<div class="menuItem" v-for="(menuItem,i) in menuList2" :key="'menu2Item'+i" :style="{width:'20%'}"
-				@click="openModel">
-				<div class="menuIcon" :style="{'background-image':'url('+menuItem.icon+')'}"></div>
-				<div class="menuName">{{menuItem.title}}</div>
+		<div class="menuOutBox">
+			<div class="menuBox" style="flex-wrap: nowrap;">
+				<div class="menuItem" v-for="(menuItem,i) in menuList2" :key="'menu2Item'+i" :style="{width:'18.5%'}"
+					@click="openModel(menuItem)" style="flex-shrink: 0;">
+					<div class="menuIcon" :style="{'background-image':'url('+menuItem.icon+')'}"></div>
+					<div class="menuName">{{menuItem.title}}</div>
+				</div>
 			</div>
 		</div>
 		<div class="bdOutBox">
@@ -45,9 +45,23 @@
 						<van-icon name="arrow" color="#48616B" />
 					</div>
 				</div>
-				<div class="bdItem" v-for="(busiBdItem,i) in busiBdValue" :key="'busiBdItem'+i">
-					<van-icon :name="require('../../assets/image/tabbar_cust_main_bdTop'+(i+1)+'.png')" size="12" />
-					<span style="margin-left: 0.08rem;">{{busiBdItem}}</span>
+				<div v-for="(shangJiItem, i) in busiBdValue" :key="'shangJiItem' + i" class="shangJiCardOutBox">
+					<div style="display:flex;justify-content: space-between;align-items: center;">
+						<div class="shangJiHeader">
+							<van-icon style="margin-left:0.04rem" :name="require('../../assets/image/tabbar_cust_main_bdTop'+(i+1)+'.png')" size="12" />
+							<span style="margin-left: 0.12rem;">{{shangJiItem}}</span>
+							<van-icon style="margin-left:0.04rem" :name="require('../../assets/image/up.png')" size="12" />
+						</div>
+						<div style="display:flex">
+							<van-icon v-if="reBang" style="margin-right:0.04rem;margin-top: 0.02rem;" :name="require('../../assets/image/huore.png')" size="12" />
+							<van-icon  v-if="chengJiaoBang" style="margin-right:0.04rem;margin-top: 0.02rem;" :name="require('../../assets/image/chengjiao.png')" size="12" />
+							<van-icon  v-if="haoPingBang" style="margin-right:0.04rem;margin-top: 0.02rem;" :name="require('../../assets/image/dianzan.png')" size="12" />
+							<span class="textStyle">3.99</span>
+						</div>
+					</div>
+					<div class="shangJiCreator">
+						创建人：零售管理部-小雪
+					</div>
 				</div>
 			</div>
 		</div>
@@ -127,65 +141,71 @@
 	export default {
 		data() {
 			return {
+				reBang:true,
+				chengJiaoBang:false,
+				haoPingBang:false,
 				swipeImg: [
 					require('../../assets/image/tabbar_cust_main_swipe1.png'),
 					require('../../assets/image/tabbar_cust_main_swipe1.png'),
 					require('../../assets/image/tabbar_cust_main_swipe1.png'),
 				],
 				topOpacity: 0,
-				management: false,
+				fiveMenu: false,
 				menuList1: [{
 						title: "重要潜客",
 						icon: require('../../assets/image/tabbar_cust_main_menu01.png'),
-						management: false
+						show: false
 					},
 					{
 						title: "我的群组",
 						icon: require('../../assets/image/tabbar_cust_main_menu02.png'),
-						management: false
+						show: false
 					},
 					{
 						title: "条件群组",
 						icon: require('../../assets/image/tabbar_cust_main_menu03.png'),
-						management: false
+						show: false
 					},
 					{
 						title: "动态分析",
 						icon: require('../../assets/image/tabbar_cust_main_menu04.png'),
-						management: false
+						show: false
 					},
 					{
 						title: "鱼骨图",
 						icon: require('../../assets/image/tabbar_cust_main_menu05.png'),
-						management: false
+						show: false
 					},
 					{
 						title: "提醒",
 						icon: require('../../assets/image/tabbar_cust_main_menu06.png'),
-						management: false
+						show: false
 					},
 					{
 						title: "存量客户",
 						icon: require('../../assets/image/tabbar_cust_main_menu07.png'),
-						management: false
+						show: false
 					},
 					{
 						title: "客户公共池",
 						icon: require('../../assets/image/tabbar_cust_main_menu08.png'),
-						management: true
+						show: false
 					},
 					{
 						title: "短信审批",
 						icon: require('../../assets/image/tabbar_cust_main_menu09.png'),
-						management: true
+						show: false
 					},
 					{
 						title: "更多",
 						icon: require('../../assets/image/tabbar_cust_main_menu10.png'),
-						management: false
+						show: false
 					}
 				],
 				menuList2: [{
+						title: "全部客群",
+						icon: require('../../assets/image/tabbar_cust_main_menu16.png')
+					}, {
 						title: "财富客群",
 						icon: require('../../assets/image/tabbar_cust_main_menu11.png')
 					},
@@ -255,9 +275,23 @@
 			changeBusiBdTab(i) {
 				if (this.busiBdIndex == i) return;
 				this.busiBdIndex = i;
+				console.log(this.busiBdIndex)
+				if(this.busiBdIndex=='0'){
+					this.reBang=true
+					this.chengJiaoBang=false
+					this.haoPingBang=false
+				}else if(this.busiBdIndex=='1'){
+					this.reBang=false
+					this.chengJiaoBang=true
+					this.haoPingBang=false
+				}else{
+					this.reBang=false
+					this.chengJiaoBang=false
+					this.haoPingBang=true
+				}
 			},
 			// 打开商机热榜
-			showMore(){
+			showMore() {
 				this.$router.push('shangJiHot')
 			},
 			openModel(val) {
@@ -269,7 +303,53 @@
 						this.$router.push('./clCustList');
 						break;
 					case "短信审批":
-						this.$router.push('messageSend')
+						this.$router.push('messageSend');
+						break;
+					case "提醒":
+						this.$router.push('./message');
+						break;
+					case "全部客群":
+						this.$router.push('./business');
+						break;
+					case "财富客群":
+						this.$router.push({
+							name: 'business',
+							params: {
+								pageType: 1
+							}
+						});
+						break;
+					case "贷款客群":
+						this.$router.push({
+							name: 'business',
+							params: {
+								pageType: 4
+							}
+						});
+						break;
+					case "商户客群":
+						this.$router.push({
+							name: 'business',
+							params: {
+								pageType: 2
+							}
+						});
+						break;
+					case "代发客群":
+						this.$router.push({
+							name: 'business',
+							params: {
+								pageType: 3
+							}
+						});
+						break;
+					case "新客客群":
+						this.$router.push({
+							name: 'business',
+							params: {
+								pageType: 5
+							}
+						});
 						break;
 					default:
 						Toast("功能开发中");
@@ -323,14 +403,51 @@
 			},
 		},
 		mounted() {
+			var menu = [];
 			switch (this.$store.state.userMsg.roleId) {
+				// case "00000001":menu = ["存量客户管理","潜在客户管理","统计报表","短信审批","VIP客户群","贷款客户群","收单客户群"];break;// 总行管理员（业务）
+				// case "00000002":menu = ["存量客户管理","潜在客户管理","统计报表","短信审批","VIP客户群","贷款客户群","收单客户群"];break;// 分行管理员
+				// case "00000003":menu = ["存量客户管理","潜在客户管理","统计报表","短信审批","客户公共池管理","VIP客户群","贷款客户群","收单客户群"];break;// 支行管理员
+				// case "00000004":menu = ["存量客户管理","潜在客户管理","营销服务","百户长营销活动","客户公共池管理","VIP客户群","贷款客户群","收单客户群"];break;// 客户经理
+				// case "00000005":menu = ["存量客户管理","潜在客户管理","统计报表","VIP客户群","贷款客户群","收单客户群"];break;// 系统管理员（科技）
+				// case "00000006":menu = ["存量客户管理","潜在客户管理","VIP客户群","贷款客户群","收单客户群"];break;// 总行领导
+				// case "00000007":menu = ["存量客户管理","潜在客户管理","VIP客户群","贷款客户群","收单客户群"];break;// 分行领导
+				// case "00000008":menu = ["存量客户管理","潜在客户管理","统计报表","客户公共池管理","短信审批","VIP客户群","贷款客户群","收单客户群"];break;// 二级支行管理员
+				// case "00000009":menu = ["存量客户管理","潜在客户管理","统计报表","客户公共池管理","VIP客户群","贷款客户群","收单客户群"];break;// 理财经理
+				case "00000001":
+					menu = ["重要潜客", "我的群组", "条件群组", "动态分析", "鱼骨图", "提醒", "存量客户", "短信审批", "更多"];
+					break; // 总行管理员（业务）
+				case "00000002":
+					menu = ["重要潜客", "我的群组", "条件群组", "动态分析", "鱼骨图", "提醒", "存量客户", "短信审批", "更多"];
+					break; // 分行管理员
+				case "00000003":
+					menu = ["重要潜客", "我的群组", "条件群组", "动态分析", "鱼骨图", "提醒", "存量客户", "客户公共池", "短信审批", "更多"];
+					break; // 支行管理员
 				case "00000004":
-					this.management = false;
-					break;
-				default:
-					this.management = true;
-					break;
+					menu = ["重要潜客", "我的群组", "条件群组", "动态分析", "鱼骨图", "提醒", "存量客户", "客户公共池", "更多"];
+					break; // 客户经理
+				case "00000005":
+					menu = ["重要潜客", "我的群组", "条件群组", "动态分析", "鱼骨图", "提醒", "存量客户", "更多"];
+					break; // 系统管理员（科技）
+				case "00000006":
+					menu = ["重要潜客", "我的群组", "条件群组", "动态分析", "鱼骨图", "提醒", "存量客户", "更多"];
+					break; // 总行领导
+				case "00000007":
+					menu = ["重要潜客", "我的群组", "条件群组", "动态分析", "鱼骨图", "提醒", "存量客户", "更多"];
+					break; // 分行领导
+				case "00000008":
+					menu = ["重要潜客", "我的群组", "条件群组", "动态分析", "鱼骨图", "提醒", "存量客户", "客户公共池", "短信审批", "更多"];
+					break; // 二级支行管理员
+				case "00000009":
+					menu = ["重要潜客", "我的群组", "条件群组", "动态分析", "鱼骨图", "提醒", "存量客户", "客户公共池", "更多"];
+					break; // 理财经理
 			}
+			menu.forEach((mItem) => {
+				console.log(mItem)
+				this.menuList1.find(item => item.title == mItem).show = true
+			})
+			let showMenu = this.menuList1.map(item => item.show);
+			this.fiveMenu = showMenu.length > 8;
 			querySysDate({}, (res) => {
 				if (res.data) {
 					this.dataDate = res.data.slice(0, 4) + "." + res.data.slice(4, 6) + "." + res.data.slice(6,
@@ -367,11 +484,20 @@
 		padding-bottom: 0.2rem;
 	}
 
+	.menuOutBox {
+		width: 100%;
+		padding: 0 0.05rem;
+		overflow-y: auto;
+	}
+
+	.menuOutBox::-webkit-scrollbar {
+		display: none;
+	}
+
 	.menuBox {
-		width: 96%;
-		margin: 0 auto;
+		margin: 0 auto 0.11rem;
 		display: flex;
-		justify-content: space-between;
+		justify-content: flex-start;
 		flex-wrap: wrap;
 	}
 
@@ -380,13 +506,12 @@
 		flex-wrap: wrap;
 		justify-content: center;
 		align-items: center;
-		height: 0.8rem;
-		padding: 0.05rem 0;
 	}
 
 	.menuIcon {
-		width: 0.25rem;
-		height: 0.25rem;
+		width: 0.24rem;
+		height: 0.24rem;
+		margin-top: 0.16rem;
 		background-repeat: no-repeat;
 		background-position: center;
 		background-size: contain;
@@ -394,8 +519,13 @@
 
 	.menuName {
 		width: 100%;
-		text-align: center;
-		font-size: 0.13rem;
+		height: 0.18rem;
+		margin-top: 0.1rem;
+		font-size: 0.12rem;
+		font-family: PingFangSC-Regular, PingFang SC;
+		font-weight: 400;
+		color: #262626;
+		line-height: 0.18rem;
 	}
 
 	:deep(.van-notice-bar) {
@@ -407,25 +537,31 @@
 	}
 
 	.messageIcon {
-		width: 0.36rem;
-		height: 0.18rem;
+		width: 0.31rem;
+		height: 0.13rem;
 		background: url(../../assets/image/tabbar_cust_main_message.png) no-repeat center;
-		background-size: contain;
-		margin-right: 0.08rem;
+		background-size: 100%;
+		margin-right: 0.07rem;
+	}
+
+	.msgValue {
+		font-size: 0.13rem;
+		font-family: PingFangSC-Regular, PingFang SC;
+		font-weight: 400;
+		color: #8C8C8C;
 	}
 
 	.busiTitle {
+		margin-top: 0.1rem;
+		padding: 0 0.13rem;
 		width: 100%;
-		font-size: 0.18rem;
+		height: 0.21rem;
+		font-size: 0.17rem;
+		font-family: PingFangSC-Medium, PingFang SC;
+		font-weight: 500;
+		color: #262626;
+		line-height: 0.21rem;
 		text-align: left;
-		padding: 0.08rem 0.12rem;
-	}
-
-	.bdOutBox {
-		width: 100%;
-		overflow-y: auto;
-		display: flex;
-		flex-wrap: nowrap;
 	}
 
 	.bdOutBox::-webkit-scrollbar {
@@ -433,36 +569,34 @@
 	}
 
 	.bdBox {
-		width: 94%;
-		margin: 0.1rem 3%;
-		border-radius: 0.12rem;
-		overflow: hidden;
-		box-shadow: 0 0 0.1rem 0 #D0D0D0;
-		flex-shrink: 0;
+		background: #FFFFFF;
+		box-shadow: 0rem 0.02rem 0.1rem 0rem rgba(217, 229, 242, 0.6);
+		border-radius: 0.08rem;
+		width: 93.6%;
+		margin: 0.03rem 3.2%;
 	}
 
 	.bdTitle {
 		width: 100%;
-		height: 0.5rem;
+		height: 0.44rem;
 		display: flex;
 		flex-wrap: nowrap;
 		justify-content: space-between;
 		background-image: linear-gradient(to right, #f4f7fd, #e4f2fd, #dbeffe, #c5e3fd, #adcbfc);
-		font-size: 0.13rem;
-		display: flex;
-		flex-wrap: nowrap;
-		justify-content: space-between;
+		font-size: 0.12rem;
 		align-items: center;
-		padding: 0 0.1rem;
+		padding: 0 0.15rem;
+		border-top-left-radius: 0.08rem;
+		border-top-right-radius: 0.08rem;
 	}
 
 	.titleIcon {
-		width: 0.88rem;
-		height: 0.18rem;
+		width: 0.66rem;
+		height: 0.14rem;
 		background: url(../../assets/image/tabbar_cust_main_sjbd.png) no-repeat center;
 		background-size: contain;
 		flex-shrink: 0;
-		margin-right: 0.1rem;
+		margin-right: 0.23rem;
 	}
 
 	.titleTab {
@@ -475,20 +609,34 @@
 	}
 
 	.tabItem {
-		color: #D4D4D4;
-		background-color: #F8F8F8;
-		padding: 0.02rem 0.08rem;
-		border-radius: 1rem;
-		box-shadow: 0 0 0.03rem 0 #DFDFDF;
+		height: 0.16rem;
+		background: #FAFAFA;
+		border-radius: 0.09rem;
+		font-size: 0.12rem;
+		font-family: PingFangSC-Regular, PingFang SC;
+		font-weight: 400;
+		color: #BFBFBF;
+		line-height: 0.16rem;
+		padding: 0 0.12rem;
 	}
 
 	.tabItem_a {
-		color: #3366CC;
-		background-color: #FFFFFF;
+		height: 0.17rem;
+		background: #FFFFFF;
+		border-radius: 0.09rem;
+		font-size: 0.12rem;
+		font-family: PingFangSC-Regular, PingFang SC;
+		font-weight: 400;
+		color: #026DFF;
+		line-height: 0.17rem;
 	}
 
 	.titleMore {
-		width: 0.85rem;
+		font-size: 0.12rem;
+		font-family: PingFangSC-Regular, PingFang SC;
+		font-weight: 400;
+		color: #595959;
+		width: 0.75rem;
 		text-align: right;
 	}
 
@@ -525,12 +673,12 @@
 	}
 
 	.dataOutBox {
-		width: 94%;
-		margin: 0.1rem 3%;
-		border-radius: 0.12rem;
-		overflow: hidden;
-		box-shadow: 0 0 0.1rem 0 #D0D0D0;
-		padding-bottom: 0.05rem;
+		background: #FFFFFF;
+		box-shadow: 0rem 0.02rem 0.1rem 0rem rgba(217, 229, 242, 0.6);
+		border-radius: 0.08rem;
+		width: 93.6%;
+		margin: 0.1rem 3.2%;
+		padding-bottom: 0.18rem;
 		position: relative;
 	}
 
@@ -538,16 +686,22 @@
 		width: 92%;
 		margin: 0 auto;
 		display: flex;
-		flex-wrap: wrap;
+		flex-wrap: nowrap;
 		justify-content: flex-start;
+		overflow-x: auto;
+	}
+
+	.dataBox::-webkit-scrollbar {
+		display: none;
 	}
 
 	.dataItem {
-		width: 30%;
+		width: 1rem;
 		padding: 0.1rem;
 		border: solid 0.01rem #F0F0F0;
-		margin: 0 calc(10% / 6) 0.1rem;
+		margin-right: 0.07rem;
 		border-radius: 0.05rem;
+		flex-shrink: 0;
 	}
 
 	.dataValue {
@@ -571,5 +725,38 @@
 		position: absolute;
 		top: 0.15rem;
 		right: 0.25rem;
+	}
+	.shangJiCardOutBox {
+		border-bottom: solid 1px #F2F2F2;
+		padding: 0.15rem 0;
+		width: 90%;
+		margin: 0 auto;
+        
+	}
+
+	.shangJiCardOutBox:last-child {
+		border: 0;
+	}
+	.shangJiHeader{
+		display: flex;
+        align-items: center;
+		font-size: 0.15rem;
+		text-align: left;
+		max-width: 80%;
+	}
+	.textStyle{
+		font-size: 0.11rem;
+		font-family: PingFangSC-Medium, PingFang SC;
+		font-weight: 500;
+		color: #E6494E;
+	}
+	.shangJiCreator{
+		/* height: 0.28rem; */
+		margin-top: 0.06rem;
+		/* margin-bottom: 0.0rem; */
+		text-align: left;
+		margin-left: 0.26rem;
+		font-size: 0.11rem;
+		color:#BFBFBF ;
 	}
 </style>
