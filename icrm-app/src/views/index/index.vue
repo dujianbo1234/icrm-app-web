@@ -16,7 +16,7 @@
             <i class="msg-icon icon-meeting"></i>晨夕会
           </div>
           <i class="msg-line"></i>
-          <div class="msgBarItem" @click="kaifazhong">
+          <div class="msgBarItem" @click="mustDo">
             <i class="msg-icon icon-todo"></i>必办<span class="msgCount1">1</span>
           </div>
           <i class="msg-line"></i>
@@ -405,8 +405,8 @@ export default {
   },
   methods: {
     /* 开发中提示 */
-    kaifazhong(){
-      Toast.fail("正在开发中")
+    mustDo(){
+     this.$router.push('mustDoList')
     },
     /* 选择日期 */
     showWeek(week) {
