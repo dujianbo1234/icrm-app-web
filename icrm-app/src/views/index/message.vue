@@ -83,10 +83,24 @@
 			占位框</div>
 		<org-list ref="orgList" type="2" @close="openOrgList=false" @activeOrg="activeOrg" />
 		<customer-list ref="custList" @close="openCustList=false" @activeCust="activeCust" />
-		<van-calendar v-model:show="dateShow1" :show-confirm="false" color="#026DFF" :min-date="minDate"
-			:max-date="endDate?(new Date(endDate.split('-').join('/'))):maxDate" @confirm="chooseDate1" />
+		<van-calendar v-model:show="dateShow1" :show-confirm="false" :show-cancle="false" color="#026DFF"
+			:min-date="minDate" :max-date="maxDate" @confirm="chooseDate1">
+			<template #title>
+				<div class="calendarTitle">
+					<div class="calendarTitle1" @click="dateShow1=false">取消</div>
+					<div class="calendarTitle2" @click="resetDate1">重置</div>
+				</div>
+			</template>
+		</van-calendar>
 		<van-calendar v-model:show="dateShow2" :show-confirm="false" color="#026DFF" :max-date="maxDate"
-			:min-date="beginDate?(new Date(beginDate.split('-').join('/'))):minDate" @confirm="chooseDate2" />
+			:min-date="minDate" @confirm="chooseDate2" title="结束时间">
+			<template #title>
+				<div class="calendarTitle">
+					<div class="calendarTitle1" @click="dateShow2=false">取消</div>
+					<div class="calendarTitle2" @click="resetDate2">重置</div>
+				</div>
+			</template>
+		</van-calendar>
 	</div>
 </template>
 
@@ -208,11 +222,29 @@
 				this.dateShow2 = true;
 			},
 			chooseDate1(date) {
+				var chooseDate = moment(date).format('YYYY-MM-DD');
+				if (this.endDate && this.endDate != chooseDate && moment(this.endDate).isBefore(chooseDate)) {
+					Toast("开始时间不能晚于结束时间");
+					return;
+				}
 				this.beginDate = moment(date).format('YYYY-MM-DD');
 				this.dateShow1 = false;
 			},
 			chooseDate2(date) {
+				var chooseDate = moment(date).format('YYYY-MM-DD');
+				if (this.beginDate && this.beginDate != chooseDate && moment(chooseDate).isBefore(this.beginDate)) {
+					Toast("结束时间不能早于开始时间");
+					return;
+				}
 				this.endDate = moment(date).format('YYYY-MM-DD');
+				this.dateShow2 = false;
+			},
+			resetDate1() {
+				this.beginDate = "";
+				this.dateShow1 = false;
+			},
+			resetDate2() {
+				this.endDate = "";
 				this.dateShow2 = false;
 			},
 			resetTop() {
@@ -470,4 +502,36 @@
 		justify-content: center;
 		margin-top: 0.1rem;
 	}
+	
+	:deep(.van-calendar__popup .van-popup__close-icon) {
+		display: none;
+	}
+	
+	:deep(.van-calendar__popup) {
+		height: 60%;
+	}
+	
+	.calendarTitle {
+		width: 100%;
+		padding: 0 0.16rem;
+		display: flex;
+		flex-wrap: nowrap;
+		align-items: center;
+		justify-content: space-between;
+	}
+	
+	.calendarTitle1 {
+		font-size: 0.15rem;
+		font-family: PingFangSC-Regular, PingFang SC;
+		font-weight: 400;
+		color: #999999;
+	}
+	
+	.calendarTitle2 {
+		font-size: 0.15rem;
+		font-family: PingFangSC-Regular, PingFang SC;
+		font-weight: 400;
+		color: #1D70F5;
+	}
+	
 </style>
