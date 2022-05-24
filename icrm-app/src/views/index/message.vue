@@ -45,7 +45,7 @@
 					</div>
 				</div>
 			</div>
-			<div class="plate4">
+			<div class="plate4" v-show="openTop">
 				<div class="plate4_title">阅读状态</div>
 				<div class="plate4_childBox">
 					<div class="plate4_child" v-for="(tab5Item,i) in codeList5" :key="'tab5'+i"
@@ -54,34 +54,44 @@
 					</div>
 				</div>
 			</div>
-			<div class="plate4">
+			<div class="plate4" v-show="openTop">
 				<div class="plate4_title">推送日期</div>
 				<div class="plate4_childBox">
 					<div class="plate4_child" :class="beginDate?'plate4_child_a':''" style="min-width: 1.05rem;"
-						@click="showDate(beginDate)">
+						@click="showDate1(beginDate)">
 						<span style="margin-right: 0.06rem;">{{beginDate||"开始时间"}}</span>
 						<van-icon :name="require('../../assets/image/common_date.png')"
 							style="margin-bottom: 0.03rem;" />
 					</div>
 					<div style="font-size: 0.12rem;margin-right: 0.1rem;color: #8C8C8C">—</div>
 					<div class="plate4_child" :class="endDate?'plate4_child_a':''" style="min-width: 1.05rem;"
-						@click="showDate(endDate)">
+						@click="showDate2(endDate)">
 						<span style="margin-right: 0.06rem;">{{endDate||"结束时间"}}</span>
 						<van-icon :name="require('../../assets/image/common_date.png')"
 							style="margin-bottom: 0.03rem;" />
 					</div>
 				</div>
 			</div>
+			<div class="plate5" @click="openTop=!openTop;resetTop();">
+				<van-icon v-if="openTop" name="arrow-up" size="20" color="#999999" />
+				<van-icon v-else name="arrow-down" size="20" color="#999999" />
+			</div>
 		</div>
 		<div :style="{height: fixedHeight}"></div>
-		1
+		<div
+			style="width: 100%;line-height: 0.5rem;border: solid 0.01rem #026DFF;font-size: 0.16rem;background-color: pink;">
+			占位框</div>
 		<org-list ref="orgList" type="2" @close="openOrgList=false" @activeOrg="activeOrg" />
 		<customer-list ref="custList" @close="openCustList=false" @activeCust="activeCust" />
-		<van-calendar v-model:show="dateShow" :show-confirm="false" color="#026DFF" />
+		<van-calendar v-model:show="dateShow1" :show-confirm="false" color="#026DFF" :min-date="minDate"
+			:max-date="endDate?(new Date(endDate.split('-').join('/'))):maxDate" @confirm="chooseDate1" />
+		<van-calendar v-model:show="dateShow2" :show-confirm="false" color="#026DFF" :max-date="maxDate"
+			:min-date="beginDate?(new Date(beginDate.split('-').join('/'))):minDate" @confirm="chooseDate2" />
 	</div>
 </template>
 
 <script>
+	import moment from "moment";
 	import {
 		getSysCodeByType
 	} from "../../request/common.js";
@@ -147,15 +157,20 @@
 					value: ""
 				}],
 				tab5Index: 0,
+				openTop: false,
 				beginDate: "",
 				endDate: "",
-				dateShow: true,
+				dateShow1: false,
+				dateShow2: false,
+				minDate: new Date(moment().subtract(1, 'year').format('YYYY/MM/DD')),
+				maxDate: new Date(),
 			}
 		},
 		components: {
 			customerList
 		},
 		methods: {
+			moment,
 			changeTab1() {
 				this.tab2Index = 0;
 			},
@@ -186,8 +201,19 @@
 				if (this.tab5Index == i) return;
 				this.tab5Index = i;
 			},
-			showDate(date) {
-				this.dateShow = true;
+			showDate1(date) {
+				this.dateShow1 = true;
+			},
+			showDate2(date) {
+				this.dateShow2 = true;
+			},
+			chooseDate1(date) {
+				this.beginDate = moment(date).format('YYYY-MM-DD');
+				this.dateShow1 = false;
+			},
+			chooseDate2(date) {
+				this.endDate = moment(date).format('YYYY-MM-DD');
+				this.dateShow2 = false;
 			},
 			resetTop() {
 				this.$nextTick(() => {
@@ -414,10 +440,6 @@
 		align-items: center;
 	}
 
-	.plate4:last-child {
-		margin-bottom: 0.1rem;
-	}
-
 	.plate4_title {
 		font-size: 0.14rem;
 		font-family: PingFangSC-Regular, PingFang SC;
@@ -435,5 +457,17 @@
 		align-items: center;
 		justify-content: flex-start;
 		overflow-x: auto;
+	}
+
+	.plate5 {
+		width: 93.6%;
+		margin: 0 auto;
+		height: 0.24rem;
+		border-top: solid 0.01rem #EFEFEF;
+		background-color: #FFFFFF;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		margin-top: 0.1rem;
 	}
 </style>
