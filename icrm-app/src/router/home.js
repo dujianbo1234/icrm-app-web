@@ -39,6 +39,11 @@ const routes = [{
 			name: 'mine',
 			component: () => import('@/views/mine/mine.vue')
 		},
+		{
+			path: '/mustDoList',
+			name: 'mustDoList',
+			component: () => import('@/views/mustDo/mustDoList.vue')
+		},
 		...mineChildren,
 	]
 }];

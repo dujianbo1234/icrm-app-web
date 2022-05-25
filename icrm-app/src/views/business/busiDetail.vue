@@ -254,7 +254,7 @@
 						<img :src="'data:image/jpeg;base64,' + photo.url">
 					</div>
 				</div>
-				<div class="cameraBox" v-if="photoList.length<9" @click="openCamera">
+				<div class="cameraBox" v-if="photoList.length<8" @click="openCamera">
 					<van-icon name="photograph" color="#BFBFBF" size="32" />
 				</div>
 			</div>
@@ -343,6 +343,7 @@
 					sysId: this.baseMsg.sysId,
 					scoreId: this.scoreId,
 					cmrcOpptId: this.baseMsg.cmrcOpptId,
+					cmrcOpptSubclass: this.baseMsg.cmrcOpptSubclass,
 					score: this.score_c
 				}, (res) => {
 					if (res.data == "操作成功") {
