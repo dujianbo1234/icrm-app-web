@@ -107,27 +107,54 @@
       <van-tabs class="tabs" v-model:active="active">
         <van-tab title="资产总览">
           <!-- 资产总览(元) -->
-          <!-- <div class="contentItem" style="margin-top: 0.12rem"> -->
           <TitleCard :cardData="cardData" :dalongShow="['等内容..']"></TitleCard>
-          <!-- </div> -->
           <!-- 分割线 -->
           <div class="dividers"></div>
           <!-- 资产分布图 -->
           <div class="card">
             <div class="custStyle aumStyle">
               <span class="title">资产分布图</span>
-              <span class="iconBox" @click="assetFlag = !assetFlag">
+              <span class="iconBox" @click="assetCheck">
                 <van-icon :name="require('@/assets/image/list_1.png')" size="0.32rem" v-if="assetFlag"/>
                 <van-icon :name="require('@/assets/image/list_2.png')" size="0.32rem" v-else/>
               </span>
             </div>
             <!-- 列表 -->
-            <div style="margin-top: 0.07rem;">
-              <Table :listLabel="listLabel" :listData="listData" :listType="listType" :lableArr="['a','b','c', 'd']" v-if="assetFlag"></Table>
-              <!-- <echarts-pie ref="aumDisDiaChart" unit="万元" :data="aumDisDiaData" v-else/> -->
+            <div style="margin-top: 0.07rem;" v-if="assetFlag">
+              <Table unit="1" :listLabel="listLabel" :listData="listData" :listType="listType" :lableArr="['a','b','c','d']"></Table>
             </div>
+            <echarts-pie ref="aumDisDiaChart" unit="元" :data="pieData" v-else/>
           </div>
-          
+          <!-- 分割线 -->
+          <div class="dividers"></div>
+          <!-- 资产分布-增长趋势 -->
+          <div class="card">
+            <div class="custStyle aumStyle">
+              <span class="title">增长趋势</span>
+              <selectors :title="['日', '月']" typeP="1" @change="changeAum"></selectors>
+            </div>
+            <echartHistogram :type="2" ref="Histogram2" :dataArr="['全部','活期存款','定期存款','理财','基金','保险','信托']" numType="no" :selectTime="selectTime" :barData="aumData" @change="aumChange" @change2="aumChange2" :timeUnit="timeUnit"></echartHistogram>
+          </div>
+          <!-- 负债总览(元) -->
+          <div class="card" style="margin-top: 0.12rem">
+            <TitleCard title="负债总览" :cardData="liabilities" :dalongShow="['等内容..']"></TitleCard>
+          </div>
+          <!-- 分割线 -->
+          <div class="dividers"></div>
+          <div class="card">
+            <div class="custStyle aumStyle">
+              <span class="title">负债分布图</span>
+              <span class="iconBox" @click="liaCheck">
+                <van-icon :name="require('@/assets/image/list_1.png')" size="0.32rem" v-if="liaFlag"/>
+                <van-icon :name="require('@/assets/image/list_2.png')" size="0.32rem" v-else/>
+              </span>
+            </div>
+            <!-- 列表 -->
+            <div style="margin-top: 0.07rem;" v-if="liaFlag">
+              <Table unit="1" :color="false" :listLabel="liaLabel" :listData="liaData" :listType="listType" :lableArr="['a','b']"></Table>
+            </div>
+            <echarts-pie ref="liaChart" unit="元" :data="pieliab" v-else/>
+          </div>
         </van-tab>
         <van-tab title="产品信息">产品信息</van-tab>
         <van-tab title="交易分析">交易分析</van-tab>
@@ -158,7 +185,7 @@
         <div v-if="dialogTitles == 0" class="swipe">
           <template v-for="item in phoneList" :key="item.id">
             <van-swipe-cell :disabled="item.dataSrc == 1">
-              <van-cell :border="true" :title="item.telType" :value="item.ctcTel"/>
+              <van-cell :border="true" :title="item.telType" :value="this.custBase.ctcTel"/>
               <template #right>
                 <van-button square type="warning" text="删除" @click="delBtn(item)"/>
                 <van-button square type="danger" text="修改" @click="editBtn(item)"/>
@@ -200,10 +227,49 @@
     <van-popup v-model:show="showPicker" round position="bottom">
       <van-picker :title="dialogTitles < 4 ? '电话类型' :'地址类型'" :columns="dialogTitles < 4 ? ['单位电话','移动电话','财务联系电话'] : ['个人通讯地址','工作单位地址']" @cancel="showPicker = false" @confirm="onConfirm"/>
     </van-popup>
+
+    <div class="bottomLine">
+      <span></span>
+      <div class="bottomText">到底啦，我是有底线的</div>
+      <span></span>
+    </div>
+
+		<div class="plate5">
+			<div class="plate5_item" @click="openMbox">
+				<div class="plate5_item_icon" :style="{'background-image': 'url('+require('@/assets/image/business_detail_message.png')+')'}">
+				</div>
+				<div class="plate5_item_text">发送短信</div>
+			</div>
+			<div class="plate5_item" @click="showCall=true">
+				<div class="plate5_item_icon"
+					:style="{'background-image': 'url('+require('@/assets/image/business_detail_call.png')+')'}">
+				</div>
+				<div class="plate5_item_text">拨打电话</div>
+			</div>
+			<div class="plate5_item" @click="openVisit">
+				<div class="plate5_item_icon" :style="{'background-image': 'url('+require('@/assets/image/business_detail_visit.png')+')'}">
+				</div>
+				<div class="plate5_item_text">登门拜访</div>
+			</div>
+		</div>
+    <!-- 打电话 -->
+		<van-overlay :show="showCall">
+			<div class="plate6">
+				<div class="plate6_1">提示</div>
+				<div class="plate6_5">是否拨打电话：{{baseMsg.ctcTel}}</div>
+				<div class="plate6_4">
+					<div class="palte6_4_1" @click="showCall=false">取消</div>
+					<div class="palte6_4_2" @click="callCust">确定</div>
+				</div>
+			</div>
+		</van-overlay>
+    <!-- 发短信组件 -->
+		<send-message ref="sendMessage" @commitSuccess="sendSuccess" />
   </div>
 </template>
 
 <script>
+// 接口
 import { 
   queryCustBaseInfo,
   queryCustTagInfo,
@@ -216,27 +282,39 @@ import {
   queryCustAddressList,
   saveCustAddressInfo,
   delCustAddressInfo,
-  queryCustAssetAnalyInfo
+  queryCustAssetAnalyInfo,
+  queryAssetsAUMGrowthTrend
 } from "@/request/custinfo.js"
+import { 
+  queryBusiDt
+} from "@/request/index.js"
+// vant
 import {
 	Toast,
 	Dialog
 } from "vant";
-
+// 自定义组件
 import TitleCard from "@/views/cust/components/TitleCard.vue"
 import Table from "@/views/index/components/Table.vue"
-import EchartsPie from "../../components/common/echarts-pie.vue";
+import EchartsPie from "@/components/common/echarts-pie.vue"
+import echartHistogram from "@/views/index/components/echart-Histogram.vue"
+import selectors from "@/views/index/components/selectors.vue"
+import sendMessage from "@/components/common/sendMessage.vue";
+import moment from "moment"
 export default {
   name: "clCustomerView",
   components: {
     TitleCard,
     Table,
-    EchartsPie
+    EchartsPie,
+    echartHistogram,
+    selectors,
+    sendMessage
   },
   data() {
     return {
-      cardData: [4845976.75, 4409514, 4409514, 4409514],
       assetFlag: true,
+      liaFlag: true,
       active: 0,
       showPicker: false,
       phoneType: '',
@@ -245,7 +323,6 @@ export default {
       adrText: '',
       activeNames: ['1'],
       custBase: {},
-      assetInfo: {},
       portraitbtn: true,
       tagList: [],
       show: false,
@@ -264,27 +341,65 @@ export default {
       addressList: [],
       listLabel: [
         { label: '类型', align: 'left', fixed: true },
-        { label: '金额(万元)', align: 'right' },
-        { label: '较上日(万元)', align: 'right' },
-        { label: '较上月(万元)', align: 'right' },
-        { label: '较年初(万元)', align: 'right' },
+        { label: '余额', align: 'right' },
+        { label: '月日均', align: 'right' },
+        { label: '季日均', align: 'right' },
+        { label: '年日均', align: 'right' },
       ],
       listData: [
-        { name: '活期存款余额', a: '', b: '', c: '', d: '' },
-        { name: '定期存款余额', a: '', b: '', c: '', d: '' },
-        { name: '理财余额', a: '', b: '', c: '', d: '' },
-        { name: '基金余额', a: '', b: '', c: '', d: '' },
-        { name: '保险余额', a: '', b: '', c: '', d: '' },
-        { name: '信托余额', a: '', b: '', c: '', d: '' },
+        { name: '活期存款', a: '', b: '', c: '', d: '' },
+        { name: '定期存款', a: '', b: '', c: '', d: '' },
+        { name: '理财', a: '', b: '', c: '', d: '' },
+        { name: '基金', a: '', b: '', c: '', d: '' },
+        { name: '保险', a: '', b: '', c: '', d: '' },
+        { name: '信托', a: '', b: '', c: '', d: '' },
         { name: '合计', a: '', b: '', c: '', d: '' },
       ],
-      aumDisDiaData: [],
-      listType: 0
+      liaLabel: [
+        { label: '类型', align: 'left', fixed: true },
+        { label: '贷款金额', align: 'right' },
+        { label: '贷款余额', align: 'right' },
+      ],
+      liaData: [
+        { name: '经营类', a: '', b: '' },
+        { name: '消费类', a: '', b: '' },
+        { name: '按揭类', a: '', b: '' },
+        { name: '合计', a: '', b: '' }
+      ],
+      cardData: [0, 0, 0, 0],
+      liabilities: [0],
+      pieData: [],
+      listType: 0,
+      dataDate: '',
+      timeUnit: 0,
+      selectTime: [],
+      xAxis: [],
+      aumDataxData: [],
+      aumData: {},
+      openLocation: true,
+			followValue: "",
+			photoList: [],
+			dingwei: "",
+			showVisit: true,
+      showCall: false
     };
   },
-  async created(){
+   created(){
+    queryBusiDt({}, res => {
+      this.dataDate = res.data.workDate;
+      this.selectTime = []
+      for(let i = 11; i >= 0; i--){
+        let obj = {
+          key: moment(this.dataDate).subtract(i, 'month').format('YYYYMM'),
+          title: moment(this.dataDate).subtract(i, 'month').format('M月'),
+        }
+        this.selectTime.push(obj)
+      }
+      this.queryAssetsTrend(this.dataDate)
+    })
     this.queryContactList()
     this.queryAddressList()
+    this.queryAssetAnaly()
     this.queryCustInfo(this.$route.query.custNum)
     this.queryTagList(this.$route.query.custNum)
   },
@@ -296,15 +411,33 @@ export default {
       }
       queryCustBaseInfo(body,res => {
         if(res && res.data){
-          this.custBase = res.data.custBase     // 客户基础信息
-          this.assetInfo = res.data.assetInfo   // 资产分布图(列表信息)
+
+          // 客户基础信息
+          this.custBase = res.data.custBase
+
+          // 资产分布图(列表信息)
+          let list = res.data.assetInfo
+          this.cardData = [list.aumBal, list.aumAvgM, list.aumAvgQ, list.aumAvgY]
+          this.listData =  [
+            { name: '活期存款', a: list.currDpsitBal, b: list.currDpsitAvgM, c: list.currDpsitAvgQ, d: list.currDpsitAvgY },
+            { name: '定期存款', a: list.timeDpsitBal, b: list.timeDpsitAvgM, c: list.timeDpsitAvgQ, d: list.timeDpsitAvgY },
+            { name: '理财', a: list.cftBal, b: list.cftAvgM, c: list.cftAvgQ, d: list.cftAvgY },
+            { name: '基金', a: list.fndBal, b: list.fndAvgM, c: list.fndAvgQ, d: list.fndAvgY },
+            { name: '保险', a: list.insBal, b: list.insAvgM, c: list.insAvgQ, d: list.insAvgY },
+            { name: '信托', a: list.entrstBal, b: list.entrstAvgM, c: list.entrstAvgQ, d: list.entrstAvgY },
+            { name: '合计', a: list.aumBal, b: list.aumAvgM, c: list.aumAvgQ, d: list.aumAvgY },
+         ]
         }
       })
     },
     async queryTagList(custNum){
       this.tagList = []
-      await this.queryDefinedTag(custNum)
-      this.queryCustTag(custNum)
+      let definedTag = await this.queryDefinedTag(custNum)
+      let custTag = await this.queryCustTag(custNum)
+      definedTag()
+      custTag()
+      // await this.queryDefinedTag(custNum)
+      // this.queryCustTag(custNum)
     },
     /* 客户标签信息查询 */
     queryCustTag(custNum){
@@ -424,7 +557,6 @@ export default {
             var body = {
               ids: [this.itemData.id]
             }
-            console.log(body)
             delCustAddressInfo(body, res => {
               Toast.clear();
               if(res.data){
@@ -488,7 +620,6 @@ export default {
       queryCustAddressList(body, res => {
         if(res && res.data && res.data.addressList){
           this.addressList = res.data.addressList
-          console.log('赋值成功')
           this.$forceUpdate()
         }else{
           Toast.fail("联系地址查询失败")
@@ -517,7 +648,7 @@ export default {
         case 0 :
           this.itemData = item
           this.phoneType = item.telType
-          this.phoneText = item.ctcTel
+          this.phoneText = this.custBase.ctcTel
           this.dialogTitles = 2
         break
         case 3 :
@@ -634,7 +765,210 @@ export default {
         this.phoneType = value
       }
       this.showPicker = false
-    }
+    },
+    /* 资产分布图-饼图 */
+    queryAssetAnaly(){
+      let body = {
+        custNum: this.$route.query.custNum,
+      }
+      queryCustAssetAnalyInfo(body, res => {
+        if(res && res.data){
+          // 资产总览饼图
+          let pieData = res.data.assetPieData
+          console.log('资产分析负债查询',res.data)
+          let itemStyle = function (item) {
+            return {
+              color: ["#488BFF", "#26CEBA", "#FFC069", "#FD6865", "#836DE4", "#FF9C6E"][item]
+            }
+          }
+          let percentage = (num) => {
+            if(num == undefined || Number(num) == 0){
+              return 0.00
+            }
+            return (Number(num)*100).toFixed(2)
+          }
+          this.pieData = pieData.map((item, index) => {
+            item.itemStyle = itemStyle(index)
+            item.percentage = percentage(item.value1 || 0)
+          })
+
+          // 负债总览
+          let assetData = res.data.assetAnalyData
+          // 贷款余额总计（消费贷款余额，经营贷款余额，按揭贷款余额）
+          this.liabilities = [assetData.loanBalSum]  
+          // 负债分布图-列表
+          this.liaData = [
+            { name: '经营类', a: assetData.corprtnLoanSum, b: assetData.corprtnLoanBal },
+            { name: '消费类', a: assetData.cnsmLoanSum, b: assetData.cnsmLoanBal },
+            { name: '按揭类', a: assetData.mrtgLoanSum, b: assetData.mrtgLoanBal },
+            { name: '合计', a: assetData.loanSum, b: assetData.loanBalSum }
+          ]
+          let pieliab = res.data.loanPieData
+          this.pieliab = pieliab.map((item, index) => {
+            item.itemStyle = itemStyle(index)
+            item.percentage = percentage(item.value1 || 0)
+          })
+        }else{
+          Toast.fail("资产分布图数据为空");
+        }
+      })
+    },
+    /* 资产分布图-列表/饼图切换 */
+    assetCheck(){
+      this.assetFlag = !this.assetFlag
+      if(!this.assetFlag){
+        this.$nextTick(() => {
+          this.$refs.aumDisDiaChart.drawEcharts();
+        });
+      }
+    },
+    /* 资产分布图-增长趋势查询 */
+    queryAssetsTrend(time){
+      let body = {
+        etlDt: moment(time).format('YYYYMMDD'),
+        custNum: this.$route.query.custNum,
+        judge: '', // 0的时候为月
+        pageNum: '1',
+        pageSize: '31'
+      }
+      let xAxis = []
+      // 根据查询日期 日/月 生成一条X轴
+      if(this.timeUnit == 0){
+        body.etlDt = moment(time).format('YYYYMM')
+        let lastDay = Number(moment(time).endOf('month').format('DD')) // 计算该月有多天
+        for(let i = lastDay - 1; i >= 0; i--){
+          let obj = {
+            value: moment(time).endOf('month').subtract(i, 'day').format('DD'), // 需要展示的时间
+            time: moment(time).endOf('month').subtract(i, 'day').format('YYYYMMDD') // 保留原时间戳
+          }
+          xAxis.push(obj)
+        }
+      }else{
+        body.etlDt = moment(time).format('YYYYMMDD')
+        body.judge = '0'
+        for(let i = 11; i >= 0; i--){
+          let obj = {
+            value: moment(time).subtract(i, 'month').format('MM'),  // 需要展示的时间
+            time: moment(time).subtract(i, 'month').format('YYYYMM')    // 保留原时间戳 往前推12个月
+          }
+          xAxis.push(obj)
+        }
+      }
+      queryAssetsAUMGrowthTrend(body, res => {
+        let data = res.data.records
+        // 全部, 活期存款, 定期存款, 理财, 基金, 保险, 信托
+        let arr = ['aumBal','currDpsitBal','timeDpsitBal','cftBal','fndBal','insBal','entrstBal']
+        let xData = [[],[],[],[],[],[],[]] 
+        // 根据生成的X轴去拿到接口返回的每一条X轴的数据
+        xAxis.forEach(itemX => {
+          let flag = true
+          data.forEach(item => {
+            if(itemX.time == item.etlDt){
+              arr.forEach((name,index)=> {
+                let obj = {
+                  value: item[`${name}${['ToYstd', name == 'aumBal' ? 'ToLastMonth' : 'ToLm'][this.timeUnit]}`] || 0,
+                  time: itemX.time,
+                  totalBalance: item[name] || 0
+                }
+                xData[index].push(obj)
+              })
+              flag = false
+            }
+          })
+          if(flag){
+            arr.forEach((n,index)=> {
+                let obj = {
+                  value: 0,
+                  time: itemX.time,
+                  totalBalance: 0
+                }
+                xData[index].push(obj)
+            })
+          }
+        })
+        this.aumDataxData = xData
+        this.xAxis = xAxis
+        this.aumData = {
+          series : xData[0],
+          xAxis: xAxis,
+        }
+      })
+    },
+    /* 资产分布-选择title */
+    aumChange(v){
+      this.aumData = {
+        series : this.aumDataxData[v],
+        xAxis: this.xAxis
+      }
+    },
+    /* 资产分布-查询选择的月份的数据 */
+    aumChange2(v){
+      this.queryAssetsTrend(this.selectTime[v].key)
+    },
+    /* 资产分布-日月切换 */
+    changeAum(data){
+      this.timeUnit = data
+      this.$refs.Histogram2.init()
+      this.queryAssetsTrend(this.dataDate)
+    },
+    /* 负债分布图-列表/饼图切换 */
+    liaCheck(){
+      this.liaFlag = !this.liaFlag
+      if(!this.liaFlag){
+        this.$nextTick(() => {
+          this.$refs.liaChart.drawEcharts();
+        });
+      }
+    },
+    /* 发送短信 */
+		openMbox() {
+      if(this.custBase.ctcTel){
+        if(isNaN(this.custBase.ctcTel)){
+          Toast.fail("电话号码格式有误");
+          return;
+        }
+        if(false){
+          AlipayJSBridge.call("callHandler", {
+            phone: this.custBase.ctcTel,
+          });
+        }else{
+          this.$refs.sendMessage.openMbox({
+            type: "",
+            searchData: {},
+            list: [{
+              cstName: this.custBase.cstName,
+              custNum: this.custBase.custNum,
+              ctcTel: this.custBase.ctcTel
+            }],
+            shrtmsgCnl: "1"
+          })
+        }
+      }
+		},
+    /* 登门拜访 */
+		openVisit() {
+			this.followValue = "";
+			this.photoList = [];
+			this.dingwei = "";
+			this.showVisit = true;
+			this.getLocation();
+		},
+    /* 获取位置信息 */
+		getLocation() {
+			this.openLocation = true;
+			this.dingwei = "正在获取位置信息...";
+			AlipayJSBridge.call('getLocation', {}, (res) => {
+				if (res.status == "000000") {
+					this.dingwei = res.result;
+				} else {
+					this.openLocation = false;
+				}
+			});
+		},
+    /* 发短信的回调 */
+		sendSuccess(msg) {
+			
+		},
   },
 };
 </script>
@@ -651,6 +985,60 @@ export default {
   padding: 0.11rem 0.12rem;
   font-size: 0.14rem;
   color: #262626;
+	.bottomLine {
+		width: 60%;
+		margin: 0.2rem auto;
+    padding-bottom: 0.2rem;
+		display: flex;
+		justify-content: space-between;
+    align-items: center;
+    &>span {
+      width: 10.7%;
+      height: 0.005rem;
+      opacity: 0.7;
+      border-top: 0.005rem solid rgba(191,191,191,1);
+    }
+    .bottomText {
+      margin: 0 2.7%;
+      font-size: 0.12rem;
+      padding: 0 0.1rem;
+      color: #BFBFBF;
+    }
+	}
+	.plate5 {
+		width: 80%;
+		height: calc(constant(safe-area-inset-bottom) + 0.4rem);
+		height: calc(env(safe-area-inset-bottom) + 0.4rem);
+		background: rgba(255, 255, 255, 0.94);
+		box-shadow: 0 -0.005rem 0 0 rgba(0, 0, 0, 0.3);
+		position: fixed;
+		bottom: 0;
+		left: 0;
+		z-index: 1;
+		display: flex;
+		flex-wrap: nowrap;
+		justify-content: space-between;
+		align-items: flex-start;
+		padding: 0.05rem 0.4rem;
+    .plate5_item_icon {
+      margin: 0 auto;
+      width: 0.24rem;
+      height: 0.24rem;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      margin-bottom: 0.04rem;
+    }
+    .plate5_item_text {
+      height: 0.18rem;
+      font-family: PingFangSC-Regular;
+      font-size: 0.12rem;
+      color: #262626;
+      letter-spacing: 0;
+      line-height: 0.18rem;
+      font-weight: 400;
+    }
+	}
   .dialog,
   .dialogs {
     // --van-cell-vertical-padding: 0;

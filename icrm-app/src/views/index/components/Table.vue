@@ -22,15 +22,15 @@
           <!-- 表头 -->
           <tr height="32" valign="middle">
             <template v-for="item in listLabel">
-              <th :align="item.align" :key="item" v-if="!item.fixed"><span class="content">{{ item.label }}</span></th>
+              <th :align="item.align" :key="item" v-if="!item.fixed"><span :class="(lableArr && lableArr.length < 3) ? 'content2' : 'content'">{{ item.label }}</span></th>
             </template>
           </tr>
           <!-- 除第一列 -->
           <tr v-for="item in listData" :key="item.name" height="32">
             <td align="right" valign="middle" v-for="name in lableArr" :key="name">
               <span class="textS">
-                <span class="content" :style="{'color' : (item[name] > 0 && name != 'a') ? '#FF3A3A' : (item[name] < 0 ? ' #37CD37' : '#595959')}">{{numFliter(item[name], name != 'a')}}</span>
-                <template v-if="name != 'a'">
+                <span :class="(lableArr && lableArr.length < 3) ? 'content2' : 'content'" :style="{'color' : (item[name] > 0 && name != 'a' && color) ? '#FF3A3A' : (item[name] < 0 ? ' #37CD37' : '#595959')}">{{numFliter(item[name], (name != 'a' && color))}}</span>
+                <template v-if="name != 'a' && color">
                   <van-icon :name="require('@/assets/image/index_arrow_top.png')" size="0.16rem" v-if="item[name] > 0"/>
                   <van-icon :name="require('@/assets/image/index_arrow_dowm.png')" size="0.16rem" v-else-if="item[name] < 0"/>
                   <van-icon :name="require('@/assets/image/index_main_numLine.png')" size="0.16rem" v-else/>
@@ -51,7 +51,15 @@ export default {
     listLabel: Array,
     listData: Array,
     listType: Number,
-    lableArr: Array
+    lableArr: Array,
+    unit: {
+      type: String,
+      default: '0',
+    },
+    color: {
+      type: String,
+      default: true,
+    }
   },
   data() {
     return {
@@ -64,11 +72,11 @@ export default {
     }
   },
   methods: {
-    numFliter(value, tip){
+    numFliter(value, tip, unit){
       if(value == undefined){
         return '0.00'
       }
-      value = (Number(value)/10000).toFixed(2)
+      value = unit == '0' ? (Number(value)/10000).toFixed(2) : Number(value).toFixed(2)
       let n = value.toString().split('.')
       let z = /\d{1,3}(?=(\d{3})+$)/g
       let b = Number(value) > 0 && tip ? '+' : ''
@@ -102,6 +110,9 @@ export default {
       }
       .content {
         min-width: 0.75rem;
+      }
+      .content2 {
+        min-width: 1.2rem;
       }
     }
     th, td{

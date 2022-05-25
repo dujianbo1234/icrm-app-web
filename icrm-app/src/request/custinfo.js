@@ -18,6 +18,8 @@ export const saveCustAddressInfo = (params,fun) => {request("custinfo.saveCustAd
 export const delCustAddressInfo = (params,fun) => {request("custinfo.delCustAddressInfo", params, fun)}
 // 资产分析负债查询
 export const queryCustAssetAnalyInfo = (params,fun) => {request("custinfo.queryCustAssetAnalyInfo", params, fun)}
+// 查询资产总览(AUM趋势图) 
+export const queryAssetsAUMGrowthTrend = (params,fun) => {request("custinfo.queryAssetsAUMGrowthTrend", params, fun)}
 // 客户标签信息查询
 export const queryCustTagInfo = (params,fun) => {request("custinfo.queryCustTagInfo", params, fun)}
 // 自定义签信息查询

@@ -8,7 +8,7 @@
       </div>
     </div>
     <div class="titleNum">{{numFliter(cardData[0], false)}}</div>
-    <div class="titleBot" :style="`justify-content: space-between;`">
+    <div class="titleBot" :style="`justify-content: space-between;`" v-if="title != '负债总览'">
       <div v-for="(item,index) in ['月日均','季日均','年日均']" :key="index">
         <p class="textF">{{item}}</p>
         <p class="textS">
@@ -20,7 +20,7 @@
       </div>
     </div>
 
-      <van-dialog v-model:show="show" title="资产总览" show-cancel-button>
+      <van-dialog v-model:show="show" :title="title" show-cancel-button>
         <div class="diloag">
           <div class="diloagItem">
             <p v-for="(item, index) in dalongShow" :key="index">{{item}}</p>

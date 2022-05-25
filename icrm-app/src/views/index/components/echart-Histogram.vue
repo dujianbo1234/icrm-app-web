@@ -3,7 +3,7 @@
     <!-- title选择 -->
     <van-tabs class="cust" v-model:active="active" :shrink="true" @change="change">
       <van-tab v-for="item in dataArr" :title="item" :key="item">
-        <echartsBar ref="echartsBar" :yName="['增长人数','增长(万元)'][type]" :unit="['人','万元'][type]" :numType="numType" :numUnit="numUnit" :timeUnit="timeUnit" :barData="barData"></echartsBar>
+        <echartsBar ref="echartsBar" :yName="['增长人数','增长(万元)','增长(元)'][type]" :unit="['人','万元','元'][type]" :numType="numType" :numUnit="numUnit" :timeUnit="timeUnit" :barData="barData"></echartsBar>
       </van-tab>
     </van-tabs>
     <!-- 下方月份选择 -->

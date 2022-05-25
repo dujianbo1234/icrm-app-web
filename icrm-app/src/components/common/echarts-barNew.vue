@@ -10,7 +10,7 @@
           {{`${currentNum > 0 ? '+' : ''}${numFliter(currentNum)}${unit}`}}
         </span>
       </span>
-      <span class="right">{{numType}}：<span class="text">{{unit == '万元' ? numFliter(pepoe) : pepoe}}{{numUnit}}</span></span>
+      <span class="right" v-if="numType != 'no'">{{numType}}：<span class="text">{{unit == '万元' ? numFliter(pepoe) : pepoe}}{{numUnit}}</span></span>
     </div>
     <span class="time">{{['日期','月份'][timeUnit]}}</span>
   </div>
