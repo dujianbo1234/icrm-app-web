@@ -275,7 +275,6 @@
 			changeBusiBdTab(i) {
 				if (this.busiBdIndex == i) return;
 				this.busiBdIndex = i;
-				console.log(this.busiBdIndex)
 				if(this.busiBdIndex=='0'){
 					this.reBang=true
 					this.chengJiaoBang=false
@@ -443,7 +442,6 @@
 					break; // 理财经理
 			}
 			menu.forEach((mItem) => {
-				console.log(mItem)
 				this.menuList1.find(item => item.title == mItem).show = true
 			})
 			let showMenu = this.menuList1.map(item => item.show);
