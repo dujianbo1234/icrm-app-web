@@ -148,7 +148,7 @@
         </div>
       </div>
       <!-- 分割线 -->
-      <div class="dividers"><van-divider :dashed="true" /></div>
+      <div class="dividers"></div>
       <!-- 客户增长趋势 -->
       <div class="contentItem">
         <div class="custStyle">
@@ -165,7 +165,7 @@
         <TitleCard :title="['AUM余额','AUM日均']" :arr="peCstAum" @change="peCstAumChange" @clickDalong="clickDalong(' ',['AUM考核口径不包括储蓄存款'])"></TitleCard>
       </div>
       <!-- 分割线 -->
-      <div class="dividers"><van-divider :dashed="true" /></div>
+      <div class="dividers"></div>
       <!-- AUM余额分布图 -->
       <div class="contentItem">
         <div class="custStyle aumStyle">
@@ -182,7 +182,7 @@
         <echarts-pie v-if="aumFlag == 1" unit="万元" :data="aumDisDiaData" ref="aumDisDiaChart"/>
       </div>
       <!-- 分割线 -->
-      <div class="dividers"><van-divider :dashed="true" /></div>
+      <div class="dividers"></div>
       <!-- AUM余额-增长趋势 -->
       <div class="contentItem">
         <div class="custStyle aumStyle">
@@ -196,7 +196,7 @@
         <TitleCard :title="['贷款余额','贷款日均']" :arr="peCstLoan" @change="peCstLoanChange" @clickDalong="clickDalong(' ',['零售贷款余额'])"></TitleCard>
       </div>
       <!-- 分割线 -->
-      <div class="dividers"><van-divider :dashed="true" /></div>
+      <div class="dividers"></div>
       <!-- 贷款余额-增长趋势 -->
       <div class="contentItem">
         <div class="custStyle aumStyle">
@@ -1575,10 +1575,10 @@ export default {
   height: 0.3rem;
   margin-right: 0.1rem;
 }
-.dividers:deep(.van-divider) {
-  border: 0 dashed rgba(255, 255, 255, 1);
-  padding: 0 0.3rem;
-  /* margin: 0.005rem 0; */
+.dividers {
+  margin: 0 5%;
+  height: 0.001rem;
+  border-bottom: 0.02rem dashed #fff;
 }
 .custStyle {
   font-size: 0.14rem;

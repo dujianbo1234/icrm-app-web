@@ -74,11 +74,11 @@ export default {
 					},
         },
         grid: {
-          left: '0%',
+          left: '15%',
           right: 20,
           top: '20%',
-          bottom: '9%',
-          containLabel: true, // 是否包含XY轴的文字
+          bottom: '17%',
+          // containLabel: true, // 是否包含XY轴的文字
         },
         axisLabel: {
           show: true,
@@ -103,7 +103,7 @@ export default {
           name: this.yName,
           nameTextStyle: {
             color: '#8C8C8C',
-            align: "right"
+            align: "center"
           },
           splitLine :{
             lineStyle:{

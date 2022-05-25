@@ -4,8 +4,29 @@ import { request } from "./request.js";
 export const queryCustSearchList = (params,fun) => {request("custinfo.queryCustSearchList", params, fun)}
 // 客户基础信息查询
 export const queryCustBaseInfo = (params,fun) => {request("custinfo.queryCustBaseInfo", params, fun)}
+// 客户联系列表查询
+export const queryCustContactList = (params,fun) => {request("custinfo.queryCustContactList", params, fun)}
+// 客户联系保存
+export const saveCustContactInfo = (params,fun) => {request("custinfo.saveCustContactInfo", params, fun)}
+// 客户联系删除
+export const delCustContactInfo = (params,fun) => {request("custinfo.delCustContactInfo", params, fun)}
+// 客户地址列表查询
+export const queryCustAddressList = (params,fun) => {request("custinfo.queryCustAddressList", params, fun)}
+// 客户地址保存
+export const saveCustAddressInfo = (params,fun) => {request("custinfo.saveCustAddressInfo", params, fun)}
+// 客户地址删除
+export const delCustAddressInfo = (params,fun) => {request("custinfo.delCustAddressInfo", params, fun)}
+// 资产分析负债查询
+export const queryCustAssetAnalyInfo = (params,fun) => {request("custinfo.queryCustAssetAnalyInfo", params, fun)}
 // 客户标签信息查询
 export const queryCustTagInfo = (params,fun) => {request("custinfo.queryCustTagInfo", params, fun)}
+// 自定义签信息查询
+export const queryCustDefinedLabel = (params,fun) => {request("custinfo.queryCustDefinedLabel", params, fun)}
+// 自定义签保存/修改
+export const saveCustDefinedLabel = (params,fun) => {request("custinfo.saveCustDefinedLabel", params, fun)}
+// 自定义签删除
+export const delCustDefinedLabel = (params,fun) => {request("custinfo.delCustDefinedLabel", params, fun)}
+
 // 查询潜在客户列表
 export const queryCustBaseInfoList = (params,fun) => {request("custinfo.queryCustBaseInfoList", params, fun)}
 // 查询客户经理

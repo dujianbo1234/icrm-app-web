@@ -3,26 +3,37 @@
     <div class="titleTop">
       <div class="titleL">
         <van-icon :name="require('@/assets/image/AUM_img.png')" size="0.2rem"/>
-        <h3>{{`${title[num ? 0 : 1]}(${unit})`}}</h3>
-        <van-icon name="question-o" size="0.16rem" color="#BFBFBF" @click="clickDalong"/>
+        <h3>{{`${title}(${unit})`}}</h3>
+        <van-icon name="question-o" size="0.16rem" color="#BFBFBF" @click="show = true"/>
       </div>
-      <span class="titleR" @click="clickBtn">
-        <van-icon :name="require('@/assets/image/AUM_YE.png')" size="0.16rem"/>
-        <span class="text">切换为{{title[num ? 1 : 0]}}</span>
-      </span>
     </div>
-    <div class="titleNum">{{numFliter(arr[num ? 0 : 1][0], false)}}</div>
-    <div class="titleBot" :style="`justify-content: ${['space-between','space-around'][num ? 0 : 1]};`">
-      <div v-for="(item,index) in [['较上日','较上月','较年初'],['较上月','较年初']][num ? 0 : 1]" :key="index">
+    <div class="titleNum">{{numFliter(cardData[0], false)}}</div>
+    <div class="titleBot" :style="`justify-content: space-between;`">
+      <div v-for="(item,index) in ['月日均','季日均','年日均']" :key="index">
         <p class="textF">{{item}}</p>
         <p class="textS">
-          <span>{{numFliter(arr[num ? 0 : 1][index + 1], true)}}</span>
-          <van-icon :name="require('@/assets/image/index_arrow_top.png')" size="0.16rem" v-if="arr[num ? 0 : 1][index + 1] > 0"/>
-          <van-icon :name="require('@/assets/image/index_arrow_dowm.png')" size="0.16rem" v-else-if="arr[num ? 0 : 1][index + 1] < 0"/>
+          <span>{{numFliter(cardData[index+1], true)}}</span>
+          <van-icon :name="require('@/assets/image/index_arrow_top.png')" size="0.16rem" v-if="cardData[index+1] > 0"/>
+          <van-icon :name="require('@/assets/image/index_arrow_dowm.png')" size="0.16rem" v-else-if="cardData[index+1] < 0"/>
           <van-icon :name="require('@/assets/image/index_main_numLine.png')" size="0.16rem" v-else/>
         </p>
       </div>
     </div>
+
+      <van-dialog v-model:show="show" title="资产总览" show-cancel-button>
+        <div class="diloag">
+          <div class="diloagItem">
+            <p v-for="(item, index) in dalongShow" :key="index">{{item}}</p>
+          </div>
+        </div>
+        <template #footer>
+          <div class="bootomBtn">
+            <!-- <van-button class="btnL" size="small" round plain type="primary" @click="show = false">取消</van-button> -->
+            <van-button class="btn" size="small" type="primary" @click="show = false">确认</van-button>
+          </div>
+        </template>
+
+      </van-dialog>
   </div>
 </template>
 
@@ -31,29 +42,33 @@ export default {
   name: "TitleCard",
   props: {
     title: {
-      type: Array,
-      default: ["选项1", "选项2"],
+      type: String,
+      default: '资产总览',
     },
-    arr: {
+    cardData: {
       type: Array,
-      default: [[], []],
+      default: [],
     },
     unit: {
       type: String,
-      default: '万元',
+      default: '元',
+    },
+    dalongShow: {
+      type: Array,
+      default: [],
     }
   },
   data() {
     return {
-      num: true
+      show: false
     };
   },
   methods: {
     numFliter(value, tip){
       if(value == undefined){
-        return '0'
+        return tip ? '0.00' : '0'
       }
-      value = (Number(value)/10000).toFixed(2)
+      value = tip ? Number(value).toFixed(0) : Number(value).toFixed(2)
       let n = value.toString().split('.')
       let z = /\d{1,3}(?=(\d{3})+$)/g
       let b = Number(value) > 0 && tip ? '+' : ''
@@ -63,18 +78,14 @@ export default {
         return `${b}${value.toString().replace(z, '$&,')}`
       }
     },
-    clickBtn(){
-      this.num = !this.num
-      this.$emit('change',this.num)
-    },
-    clickDalong(){
-      this.$emit('clickDalong')
-    }
   },
 };
 </script>
 <style lang="less" scoped>
 .TitleCard {
+  background: #fff;
+  border-radius: 0.08rem;
+  padding: 0.07rem 0.075rem 0;
   .titleTop {
     display: flex;
     justify-content: space-between;
@@ -92,17 +103,6 @@ export default {
         font-weight: 500;
         color: rgba(0, 0, 0, 0.85);
         font-weight: 500;
-      }
-    }
-    .titleR {
-      display: flex;
-      justify-content: space-between;
-      .text {
-        font-family: PingFangSC-Regular;
-        font-size: 0.12rem;
-        color: #026DFF;
-        letter-spacing: 0;
-        font-weight: 400;
       }
     }
   }
@@ -132,6 +132,27 @@ export default {
       align-items: center;
       color: #262626;
     }
+  }
+}
+.diloag {
+  text-align: left;
+  width: 90%;
+  margin: auto;
+  padding: 0.05rem;
+  border-radius: 0.04rem;
+  border: solid 1px #e6e6e6;
+  .diloagItem {
+    overflow-y: auto;
+    max-height: 4rem;
+    line-height: 0.3rem;
+    font-size: 0.13rem;
+  }
+}
+.bootomBtn {
+  margin: 0.08rem;
+  .btn {
+    padding: 0 0.32rem;
+    border-radius: 0.08rem;
   }
 }
 </style>
