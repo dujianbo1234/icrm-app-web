@@ -73,7 +73,8 @@
 	 * @variable: getSysCodeByType 码值查询
 	 * @variable: queryMessageTemplateListForOption 获取短信模板列表
 	 * @variable: addMessageSendInfo 添加短信发送
-	 * @variable: addCustSearchMessageSend 发送全部
+	 * @variable: addCustSearchMessageSend 存量客户列表发送全部
+	 * @variable: addWarningMgtMessageSend 消息提醒列表发送全部
 	 * @variable: queryMessageKeyWordCheck 短信关键字校验
 	 * @variable: addEsbMessageSendInfo ESB短信发送
 	 */
@@ -85,8 +86,11 @@
 		addMessageSendInfo,
 		queryMessageKeyWordCheck,
 		addEsbMessageSendInfo,
-    addCustSearchMessageSend
+		addCustSearchMessageSend
 	} from "../../request/custinfo.js";
+	import {
+		addWarningMgtMessageSend
+	} from "../../request/product.js";
 	/**
 	 * 引入vant组件
 	 * @variable: Toast 轻提示组件
@@ -112,7 +116,7 @@
 					shrtmsgCnl: "8",
 					custList: [],
 					searchData: {},
-					acsry: ""
+					// acsry: ""
 				},
 				haveTest: false,
 				testTel: "",
@@ -122,7 +126,7 @@
 		},
 		methods: {
 			/**
-			 * @param {Object} msg
+			 * @param {Object} 
 			 * 调用该方法打开短信发送弹框
 			 * msg.type 类型值，用于判断发送短信用于何处
 			 * msg.searchData 筛选条件，用于全部发送时的条件筛选
@@ -141,26 +145,20 @@
 					shrtmsgCnl: msg.shrtmsgCnl,
 					custList: [],
 					searchData: {},
-					acsry: msg.list[0].sysId
+					// acsry: msg.list[0].sysId
 				};
 				switch (msg.type) {
 					case "CLCustListSendAll":
-            this.GMParams = Object.assign(this.GMParams, msg.searchData)
-						break;
-					case "QZCustListSendAll":
-						this.GMParams.searchData = msg.searchData;
+						this.GMParams = Object.assign(this.GMParams, msg.searchData)
 						break;
 					case "messageListSendAll":
-						this.GMParams.searchData = msg.searchData;
-						break;
-					case "SJListSendAll":
 						this.GMParams.searchData = msg.searchData;
 						break;
 					default:
 						this.GMParams.custList = msg.list.map((item) => {
 							return {
 								custNum: item.custNo || item.custNum,
-								cstName: item.custName || item.cstName|| item.custNm,
+								cstName: item.custName || item.cstName || item.custNm,
 								mobileNum: item.ctcTel || item.phoneNo || item.telPhone
 							}
 						});
@@ -258,7 +256,8 @@
 						}
 						this.messageValue += outInputValue[i] + inputHtml[i].value;
 					}
-					if (outInputValue.length > inputHtml.length) this.messageValue += outInputValue[outInputValue.length - 1];
+					if (outInputValue.length > inputHtml.length) this.messageValue += outInputValue[outInputValue.length -
+						1];
 					this.GMParams.shrtmsgCntnt = this.messageValue + "如需退订，请回复TD。";
 					Toast.loading({
 						message: "正在发送",
@@ -267,14 +266,14 @@
 					});
 					queryMessageKeyWordCheck({
 						shrtmsgCntnt: this.messageValue + "如需退订，请回复TD。"
-					},(res1)=>{
+					}, (res1) => {
 						if (res1.data) {
 							Toast.fail("短信内容包含敏感词，请修改！");
 						} else {
 							addEsbMessageSendInfo({
 								shrtmsgCntnt: this.messageValue + "如需退订，请回复TD。",
 								mobileNum: this.testTel
-							},(res2)=>{
+							}, (res2) => {
 								Toast.success("短信已发送至当前号码，请查收并确认是否符合预期！");
 								this.haveTest = true;
 							})
@@ -292,22 +291,25 @@
 				});
 				switch (this.msgType) {
 					case "CLCustListSendAll":
-            this.sendMessage(addCustSearchMessageSend)
+						this.sendMessage(addCustSearchMessageSend);
+						break;
+					case "messageListSendAll":
+						this.sendMessage(addWarningMgtMessageSend);
 						break;
 					default:
-            this.sendMessage(addMessageSendInfo)
+						this.sendMessage(addMessageSendInfo);
 						break;
 				}
 			},
-      sendMessage(type){
-				type(this.GMParams,(res)=>{
+			sendMessage(type) {
+				type(this.GMParams, (res) => {
 					Toast.success("提交成功");
 					this.$refs.messageValue.innerHTML = "";
 					this.$emit("closeBatchSendBtn");
-					this.$emit("commitSuccess",this.messageValue + "如需退订，请回复TD。");
+					this.$emit("commitSuccess", this.messageValue + "如需退订，请回复TD。");
 					this.showMBox = false;
 				})
-      }
+			}
 		},
 		mounted() {
 			getSysCodeByType({

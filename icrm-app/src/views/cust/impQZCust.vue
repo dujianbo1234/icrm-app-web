@@ -86,15 +86,21 @@
 				</div>
 				<div class="boxBottom" style="bottom: 0.3rem;"></div>
 				<div class="moreBox" @click.stop="moreBoxOpen=!moreBoxOpen">
-					<van-icon v-if="moreBoxOpen" name="arrow-down" color="#ADADAD" size="24" />
-					<van-icon v-else name="arrow-up" color="#ADADAD" size="24" />
+					<van-icon v-if="moreBoxOpen" name="arrow-up" color="#ADADAD" size="24" />
+					<van-icon v-else name="arrow-down" color="#ADADAD" size="24" />
 				</div>
 				<div class="boxBottom"></div>
 			</div>
-			<div class="total">
-				<div>筛选结果：共{{total}}条数据</div>
-				<div class="fpBtn" v-if="$store.state.userMsg.roleId!='00000004'&&!openPLFP"
-					@click="checked=[];checkAll=false;openPLFP=true;">分配</div>
+			<div class="totalBox">
+				<div class="total">
+					<div>筛选结果：共{{total}}条数据</div>
+					<div class="fpBtn" v-if="$store.state.userMsg.roleId!='00000004'&&!openPLFP"
+						@click="checked=[];checkAll=false;openPLFP=true;">分配</div>
+				</div>
+				<div class="total">
+					<div>预估获客数：{{Number(estCstSum).toLocaleString()}}</div>
+					<div>预估成交额：{{fixedNum(estAmtSum)}}</div>
+				</div>
 			</div>
 		</div>
 		<div class="topZW">
@@ -192,7 +198,8 @@
 	import {
 		queryCustomersInfoList,
 		updatePoteCustomersInfo,
-		deleteCustomersMarketing
+		deleteCustomersMarketing,
+		queryCustBaseSummary
 	} from "../../request/custinfo.js";
 	import custlistCS from "../../components/cust/custlistCS.vue";
 	import {
@@ -215,7 +222,9 @@
 				value2: "",
 				value3: "",
 				value4: "",
-				total: "9",
+				total: "0",
+				estCstSum: "0",
+				estAmtSum: "0",
 				msgList: [],
 				pageIndex: 0,
 				loading: false,
@@ -319,14 +328,16 @@
 				this.params.estCstEnd = this.value2;
 				this.params.estAmtStart = this.value3;
 				this.params.estAmtEnd = this.value4;
-				if((this.params.estCstStart||this.params.estCstStart===0)&&(this.params.estCstEnd||this.params.estCstEnd===0)){
-					if(this.params.estCstStart>this.params.estCstEnd){
+				if ((this.params.estCstStart || this.params.estCstStart === 0) && (this.params.estCstEnd || this.params
+						.estCstEnd === 0)) {
+					if (this.params.estCstStart > this.params.estCstEnd) {
 						Toast.fail("最大值不能小于最小值")
 						return;
 					}
 				}
-				if((this.params.estAmtStart||this.params.estAmtStart===0)&&(this.params.estAmtEnd||this.params.estAmtEnd===0)){
-					if(this.params.estAmtStart>this.params.estAmtEnd){
+				if ((this.params.estAmtStart || this.params.estAmtStart === 0) && (this.params.estAmtEnd || this.params
+						.estAmtEnd === 0)) {
+					if (this.params.estAmtStart > this.params.estAmtEnd) {
 						Toast.fail("最大值不能小于最小值")
 						return;
 					}
@@ -451,6 +462,12 @@
 				this.params.pageNum = (++this.pageIndex).toString();
 				this.params.orgId = this.chooseOrg.value;
 				this.loading = true;
+				if (this.pageIndex == "1") {
+					queryCustBaseSummary(this.params, (res) => {
+						this.estCstSum = res.data.records[0].estCstSum;
+						this.estAmtSum = res.data.records[0].estAmtSum;
+					})
+				};
 				queryCustomersInfoList(this.params, (res) => {
 					if (res.data && res.data.records) {
 						this.total = res.data.total;
@@ -593,7 +610,7 @@
 		justify-content: space-around;
 		align-items: center;
 	}
-	
+
 	.orderList::-webkit-scrollbar {
 		display: none;
 	}
@@ -673,12 +690,17 @@
 		align-items: center;
 	}
 
+	.totalBox {
+		width: 100%;
+		padding: 0.06rem 0 0.02rem;
+		background-color: #F5F5F5;
+	}
+
 	.total {
 		font-size: 0.1rem;
 		color: #262626;
-		height: 0.35rem;
+		height: 0.24rem;
 		padding: 0 0.15rem;
-		background-color: #F5F5F5;
 		display: flex;
 		flex-wrap: nowrap;
 		justify-content: space-between;
@@ -869,7 +891,7 @@
 		background-color: #026DFF;
 		border: solid 0.01rem #026DFF;
 	}
-	
+
 	:deep(.van-field__left-icon) {
 		display: flex;
 		align-items: center;
