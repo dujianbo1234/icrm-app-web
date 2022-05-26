@@ -12,18 +12,22 @@
 				<div style="display:flex;justify-content: space-between;align-items: center;">
 					<div class="shangJiHeader">
 						<van-icon style="margin-left:0.04rem" :name="require('../../assets/image/tabbar_cust_main_bdTop'+(i+1)+'.png')" size="12" />
-						<span style="margin-left: 0.12rem;">{{shangJiItem}}</span>
-						<van-icon style="margin-left:0.04rem" :name="require('../../assets/image/up.png')" size="12" />
+						<span class="shangJiTitle" style="margin-left: 0.12rem;">{{shangJiItem.modelName}}</span>
+						<van-icon v-if="(reBang && shangJiItem.hotListFlag=='2')||(chengJiaoBang && shangJiItem.dealNumFlag=='2')||(haoPingBang && shangJiItem.laimScoreFlag=='2')" style="margin-left:0.04rem" :name="require('../../assets/image/up.png')" size="12" />
+						<van-icon v-if="(reBang && shangJiItem.hotListFlag=='1')||(chengJiaoBang && shangJiItem.dealNumFlag=='1')||(haoPingBang && shangJiItem.laimScoreFlag=='1')" style="margin-left:0.04rem" :name="require('../../assets/image/down.png')" size="12" />
+						<van-icon v-if="(reBang && shangJiItem.hotListFlag=='0')||(chengJiaoBang && shangJiItem.dealNumFlag=='0')||(haoPingBang && shangJiItem.laimScoreFlag=='0')" style="margin-left:0.04rem" :name="require('../../assets/image/line.png')" size="12" />
 					</div>
 					<div style="display:flex">
 						<van-icon v-if="reBang" style="margin-right:0.04rem;margin-top: 0.02rem;" :name="require('../../assets/image/huore.png')" size="12" />
 						<van-icon  v-if="chengJiaoBang" style="margin-right:0.04rem;margin-top: 0.02rem;" :name="require('../../assets/image/chengjiao.png')" size="12" />
 						<van-icon  v-if="haoPingBang" style="margin-right:0.04rem;margin-top: 0.02rem;" :name="require('../../assets/image/dianzan.png')" size="12" />
-						<span class="textStyle">3.99</span>
+						<span v-if="reBang" class="textStyle">{{shangJiItem.hotList}}</span>
+						<span v-if="chengJiaoBang" class="textStyle">{{shangJiItem.dealNum}}</span>
+						<span v-if="haoPingBang" class="textStyle">{{shangJiItem.laimScore}}</span>
 					</div>
 				</div>
                 <div class="shangJiCreator">
-					创建人：零售管理部-小雪
+					创建人：{{shangJiItem.crtUsrName}}
 				</div>
 
 			</div>
@@ -31,19 +35,24 @@
 				<div style="display:flex;justify-content: space-between;align-items: center;">
 					<div class="shangJiHeader">
 						<div class="sjIcon">{{i+4}}</div>
-						<div style="margin-left: 0.08rem;">{{shangJiItem}}</div>
-						<van-icon style="margin-left:0.04rem" :name="require('../../assets/image/down.png')" size="12" />
+						<span class="shangJiTitle" style="margin-left: 0.12rem;">{{shangJiItem.modelName}}</span>
+						<van-icon v-if="(reBang && shangJiItem.hotListFlag=='2')||(chengJiaoBang && shangJiItem.dealNumFlag=='2')||(haoPingBang && shangJiItem.laimScoreFlag=='2')" style="margin-left:0.04rem" :name="require('../../assets/image/up.png')" size="12" />
+						<van-icon v-if="(reBang && shangJiItem.hotListFlag=='1')||(chengJiaoBang && shangJiItem.dealNumFlag=='1')||(haoPingBang && shangJiItem.laimScoreFlag=='1')" style="margin-left:0.04rem" :name="require('../../assets/image/down.png')" size="12" />
+						<van-icon v-if="(reBang && shangJiItem.hotListFlag=='0')||(chengJiaoBang && shangJiItem.dealNumFlag=='0')||(haoPingBang && shangJiItem.laimScoreFlag=='0')" style="margin-left:0.04rem" :name="require('../../assets/image/line.png')" size="12" />
 					</div>
 					<div style="display:flex">
 						<van-icon v-if="reBang" style="margin-right:0.04rem;margin-top: 0.02rem;" :name="require('../../assets/image/huore_gray.png')" size="12" />
 						<van-icon  v-if="chengJiaoBang" style="margin-right:0.04rem;margin-top: 0.02rem;" :name="require('../../assets/image/chengjiao_gray.png')" size="12" />
 						<van-icon  v-if="haoPingBang" style="margin-right:0.04rem;margin-top: 0.02rem;" :name="require('../../assets/image/dianzan_gray.png')" size="12" />
-						<span class="textStyle1">4.99</span>
+						<span v-if="reBang" class="textStyle1">{{shangJiItem.hotList}}</span>
+						<span v-if="chengJiaoBang" class="textStyle1">{{shangJiItem.dealNum}}</span>
+						<span v-if="haoPingBang" class="textStyle1">{{shangJiItem.laimScore}}</span>
 					</div>
 				</div>
 				
                  <div class="shangJiCreator">
-					创建人：零售管理部-小雪
+					创建人：{{shangJiItem.crtUsrName}}
+
 				</div>
 
 			</div>
@@ -60,33 +69,23 @@
 		Button
 	} from "vant";
 	import {
-		queryMessageApproveList,
-		approveMessageSendApply
+		queryCmrcOpportRankList
 	} from "../../request/market.js";
 	export default {
 		data() {
 			return {
                 active:0,
 				showApprove: false,
-				finished: true,
+				finished: false,
 				pageIndex: 0,
+				orderField:'',
 				loading:false,
 				reBang:true,
 				listHeight:'',
 				chengJiaoBang:false,
 				haoPingBang:false,
 				shangJiList: [
-                    "3月财富T0到期商机",
-                    "3月余额不达标50万财富防流失商机50万财富防流失商机",
-                    "3月财富T0到期商机备份",
-                    "3月财富XXXXX",
-                    "3月余额不达标XXX防流失商机",
-                    "3月财富商机的秘密",
-                    "3月如何抓住更多商机",
-                    "3月商机XXXXX",
-                    "3月财富T0到期商机",
-                    "商机密码",
-                    "2月财富T0到期商机"
+                    
 				],
 				msgList: [],
 			};
@@ -102,67 +101,63 @@
 
 			},
 			onClickTab(el){
+				this.pageIndex = 0
+				this.msgList = []
 				console.log(el)
 				if(el.name=='0'){
+					this.orderField='HOT_LIST_RANK'
 					this.reBang=true
 					this.chengJiaoBang=false
 					this.haoPingBang=false
+					
 				}else if(el.name=='1'){
+					this.orderField='DEAL_NUM_RANK'
 					this.reBang=false
 					this.chengJiaoBang=true
 					this.haoPingBang=false
 				}else{
+					this.orderField='LAIM_SCORE_RANK'
 					this.reBang=false
 					this.chengJiaoBang=false
 					this.haoPingBang=true
 				}
+				this.onLoad()
+
 			},
 			onLoad() {
-				// this.finished = false;
-				// Toast.loading({
-				// 	message: "正在加载",
-				// 	forbidClick: true,
-				// 	duration: 0,
-				// });
-				// this.pageIndex++;
-				// let params = {
-				// 	pageNum: this.pageIndex.toString(),
-				// 	pageSize: "10",
-				// 	tplNo: "",
-				// 	exapSt: "1",
-				// 	belongOrg: "",
-				// 	userId: "",
-				// };
-				// this.params = JSON.stringify(params);
-				// queryMessageApproveList(params, (res) => {
-				// 	if (res.data && res.data.records) {
-				// 		Toast.clear();
-				// 		this.allNum = res.data.total.toLocaleString();
-				// 		this.msgList = this.msgList.concat(res.data.records);
-				// 		if (this.msgList.length >= this.allNum) this.finished = true;
-				// 	} else {
-				// 		Toast.fail("短信审批列表为空");
-				// 		this.finished = true;
-				// 	}
-				// 	this.loading = false;
-				// });
+				this.finished = false;
+				Toast.loading({
+					message: "正在加载",
+					forbidClick: true,
+					duration: 0,
+				});
+				this.pageIndex++;
+				let params = {
+					pageNum: this.pageIndex.toString(),
+					pageSize: "10",
+					etlDt:this.$route.query.etlDt,
+					orderField: this.orderField,
+				};
+				this.params = JSON.stringify(params);
+				queryCmrcOpportRankList(params, (res) => {
+					if (res.data && res.data.records) {
+						Toast.clear();
+						this.allNum = res.data.total.toLocaleString();
+						this.shangJiList = this.shangJiList.concat(res.data.records);
+						if (this.shangJiList.length >= this.allNum) this.finished = true;
+					} else {
+						Toast.fail("商机热榜列表为空");
+						this.finished = true;
+					}
+					this.loading = false;
+				});
 			},
 		},
 		mounted() {
 			this.getHeight()
-            this.shangJiList= [
-                    "3月财富T0到期商机",
-                    "3月余额不达标50万财富防流失商机财富防流失商机3月余额不达标50万财富防流失商机财富防流失商机",
-                    "3月财富T0到期商机备份",
-                    "3月财富XXXXX",
-                    "3月余额不达标XXX防流失商机",
-                    "3月财富商机的秘密",
-                    "3月如何抓住更多商机",
-                    "3月商机XXXXX",
-                    "3月财富T0到期商机",
-                    "商机密码",
-                    "2月财富T0到期商机"
-				]
+			this.orderField='HOT_LIST_RANK'
+
+            
         }
 	}
 </script>
@@ -242,5 +237,9 @@
 		font-weight: 500;
 		color: #262626;
 	}
-	
+	.shangJiTitle{
+		font-size: 0.13rem;
+		font-weight: 500;
+		color: #262626;
+	}
 </style>

@@ -28,3 +28,8 @@ export const queryOpportCustServList = (params,fun) => {request("market.queryOpp
 export const saveOpportCustServInfo = (params,fun) => {request("market.saveOpportCustServInfo", params, fun)}
 // 商机跟进上传图片
 export const opportCustServUploadMpaas = (params,fun) => {request("market.opportCustServUpload", params, fun)}
+//商机排行榜
+export const queryCmrcOpportRankList = (params,fun) => {request("market.queryCmrcOpportRankList", params, fun)}
+//客户拜访详情
+export const custServiceDetail = (params,fun) => {request("custserv.custServiceDetail", params, fun)}
+
