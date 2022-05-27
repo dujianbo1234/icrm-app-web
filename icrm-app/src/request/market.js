@@ -33,7 +33,7 @@ export const queryCmrcOpportRankList = (params,fun) => {request("market.queryCmr
 //必办列表查询
 export const queryEmployeeMustDoList = (params,fun) => {request("market.queryEmployeeMustDoList", params, fun)}
 //客户拜访详情
-export const custServiceDetail = (params,fun) => {request("custserv.custServiceDetail", params, fun)}
+export const queryCustomeServicFollow = (params,fun) => {request("custserv.queryCustomeServicFollow", params, fun)}
 //必办现场定位
 export const followEmployeeMustDo = (params,fun) => {request("market.followEmployeeMustDo", params, fun)}
 

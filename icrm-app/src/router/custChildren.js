@@ -42,5 +42,10 @@ export default [{
 		path: '/shangJiHot',
 		name: 'shangJiHot',
 		component: () => import('@/views/business/shangJiHot.vue')
+	},
+	{
+		path: '/baiFangList',
+		name: 'baiFangList',
+		component: () => import('@/views/cust/baiFangList.vue')
 	}
 ];

@@ -2,7 +2,7 @@
   <!-- 客户视图 -->
   <div class="clCustomerView">
     <!-- 顶部title -->
-    <nav-bar title="客户视图" type="2" leftIcon rightText="客户拜访" rightColor="rgba(2, 109, 255, 1)"/>
+    <nav-bar title="客户视图" @touchRight="onClickRight" type="2" leftIcon rightText="客户拜访" rightColor="rgba(2, 109, 255, 1)"/>
     <!-- 客户信息 -->
     <div class="card custInfo">
       <div class="custInfoName">
@@ -504,6 +504,15 @@ export default {
   },
   methods: {
     moment,
+    // 客户拜访记录跳转
+    onClickRight(){
+      this.$router.push({
+        name:'baiFangList',
+        query:{
+          custNo:this.$route.query.custNum
+        }
+      })
+    },
     /* 客户基础信息查询 */
     queryCustInfo(custNum){
       let body = {
