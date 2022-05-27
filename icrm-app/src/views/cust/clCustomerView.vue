@@ -1164,17 +1164,17 @@ export default {
                     { label: "到期日期", key: 'expDayPrd', width: '100' },
                     { label: "产品开放期", key: 'otpuBeginDt', width: '100' },
                     // 拼接的部分                    
-                    { label: "购买金额", key: '', width: '100' },
-                    { label: "购买日期", key: '', width: '100' },
-                    { label: "起息日期", key: '', width: '100' },
-                    { label: "购买渠道", key: '', width: '100' },
+                    { label: "购买金额", key: 'prchsdAmt', width: '100' },
+                    { label: "购买日期", key: 'prchsdDt', width: '100' },
+                    { label: "起息日期", key: 'stIntDt', width: '100' },
+                    { label: "购买渠道", key: 'cnlKnd', width: '100' },
                   ]
                 }
               })
               /* 理财交易明细查询(暂不用) */
-              queryCustFinaTranInfo(body, res => {
-                console.log('理财交易明细查询(暂不用)',res)
-              })
+              // queryCustFinaTranInfo(body, res => {
+              //   console.log('理财交易明细查询(暂不用)',res)
+              // })
             break;
             case '基金':
               /*  基金产品明细查询 */
