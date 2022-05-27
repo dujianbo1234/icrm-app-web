@@ -93,3 +93,5 @@ export const addEsbMessageSendInfo = (params,fun) => {request("custinfo.addEsbMe
 export const addMessageSendInfo = (params,fun) => {request("custinfo.addMessageSendInfo", params, fun)}
 // 添加短信全部发送
 export const addCustSearchMessageSend = (params,fun) => {request("custinfo.addCustSearchMessageSend", params, fun)}
+// 预估获客数和预估成交额汇总
+export const queryCustBaseSummary = (params,fun) => {request("custinfo.queryCustBaseSummary", params, fun)}

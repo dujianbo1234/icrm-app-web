@@ -49,18 +49,22 @@
 					<div style="display:flex;justify-content: space-between;align-items: center;">
 						<div class="shangJiHeader">
 							<van-icon style="margin-left:0.04rem" :name="require('../../assets/image/tabbar_cust_main_bdTop'+(i+1)+'.png')" size="12" />
-							<span style="margin-left: 0.12rem;">{{shangJiItem}}</span>
-							<van-icon style="margin-left:0.04rem" :name="require('../../assets/image/up.png')" size="12" />
+							<span class="shangJiTitle" style="margin-left: 0.12rem;">{{shangJiItem.modelName}}</span>
+							<van-icon v-if="(reBang && shangJiItem.hotListFlag=='2')||(chengJiaoBang && shangJiItem.dealNumFlag=='2')||(haoPingBang && shangJiItem.laimScoreFlag=='2')" style="margin-left:0.04rem" :name="require('../../assets/image/up.png')" size="12" />
+							<van-icon v-if="(reBang && shangJiItem.hotListFlag=='1')||(chengJiaoBang && shangJiItem.dealNumFlag=='1')||(haoPingBang && shangJiItem.laimScoreFlag=='1')" style="margin-left:0.04rem" :name="require('../../assets/image/down.png')" size="12" />
+							<van-icon v-if="(reBang && shangJiItem.hotListFlag=='0')||(chengJiaoBang && shangJiItem.dealNumFlag=='0')||(haoPingBang && shangJiItem.laimScoreFlag=='0')" style="margin-left:0.04rem" :name="require('../../assets/image/line.png')" size="12" />
 						</div>
 						<div style="display:flex">
 							<van-icon v-if="reBang" style="margin-right:0.04rem;margin-top: 0.02rem;" :name="require('../../assets/image/huore.png')" size="12" />
 							<van-icon  v-if="chengJiaoBang" style="margin-right:0.04rem;margin-top: 0.02rem;" :name="require('../../assets/image/chengjiao.png')" size="12" />
 							<van-icon  v-if="haoPingBang" style="margin-right:0.04rem;margin-top: 0.02rem;" :name="require('../../assets/image/dianzan.png')" size="12" />
-							<span class="textStyle">3.99</span>
+							<span v-if="reBang" class="textStyle">{{shangJiItem.hotList}}</span>
+							<span v-if="chengJiaoBang" class="textStyle">{{shangJiItem.dealNum}}</span>
+							<span v-if="haoPingBang" class="textStyle">{{shangJiItem.laimScore}}</span>
 						</div>
 					</div>
 					<div class="shangJiCreator">
-						创建人：零售管理部-小雪
+						创建人：{{shangJiItem.crtUsrName}}
 					</div>
 				</div>
 			</div>
@@ -135,6 +139,9 @@
 	import {
 		querySysDate
 	} from "../../request/index.js";
+	import {
+		queryCmrcOpportRankList,custServiceDetail
+	} from "../../request/market.js";
 	import {
 		Toast
 	} from "vant";
@@ -231,6 +238,7 @@
 				busiBdValue: ["商户有效率提升", "金卡客户数提升", "VIP客户提升-代发客群"],
 				active: 0,
 				dataDate: "",
+				dataDateS:'',
 				showDate: false,
 				currentDate: "",
 				minDate: new Date(2020, 0, 1),
@@ -272,27 +280,70 @@
 			}
 		},
 		methods: {
+			getbiBan(){
+				custServiceDetail(null, (res) => {
+					if (res.data) {
+						
+						console.log('res.data1111',res.data)
+
+					} else {
+						console.log('res.data1111',res.data)
+
+					}
+					this.loading = false;
+				});
+			},
+			getCmrcOpportRankList(etlDt){
+				let params = {
+					pageNum: '1',
+					pageSize: "3",
+					etlDt:etlDt,
+					orderField: this.orderField,
+				};
+				this.params = JSON.stringify(params);
+				console.log('params',params)
+				queryCmrcOpportRankList(params, (res) => {
+					if (res.data) {
+						this.busiBdValue=res.data.records
+						console.log('res.data',res.data)
+
+					} else {
+						Toast.fail("审批失败");
+
+					}
+					this.loading = false;
+				});
+			},
 			changeBusiBdTab(i) {
 				if (this.busiBdIndex == i) return;
 				this.busiBdIndex = i;
-				console.log(this.busiBdIndex)
 				if(this.busiBdIndex=='0'){
+					this.orderField='HOT_LIST_RANK'
 					this.reBang=true
 					this.chengJiaoBang=false
 					this.haoPingBang=false
 				}else if(this.busiBdIndex=='1'){
+					this.orderField='DEAL_NUM_RANK'
 					this.reBang=false
 					this.chengJiaoBang=true
 					this.haoPingBang=false
 				}else{
+					this.orderField='LAIM_SCORE_RANK'
 					this.reBang=false
 					this.chengJiaoBang=false
 					this.haoPingBang=true
 				}
+				this.getCmrcOpportRankList(this.dataDateS)
+
 			},
 			// 打开商机热榜
 			showMore() {
-				this.$router.push('shangJiHot')
+				this.$router.push({
+					name:'shangJiHot',
+					query:{
+						etlDt:this.dataDateS
+					}
+				})
 			},
 			openModel(val) {
 				switch (val.title) {
@@ -402,7 +453,8 @@
 
 			},
 		},
-		mounted() {
+		async mounted() {
+			// this.getbiBan()
 			var menu = [];
 			switch (this.$store.state.userMsg.roleId) {
 				// case "00000001":menu = ["存量客户管理","潜在客户管理","统计报表","短信审批","VIP客户群","贷款客户群","收单客户群"];break;// 总行管理员（业务）
@@ -443,13 +495,16 @@
 					break; // 理财经理
 			}
 			menu.forEach((mItem) => {
-				console.log(mItem)
 				this.menuList1.find(item => item.title == mItem).show = true
 			})
 			let showMenu = this.menuList1.map(item => item.show);
 			this.fiveMenu = showMenu.length > 8;
-			querySysDate({}, (res) => {
+			querySysDate({},(res) => {
 				if (res.data) {
+					console.log('querySysDate',res.data)
+					this.dataDateS=res.data
+					this.orderField='HOT_LIST_RANK'
+					this.getCmrcOpportRankList(res.data)
 					this.dataDate = res.data.slice(0, 4) + "." + res.data.slice(4, 6) + "." + res.data.slice(6,
 						8);
 					var nowDateArr = this.dataDate.split(".");
@@ -465,6 +520,8 @@
 					Toast.fail("系统跑批日期数据为空")
 				}
 			})
+			console.log('this.dataDate',this.dataDate)
+			
 		},
 	}
 </script>
@@ -744,11 +801,16 @@
 		text-align: left;
 		max-width: 80%;
 	}
+	.shangJiTitle{
+		font-size: 0.13rem;
+		font-weight: 500;
+		color: #262626;
+	}
 	.textStyle{
 		font-size: 0.11rem;
 		font-family: PingFangSC-Medium, PingFang SC;
 		font-weight: 500;
-		color: #E6494E;
+		color: #262626;
 	}
 	.shangJiCreator{
 		/* height: 0.28rem; */
