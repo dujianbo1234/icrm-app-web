@@ -108,7 +108,7 @@
       <div class="sendMsgBtn" @click="msgBatchSend(false)">批量发送</div>
     </div>
     <!-- 选择机构组件 -->
-    <org-list ref="orgList" type="2" @close="closeOrg" @activeOrg="activeOrg" />
+    <org-list ref="orgList" :type="2" @close="closeOrg" @activeOrg="activeOrg" />
     <!-- 发送短信组件 -->
     <send-message ref="sendMessage" @commitSuccess="sendSuccess" />
   </div>

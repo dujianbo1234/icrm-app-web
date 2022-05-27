@@ -26,7 +26,7 @@ export function numFliter(num, tip, fixed) {
   if (num == undefined) {
     return '0.00'
   }
-  let value = fixed ? (Number(value)/10000).toFixed(2) : Number(value)/10000
+  let value = fixed ? (Number(num)/10000).toFixed(2) : Number(num)/10000
   let n = value.toString().split('.')
   let z = /\d{1,3}(?=(\d{3})+$)/g
   let b = Number(value) > 0 && tip ? '+' : ''

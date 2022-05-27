@@ -2,7 +2,8 @@
   <div class="TitleCard">
     <div class="titleTop">
       <div class="titleL">
-        <van-icon :name="require('@/assets/image/AUM_img.png')" size="0.2rem"/>
+        <van-icon :name="require('@/assets/image/cust_zczl.png')" size="0.2rem" v-if="imgUrl == '0'"/>
+        <van-icon :name="require('@/assets/image/cust_fzzl.png')" size="0.2rem" v-else/>
         <h3>{{`${title}(${unit})`}}</h3>
         <van-icon name="question-o" size="0.16rem" color="#BFBFBF" @click="show = true"/>
       </div>
@@ -56,6 +57,10 @@ export default {
     dalongShow: {
       type: Array,
       default: [],
+    },
+    imgUrl: {
+      type: String,
+      default: '0',
     }
   },
   data() {

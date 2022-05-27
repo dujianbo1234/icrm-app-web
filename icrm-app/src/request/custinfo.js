@@ -18,6 +18,8 @@ export const saveCustAddressInfo = (params,fun) => {request("custinfo.saveCustAd
 export const delCustAddressInfo = (params,fun) => {request("custinfo.delCustAddressInfo", params, fun)}
 // 资产分析负债查询
 export const queryCustAssetAnalyInfo = (params,fun) => {request("custinfo.queryCustAssetAnalyInfo", params, fun)}
+// 客户服务新增(打电话)
+export const custServiceAdd = (params,fun) => {request("custserv.custServiceAdd", params, fun)}
 // 查询资产总览(AUM趋势图) 
 export const queryAssetsAUMGrowthTrend = (params,fun) => {request("custinfo.queryAssetsAUMGrowthTrend", params, fun)}
 // 客户标签信息查询
@@ -28,6 +30,36 @@ export const queryCustDefinedLabel = (params,fun) => {request("custinfo.queryCus
 export const saveCustDefinedLabel = (params,fun) => {request("custinfo.saveCustDefinedLabel", params, fun)}
 // 自定义签删除
 export const delCustDefinedLabel = (params,fun) => {request("custinfo.delCustDefinedLabel", params, fun)}
+
+// 客户持有产品查询
+export const queryCustHoldPrdInfo = (params,fun) => {request("custinfo.queryCustHoldPrdInfo", params, fun)}
+// 定期存款产品明细
+export const queryCustTimeDepAcctInfo = (params,fun) => {request("custinfo.queryCustTimeDepAcctInfo", params, fun)}
+// 活期存款产品明细
+export const queryCustCurrDepAcctInfo = (params,fun) => {request("custinfo.queryCustCurrDepAcctInfo", params, fun)}
+// 贷款产品明细查询
+export const queryCustLoanAcctInfo = (params,fun) => {request("custinfo.queryCustLoanAcctInfo", params, fun)}
+// 理财产品明细查询
+export const queryCustFinaAcctInfo = (params,fun) => {request("custinfo.queryCustFinaAcctInfo", params, fun)}
+// 理财交易明细查询
+export const queryCustFinaTranInfo = (params,fun) => {request("custinfo.queryCustFinaTranInfo", params, fun)}
+// 基金产品明细查询
+export const queryCustFundAcctInfo = (params,fun) => {request("custinfo.queryCustFundAcctInfo", params, fun)}
+// 保险产品明细查询
+export const queryCustBassAcctInfo = (params,fun) => {request("custinfo.queryCustBassAcctInfo", params, fun)}
+// 信托产品明细查询
+export const queryCustTrustAcctInfo = (params,fun) => {request("custinfo.queryCustTrustAcctInfo", params, fun)}
+// 推荐产品信息查询
+export const queryRecommendProdList = (params,fun) => {request("custinfo.queryRecommendProdList", params, fun)}
+// 交易行为分析查询
+export const queryCustTranFlowInfo = (params,fun) => {request("custinfo.queryCustTranFlowInfo", params, fun)}
+// 客户签约产品查询
+export const queryCustSignPrdInfo = (params,fun) => {request("custinfo.queryCustSignPrdInfo", params, fun)}
+// 签约产品明细查询
+export const queryCustSignPrdList = (params,fun) => {request("custinfo.queryCustSignPrdList", params, fun)}
+
+// 查询商机列表
+export const queryCmrcOpportunityList = (params,fun) => {request("market.queryCmrcOpportunityList", params, fun)}  
 
 // 查询潜在客户列表
 export const queryCustBaseInfoList = (params,fun) => {request("custinfo.queryCustBaseInfoList", params, fun)}

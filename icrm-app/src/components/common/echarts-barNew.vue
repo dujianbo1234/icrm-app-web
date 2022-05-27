@@ -33,7 +33,10 @@ export default {
       type: String,
       default: '人'
     },
-    numType: String,
+    numType: {
+      type: String,
+      default: '客户总数'
+    },
     numUnit: {
       type: String,
       default: ''
@@ -163,7 +166,7 @@ export default {
       if(value == undefined){
         return '0'
       }
-      value = Number(value).toFixed(0)
+      value = this.unit == "元" ? Number(value).toFixed(2) : Number(value).toFixed(0)
       let n = value.toString().split('.')
       let z = /\d{1,3}(?=(\d{3})+$)/g
       let b = Number(value) > 0 && tip ? '+' : ''

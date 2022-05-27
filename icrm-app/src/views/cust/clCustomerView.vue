@@ -104,62 +104,155 @@
     </div>
 
     <div class="tabsList">
-      <van-tabs class="tabs" v-model:active="active">
-        <van-tab title="资产总览">
-          <!-- 资产总览(元) -->
-          <TitleCard :cardData="cardData" :dalongShow="['等内容..']"></TitleCard>
-          <!-- 分割线 -->
-          <div class="dividers"></div>
-          <!-- 资产分布图 -->
-          <div class="card">
-            <div class="custStyle aumStyle">
-              <span class="title">资产分布图</span>
-              <span class="iconBox" @click="assetCheck">
-                <van-icon :name="require('@/assets/image/list_1.png')" size="0.32rem" v-if="assetFlag"/>
-                <van-icon :name="require('@/assets/image/list_2.png')" size="0.32rem" v-else/>
-              </span>
-            </div>
-            <!-- 列表 -->
-            <div style="margin-top: 0.07rem;" v-if="assetFlag">
-              <Table unit="1" :listLabel="listLabel" :listData="listData" :listType="listType" :lableArr="['a','b','c','d']"></Table>
-            </div>
-            <echarts-pie ref="aumDisDiaChart" unit="元" :data="pieData" v-else/>
-          </div>
-          <!-- 分割线 -->
-          <div class="dividers"></div>
-          <!-- 资产分布-增长趋势 -->
-          <div class="card">
-            <div class="custStyle aumStyle">
-              <span class="title">增长趋势</span>
-              <selectors :title="['日', '月']" typeP="1" @change="changeAum"></selectors>
-            </div>
-            <echartHistogram :type="2" ref="Histogram2" :dataArr="['全部','活期存款','定期存款','理财','基金','保险','信托']" numType="no" :selectTime="selectTime" :barData="aumData" @change="aumChange" @change2="aumChange2" :timeUnit="timeUnit"></echartHistogram>
-          </div>
-          <!-- 负债总览(元) -->
-          <div class="card" style="margin-top: 0.12rem">
-            <TitleCard title="负债总览" :cardData="liabilities" :dalongShow="['等内容..']"></TitleCard>
-          </div>
-          <!-- 分割线 -->
-          <div class="dividers"></div>
-          <div class="card">
-            <div class="custStyle aumStyle">
-              <span class="title">负债分布图</span>
-              <span class="iconBox" @click="liaCheck">
-                <van-icon :name="require('@/assets/image/list_1.png')" size="0.32rem" v-if="liaFlag"/>
-                <van-icon :name="require('@/assets/image/list_2.png')" size="0.32rem" v-else/>
-              </span>
-            </div>
-            <!-- 列表 -->
-            <div style="margin-top: 0.07rem;" v-if="liaFlag">
-              <Table unit="1" :color="false" :listLabel="liaLabel" :listData="liaData" :listType="listType" :lableArr="['a','b']"></Table>
-            </div>
-            <echarts-pie ref="liaChart" unit="元" :data="pieliab" v-else/>
-          </div>
-        </van-tab>
-        <van-tab title="产品信息">产品信息</van-tab>
-        <van-tab title="交易分析">交易分析</van-tab>
-        <van-tab title="商机记录">商机记录</van-tab>
+
+      <van-tabs class="tabs" v-model:active="active" @change="queryCustInfos">
+        <van-tab title="资产总览"></van-tab>
+        <van-tab title="产品信息"></van-tab>
+        <van-tab title="交易分析"></van-tab>
+        <van-tab title="商机记录"></van-tab>
       </van-tabs>
+
+      <div v-if="active == 0">
+        <!-- 资产总览(元) -->
+        <div class="card">
+          <TitleCard :cardData="cardData" :dalongShow="['等内容..']"></TitleCard>
+        </div>
+        <!-- 分割线 -->
+        <div class="dividers"></div>
+        <!-- 资产分布图 -->
+        <div class="card">
+          <div class="custStyle aumStyle">
+            <span class="title">资产分布图</span>
+            <span class="iconBox" @click="assetCheck">
+              <van-icon :name="require('@/assets/image/list_1.png')" size="0.32rem" v-if="assetFlag"/>
+              <van-icon :name="require('@/assets/image/list_2.png')" size="0.32rem" v-else/>
+            </span>
+          </div>
+          <!-- 列表 -->
+          <div style="margin-top: 0.07rem;" v-if="assetFlag">
+            <Table :unit="1" :listLabel="listLabel" :listData="listData" :listType="listType" :lableArr="['a','b','c','d']"></Table>
+          </div>
+          <echarts-pie ref="aumDisDiaChart" :unit="'元'" :data="pieData" v-else/>
+        </div>
+        <!-- 分割线 -->
+        <div class="dividers"></div>
+        <!-- 资产分布-增长趋势 -->
+        <div class="card">
+          <div class="custStyle aumStyle">
+            <span class="title">增长趋势</span>
+            <selectors :title="['日', '月']" :typeP="1" @change="changeAum"></selectors>
+          </div>
+          <echartHistogram :type="2" ref="Histogram2" :dataArr="['全部','活期存款','定期存款','理财','基金','保险','信托']" :numType="'no'" :selectTime="selectTime" :barData="aumData" @change="aumChange" @change2="aumChange2" :timeUnit="timeUnit"></echartHistogram>
+        </div>
+        <!-- 负债总览(元) -->
+        <div class="card" style="margin-top: 0.12rem;">
+          <TitleCard title="负债总览" imgUrl="1" :cardData="liabilities" :dalongShow="['等内容..']"></TitleCard>
+        </div>
+        <!-- 分割线 -->
+        <div class="dividers"></div>
+        <div class="card">
+          <div class="custStyle aumStyle">
+            <span class="title">负债分布图</span>
+            <span class="iconBox" @click="liaCheck">
+              <van-icon :name="require('@/assets/image/list_1.png')" size="0.32rem" v-if="liaFlag"/>
+              <van-icon :name="require('@/assets/image/list_2.png')" size="0.32rem" v-else/>
+            </span>
+          </div>
+          <!-- 列表 -->
+          <div style="margin-top: 0.07rem;" v-if="liaFlag">
+            <Table :unit="1" :color="false" :listLabel="liaLabel" :listData="liaData" :listType="listType" :lableArr="['a','b']"></Table>
+          </div>
+          <echarts-pie ref="liaChart" unit="元" :data="pieliab" v-else/>
+        </div>
+      </div>
+
+      <div v-if="active == 1">
+        <div class="card">
+          <div class="titleTop">
+            <div class="titleL">
+              <van-icon :name="require('@/assets/image/cust_cycp.png')" size="0.2rem"/>
+              <h3>持有产品</h3>
+            </div>
+          </div>
+          <TabsList :setList="prdList" style="margin-top: 0.1rem"/>
+        </div>
+
+        <div class="card" style="margin-top: 0.12rem;">
+          <div class="titleTop">
+            <div class="titleL">
+              <van-icon :name="require('@/assets/image/cust_qycp.png')" size="0.2rem"/>
+              <h3>签约产品</h3>
+            </div>
+          </div>
+          <TabsList :setList="sgnList" style="margin-top: 0.1rem"/>
+        </div>
+
+        <div class="card" style="margin-top: 0.12rem;">
+          <div class="titleTop">
+            <div class="titleL">
+              <van-icon :name="require('@/assets/image/cust_tjcp.png')" size="0.2rem"/>
+              <h3>推荐产品</h3>
+            </div>
+          </div>
+          <div class="recommend">
+            <div class="textL">久赢现金宝</div>
+            <div class="textR" @click="fenxiang">分享</div>
+          </div>
+          <div class="recommend">
+            <div class="textL">久赢现金宝</div>
+            <div class="textR" @click="fenxiang">分享</div>
+          </div>
+        </div>
+      </div>
+
+      <div v-if="active == 2">
+        <div class="analysis">
+          <!-- 流入总金额 -->
+          <div class="card">
+            <div class="titleTop">
+              <div class="titleL">
+                <van-icon :name="require('@/assets/image/AUM_img.png')" size="0.2rem"/>
+                <h3>流入总金额(万元)</h3>
+              </div>
+            </div>
+            <div class="titleNum">{{numFliter(inData.txnAmtCount || 0, false)}}</div>
+            <div class="titleBot">
+              <div>
+                <p class="textF">累计笔数</p>
+                <p class="textS">{{numFliter(inData.txnStcoCount || 0, true)}}</p>
+              </div>
+              <div>
+                <p class="textF">统计日期</p>
+                <p class="textS">{{`${inData.sticStartDt ? moment(inData.sticStartDt).format('YYYY.MM.DD') : '-'} - ${inData.sticEndDt ? moment(inData.sticEndDt).format('YYYY.MM.DD') : '-'}`}}</p>
+              </div>
+            </div>
+          </div>
+          <!-- 流出总金额 -->
+          <div class="card" style="margin-top: 0.12rem;">
+            <div class="titleTop">
+              <div class="titleL">
+                <van-icon :name="require('@/assets/image/cust_fzzl.png')" size="0.2rem"/>
+                <h3>流出总金额(万元)</h3>
+              </div>
+            </div>
+            <div class="titleNum">{{numFliter(outData.txnAmtCount || 0, false)}}</div>
+            <div class="titleBot">
+              <div>
+                <p class="textF">累计笔数</p>
+                <p class="textS">{{numFliter(outData.txnStcoCount || 0, true)}}</p>
+              </div>
+              <div>
+                <p class="textF">统计日期</p>
+                <p class="textS">{{`${outData.sticStartDt ? moment(outData.sticStartDt).format('YYYY.MM.DD') : '-'} - ${outData.sticEndDt ? moment(outData.sticEndDt).format('YYYY.MM.DD') : '-'}`}}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div v-if="active == 3">
+        <UnityList :unityList="unityList" :finished="finished" :loading="loading" @getCustList="getCustList"/>
+      </div>
     </div>
     <!-- 弹框组件 -->
     <div class="dialog">
@@ -234,37 +327,7 @@
       <span></span>
     </div>
 
-		<div class="plate5">
-			<div class="plate5_item" @click="openMbox">
-				<div class="plate5_item_icon" :style="{'background-image': 'url('+require('@/assets/image/business_detail_message.png')+')'}">
-				</div>
-				<div class="plate5_item_text">发送短信</div>
-			</div>
-			<div class="plate5_item" @click="showCall=true">
-				<div class="plate5_item_icon"
-					:style="{'background-image': 'url('+require('@/assets/image/business_detail_call.png')+')'}">
-				</div>
-				<div class="plate5_item_text">拨打电话</div>
-			</div>
-			<div class="plate5_item" @click="openVisit">
-				<div class="plate5_item_icon" :style="{'background-image': 'url('+require('@/assets/image/business_detail_visit.png')+')'}">
-				</div>
-				<div class="plate5_item_text">登门拜访</div>
-			</div>
-		</div>
-    <!-- 打电话 -->
-		<van-overlay :show="showCall">
-			<div class="plate6">
-				<div class="plate6_1">提示</div>
-				<div class="plate6_5">是否拨打电话：{{baseMsg.ctcTel}}</div>
-				<div class="plate6_4">
-					<div class="palte6_4_1" @click="showCall=false">取消</div>
-					<div class="palte6_4_2" @click="callCust">确定</div>
-				</div>
-			</div>
-		</van-overlay>
-    <!-- 发短信组件 -->
-		<send-message ref="sendMessage" @commitSuccess="sendSuccess" />
+    <LowestLevel :custBase="custBase"/>
   </div>
 </template>
 
@@ -283,7 +346,22 @@ import {
   saveCustAddressInfo,
   delCustAddressInfo,
   queryCustAssetAnalyInfo,
-  queryAssetsAUMGrowthTrend
+  queryAssetsAUMGrowthTrend,
+  queryCustHoldPrdInfo,
+  queryCustSignPrdInfo,
+  queryCustSignPrdList,
+  queryCustTimeDepAcctInfo,
+  queryCustCurrDepAcctInfo,
+  queryCustLoanAcctInfo,
+  queryCustFinaAcctInfo,
+  queryCustFinaTranInfo,
+  queryCustFundAcctInfo,
+  queryCustBassAcctInfo,
+  queryCustTrustAcctInfo,
+  // queryRecommendProdList,
+  queryCustTranFlowInfo,
+  queryCmrcOpportunityList
+
 } from "@/request/custinfo.js"
 import { 
   queryBusiDt
@@ -294,22 +372,26 @@ import {
 	Dialog
 } from "vant";
 // 自定义组件
-import TitleCard from "@/views/cust/components/TitleCard.vue"
 import Table from "@/views/index/components/Table.vue"
 import EchartsPie from "@/components/common/echarts-pie.vue"
 import echartHistogram from "@/views/index/components/echart-Histogram.vue"
 import selectors from "@/views/index/components/selectors.vue"
-import sendMessage from "@/components/common/sendMessage.vue";
+import TitleCard from "@/views/cust/components/TitleCard.vue"
+import LowestLevel from "@/views/cust/components/LowestLevel.vue"
+import TabsList from "@/views/cust/components/TabsList.vue"
+import UnityList from "@/views/cust/components/UnityList.vue"
 import moment from "moment"
 export default {
   name: "clCustomerView",
   components: {
-    TitleCard,
     Table,
     EchartsPie,
     echartHistogram,
     selectors,
-    sendMessage
+    TitleCard,
+    LowestLevel,
+    TabsList,
+    UnityList
   },
   data() {
     return {
@@ -376,15 +458,33 @@ export default {
       xAxis: [],
       aumDataxData: [],
       aumData: {},
-      openLocation: true,
-			followValue: "",
-			photoList: [],
-			dingwei: "",
-			showVisit: true,
-      showCall: false
+      prdList: [],
+      sgnList: [],
+      inData: {
+        txnAmtCount: '0',
+        txnStcoCount: '0',
+        sticStartDt: '',
+        sticEndDt: ''
+      },
+      outData: {
+        txnAmtCount: '0',
+        txnStcoCount: '0',
+        sticStartDt: '',
+        sticEndDt: ''
+      },
+      unityList: [],
+      total: 0,
+      finished: true,
+      loading: false,
+      pageIndex: 0,
+      params: {
+        custNum: this.$route.query.custNum,
+        pageNum: '1',
+        pageSize: '10'
+      }
     };
   },
-   created(){
+  created(){
     queryBusiDt({}, res => {
       this.dataDate = res.data.workDate;
       this.selectTime = []
@@ -397,13 +497,17 @@ export default {
       }
       this.queryAssetsTrend(this.dataDate)
     })
+    this.queryunityList()
     this.queryContactList()
     this.queryAddressList()
     this.queryAssetAnaly()
+    this.queryCustHoldPrd()
+    this.querySignInfo()
     this.queryCustInfo(this.$route.query.custNum)
     this.queryTagList(this.$route.query.custNum)
   },
   methods: {
+    moment,
     /* 客户基础信息查询 */
     queryCustInfo(custNum){
       let body = {
@@ -773,9 +877,6 @@ export default {
       }
       queryCustAssetAnalyInfo(body, res => {
         if(res && res.data){
-          // 资产总览饼图
-          let pieData = res.data.assetPieData
-          console.log('资产分析负债查询',res.data)
           let itemStyle = function (item) {
             return {
               color: ["#488BFF", "#26CEBA", "#FFC069", "#FD6865", "#836DE4", "#FF9C6E"][item]
@@ -787,11 +888,13 @@ export default {
             }
             return (Number(num)*100).toFixed(2)
           }
-          this.pieData = pieData.map((item, index) => {
+          // 资产总览饼图
+          let pieData = res.data.assetPieDataA
+          pieData.forEach((item, index) => {
             item.itemStyle = itemStyle(index)
             item.percentage = percentage(item.value1 || 0)
           })
-
+          this.pieData = pieData
           // 负债总览
           let assetData = res.data.assetAnalyData
           // 贷款余额总计（消费贷款余额，经营贷款余额，按揭贷款余额）
@@ -803,11 +906,13 @@ export default {
             { name: '按揭类', a: assetData.mrtgLoanSum, b: assetData.mrtgLoanBal },
             { name: '合计', a: assetData.loanSum, b: assetData.loanBalSum }
           ]
-          let pieliab = res.data.loanPieData
-          this.pieliab = pieliab.map((item, index) => {
+          // 负债分布图-饼图
+          let pieliab = res.data.loanPieDataA
+          pieliab.forEach((item, index) => {
             item.itemStyle = itemStyle(index)
             item.percentage = percentage(item.value1 || 0)
           })
+          this.pieliab = pieliab
         }else{
           Toast.fail("资产分布图数据为空");
         }
@@ -920,55 +1025,327 @@ export default {
         });
       }
     },
-    /* 发送短信 */
-		openMbox() {
-      if(this.custBase.ctcTel){
-        if(isNaN(this.custBase.ctcTel)){
-          Toast.fail("电话号码格式有误");
-          return;
-        }
-        if(false){
-          AlipayJSBridge.call("callHandler", {
-            phone: this.custBase.ctcTel,
-          });
-        }else{
-          this.$refs.sendMessage.openMbox({
-            type: "",
-            searchData: {},
-            list: [{
-              cstName: this.custBase.cstName,
-              custNum: this.custBase.custNum,
-              ctcTel: this.custBase.ctcTel
-            }],
-            shrtmsgCnl: "1"
-          })
-        }
+    /* 产品信息接口调用 */
+    queryCustInfos(){
+      if(this.active == 1){
+        this.tableListGet()
       }
-		},
-    /* 登门拜访 */
-		openVisit() {
-			this.followValue = "";
-			this.photoList = [];
-			this.dingwei = "";
-			this.showVisit = true;
-			this.getLocation();
-		},
-    /* 获取位置信息 */
-		getLocation() {
-			this.openLocation = true;
-			this.dingwei = "正在获取位置信息...";
-			AlipayJSBridge.call('getLocation', {}, (res) => {
-				if (res.status == "000000") {
-					this.dingwei = res.result;
-				} else {
-					this.openLocation = false;
-				}
-			});
-		},
-    /* 发短信的回调 */
-		sendSuccess(msg) {
-			
-		},
+      if(this.active == 2){
+        this.queryFlowInfo()
+      }
+    },
+    /* 客户持有产品查询 */
+    queryCustHoldPrd(){
+      let body = {
+        custNum: this.$route.query.custNum
+      }
+      queryCustHoldPrdInfo(body,res => {
+        if(res && res.data && res.data.prdList){
+          let arr = [
+            { name: '定期存款', key: 'HOLD_TIME_DPSIT', disabled: true },
+            { name: '活期存款', key: 'HOLD_CURR_DPSIT', disabled: true },
+            { name: '贷款', key: 'HOLD_LOAN', disabled: true },
+            { name: '理财', key: 'HOLD_CFT', disabled: true },
+            { name: '基金', key: 'HOLD_FND', disabled: true },
+            { name: '保险', key: 'HOLD_INS', disabled: true },
+            { name: '信托', key: 'HOLD_ENTRST', disabled: true }
+          ]
+          res.data.prdList.forEach(item => {
+            arr.forEach(i => {
+              if(i.key == item){
+                i.disabled = false
+              }
+            })
+          })
+          this.prdList = arr
+        }
+      })
+    },
+    /* 客户签约产品查询 */
+    querySignInfo(){
+      let body = {
+        custNum: this.$route.query.custNum
+      }
+      queryCustSignPrdInfo(body, res => {
+        if(res && res.data && res.data.sgnList){
+          let arr = [
+            { name: '网上银行', key: 'SGN_WBANK', disabled: true },
+            { name: '支付宝', key: 'SGN_ALPY', disabled: true},
+            { name: '微信银行', key: 'SGN_WCHT_BNK', disabled: true },
+            { name: '微信支付', key: 'SGN_WCHT_PYMT', disabled: true },
+            { name: '云闪付', key: 'SGN_YSF', disabled: true },
+            { name: '九银合伙人', key: 'SGN_JYHHR', disabled: true },
+            { name: '手机银行', key: 'SGN_MOBBANK', disabled: true }
+          ]
+          res.data.sgnList.forEach(item => {
+            arr.forEach(i => {
+              if(i.key == item){
+                i.disabled = false
+              }
+            })
+          })
+          this.sgnList = arr
+        }
+      })
+    },
+    /* 根据拥有的权限查询列表信息 */
+    tableListGet(){
+      let body = {
+        custNum: this.$route.query.custNum
+      }
+      // 持有产品
+      this.prdList.forEach(item => {
+        if(item.disabled){
+          item.list = []
+        }else{
+          switch(item.name){
+            case '定期存款':
+              /*  定期存款产品明细查询 */
+              queryCustTimeDepAcctInfo(body,res => {
+                if(res && res.data){
+                  item.list = res.data.records
+                  item.label = [
+                    { label: "存款种类", key: 'depKnd', fixed: 'left', width: '100' },
+                    { label: "存期", key: 'depte', width: '100' },
+                    { label: "利率", key: 'intRat', width: '100' },
+                    { label: "余额", key: 'currBal', width: '100' },
+                    { label: "到期日期", key: 'expDt', width: '100' },
+                    { label: "账户状态", key: 'acctSt', width: '100' },
+                  ]
+                }
+              })
+            break;
+            case '活期存款':
+              /*  活期存款产品明细查询 */
+              queryCustCurrDepAcctInfo(body,res => {
+                if(res && res.data){
+                  item.list = res.data.records
+                  item.label = [
+                    { label: "存款种类", key: 'depKnd', fixed: 'left', width: '100' },
+                    { label: "卡号", key: 'cardNum', width: '100' },
+                    { label: "利率", key: 'intRat', width: '100' },
+                    { label: "时点余额", key: 'currBal', width: '100' },
+                    { label: "可用余额", key: 'usablBal', width: '100' },
+                    { label: "控制金额", key: 'cntrlAmt', width: '100' },
+                    { label: "账户状态", key: 'acctSt', width: '100' },
+                  ]
+                }
+              })
+            break;
+            case '贷款':
+              /* 贷款产品明细查询 */
+              queryCustLoanAcctInfo(body,res => {
+                if(res && res.data){
+                  item.list = res.data.records
+                  item.label = [
+                    { label: "贷款类别", key: 'loanCtgry', fixed: 'left', width: '100' },
+                    { label: "贷款名称", key: 'loanNm', width: '100' },
+                    { label: "利率", key: 'intRat', width: '100' },
+                    { label: "发放金额", key: 'dstrbtAmt', width: '100' },
+                    { label: "当前余额", key: 'currBal', width: '100' },
+                    { label: "贷款状态", key: 'loanSt', width: '100' },
+                  ]
+                }
+              })
+            break;
+            case '理财':
+              /*  理财产品明细查询 */
+              queryCustFinaAcctInfo(body,res => {
+                if(res && res.data){
+                  item.list = res.data.records
+                  item.label = [
+                    { label: "产品名称", key: 'pdNm', fixed: 'left', width: '100' },
+                    { label: "卡号", key: 'cardNum', width: '100' },
+                    { label: "产品余额", key: 'acctBal', width: '100' },
+                    { label: "产品状态", key: 'acctStCd', width: '100' },
+                    { label: "到期日期", key: 'expDayPrd', width: '100' },
+                    { label: "产品开放期", key: 'otpuBeginDt', width: '100' },
+                    // 拼接的部分                    
+                    { label: "购买金额", key: '', width: '100' },
+                    { label: "购买日期", key: '', width: '100' },
+                    { label: "起息日期", key: '', width: '100' },
+                    { label: "购买渠道", key: '', width: '100' },
+                  ]
+                }
+              })
+              /* 理财交易明细查询(暂不用) */
+              queryCustFinaTranInfo(body, res => {
+                console.log('理财交易明细查询(暂不用)',res)
+              })
+            break;
+            case '基金':
+              /*  基金产品明细查询 */
+              queryCustFundAcctInfo(body,res => {
+                if(res && res.data){
+                  item.list = res.data.records
+                  item.label = [
+                    { label: "产品名称", key: 'pdNm', fixed: 'left', width: '100' },
+                    { label: "基金代码", key: 'fndCd', width: '100' },
+                    { label: "基金风险等级", key: 'fndRskLvl', width: '100' },
+                    { label: "当前份额", key: 'currLot', width: '100' },
+                    { label: "累计买入金额", key: 'acmlPrchsdAmt', width: '100' },
+                    { label: "账户状态", key: 'fndAcctStCd', width: '100' },
+                  ]
+                }
+              })
+            break;
+            case '保险':
+              /*  保险产品明细查询 */
+              queryCustBassAcctInfo(body,res => {
+                if(res && res.data){
+                  item.list = res.data.records
+                  item.label = [
+                    { label: "保险公司名称", key: 'insCoNm', fixed: 'left', width: '100' },
+                    { label: "保险产品名称", key: 'insPdNm', width: '100' },
+                    { label: "险种类别", key: 'typeOfInsureCtgry', width: '100' },
+                    { label: "缴费方式", key: 'ptfMd', width: '100' },
+                    { label: "缴费期限", key: 'currActYld', width: '100' },
+                    { label: "保险费", key: 'prem', width: '100' },
+                  ]
+                }
+              })
+            break;
+            case '信托':
+              /*  信托产品明细查询 */
+              queryCustTrustAcctInfo(body,res => {
+                if(res && res.data){
+                  item.list = res.data.records
+                  item.label = [
+                    { label: "产品名称", key: 'pdNm', fixed: 'left', width: '100' },
+                    { label: "卡号", key: 'cardNum', width: '100' },
+                    { label: "产品余额", key: 'acctBal', width: '100' },
+                    { label: "产品状态", key: 'acctStCd', width: '100' },
+                    { label: "到期日期", key: '', width: '100' },
+                    { label: "产品开放期", key: '', width: '100' },
+                    // 拼接的部分                    
+                    { label: "购买金额", key: 'buyAmt', width: '100' },
+                    { label: "购买日期", key: '', width: '100' },
+                    { label: "起息日期", key: '', width: '100' },
+                    { label: "购买渠道", key: '', width: '100' },
+                  ]
+                }
+              })
+            break;
+          }
+        }
+      })
+      // 签约产品
+      this.sgnList.forEach(item => {
+        if(item.disabled){
+          item.list = []
+        }else{
+          let queryItemList = (type) => {
+            body.sgnPdCtgry = type
+            queryCustSignPrdList(body, res => {
+              if(res && res.data){
+                item.list = res.data.records
+                item.label = [
+                  { label: "客户编号", key: 'custNum', fixed: 'left', width: '100' },
+                  { label: "签约账号", key: 'sgnAcctNo', width: '100' },
+                  { label: "签约手机号", key: 'sgnMobileNum', width: '100' },
+                  { label: "签约机构", key: 'sgnInst', width: '100' },
+                  { label: "签约机构名称", key: 'sgnInstNm', width: '100' },
+                  { label: "签约日期", key: 'sgnDt', width: '100' },
+                ]
+              }
+            })
+          }
+          /*  签约产品明细查询 */
+          switch (item.name) {
+            case '手机银行':
+              queryItemList('20401')
+            break;
+            case '网上银行':
+              queryItemList('20101')
+            break;
+            case '微信银行':
+              queryItemList('20201')
+            break;
+            case '微信支付':
+              queryItemList('40301')
+            break;
+            case '支付宝':
+              queryItemList('40302')
+            break;
+            case '云闪付':
+              queryItemList('40105')
+            break;
+            case '九银合伙人':
+              queryItemList('70234')
+            break;
+          }
+        }
+      })
+    },
+    /* 分享 */
+    fenxiang(){
+      Toast.fail("尽请期待")
+      /* 
+        推荐产品信息查询
+        custNum         客户编号
+        pdCd            产品代码
+        pdNm            产品名称
+        recomDt         推荐日期
+        pdCmpnIntrdc    营销话术
+       */      
+      // queryRecommendProdList({},res => {})
+    },
+    /* 交易行为分析查询 */
+    queryFlowInfo(){
+      let body = {
+        custNum: this.$route.query.custNum
+      }
+      queryCustTranFlowInfo(body, res => {
+        if(res && res.data){
+          if(res.data.inFlowCount){
+            this.inData = res.data.inFlowCount    // 流入
+          }
+          if(res.data.outFlowCount){
+            this.outData = res.data.outFlowCount  // 流出
+          }
+        }
+      })
+    },
+    /* 查询商机列表 */
+    queryunityList(){
+      this.finished = false;
+      this.loading = true;
+      Toast.loading({
+        message: "正在加载",
+        forbidClick: true,
+        duration: 0,
+      });
+      queryCmrcOpportunityList(this.params, res => {
+        if (res.data && res.data.records) {
+          this.total = res.data.total;
+          this.unityList = this.unityList.concat(res.data.records);
+          if (this.unityList.length >= this.total) this.finished = true;
+        } else {
+          this.finished = true;
+        }
+        Toast.clear();
+        this.loading = false;
+      })
+    },
+    /* 通过reload事件调用 */
+    getCustList() {
+      this.pageIndex++;
+      this.params.pageNum = this.pageIndex.toString()
+      this.queryunityList()
+    },
+    numFliter(value, tip){
+      if(value == undefined){
+        return '0.00'
+      }
+      value = tip ? Number(value) : (Number(value)/10000).toFixed(2)
+      let n = value.toString().split('.')
+      let z = /\d{1,3}(?=(\d{3})+$)/g
+      if(value.toString().indexOf('.') >= 0){
+        return `${n[0].replace(z, '$&,')}.${n[1]}`
+      }else{
+        return `${value.toString().replace(z, '$&,')}`
+      }
+    },
   },
 };
 </script>
@@ -987,7 +1364,7 @@ export default {
   color: #262626;
 	.bottomLine {
 		width: 60%;
-		margin: 0.2rem auto;
+		margin: 0.2rem auto 0.35rem;
     padding-bottom: 0.2rem;
 		display: flex;
 		justify-content: space-between;
@@ -1003,40 +1380,6 @@ export default {
       font-size: 0.12rem;
       padding: 0 0.1rem;
       color: #BFBFBF;
-    }
-	}
-	.plate5 {
-		width: 80%;
-		height: calc(constant(safe-area-inset-bottom) + 0.4rem);
-		height: calc(env(safe-area-inset-bottom) + 0.4rem);
-		background: rgba(255, 255, 255, 0.94);
-		box-shadow: 0 -0.005rem 0 0 rgba(0, 0, 0, 0.3);
-		position: fixed;
-		bottom: 0;
-		left: 0;
-		z-index: 1;
-		display: flex;
-		flex-wrap: nowrap;
-		justify-content: space-between;
-		align-items: flex-start;
-		padding: 0.05rem 0.4rem;
-    .plate5_item_icon {
-      margin: 0 auto;
-      width: 0.24rem;
-      height: 0.24rem;
-      background-size: cover;
-      background-position: center;
-      background-repeat: no-repeat;
-      margin-bottom: 0.04rem;
-    }
-    .plate5_item_text {
-      height: 0.18rem;
-      font-family: PingFangSC-Regular;
-      font-size: 0.12rem;
-      color: #262626;
-      letter-spacing: 0;
-      line-height: 0.18rem;
-      font-weight: 400;
     }
 	}
   .dialog,
@@ -1098,7 +1441,7 @@ export default {
   }
   .card {
     background: #fff;
-    padding: 0.07rem 0.075rem;
+    padding: 0.12rem;
     border-radius: 0.08rem;
     .custStyle {
       font-size: 0.14rem;
@@ -1116,6 +1459,26 @@ export default {
       }
       .iconBox {
         height: 0.32rem;
+      }
+    }
+  }
+  .titleTop {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .titleL {
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      height: 0.2rem;
+      text-align: left;
+      h3 {
+        margin: 0 0.08rem;
+        font-family: PingFangSC-Medium;
+        font-size: 0.14rem;
+        font-weight: 500;
+        color: rgba(0, 0, 0, 0.85);
+        font-weight: 500;
       }
     }
   }
@@ -1266,7 +1629,7 @@ export default {
 
   }
   .custPortrait {
-    margin-top: 0.05rem;
+    margin-top: 0.12rem;
     .custPortrait_title {
       display: flex;
       justify-content: space-between;
@@ -1358,28 +1721,74 @@ export default {
   }
   .tabsList {
     margin-top: 0.12rem;
-    &:deep(.tabs) {
+    .tabs {
       --van-tab-text-color: #8C8C8C;
       --van-tab-active-text-color: #026DFF;
       --van-tabs-bottom-bar-color: #026DFF;
-      .van-tabs__nav {
+      &:deep(.van-tabs__nav) {
         border-radius: 0.08rem 0.08rem 0 0;
         background: linear-gradient(180deg, #FFFFFF 0%, rgba(255, 255, 255, 0) 100%);
       }
-      .van-tabs__content {
+      &:deep(.van-tabs__content) {
         margin-top: 0.12rem;
-        // background: #fff;
-        // border-radius: 0.08rem;
-        // padding: 0.07rem 0.075rem;
       }
-      .van-tabs__line {
+      &:deep(.van-tabs__line) {
         width: 0.6rem;
+      }
+    }
+    .analysis {
+      .titleNum {
+        width: 100%;
+        text-align: left;
+        margin: 0.12rem 0 0.08rem 0;
+        font-family: PingFangSC-Medium;
+        font-size: 0.2rem;
+        color: rgba(0,0,0,0.85);
+        letter-spacing: 0;
+        font-weight: 500;
+      }
+      .titleBot {
+        display: flex;
+        // justify-content: space-around;
+        text-align: left;
+        letter-spacing: 0;
+        font-weight: 400;
+        font-size: 0.12rem;
+        &>div {
+          flex: 1;
+        }
+        .textF {
+          color: #8C8C8C;
+        }
+        .textS {
+          // display: flex;
+          // justify-content: flex-start;
+          align-items: center;
+          color: #262626;
+        }
       }
     }
     .dividers {
       margin: 0 5%;
       height: 0.001rem;
       border-bottom: 0.02rem dashed #fff;
+    }
+    .recommend {
+      display: flex;
+      justify-content: space-between;
+      justify-items: center;
+      padding: 0.16rem 0.12rem;
+      margin-top: 0.12rem;
+      box-shadow: inset 0 0.005rem 0 0 rgba(0, 0, 0, 0.08);
+      .textL {
+        margin: auto 0;
+      }
+      .textR {
+        color: #026DFF;
+        padding: 0.045rem 0.285rem;
+        border-radius: 0.15rem;
+        border: 0.01rem solid #026DFF;
+      }
     }
   }
 }
