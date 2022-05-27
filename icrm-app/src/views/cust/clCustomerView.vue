@@ -104,155 +104,149 @@
     </div>
 
     <div class="tabsList">
-
       <van-tabs class="tabs" v-model:active="active" @change="queryCustInfos">
-        <van-tab title="资产总览"></van-tab>
-        <van-tab title="产品信息"></van-tab>
-        <van-tab title="交易分析"></van-tab>
-        <van-tab title="商机记录"></van-tab>
-      </van-tabs>
-
-      <div v-if="active == 0">
-        <!-- 资产总览(元) -->
-        <div class="card">
-          <TitleCard :cardData="cardData" :dalongShow="['等内容..']"></TitleCard>
-        </div>
-        <!-- 分割线 -->
-        <div class="dividers"></div>
-        <!-- 资产分布图 -->
-        <div class="card">
-          <div class="custStyle aumStyle">
-            <span class="title">资产分布图</span>
-            <span class="iconBox" @click="assetCheck">
-              <van-icon :name="require('@/assets/image/list_1.png')" size="0.32rem" v-if="assetFlag"/>
-              <van-icon :name="require('@/assets/image/list_2.png')" size="0.32rem" v-else/>
-            </span>
+        <van-tab title="资产总览">
+          <!-- 资产总览(元) -->
+          <div class="card">
+            <TitleCard :cardData="cardData" :dalongShow="['等内容..']"></TitleCard>
           </div>
-          <!-- 列表 -->
-          <div style="margin-top: 0.07rem;" v-if="assetFlag">
-            <Table :unit="1" :listLabel="listLabel" :listData="listData" :listType="listType" :lableArr="['a','b','c','d']"></Table>
-          </div>
-          <echarts-pie ref="aumDisDiaChart" :unit="'元'" :data="pieData" v-else/>
-        </div>
-        <!-- 分割线 -->
-        <div class="dividers"></div>
-        <!-- 资产分布-增长趋势 -->
-        <div class="card">
-          <div class="custStyle aumStyle">
-            <span class="title">增长趋势</span>
-            <selectors :title="['日', '月']" :typeP="1" @change="changeAum"></selectors>
-          </div>
-          <echartHistogram :type="2" ref="Histogram2" :dataArr="['全部','活期存款','定期存款','理财','基金','保险','信托']" :numType="'no'" :selectTime="selectTime" :barData="aumData" @change="aumChange" @change2="aumChange2" :timeUnit="timeUnit"></echartHistogram>
-        </div>
-        <!-- 负债总览(元) -->
-        <div class="card" style="margin-top: 0.12rem;">
-          <TitleCard title="负债总览" imgUrl="1" :cardData="liabilities" :dalongShow="['等内容..']"></TitleCard>
-        </div>
-        <!-- 分割线 -->
-        <div class="dividers"></div>
-        <div class="card">
-          <div class="custStyle aumStyle">
-            <span class="title">负债分布图</span>
-            <span class="iconBox" @click="liaCheck">
-              <van-icon :name="require('@/assets/image/list_1.png')" size="0.32rem" v-if="liaFlag"/>
-              <van-icon :name="require('@/assets/image/list_2.png')" size="0.32rem" v-else/>
-            </span>
-          </div>
-          <!-- 列表 -->
-          <div style="margin-top: 0.07rem;" v-if="liaFlag">
-            <Table :unit="1" :color="false" :listLabel="liaLabel" :listData="liaData" :listType="listType" :lableArr="['a','b']"></Table>
-          </div>
-          <echarts-pie ref="liaChart" unit="元" :data="pieliab" v-else/>
-        </div>
-      </div>
-
-      <div v-if="active == 1">
-        <div class="card">
-          <div class="titleTop">
-            <div class="titleL">
-              <van-icon :name="require('@/assets/image/cust_cycp.png')" size="0.2rem"/>
-              <h3>持有产品</h3>
+          <!-- 分割线 -->
+          <div class="dividers"></div>
+          <!-- 资产分布图 -->
+          <div class="card">
+            <div class="custStyle aumStyle">
+              <span class="title">资产分布图</span>
+              <span class="iconBox" @click="assetCheck">
+                <van-icon :name="require('@/assets/image/list_1.png')" size="0.32rem" v-if="assetFlag"/>
+                <van-icon :name="require('@/assets/image/list_2.png')" size="0.32rem" v-else/>
+              </span>
             </div>
-          </div>
-          <TabsList :setList="prdList" style="margin-top: 0.1rem"/>
-        </div>
-
-        <div class="card" style="margin-top: 0.12rem;">
-          <div class="titleTop">
-            <div class="titleL">
-              <van-icon :name="require('@/assets/image/cust_qycp.png')" size="0.2rem"/>
-              <h3>签约产品</h3>
+            <!-- 列表 -->
+            <div style="margin-top: 0.07rem;" v-if="assetFlag">
+              <Table :unit="1" :listLabel="listLabel" :listData="listData" :listType="listType" :lableArr="['a','b','c','d']"></Table>
             </div>
+            <echarts-pie ref="aumDisDiaChart" :unit="'元'" :data="pieData" v-else/>
           </div>
-          <TabsList :setList="sgnList" style="margin-top: 0.1rem"/>
-        </div>
-
-        <div class="card" style="margin-top: 0.12rem;">
-          <div class="titleTop">
-            <div class="titleL">
-              <van-icon :name="require('@/assets/image/cust_tjcp.png')" size="0.2rem"/>
-              <h3>推荐产品</h3>
+          <!-- 分割线 -->
+          <div class="dividers"></div>
+          <!-- 资产分布-增长趋势 -->
+          <div class="card">
+            <div class="custStyle aumStyle">
+              <span class="title">增长趋势</span>
+              <selectors :title="['日', '月']" :typeP="1" @change="changeAum"></selectors>
             </div>
+            <echartHistogram :type="2" ref="Histogram2" :dataArr="['全部','活期存款','定期存款','理财','基金','保险','信托']" :numType="'no'" :selectTime="selectTime" :barData="aumData" @change="aumChange" @change2="aumChange2" :timeUnit="timeUnit"></echartHistogram>
           </div>
-          <div class="recommend">
-            <div class="textL">久赢现金宝</div>
-            <div class="textR" @click="fenxiang">分享</div>
+          <!-- 负债总览(元) -->
+          <div class="card" style="margin-top: 0.12rem;">
+            <TitleCard title="负债总览" imgUrl="1" :cardData="liabilities" :dalongShow="['等内容..']"></TitleCard>
           </div>
-          <div class="recommend">
-            <div class="textL">久赢现金宝</div>
-            <div class="textR" @click="fenxiang">分享</div>
+          <!-- 分割线 -->
+          <div class="dividers"></div>
+          <div class="card">
+            <div class="custStyle aumStyle">
+              <span class="title">负债分布图</span>
+              <span class="iconBox" @click="liaCheck">
+                <van-icon :name="require('@/assets/image/list_1.png')" size="0.32rem" v-if="liaFlag"/>
+                <van-icon :name="require('@/assets/image/list_2.png')" size="0.32rem" v-else/>
+              </span>
+            </div>
+            <!-- 列表 -->
+            <div style="margin-top: 0.07rem;" v-if="liaFlag">
+              <Table :unit="1" :color="false" :listLabel="liaLabel" :listData="liaData" :listType="listType" :lableArr="['a','b']"></Table>
+            </div>
+            <echarts-pie ref="liaChart" unit="元" :data="pieliab" v-else/>
           </div>
-        </div>
-      </div>
+        </van-tab>
 
-      <div v-if="active == 2">
-        <div class="analysis">
-          <!-- 流入总金额 -->
+        <van-tab title="产品信息">
           <div class="card">
             <div class="titleTop">
               <div class="titleL">
-                <van-icon :name="require('@/assets/image/AUM_img.png')" size="0.2rem"/>
-                <h3>流入总金额(万元)</h3>
+                <van-icon :name="require('@/assets/image/cust_cycp.png')" size="0.2rem"/>
+                <h3>持有产品</h3>
               </div>
             </div>
-            <div class="titleNum">{{numFliter(inData.txnAmtCount || 0, false)}}</div>
-            <div class="titleBot">
-              <div>
-                <p class="textF">累计笔数</p>
-                <p class="textS">{{numFliter(inData.txnStcoCount || 0, true)}}</p>
-              </div>
-              <div>
-                <p class="textF">统计日期</p>
-                <p class="textS">{{`${inData.sticStartDt ? moment(inData.sticStartDt).format('YYYY.MM.DD') : '-'} - ${inData.sticEndDt ? moment(inData.sticEndDt).format('YYYY.MM.DD') : '-'}`}}</p>
-              </div>
-            </div>
+            <TabsList :setList="prdList" style="margin-top: 0.1rem"/>
           </div>
-          <!-- 流出总金额 -->
+
           <div class="card" style="margin-top: 0.12rem;">
             <div class="titleTop">
               <div class="titleL">
-                <van-icon :name="require('@/assets/image/cust_fzzl.png')" size="0.2rem"/>
-                <h3>流出总金额(万元)</h3>
+                <van-icon :name="require('@/assets/image/cust_qycp.png')" size="0.2rem"/>
+                <h3>签约产品</h3>
               </div>
             </div>
-            <div class="titleNum">{{numFliter(outData.txnAmtCount || 0, false)}}</div>
-            <div class="titleBot">
-              <div>
-                <p class="textF">累计笔数</p>
-                <p class="textS">{{numFliter(outData.txnStcoCount || 0, true)}}</p>
+            <TabsList :setList="sgnList" style="margin-top: 0.1rem"/>
+          </div>
+
+          <div class="card" style="margin-top: 0.12rem;">
+            <div class="titleTop">
+              <div class="titleL">
+                <van-icon :name="require('@/assets/image/cust_tjcp.png')" size="0.2rem"/>
+                <h3>推荐产品</h3>
               </div>
-              <div>
-                <p class="textF">统计日期</p>
-                <p class="textS">{{`${outData.sticStartDt ? moment(outData.sticStartDt).format('YYYY.MM.DD') : '-'} - ${outData.sticEndDt ? moment(outData.sticEndDt).format('YYYY.MM.DD') : '-'}`}}</p>
+            </div>
+            <div class="recommend">
+              <div class="textL">久赢现金宝</div>
+              <div class="textR" @click="fenxiang">分享</div>
+            </div>
+            <div class="recommend">
+              <div class="textL">久赢现金宝</div>
+              <div class="textR" @click="fenxiang">分享</div>
+            </div>
+          </div>
+        </van-tab>
+        <van-tab title="交易分析">
+          <div class="analysis">
+            <!-- 流入总金额 -->
+            <div class="card">
+              <div class="titleTop">
+                <div class="titleL">
+                  <van-icon :name="require('@/assets/image/AUM_img.png')" size="0.2rem"/>
+                  <h3>流入总金额(万元)</h3>
+                </div>
+              </div>
+              <div class="titleNum">{{numFliter(inData.txnAmtCount || 0, false)}}</div>
+              <div class="titleBot">
+                <div>
+                  <p class="textF">累计笔数</p>
+                  <p class="textS">{{numFliter(inData.txnStcoCount || 0, true)}}</p>
+                </div>
+                <div>
+                  <p class="textF">统计日期</p>
+                  <p class="textS">{{`${inData.sticStartDt ? moment(inData.sticStartDt).format('YYYY.MM.DD') : '-'} - ${inData.sticEndDt ? moment(inData.sticEndDt).format('YYYY.MM.DD') : '-'}`}}</p>
+                </div>
+              </div>
+            </div>
+            <!-- 流出总金额 -->
+            <div class="card" style="margin-top: 0.12rem;">
+              <div class="titleTop">
+                <div class="titleL">
+                  <van-icon :name="require('@/assets/image/cust_fzzl.png')" size="0.2rem"/>
+                  <h3>流出总金额(万元)</h3>
+                </div>
+              </div>
+              <div class="titleNum">{{numFliter(outData.txnAmtCount || 0, false)}}</div>
+              <div class="titleBot">
+                <div>
+                  <p class="textF">累计笔数</p>
+                  <p class="textS">{{numFliter(outData.txnStcoCount || 0, true)}}</p>
+                </div>
+                <div>
+                  <p class="textF">统计日期</p>
+                  <p class="textS">{{`${outData.sticStartDt ? moment(outData.sticStartDt).format('YYYY.MM.DD') : '-'} - ${outData.sticEndDt ? moment(outData.sticEndDt).format('YYYY.MM.DD') : '-'}`}}</p>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </div>
+        </van-tab>
 
-      <div v-if="active == 3">
-        <UnityList :unityList="unityList" :finished="finished" :loading="loading" @getCustList="getCustList"/>
-      </div>
+        <van-tab title="商机记录">
+          <UnityList :unityList="unityList" :finished="finished" :loading="loading" @getCustList="getCustList"/>
+        </van-tab>
+
+      </van-tabs>
     </div>
     <!-- 弹框组件 -->
     <div class="dialog">
@@ -481,7 +475,9 @@ export default {
         custNum: this.$route.query.custNum,
         pageNum: '1',
         pageSize: '10'
-      }
+      },
+      flowInfo: true,
+      listGet: true
     };
   },
   created(){
@@ -1028,10 +1024,17 @@ export default {
     /* 产品信息接口调用 */
     queryCustInfos(){
       if(this.active == 1){
-        this.tableListGet()
+        if(this.listGet){
+          this.tableListGet()
+          this.listGet = false
+        }
       }
       if(this.active == 2){
         this.queryFlowInfo()
+        if(this.flowInfo){
+          this.queryFlowInfo()
+          this.flowInfo = false
+        }
       }
     },
     /* 客户持有产品查询 */
@@ -1735,36 +1738,36 @@ export default {
       &:deep(.van-tabs__line) {
         width: 0.6rem;
       }
-    }
-    .analysis {
-      .titleNum {
-        width: 100%;
-        text-align: left;
-        margin: 0.12rem 0 0.08rem 0;
-        font-family: PingFangSC-Medium;
-        font-size: 0.2rem;
-        color: rgba(0,0,0,0.85);
-        letter-spacing: 0;
-        font-weight: 500;
-      }
-      .titleBot {
-        display: flex;
-        // justify-content: space-around;
-        text-align: left;
-        letter-spacing: 0;
-        font-weight: 400;
-        font-size: 0.12rem;
-        &>div {
-          flex: 1;
+      .analysis {
+        .titleNum {
+          width: 100%;
+          text-align: left;
+          margin: 0.12rem 0 0.08rem 0;
+          font-family: PingFangSC-Medium;
+          font-size: 0.2rem;
+          color: rgba(0,0,0,0.85);
+          letter-spacing: 0;
+          font-weight: 500;
         }
-        .textF {
-          color: #8C8C8C;
-        }
-        .textS {
-          // display: flex;
-          // justify-content: flex-start;
-          align-items: center;
-          color: #262626;
+        .titleBot {
+          display: flex;
+          // justify-content: space-around;
+          text-align: left;
+          letter-spacing: 0;
+          font-weight: 400;
+          font-size: 0.12rem;
+          &>div {
+            flex: 1;
+          }
+          .textF {
+            color: #8C8C8C;
+          }
+          .textS {
+            // display: flex;
+            // justify-content: flex-start;
+            align-items: center;
+            color: #262626;
+          }
         }
       }
     }
