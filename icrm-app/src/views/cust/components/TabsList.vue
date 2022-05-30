@@ -2,7 +2,7 @@
   <!-- 客户视图-产品信息列表 -->
   <div class="tabsLists">
 
-    <van-tabs class="tabss" v-model:active="active" :click-tab="clickTab">
+    <van-tabs class="tabss" v-model:active="active">
       <template v-for="(item, index) in setList" :key="index">
         <van-tab :title="item.name" :disabled="item.disabled">
 
@@ -38,11 +38,7 @@ export default {
       active: "0"
     };
   },
-  methods: {
-    clickTab(name, title, disabled){
-      console.log(name, title, disabled)
-    }
-  }
+  methods: {}
 };
 </script>
 
