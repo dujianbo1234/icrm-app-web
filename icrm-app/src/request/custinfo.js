@@ -30,7 +30,6 @@ export const queryCustDefinedLabel = (params,fun) => {request("custinfo.queryCus
 export const saveCustDefinedLabel = (params,fun) => {request("custinfo.saveCustDefinedLabel", params, fun)}
 // 自定义签删除
 export const delCustDefinedLabel = (params,fun) => {request("custinfo.delCustDefinedLabel", params, fun)}
-
 // 客户持有产品查询
 export const queryCustHoldPrdInfo = (params,fun) => {request("custinfo.queryCustHoldPrdInfo", params, fun)}
 // 定期存款产品明细
@@ -59,10 +58,8 @@ export const queryCustSignPrdInfo = (params,fun) => {request("custinfo.queryCust
 export const queryCustSignPrdList = (params,fun) => {request("custinfo.queryCustSignPrdList", params, fun)}
 // 图片上传
 export const custServUpload = (params,fun) => {request("custserv.custServUpload", params, fun)}
-
 // 查询商机列表
 export const queryCmrcOpportunityList = (params,fun) => {request("custinfo.queryCustViewOpportunityList", params, fun)}  
-
 // 查询潜在客户列表
 export const queryCustBaseInfoList = (params,fun) => {request("custinfo.queryCustBaseInfoList", params, fun)}
 // 查询客户经理
