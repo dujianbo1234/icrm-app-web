@@ -5,7 +5,7 @@
         <van-icon :name="require('@/assets/image/cust_zczl.png')" size="0.2rem" v-if="imgUrl == '0'"/>
         <van-icon :name="require('@/assets/image/cust_fzzl.png')" size="0.2rem" v-else/>
         <h3>{{`${title}(${unit})`}}</h3>
-        <van-icon name="question-o" size="0.16rem" color="#BFBFBF" @click="show = true"/>
+        <van-icon name="question-o" size="0.16rem" color="#BFBFBF" @click="show = true" v-if="tooltip"/>
       </div>
     </div>
     <div class="titleNum">{{numFliter(cardData[0], false)}}</div>
@@ -61,6 +61,10 @@ export default {
     imgUrl: {
       type: String,
       default: '0',
+    },
+    tooltip: {
+      type: Boolean,
+      default: false
     }
   },
   data() {

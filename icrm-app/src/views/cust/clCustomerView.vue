@@ -62,17 +62,17 @@
     <div class="card custPortrait">
       <div class="custPortrait_title">
         <div class="custPortrait_title_l">
-          <van-icon class="icon" :name="require(`@/assets/image/cust_edit_user.png`)" size="14"/>
+          <van-icon class="icon" :name="require(`@/assets/image/cust_edit_user.png`)" size="0.2rem"/>
           <span>客户画像</span>
         </div>
         <div class="custPortrait_title_r">
           <span class="btnAdd" @click="addTag">
-            <van-icon name="plus" size="10" color="#8C8C8C"/>
+            <van-icon name="plus" size="0.1rem" color="#8C8C8C"/>
             <span>自定义标签</span>
           </span>
           <span class="btnText" @click="portraitbtn = !portraitbtn" v-if="tagList && tagList.length > 1">
             <span>{{portraitbtn ? '展开' : '收起'}}</span>
-            <van-icon :name="portraitbtn ? 'arrow-down' : 'arrow-up'" size="14" color="#8C8C8C"/>
+            <van-icon :name="portraitbtn ? 'arrow-down' : 'arrow-up'" size="0.12rem" color="#8C8C8C"/>
           </span>
         </div>
       </div>
@@ -82,7 +82,7 @@
             <!-- 类型名 -->
             <div class="main_label">
               <span>{{item.label}}：</span>
-              <van-icon class="icon" :name="require(`@/assets/image/cust_edit.png`)" size="12" style="padding-top: 0.02rem;" v-if="item.label === '自定义标签'" @click="editTag = !editTag"/>
+              <van-icon class="icon" :name="require(`@/assets/image/cust_edit.png`)" size="0.12rem" style="padding-top: 0.02rem;" v-if="item.label === '自定义标签'" @click="editTag = !editTag"/>
             </div>
             <!-- 标签 -->
             <template v-for="tag in item.tag" :key="tag">
@@ -187,7 +187,7 @@
                 <h3>推荐产品</h3>
               </div>
             </div>
-            <div class="recommend">
+            <div class="recommend" style="margin-top: 0.12rem;">
               <div class="textL">久赢现金宝</div>
               <div class="textR" @click="fenxiang">分享</div>
             </div>
@@ -320,7 +320,7 @@
       <div class="bottomText">到底啦，我是有底线的</div>
       <span></span>
     </div>
-
+    <!-- 发短信 - 打电话 - 登门拜访 -->
     <LowestLevel :custBase="custBase"/>
   </div>
 </template>
@@ -1818,7 +1818,7 @@ export default {
       justify-content: space-between;
       justify-items: center;
       padding: 0.16rem 0.12rem;
-      margin-top: 0.12rem;
+      // margin-top: 0.12rem;
       box-shadow: inset 0 0.005rem 0 0 rgba(0, 0, 0, 0.08);
       .textL {
         margin: auto 0;
