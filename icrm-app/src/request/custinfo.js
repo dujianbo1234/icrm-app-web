@@ -57,9 +57,11 @@ export const queryCustTranFlowInfo = (params,fun) => {request("custinfo.queryCus
 export const queryCustSignPrdInfo = (params,fun) => {request("custinfo.queryCustSignPrdInfo", params, fun)}
 // 签约产品明细查询
 export const queryCustSignPrdList = (params,fun) => {request("custinfo.queryCustSignPrdList", params, fun)}
+// 图片上传
+export const custServUpload = (params,fun) => {request("custserv.custServUpload", params, fun)}
 
 // 查询商机列表
-export const queryCmrcOpportunityList = (params,fun) => {request("market.queryCmrcOpportunityList", params, fun)}  
+export const queryCmrcOpportunityList = (params,fun) => {request("custinfo.queryCustViewOpportunityList", params, fun)}  
 
 // 查询潜在客户列表
 export const queryCustBaseInfoList = (params,fun) => {request("custinfo.queryCustBaseInfoList", params, fun)}

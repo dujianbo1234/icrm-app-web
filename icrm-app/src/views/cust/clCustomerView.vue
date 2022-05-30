@@ -607,7 +607,7 @@ export default {
     },
     /* 添加自定义标签 */
     addTag(){
-      if(this.tagList[0].label == '自定义标签' && this.tagList[0].tag.length > 9){
+      if(this.tagList && this.tagList[0] && this.tagList[0].label == '自定义标签' && this.tagList[0].tag.length > 9){
         Dialog.alert({
           title: '提示',
           message: '自定义标签仅限10个。',
@@ -1134,7 +1134,7 @@ export default {
                   item.list = res.data.records
                   item.label = [
                     { label: "存款种类", key: 'depKnd', fixed: 'left', width: '100' },
-                    { label: "卡号", key: 'cardNum', width: '100' },
+                    { label: "卡号", key: 'cardNum', width: '150' },
                     { label: "利率", key: 'intRat', width: '100' },
                     { label: "时点余额", key: 'currBal', width: '100' },
                     { label: "可用余额", key: 'usablBal', width: '100' },
@@ -1167,7 +1167,7 @@ export default {
                   item.list = res.data.records
                   item.label = [
                     { label: "产品名称", key: 'pdNm', fixed: 'left', width: '100' },
-                    { label: "卡号", key: 'cardNum', width: '100' },
+                    { label: "卡号", key: 'cardNum', width: '150' },
                     { label: "产品余额", key: 'acctBal', width: '100' },
                     { label: "产品状态", key: 'acctStCd', width: '100' },
                     { label: "到期日期", key: 'expDayPrd', width: '100' },
@@ -1224,16 +1224,16 @@ export default {
                   item.list = res.data.records
                   item.label = [
                     { label: "产品名称", key: 'pdNm', fixed: 'left', width: '100' },
-                    { label: "卡号", key: 'cardNum', width: '100' },
+                    { label: "卡号", key: 'cardNum', width: '150' },
                     { label: "产品余额", key: 'acctBal', width: '100' },
                     { label: "产品状态", key: 'acctStCd', width: '100' },
-                    { label: "到期日期", key: '', width: '100' },
-                    { label: "产品开放期", key: '', width: '100' },
+                    { label: "到期日期", key: 'expDayPrd', width: '100' },
+                    { label: "产品开放期", key: 'otpuBeginDt', width: '100' },
                     // 拼接的部分                    
                     { label: "购买金额", key: 'buyAmt', width: '100' },
-                    { label: "购买日期", key: '', width: '100' },
-                    { label: "起息日期", key: '', width: '100' },
-                    { label: "购买渠道", key: '', width: '100' },
+                    { label: "购买日期", key: 'prchsdDt', width: '100' },
+                    { label: "起息日期", key: 'stIntDt', width: '100' },
+                    { label: "购买渠道", key: 'cnlKnd', width: '100' },
                   ]
                 }
               })
@@ -1252,8 +1252,8 @@ export default {
               if(res && res.data){
                 item.list = res.data.records
                 item.label = [
-                  { label: "客户编号", key: 'custNum', fixed: 'left', width: '100' },
-                  { label: "签约账号", key: 'sgnAcctNo', width: '100' },
+                  { label: "客户编号", key: 'custNum', fixed: 'left', width: '130' },
+                  { label: "签约账号", key: 'sgnAcctNo', width: '150' },
                   { label: "签约手机号", key: 'sgnMobileNum', width: '100' },
                   { label: "签约机构", key: 'sgnInst', width: '100' },
                   { label: "签约机构名称", key: 'sgnInstNm', width: '100' },

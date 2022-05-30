@@ -8,7 +8,7 @@
 
           <el-table size="small" :data="item.list" fit :header-row-style="headerStyle" style="width: 100%">
             <template v-for="(i, iIindex) in item.label" :key="iIindex">
-              <el-table-column :prop="i.key" :label="i.label" :fixed="i.fixed" :show-overflow-tooltip="i.tooltip" :align="i.align || 'left'" :width="i.width">
+              <el-table-column :prop="i.key" :label="i.label" :fixed="i.fixed" :show-overflow-tooltip="i.tooltip" :align="i.align || 'center'" :width="i.width">
               </el-table-column>
             </template>
           </el-table>

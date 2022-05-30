@@ -64,7 +64,7 @@
 </template>
 
 <script>
-import { custServiceAdd } from "@/request/custinfo.js";
+import { custServiceAdd, custServUpload } from "@/request/custinfo.js";
 import { Toast, ImagePreview } from "vant";
 import { opportCustServUploadMpaas, saveOpportCustServInfo } from "@/request/market";
 import sendMessage from "@/components/common/sendMessage.vue";
@@ -93,7 +93,6 @@ export default {
   methods: {
     /* 发送短信 */
     openMbox(type) {
-      this.custBase.ctcTel = "15872204863";
       if (isNaN(this.custBase.ctcTel)) {
         Toast.fail("电话号码格式有误");
         return;
@@ -109,19 +108,8 @@ export default {
                 custNo: this.custBase.custNum,
                 mobileNum: this.custBase.ctcTel,
                 communictionChannel: "02",
-                custManager: this.custBase.belgCustMgrNm
-                // sysId: this.custBase.sysId,
-                // custNum: this.custBase.custNo,
-                // cstNam: this.custBase.custNm,
-                // serviceType: "02",
-                // custOrg: this.custBase.belongOrg,
-                // custMgrNum: this.custBase.followUpPrsn,
-                // mobileNum: this.custBase.ctcTel,
+                custType: '1',
               };
-              // saveOpportCustServInfo(body, (ress) => {
-              //   console.log("ress", ress);
-              //   this.showCall = false;
-              // });
               custServiceAdd(body, (ress) => {
                 this.showCall = false;
               });
@@ -187,22 +175,18 @@ export default {
 				forbidClick: true,
 				duration: 0
 			});
-			// saveOpportCustServInfo({
-			// 	sysId: this.custBase.sysId,
-			// 	custNum: this.custBase.custNo,
-			// 	cstNam: this.custBase.custNm,
-			// 	serviceType: "01",
-			// 	serviceContent: this.followValue,
-			// 	visitAddress: this.dingwei,
-			// 	custOrg: this.custBase.belongOrg,
-			// 	custMgrNum: this.custBase.followUpPrsn,
-			// 	mobileNum: this.custBase.ctcTel,
-			// 	uploadIds: this.photoList.map(item => item.tableKey)
-			// }, (res) => {
-			// 	this.getFollowMsg();
-			// 	this.showVisit = false;
-			// 	Toast.clear();
-			// })
+      let body = {
+        custName: this.custBase.cstName,
+        custNo: this.custBase.custNum,
+        mobileNum: this.custBase.ctcTel,
+        communictionChannel: "01",
+        custType: '1',
+      };
+			custServiceAdd(body, (res) => {
+				// this.getFollowMsg();
+				this.showVisit = false;
+				Toast.clear();
+			})
 		},
 		delPhoto(i) {
 			this.photoList.splice(i, 1)
@@ -217,15 +201,16 @@ export default {
 			AlipayJSBridge.call('openPickerV', {openType: "0"}, (res1) => {
 				if (res1.status == "000000") {
 					Toast.loading({	message: "正在上传", forbidClick: true, duration: 0 });
-					opportCustServUploadMpaas({file: res1.result},(res2)=>{
+					custServUpload({file: res1.result},(res2)=>{
 						Toast.success("上传成功");
 						this.photoList.push({
 							url: res1.result,
 							tableKey: res2.data[0].tableKey
 						})
+            console.log(res2.data[0].tableKey)
 					})
-				} else if (res.status != "000004") {
-					Toast.fail(res.msg)
+				} else if (res1.status != "000004") {
+					Toast.fail(res1.msg)
 				}
 			});
 		},
@@ -459,6 +444,22 @@ export default {
 		margin-bottom: 0.12rem;
 		margin-right: calc(calc(100% - 2.92rem) / 3);
 		position: relative;
+    .delBtn {
+      position: absolute;
+      top: -0.06rem;
+      right: -0.06rem;
+    }
+    .imgBox {
+      width: 100%;
+      height: 100%;
+      border-radius: 0.08rem;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      img {
+        width: 100%;
+      }
+    }
 	}
 	.cameraBox:nth-child(4n) {
 		margin-right: 0;
