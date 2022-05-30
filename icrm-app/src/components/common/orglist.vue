@@ -187,6 +187,10 @@
 					this.postMsg.orgType = "3";
 					this.startLevel = 3;
 					break;
+				case "00000009":
+					this.postMsg.orgType = "1";
+					this.startLevel = 1;
+					break;
 			}
 		}
 	}
