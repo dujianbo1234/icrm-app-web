@@ -109,6 +109,7 @@ export default {
                 custNo: this.custBase.custNum,
                 mobileNum: this.custBase.ctcTel,
                 communictionChannel: "02",
+                custManager: this.custBase.belgCustMgrNm
                 // sysId: this.custBase.sysId,
                 // custNum: this.custBase.custNo,
                 // cstNam: this.custBase.custNm,
@@ -122,7 +123,6 @@ export default {
               //   this.showCall = false;
               // });
               custServiceAdd(body, (ress) => {
-                console.log("ress", ress);
                 this.showCall = false;
               });
             } else {
