@@ -70,7 +70,6 @@
 	}
 	
 	.topSafePlace {
-		background-color: ;
 		height: constant(safe-area-inset-top);
 		height: env(safe-area-inset-top);
 		width: 100%;
