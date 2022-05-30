@@ -89,9 +89,9 @@
 		methods: {
 			getFollowMsg() {
 				queryCustomeServicFollow({
-					// custNo: this.$route.query.custNo
+					custNo: this.$route.query.custNo
 					// custNo: 'P900010000395059'
-					custNo: 'P900010002921439'
+					// custNo: 'P900010002921439'
                     
 				}, (res) => {
 					this.followMsg = res.data;
