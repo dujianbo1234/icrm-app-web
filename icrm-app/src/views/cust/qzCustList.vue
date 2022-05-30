@@ -181,6 +181,8 @@
 					break;
 				case "00000007":
 					break;
+				case "00000010":
+					break;
 				default:
 					this.rightText = "客户分配";
 					this.showAddCust = true;
