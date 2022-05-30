@@ -82,7 +82,7 @@
             </div>
             <div class="playFrom" v-if="!showBatchSend">
               <template  v-for="(text, s) in ['callPhone','sendMessage']" :key="s">
-                <van-icon :name="require(`@/assets/image/${text}${item.ctcTel ? '.png' : '_gray.png'}`)" size="0.22rem" :style="`margin-right: ${['0.2','0.15'][s]}rem;`" @click="gaveCall(item, [true,false][s])"/>
+                <van-icon :name="require(`@/assets/image/${text}${item.ctcTel ? '.png' : '_gray.png'}`)" size="0.22rem" :style="`margin-right: ${['0.2','0.15'][s]}rem;`" @click.stop="gaveCall(item, [true,false][s])"/>
               </template>
             </div>
           </div>
