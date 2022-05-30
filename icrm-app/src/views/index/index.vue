@@ -29,7 +29,7 @@
     <div style="width: 100%; height: 0.5rem; background-color: #f8f8f8"></div>
     <div class="mainContent">
       <div class="selectTimebar">
-        <org-list type="0" showText="请选择机构" v-if="$store.state.userMsg.roleId!='00000004'" @activeOrg="khgmActiveOrg" />
+        <org-list :type="0" showText="请选择机构" v-if="$store.state.userMsg.roleId!='00000004'" @activeOrg="khgmActiveOrg" />
         <div v-else></div>
         <div class="currentDate">当前数据时间：{{ showDate }}</div>
       </div>
