@@ -180,7 +180,7 @@ export default {
         custNo: this.custBase.custNum,
         mobileNum: this.custBase.ctcTel,
         communictionChannel: "01",
-        custType: '1',
+        custType: '1'
       };
 			custServiceAdd(body, (res) => {
 				// this.getFollowMsg();

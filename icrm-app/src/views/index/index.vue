@@ -33,7 +33,7 @@
         <div v-else></div>
         <div class="currentDate">当前数据时间：{{ showDate }}</div>
       </div>
-      <div class="contentItem week" :class="showWeekDetial ? 'open' : 'close'" v-if="$store.state.userMsg.roleId != '00000006'">
+      <div class="contentItem week" :class="showWeekDetial ? 'open' : 'close'" v-if="$store.state.userMsg.roleId != '00000006' && $store.state.userMsg.roleId != '00000010'">
         <div class="weekListTitle">
           <h2>工作日报({{currentMonth}}月)</h2>
           <span>* 只展示近7天的数据</span>

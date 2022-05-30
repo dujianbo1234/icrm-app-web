@@ -97,6 +97,9 @@
 </script>
 
 <style>
+	.zIndex {
+		z-index: 999999 !important;
+	}
 	.home {
 		background-color: #F5F5F5;
 		padding-bottom: constant(safe-area-inset-bottom);

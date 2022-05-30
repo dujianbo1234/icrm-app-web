@@ -70,7 +70,7 @@
             <van-icon name="plus" size="10" color="#8C8C8C"/>
             <span>自定义标签</span>
           </span>
-          <span class="btnText" @click="portraitbtn = !portraitbtn">
+          <span class="btnText" @click="portraitbtn = !portraitbtn" v-if="tagList && tagList.length > 1">
             <span>{{portraitbtn ? '展开' : '收起'}}</span>
             <van-icon :name="portraitbtn ? 'arrow-down' : 'arrow-up'" size="14" color="#8C8C8C"/>
           </span>
@@ -272,7 +272,7 @@
         <div v-if="dialogTitles == 0" class="swipe">
           <template v-for="item in phoneList" :key="item.id">
             <van-swipe-cell :disabled="item.dataSrc == 1">
-              <van-cell :border="true" :title="item.telType" :value="this.custBase.ctcTel"/>
+              <van-cell :border="true" :title="item.telType" :value="item.ctcTel"/>
               <template #right>
                 <van-button square type="warning" text="删除" @click="delBtn(item)"/>
                 <van-button square type="danger" text="修改" @click="editBtn(item)"/>
@@ -348,7 +348,7 @@ import {
   queryCustCurrDepAcctInfo,
   queryCustLoanAcctInfo,
   queryCustFinaAcctInfo,
-  queryCustFinaTranInfo,
+  // queryCustFinaTranInfo,
   queryCustFundAcctInfo,
   queryCustBassAcctInfo,
   queryCustTrustAcctInfo,
@@ -494,8 +494,8 @@ export default {
       this.queryAssetsTrend(this.dataDate)
     })
     this.queryunityList()
-    this.queryContactList()
-    this.queryAddressList()
+    // this.queryContactList()
+    // this.queryAddressList()
     this.queryAssetAnaly()
     this.queryCustHoldPrd()
     this.querySignInfo()
@@ -617,6 +617,7 @@ export default {
           // on close
         });
       }else{
+        this.value = ''
         this.initDialog('addTag', '添加自定义标签')
       }
     },
@@ -704,18 +705,26 @@ export default {
     },
     /* 修改电话按钮 */
     editPhone(){
-      this.openDialog = true
-      this.dialogTitles = 0
+      this.queryContactList()
     },
     /* 查询联系电话 */
     queryContactList(){
+      Toast.loading({
+        message: "正在加载",
+        forbidClick: true,
+        duration: 0,
+        className: 'zIndex'
+      });
       let body = {
         custNum: this.$route.query.custNum
       }
       queryCustContactList(body, res => {
         if(res && res.data && res.data.contactList){
           this.phoneList = res.data.contactList
-          this.$forceUpdate() 
+          this.openDialog = true
+          this.dialogTitles = 0
+          Toast.clear()
+          // this.$forceUpdate() 
         }else{
           Toast.fail("联系电话查询失败")
         }
@@ -723,13 +732,22 @@ export default {
     },
     /* 查询联系地址 */
     queryAddressList(){
+      Toast.loading({
+        message: "正在加载",
+        forbidClick: true,
+        className: 'zIndex',
+        duration: 0,
+      });
       let body = {
         custNum: this.$route.query.custNum
       }
       queryCustAddressList(body, res => {
         if(res && res.data && res.data.addressList){
           this.addressList = res.data.addressList
-          this.$forceUpdate()
+          this.openDialog = true
+          this.dialogTitles = 3
+          Toast.clear()
+          // this.$forceUpdate()
         }else{
           Toast.fail("联系地址查询失败")
         }
@@ -737,9 +755,9 @@ export default {
     },
     /* 修改地址按钮 */
     editAddress(){
-      this.openDialog = true
+      // this.openDialog = true
       this.type = 'editAddress'
-      this.dialogTitles = 3
+      this.queryAddressList()
     },
     /* 删除按钮 */
     delBtn(item){
@@ -757,7 +775,7 @@ export default {
         case 0 :
           this.itemData = item
           this.phoneType = item.telType
-          this.phoneText = this.custBase.ctcTel
+          this.phoneText = item.ctcTel
           this.dialogTitles = 2
         break
         case 3 :
@@ -775,6 +793,7 @@ export default {
           message: "正在加载",
           forbidClick: true,
           duration: 0,
+          className: 'zIndex'
         });
         this.saveCustPhone()
       }else if(this.dialogTitles == 4 || this.dialogTitles == 5){
@@ -782,6 +801,7 @@ export default {
           message: "正在加载",
           forbidClick: true,
           duration: 0,
+          className: 'zIndex'
         });
         this.saveAddress()
       }else{
@@ -817,9 +837,13 @@ export default {
       }
       saveCustContactInfo(body, res => {
         if(res && res.data){
+          // this.dialogTitles = 0
           this.queryContactList()
-          this.dialogTitles = 0
-          Toast.success(body.id ? "修改成功" : '保存成功')
+        }else{
+          Toast.fail({
+            message: body.id ? "修改失败" : '保存失败',
+            className: 'zIndex'
+          })
         }
       })
     },
@@ -841,8 +865,12 @@ export default {
       saveCustAddressInfo(body, res => {
         if(res && res.data){
           this.queryAddressList()
-          this.dialogTitles = 3
-          Toast.success(body.id ? "修改成功" : '保存成功')
+          // this.dialogTitles = 3
+        }else{
+          Toast.fail({
+            message: body.id ? "修改失败" : '保存失败',
+            className: 'zIndex'
+          })
         }
       })
     },
