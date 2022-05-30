@@ -9,10 +9,13 @@
 			<div class="empty" v-if="!followMsg.length">-暂无跟进记录-</div>
 			<van-steps direction="vertical" :active="0">
 				<van-step v-for="(followItem,i) in followMsg" :key="'followItem'+i">
-					<div class="followItem1">{{followItem.serviceTitle}}</div>
+					<div class="followItem1">
+						<div>{{followItem.communictionChannel=='01'?'登门拜访':followItem.communictionChannel=='02'?'电话跟进':followItem.communictionChannel=='03'?'行内到访':followItem.communictionChannel=='04'?'微信跟进':'短信跟进'}}</div>
+						<div v-if="followItem.communictionChannel=='02' && $store.state.userMsg.empid==followItem.createPerson && followItem.serviceContent==''"  @click="saveTelInfo(followItem)">保存</div>
+					</div>
 					<div class="followItem2" :style="{'-webkit-line-clamp':followItem.showDesc?'100':'15'}"
 						@click="followItem.showDesc=!followItem.showDesc">{{followItem.serviceContent}}</div>
-					<div class="followItem5" v-if="followItem.serviceType=='01'&&followItem.fileList.length">
+					<div class="followItem5" v-if="followItem.communictionChannel=='01'&&followItem.fileList.length">
 						<div class="followItem5_1"
 							v-for="(file,j) in followItem.fileList.length>4&&!followItem.showAllPhoto?followItem.fileList.slice(0,3):followItem.fileList"
 							:key="'file'+j" @click="openPhoto(this.$store.state.baseUrl + file.fileServerPath)">
@@ -24,7 +27,7 @@
 								size="21" />
 						</div>
 					</div>
-					<div class="followItem6" v-if="followItem.serviceType=='01'&&followItem.visitAddress">
+					<div class="followItem6" v-if="followItem.communictionChannel=='01'&&followItem.visitAddress">
 						<div class="followItem6_1">
 							<van-icon :name="require('../../assets/image/common_dingwei_blue.png')" size="12"
 								style="margin-right: 0.04rem;flex-shrink: 0;padding: 0.03rem 0;" />
@@ -32,8 +35,13 @@
 						</div>
 						<div class="followItem6_2">{{followItem.visitAddress.split("------")[1]?followItem.visitAddress.split("------")[0]:""}}</div>
 					</div>
+					<div class="inputBox" v-if="followItem.communictionChannel=='02' && $store.state.userMsg.empid==followItem.createPerson && followItem.serviceContent==''">
+						<van-field class="telInput" v-model="followItem.serviceValue" input-align="left" border maxlength="200" autosize rows="4"
+									type="textarea">
+						</van-field>
+					</div>
 					<div class="followPeople">跟进人:{{followItem.createPersonName}}({{followItem.createPerson}})</div>
-					<div class="followPeople">机构:{{followItem.createPersonName}}</div>
+					<div class="followPeople">机构:{{followItem.custOrgName}}</div>
 
 					<div class="followItem3" v-if="i!=followMsg.length-1"></div>
 					<div class="followItem4">
@@ -63,6 +71,7 @@
 	} from "../../api/common.js";
 	import {
 		queryCustomeServicFollow,
+		custServiceUpdate
 	} from "../../request/market.js";
 	import {
 		Toast,
@@ -72,6 +81,7 @@
 		data() {
 			return {
 				followMsg: [],
+				serviceContent:'',//电话内容
 			}
 		},
 		components: {
@@ -80,12 +90,14 @@
 			getFollowMsg() {
 				queryCustomeServicFollow({
 					// custNo: this.$route.query.custNo
+					// custNo: 'P900010000395059'
 					custNo: 'P900010002921439'
                     
 				}, (res) => {
 					this.followMsg = res.data;
                     console.log('this.followMsg',this.followMsg)
 					this.followMsg.forEach((item) => {
+						item.serviceValue=''
 						item.showDesc = false;
 						item.showAllPhoto = false;
 					});
@@ -96,6 +108,16 @@
 					images: [file],
 					showIndex: false
 				});
+			},
+			saveTelInfo(value){
+				console.log('55',value)
+				custServiceUpdate({
+					serviceId:value.serviceId,
+					serviceContent: value.serviceValue
+				}, (res) => {
+					this.getFollowMsg()
+					console.log('res',res)
+				})
 			}
 		},
 		mounted() {
@@ -150,6 +172,8 @@
 		font-weight: 500;
 	}
 	.followItem1 {
+		display: flex;
+		justify-content: space-between;
 		width: calc(100% - 0.12rem);
 		height: 0.21rem;
 		line-height: 0.21rem;
@@ -336,5 +360,16 @@
 		font-family: PingFangSC-Regular;
 		letter-spacing: 0;
 		font-weight: 400;
+	}
+	.telInput{
+		margin-top: 0.1rem;
+	}
+	.inputBox :deep(.van-cell){
+		width: 90%;
+	}
+	.telInput :deep(.van-cell__value){
+		border:1px solid #EBEBEB;
+		border-radius: 0.05rem;
+		padding: 0.02rem;
 	}
 </style>
