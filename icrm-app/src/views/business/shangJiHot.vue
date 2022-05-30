@@ -87,7 +87,6 @@
 				shangJiList: [
                     
 				],
-				msgList: [],
 			};
 		},
 		components: {},
@@ -102,7 +101,7 @@
 			},
 			onClickTab(el){
 				this.pageIndex = 0
-				this.msgList = []
+				this.shangJiList = []
 				console.log(el)
 				if(el.name=='0'){
 					this.orderField='HOT_LIST_RANK'
