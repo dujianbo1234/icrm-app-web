@@ -312,7 +312,6 @@ export default {
       this.queryList()
     },
     gaveCall(item, type) {
-      console.log(item)
       if(item.ctcTel){
         if(isNaN(item.ctcTel)){
           Toast.fail("电话号码格式有误");
