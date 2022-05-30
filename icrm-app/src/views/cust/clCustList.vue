@@ -116,7 +116,7 @@
 <script>
 import { getSysCodeByType } from "../../request/common.js";
 import { formatNum, formatNums } from "@/api/common.js";
-import { queryCustSearchList } from "../../request/custinfo.js";
+import { custServiceAdd, queryCustSearchList } from "@/request/custinfo.js";
 import { Toast } from "vant";
 import sendMessage from "../../components/common/sendMessage.vue";
 export default {
@@ -312,15 +312,29 @@ export default {
       this.queryList()
     },
     gaveCall(item, type) {
+      console.log(item)
       if(item.ctcTel){
         if(isNaN(item.ctcTel)){
           Toast.fail("电话号码格式有误");
           return;
         }
         if(type){
-          AlipayJSBridge.call("callHandler", {
-            phone: item.ctcTel,
-          });
+          AlipayJSBridge.call("callHandler", {phone: item.ctcTel}, (res) => {
+            if (res.status == "000000") {
+              let body = {
+                custName: item.cstName,
+                custNo: item.custNum,
+                mobileNum: item.ctcTel,
+                communictionChannel: "02",
+                custType: '1',
+              };
+              custServiceAdd(body, (ress) => {
+                // this.showCall = false;
+              });
+            } else {
+              Toast.fail(res.msg);
+            }
+          })
         }else{
           this.$refs.sendMessage.openMbox({
             type: "",
