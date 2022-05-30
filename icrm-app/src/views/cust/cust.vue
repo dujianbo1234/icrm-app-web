@@ -140,7 +140,8 @@
 		querySysDate
 	} from "../../request/index.js";
 	import {
-		queryCmrcOpportRankList,custServiceDetail
+		queryCmrcOpportRankList,
+		// custServiceDetail
 	} from "../../request/market.js";
 	import {
 		Toast
@@ -280,19 +281,19 @@
 			}
 		},
 		methods: {
-			getbiBan(){
-				custServiceDetail(null, (res) => {
-					if (res.data) {
+			// getbiBan(){
+			// 	custServiceDetail(null, (res) => {
+			// 		if (res.data) {
 						
-						console.log('res.data1111',res.data)
+			// 			console.log('res.data1111',res.data)
 
-					} else {
-						console.log('res.data1111',res.data)
+			// 		} else {
+			// 			console.log('res.data1111',res.data)
 
-					}
-					this.loading = false;
-				});
-			},
+			// 		}
+			// 		this.loading = false;
+			// 	});
+			// },
 			getCmrcOpportRankList(etlDt){
 				let params = {
 					pageNum: '1',
