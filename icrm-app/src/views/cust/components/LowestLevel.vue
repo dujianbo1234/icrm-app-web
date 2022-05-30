@@ -180,7 +180,8 @@ export default {
         custNo: this.custBase.custNum,
         mobileNum: this.custBase.ctcTel,
         communictionChannel: "01",
-        custType: '1'
+        custType: '1',
+        uploadIds: this.photoList.map(item => item.tableKey)
       };
 			custServiceAdd(body, (res) => {
 				// this.getFollowMsg();
@@ -207,7 +208,6 @@ export default {
 							url: res1.result,
 							tableKey: res2.data[0].tableKey
 						})
-            console.log(res2.data[0].tableKey)
 					})
 				} else if (res1.status != "000004") {
 					Toast.fail(res1.msg)
