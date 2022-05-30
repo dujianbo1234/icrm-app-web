@@ -7,7 +7,7 @@
             <span class="name">{{item.cmrcOpptSubclassNm}}</span>
             <span class="icon blue" v-if="item.cmrcOpptSt == '2'">待跟进</span>
             <span class="icon yellow" v-if="item.cmrcOpptSt == '4'">已跟进</span>
-            <span class="icon blue" v-if="item.cmrcOpptSt == '5'">已成交</span>
+            <span class="icon green" v-if="item.cmrcOpptSt == '5'">已成交</span>
             <span class="icon grany" v-if="item.cmrcOpptSt == '3'">逾期未跟进</span>
           </div>
           <div class="keyWords">{{item.keyWords}}</div>
@@ -96,6 +96,9 @@ export default {
         }
         .yellow {
           background: #ffba00;
+        }
+        .green {
+          background: rgb(18, 255, 18);
         }
         .grany {
           background: #bfbfbf;
