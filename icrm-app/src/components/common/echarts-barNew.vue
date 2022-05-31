@@ -27,8 +27,11 @@ export default {
         return {}
       }
     },
-    yName: String,
     timeUnit: Number,
+    yName: {
+      type: String,
+      default: '增长人数'
+    },
     unit: {
       type: String,
       default: '人'

@@ -13,7 +13,7 @@
 			<van-datetime-picker v-model="currentDate" type="date" title="选择日期" :min-date="minDate" :max-date="maxDate"
 				@cancel="$refs.dateDrop.toggle(false)" @confirm="activeDate" />
 		</van-popup>
-		<org-list ref="orgList" type="2" :overlay="false" @close="closeOrg" @activeOrg="activeOrg" />
+		<org-list ref="orgList" :type="2" :overlay="false" @close="closeOrg" @activeOrg="activeOrg" />
 		<cust-list ref="custList" :overlay="false" :orgId="chooseOrg.value" @close="closeCust"
 			@activeCust="activeCust" />
 		<div class="modelBox"

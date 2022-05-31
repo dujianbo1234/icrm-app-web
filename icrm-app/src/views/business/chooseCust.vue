@@ -156,7 +156,7 @@
 			</div>
 		</van-list>
 		<div class="bottomZW"></div>
-		<org-list ref="orgList" type="2" @close="openOrgList=false" @activeOrg="activeOrg" />
+		<org-list ref="orgList" :type="2" @close="openOrgList=false" @activeOrg="activeOrg" />
 		<customer-list ref="custList" @close="openCustList=false" @activeCust="activeCust" />
 	</div>
 </template>

@@ -2,7 +2,7 @@
   <div class="echart-Histogram">
     <!-- title选择 -->
     <van-tabs class="cust" v-model:active="active" :shrink="true" @change="change">
-      <van-tab v-for="item in dataArr" :title="item" :key="item">
+      <van-tab v-for="(item, index) in dataArr" :title="item" :key="index">
         <echartsBar ref="echartsBar" :yName="['增长人数','增长(万元)','增长(元)'][type]" :unit="['人','万元','元'][type]" :numType="numType" :numUnit="numUnit" :timeUnit="timeUnit" :barData="barData"></echartsBar>
       </van-tab>
     </van-tabs>
@@ -34,8 +34,8 @@ export default {
       type: Object,
       default: ()=>{
         return {
-          series: [120, -100, 150, 80, 70, 110, 130, 240, -100, 120,120, -200, 150, 80, 70, 110, 130, 240, 100, 120,120, 200, 150, 80, 70, 110, 130, 240, 100, 120],
-          xAxis: ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30"],
+          series: [],
+          xAxis: [],
         }
       }
     },
@@ -53,6 +53,7 @@ export default {
   methods: {
     // 选择title类型
     change(v){
+      console.log(v)
       this.$emit('change', v)
     },
     // 选择月份时重置title

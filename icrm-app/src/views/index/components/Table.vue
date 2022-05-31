@@ -57,7 +57,7 @@ export default {
       default: 0,
     },
     color: {
-      type: String,
+      type: Boolean,
       default: true,
     }
   },

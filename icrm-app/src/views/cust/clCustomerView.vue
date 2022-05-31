@@ -135,7 +135,7 @@
               <span class="title">增长趋势</span>
               <selectors :title="['日', '月']" :typeP="1" @change="changeAum"></selectors>
             </div>
-            <echartHistogram :type="2" ref="Histogram2" :dataArr="['全部','活期存款','定期存款','理财','基金','保险','信托']" :numType="'no'" :selectTime="selectTime" :barData="aumData" @change="aumChange" @change2="aumChange2" :timeUnit="timeUnit"></echartHistogram>
+            <echartHistogram ref="Histogram2" :type="2" :dataArr="['全部','活期存款','定期存款','理财','基金','保险','信托']" :numType="'no'" :selectTime="selectTime" :barData="aumData" @change="aumChange" @change2="aumChange2" :timeUnit="timeUnit"></echartHistogram>
           </div>
           <!-- 负债总览(元) -->
           <div class="card" style="margin-top: 0.12rem;">

@@ -146,7 +146,7 @@
 			</div>
 		</van-popup>
 		<div class="bottomZW"></div>
-		<org-list ref="orgList" type="2" @close="openOrgList=false" @activeOrg="activeOrg" />
+		<org-list ref="orgList" :type="2" @close="openOrgList=false" @activeOrg="activeOrg" />
 		<customer-list ref="custList" @close="openCustList=false" @activeCust="activeCust" />
 		<van-calendar v-model:show="dateShow1" :show-confirm="false" :show-cancle="false" color="#026DFF"
 			:min-date="minDate" :max-date="maxDate" @confirm="chooseDate1">

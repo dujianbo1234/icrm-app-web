@@ -43,7 +43,7 @@
 			<div v-else></div>
 		</div>
 		<div style="width: 100%;height: 1.8rem;"></div>
-		<org-list ref="orgList" type="2" :overlay="false"></org-list>
+		<org-list ref="orgList" :type="2" :overlay="false"></org-list>
 		<van-checkbox-group v-model="chooseItems">
 			<van-list v-model:loading="loading" :finished="finished" finished-text="没有更多了" :offset="10"
 				@load="getCustList">

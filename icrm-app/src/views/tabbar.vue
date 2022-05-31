@@ -55,17 +55,27 @@
 				showTabbar: true
 			}
 		},
-		watch: {
-			$route() {
-				let index = this.tabbarList.indexOf(this.tabbarList.find(item => item.name == this.$route.name));
-				if (index < 0) {
-					this.showTabbar = false;
-				} else {
-					this.active = index;
-					this.showTabbar = true;
-				}
+		beforeRouteUpdate(to, from, next){
+			let index = this.tabbarList.indexOf(this.tabbarList.find(item => item.name == to.name));
+			if (index < 0) {
+				this.showTabbar = false;
+			} else {
+				this.active = index;
+				this.showTabbar = true;
 			}
-		}
+			next()
+		},
+		// watch: {
+		// 	$route() {
+		// 		let index = this.tabbarList.indexOf(this.tabbarList.find(item => item.name == this.$route.name));
+		// 		if (index < 0) {
+		// 			this.showTabbar = false;
+		// 		} else {
+		// 			this.active = index;
+		// 			this.showTabbar = true;
+		// 		}
+		// 	}
+		// }
 	}
 </script>
 
