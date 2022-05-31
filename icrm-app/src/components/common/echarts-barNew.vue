@@ -50,7 +50,6 @@ export default {
   },
   watch: {
     barData(newData, oldData){
-      console.log('newData',newData)
       this.initData(newData.xAxis, newData.series)
     }
   },
