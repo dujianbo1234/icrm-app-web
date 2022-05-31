@@ -159,7 +159,7 @@
 				<van-field v-model="followItem.onsiteInspDsc" type="textarea" placeholder="" rows="5" autosize readonly
 					maxlength="150" />
 			</div>
-			<div class="followItem5">
+			<div class="popPlate2">
 				<div class="followItem5_1"
 					v-for="(file,j) in followItem.fileList"
 					:key="'file'+j" @click="openPhoto(this.$store.state.baseUrl + file.fileServerPath)">
@@ -967,8 +967,8 @@
 	}
 
 	.followItem5_1 {
-		width: 0.7rem;
-		height: 0.7rem;
+		width: 0.75rem;
+		height: 0.75rem;
 		margin-right: calc(calc(100% - 3rem) / 3);
 		margin-bottom: 0.12rem;
 		overflow: hidden;
@@ -985,12 +985,4 @@
 		width: 100%;
 	}
 
-	.followItem5_2 {
-		width: 0.7rem;
-		height: 0.7rem;
-		display: flex;
-		flex-wrap: nowrap;
-		justify-content: center;
-		align-items: center;
-	}
 </style>
