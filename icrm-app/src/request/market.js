@@ -40,5 +40,5 @@ export const custServiceUpdate = (params,fun) => {request("custserv.custServiceU
 export const followEmployeeMustDo = (params,fun) => {request("market.followEmployeeMustDo", params, fun)}
 //必办详情查询
 export const queryEmployeeMustDoDetail = (params,fun) => {request("market.queryEmployeeMustDoDetail", params, fun)}
-
-
+//查询客户维护信息
+export const queryCustMaintainInfo = (params,fun) => {request("market.queryCustMaintainInfo", params, fun)}
