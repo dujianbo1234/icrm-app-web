@@ -6,7 +6,7 @@
       <template v-for="(item, index) in setList" :key="index">
         <van-tab :title="item.name" :disabled="item.disabled">
 
-          <el-table size="small" :data="item.list" fit :header-row-style="headerStyle" style="width: 100%">
+          <el-table size="small" :data="item.list" fit :header-row-style="headerStyle">
             <template v-for="(i, iIindex) in item.label" :key="iIindex">
               <el-table-column :prop="i.key" :label="i.label" :fixed="i.fixed" :show-overflow-tooltip="i.tooltip" :align="i.align || 'center'" :width="i.width">
               </el-table-column>
