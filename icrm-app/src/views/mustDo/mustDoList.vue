@@ -82,7 +82,7 @@
 								<span class="daoqiDate">{{ mustDoItem.expDay }}</span>
 							</div>
 							<div class="msgValue3Right" >
-								<van-icon v-if="mustDoItem.mastDoSt == '01'" :name="require('@/assets/image/yiban.png')" size="24"/>
+								<van-icon @click="visitDetail(mustDoItem.id)" v-if="mustDoItem.mastDoSt == '01'" :name="require('@/assets/image/yiban.png')" size="24"/>
 								<van-icon  @click="openVisit(mustDoItem.id)" v-if="mustDoItem.mastDoSt == '02' && $store.state.userMsg.roleId=='00000004'" :name="require('@/assets/image/daiban.png')" size="24"/>
 								<van-icon v-if="mustDoItem.mastDoSt == '03' && $store.state.userMsg.roleId=='00000004'" :name="require('@/assets/image/daiban_gray.png')" size="24"/>
 							</div>
@@ -109,16 +109,24 @@
 		<customer-list ref="custList" @close="openCustList=false" @activeCust="activeCust" />
 		<van-popup v-model:show="showVisit" round position="bottom" z-index="99999" :close-on-click-overlay="false"
 			style="background-color: #F8F8F8;height: 80%;">
-			<div class="popTitle">
+			<div class="popTitle" v-if="newVisit">
 				<div class="popTitle1" @click="cancle">取消</div>
 				<div class="popTitle2">现场定位核查</div>
 				<div class="popTitle3" @click="addVisit">添加</div>
 			</div>
-			<div class="popPlate1">
+			<div class="popTitle"  v-if="!newVisit">
+				<div class="popTitle1" @click="cancle">取消</div>
+				<div class="popTitle2">现场定位核查记录</div>
+			</div>
+			<div class="popPlate1"  v-if="newVisit">
 				<van-field v-model="followValue" type="textarea" placeholder="请输入拜访记录（非必填）" rows="5" autosize
 					maxlength="150" />
 			</div>
-			<div class="popPlate2">
+			<div class="popPlate1"  v-if="!newVisit">
+				<van-field v-model="followValue" type="textarea" placeholder="" rows="5" autosize readonly
+					maxlength="150" />
+			</div>
+			<div class="popPlate2" v-if="newVisit">
 				<div class="cameraBox" v-for="(photo,i) in photoList" :key="'photo'+i">
 					<van-icon class="delBtn" :name="require('../../assets/image/common_delete.png')" color="##8C8C8C"
 						size="20" @click="delPhoto(i)" />
@@ -130,6 +138,18 @@
 					<van-icon name="photograph" color="#BFBFBF" size="32" />
 				</div>
 			</div>
+			<div class="followItem5" v-if="!newVisit&&followItem.fileList.length">
+						<div class="followItem5_1"
+							v-for="(file,j) in followItem.fileList.length>4&&!followItem.showAllPhoto?followItem.fileList.slice(0,3):followItem.fileList"
+							:key="'file'+j" @click="openPhoto(this.$store.state.baseUrl + file.fileServerPath)">
+							<img :src="this.$store.state.baseUrl + file.fileServerPath">
+						</div>
+						<div class="followItem5_2" v-if="followItem.fileList.length>4&&!followItem.showAllPhoto"
+							@click="followItem.showAllPhoto=true">
+							<van-icon :name="require('../../assets/image/common_more.png')" color="##8C8C8C"
+								size="21" />
+						</div>
+					</div>
 			<div class="popPlate3">
 				<van-icon :name="require('../../assets/image/common_dingwei_blue.png')" size="15"
 					style="margin-right: 0.04rem;flex-shrink: 0;padding: 0.03rem 0;" />
@@ -153,12 +173,14 @@
 		Toast,
 		Dialog,
 		Overlay,
-		Button
+		Button,
+		ImagePreview
 	} from "vant";
 	import {
 		queryEmployeeMustDoList,
 		followEmployeeMustDo,
-		opportCustServUploadMpaas
+		opportCustServUploadMpaas,
+		queryEmployeeMustDoDetail
 	} from "../../request/market.js";
 	import moment from "moment";
 	import customerList from "../../components/common/customerList.vue";
@@ -214,6 +236,7 @@
 				dingwei: "",
 				openLocation: true,
 				id:'',
+				newVisit:false,
 			};
 		},
 		components: {customerList},
@@ -315,12 +338,32 @@
 				this.onLoad();
 			},
 			openVisit(el){
-				this.id=el.id
+				this.newVisit=true
+				this.id=el
 				this.followValue = "";
 				this.photoList = [];
 				this.dingwei = "";
 				this.showVisit = true;
 				this.getLocation();
+			},
+			openPhoto(file) {
+				ImagePreview({
+					images: [file],
+					showIndex: false
+				});
+			},
+			visitDetail(el){
+				this.newVisit=false
+				this.id=el
+				this.showVisit = true;
+				queryEmployeeMustDoDetail({
+					id: this.id,
+				}, (res) => {
+					console.log('res',res)
+					// this.followItem=res
+					
+					Toast.clear();
+				})
 			},
 			cancle() {
 				this.showVisit = false;
@@ -876,5 +919,39 @@
 		position: absolute;
 		top: -0.06rem;
 		right: -0.06rem;
+	}
+	.followItem5 {
+		width: calc(100% - 0.2rem);
+		margin-top: 0.12rem;
+		display: flex;
+		flex-wrap: wrap;
+		margin-bottom: -0.12rem;
+	}
+
+	.followItem5_1 {
+		width: 0.5rem;
+		height: 0.5rem;
+		margin-right: calc(calc(100% - 2rem) / 3);
+		margin-bottom: 0.12rem;
+		overflow: hidden;
+		display: flex;
+		align-items: center;
+	}
+
+	.followItem5_1:nth-child(4n) {
+		margin-right: 0;
+	}
+
+	.followItem5_1>img {
+		width: 100%;
+	}
+
+	.followItem5_2 {
+		width: 0.5rem;
+		height: 0.5rem;
+		display: flex;
+		flex-wrap: nowrap;
+		justify-content: center;
+		align-items: center;
 	}
 </style>

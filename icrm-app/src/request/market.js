@@ -38,4 +38,7 @@ export const queryCustomeServicFollow = (params,fun) => {request("custserv.query
 export const custServiceUpdate = (params,fun) => {request("custserv.custServiceUpdate", params, fun)}
 //必办现场定位
 export const followEmployeeMustDo = (params,fun) => {request("market.followEmployeeMustDo", params, fun)}
+//必办详情查询
+export const queryEmployeeMustDoDetail = (params,fun) => {request("market.queryEmployeeMustDoDetail", params, fun)}
+
 
