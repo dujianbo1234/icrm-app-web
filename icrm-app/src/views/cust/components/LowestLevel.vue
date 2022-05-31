@@ -185,8 +185,16 @@ export default {
       };
 			custServiceAdd(body, (res) => {
 				// this.getFollowMsg();
-				this.showVisit = false;
-				Toast.clear();
+        if(res && res.data){
+          Toast.success(res.msg)
+          this.showVisit = false;
+        }else{
+          if(res.msg){
+            Toast.fail(res.msg)
+          }else{
+            Toast.clear();
+          }
+        }
 			})
 		},
 		delPhoto(i) {
