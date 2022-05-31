@@ -187,14 +187,18 @@
                 <h3>推荐产品</h3>
               </div>
             </div>
-            <div class="recommend" style="margin-top: 0.12rem;">
-              <div class="textL">久赢现金宝</div>
-              <div class="textR" @click="fenxiang">分享</div>
-            </div>
-            <div class="recommend">
-              <div class="textL">久赢现金宝</div>
-              <div class="textR" @click="fenxiang">分享</div>
-            </div>
+            <template v-for="(item ,index) in prodList">
+              <div v-if="index < 5" :key="index">
+                <div class="recommend" style="margin-top: 0.12rem;" v-if="index == 0">
+                  <div class="textL">{{item.pdNm}}</div>
+                  <div class="textR" @click="fenxiang">分享</div>
+                </div>
+                <div class="recommend" v-else>
+                  <div class="textL">{{item.pdNm}}</div>
+                  <div class="textR" @click="fenxiang">分享</div>
+                </div>
+              </div>
+            </template>
           </div>
         </van-tab>
         <van-tab title="交易分析">
@@ -352,7 +356,7 @@ import {
   queryCustFundAcctInfo,
   queryCustBassAcctInfo,
   queryCustTrustAcctInfo,
-  // queryRecommendProdList,
+  queryRecommendProdList,
   queryCustTranFlowInfo,
   queryCmrcOpportunityList
 
@@ -454,6 +458,7 @@ export default {
       aumData: {},
       prdList: [],
       sgnList: [],
+      prodList: [],
       inData: {
         txnAmtCount: '0',
         txnStcoCount: '0',
@@ -494,6 +499,7 @@ export default {
       this.queryAssetsTrend(this.dataDate)
     })
     this.queryunityList()
+    this.queryProdList()
     // this.queryContactList()
     // this.queryAddressList()
     this.queryAssetAnaly()
@@ -1313,9 +1319,8 @@ export default {
         }
       })
     },
-    /* 分享 */
-    fenxiang(){
-      Toast.fail("尽请期待")
+    /* 推荐产品信息查询 */
+    queryProdList(){
       /* 
         推荐产品信息查询
         custNum         客户编号
@@ -1323,8 +1328,19 @@ export default {
         pdNm            产品名称
         recomDt         推荐日期
         pdCmpnIntrdc    营销话术
-       */      
-      // queryRecommendProdList({},res => {})
+       */
+      let body = {
+        custNum: this.$route.query.custNum
+      }
+      queryRecommendProdList(body,res => {
+        if(res && res.data && res.data.records){
+          this.prodList = res.data.records
+        }
+      })
+    },
+    /* 分享 */
+    fenxiang(){
+      Toast.fail("尽请期待")
     },
     /* 交易行为分析查询 */
     queryFlowInfo(){
