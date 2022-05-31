@@ -1143,7 +1143,7 @@ export default {
                 if(res && res.data){
                   item.list = res.data.records
                   item.label = [
-                    { label: "存款种类", key: 'depKnd', fixed: 'left', width: '100' },
+                    { label: "存款种类", key: 'depKnd', width: '100' },
                     { label: "存期", key: 'depte', width: '100' },
                     { label: "利率", key: 'intRat', width: '100' },
                     { label: "余额", key: 'currBal', width: '100' },
@@ -1159,7 +1159,7 @@ export default {
                 if(res && res.data){
                   item.list = res.data.records
                   item.label = [
-                    { label: "存款种类", key: 'depKnd', fixed: 'left', width: '100' },
+                    { label: "存款种类", key: 'depKnd', width: '100' },
                     { label: "卡号", key: 'cardNum', width: '150' },
                     { label: "利率", key: 'intRat', width: '100' },
                     { label: "时点余额", key: 'currBal', width: '100' },
@@ -1176,7 +1176,7 @@ export default {
                 if(res && res.data){
                   item.list = res.data.records
                   item.label = [
-                    { label: "贷款类别", key: 'loanCtgry', fixed: 'left', width: '100' },
+                    { label: "贷款类别", key: 'loanCtgry', width: '100' },
                     { label: "贷款名称", key: 'loanNm', width: '100' },
                     { label: "利率", key: 'intRat', width: '100' },
                     { label: "发放金额", key: 'dstrbtAmt', width: '100' },
@@ -1192,7 +1192,7 @@ export default {
                 if(res && res.data){
                   item.list = res.data.records
                   item.label = [
-                    { label: "产品名称", key: 'pdNm', fixed: 'left', width: '100' },
+                    { label: "产品名称", key: 'pdNm', width: '100' },
                     { label: "卡号", key: 'cardNum', width: '150' },
                     { label: "产品余额", key: 'acctBal', width: '100' },
                     { label: "产品状态", key: 'acctStCd', width: '100' },
@@ -1217,7 +1217,7 @@ export default {
                 if(res && res.data){
                   item.list = res.data.records
                   item.label = [
-                    { label: "产品名称", key: 'pdNm', fixed: 'left', width: '100' },
+                    { label: "产品名称", key: 'pdNm', width: '100' },
                     { label: "基金代码", key: 'fndCd', width: '100' },
                     { label: "基金风险等级", key: 'fndRskLvl', width: '100' },
                     { label: "当前份额", key: 'currLot', width: '100' },
@@ -1233,7 +1233,7 @@ export default {
                 if(res && res.data){
                   item.list = res.data.records
                   item.label = [
-                    { label: "保险公司名称", key: 'insCoNm', fixed: 'left', width: '100' },
+                    { label: "保险公司名称", key: 'insCoNm', width: '100' },
                     { label: "保险产品名称", key: 'insPdNm', width: '100' },
                     { label: "险种类别", key: 'typeOfInsureCtgry', width: '100' },
                     { label: "缴费方式", key: 'ptfMd', width: '100' },
@@ -1249,7 +1249,7 @@ export default {
                 if(res && res.data){
                   item.list = res.data.records
                   item.label = [
-                    { label: "产品名称", key: 'pdNm', fixed: 'left', width: '100' },
+                    { label: "产品名称", key: 'pdNm', width: '100' },
                     { label: "卡号", key: 'cardNum', width: '150' },
                     { label: "产品余额", key: 'acctBal', width: '100' },
                     { label: "产品状态", key: 'acctStCd', width: '100' },
@@ -1278,11 +1278,9 @@ export default {
               if(res && res.data){
                 item.list = res.data.records
                 item.label = [
-                  { label: "客户编号", key: 'custNum', fixed: 'left', width: '130' },
                   { label: "签约账号", key: 'sgnAcctNo', width: '150' },
                   { label: "签约手机号", key: 'sgnMobileNum', width: '100' },
-                  { label: "签约机构", key: 'sgnInst', width: '100' },
-                  { label: "签约机构名称", key: 'sgnInstNm', width: '100' },
+                  { label: "签约机构", key: 'sgnInstNm', width: '100' },
                   { label: "签约日期", key: 'sgnDt', width: '100' },
                 ]
               }

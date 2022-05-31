@@ -253,6 +253,7 @@ export default {
         forbidClick: true,
         duration: 0,
       });
+      console.log('this.params',this.params)
       queryCustSearchList(this.params, (res) => {
         if (res.data && res.data.records) {
           this.total = res.data.total;

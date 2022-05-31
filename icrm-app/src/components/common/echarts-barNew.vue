@@ -83,11 +83,11 @@ export default {
 					},
         },
         grid: {
-          left: '15%',
+          left: '0%',
           right: 20,
           top: '20%',
-          bottom: '17%',
-          // containLabel: true, // 是否包含XY轴的文字
+          bottom: '3%',
+          containLabel: true, // 是否包含XY轴的文字
         },
         axisLabel: {
           show: true,
@@ -112,7 +112,7 @@ export default {
           name: this.yName,
           nameTextStyle: {
             color: '#8C8C8C',
-            align: "center"
+            // align: "center"
           },
           splitLine :{
             lineStyle:{
@@ -228,7 +228,7 @@ export default {
   }
   .time {
     position: absolute;
-    bottom: 0;
+    bottom: -3.5%;
     right: 2%;
     color: #8C8C8C;
     font-size: 0.1rem
