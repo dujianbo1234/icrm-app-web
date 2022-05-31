@@ -587,7 +587,6 @@ export default {
               color: ["#488BFF", "#26CEBA", "#FFC069", "#FD6865", "#836DE4", "#FF9C6E"][item]
             }
           }
-          // let theSum = dataObj.currDpsitBal + dataObj.timeDpsitBal + dataObj.cftBal + dataObj.fndBal + dataObj.insBal + dataObj.entrstBal // 总和
           let percentage = (num) => {
             if(num == undefined || Number(num) == 0){
               return 0.00

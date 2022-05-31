@@ -270,6 +270,7 @@ export default {
     },
     /* 初始化查询条件 */
     initParams(){
+      this.tageListActive = 0
 			this.params = {
 				pageSize: "10",
 				pageNum: "1",
