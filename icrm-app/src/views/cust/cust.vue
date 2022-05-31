@@ -48,16 +48,26 @@
 				<div v-for="(shangJiItem, i) in busiBdValue" :key="'shangJiItem' + i" class="shangJiCardOutBox">
 					<div style="display:flex;justify-content: space-between;align-items: center;">
 						<div class="shangJiHeader">
-							<van-icon style="margin-left:0.04rem" :name="require('../../assets/image/tabbar_cust_main_bdTop'+(i+1)+'.png')" size="12" />
+							<van-icon style="margin-left:0.04rem"
+								:name="require('../../assets/image/tabbar_cust_main_bdTop'+(i+1)+'.png')" size="12" />
 							<span class="shangJiTitle" style="margin-left: 0.12rem;">{{shangJiItem.modelName}}</span>
-							<van-icon v-if="(reBang && shangJiItem.hotListFlag=='2')||(chengJiaoBang && shangJiItem.dealNumFlag=='2')||(haoPingBang && shangJiItem.laimScoreFlag=='2')" style="margin-left:0.04rem" :name="require('../../assets/image/up.png')" size="12" />
-							<van-icon v-if="(reBang && shangJiItem.hotListFlag=='1')||(chengJiaoBang && shangJiItem.dealNumFlag=='1')||(haoPingBang && shangJiItem.laimScoreFlag=='1')" style="margin-left:0.04rem" :name="require('../../assets/image/down.png')" size="12" />
-							<van-icon v-if="(reBang && shangJiItem.hotListFlag=='0')||(chengJiaoBang && shangJiItem.dealNumFlag=='0')||(haoPingBang && shangJiItem.laimScoreFlag=='0')" style="margin-left:0.04rem" :name="require('../../assets/image/line.png')" size="12" />
+							<van-icon
+								v-if="(reBang && shangJiItem.hotListFlag=='2')||(chengJiaoBang && shangJiItem.dealNumFlag=='2')||(haoPingBang && shangJiItem.laimScoreFlag=='2')"
+								style="margin-left:0.04rem" :name="require('../../assets/image/up.png')" size="12" />
+							<van-icon
+								v-if="(reBang && shangJiItem.hotListFlag=='1')||(chengJiaoBang && shangJiItem.dealNumFlag=='1')||(haoPingBang && shangJiItem.laimScoreFlag=='1')"
+								style="margin-left:0.04rem" :name="require('../../assets/image/down.png')" size="12" />
+							<van-icon
+								v-if="(reBang && shangJiItem.hotListFlag=='0')||(chengJiaoBang && shangJiItem.dealNumFlag=='0')||(haoPingBang && shangJiItem.laimScoreFlag=='0')"
+								style="margin-left:0.04rem" :name="require('../../assets/image/line.png')" size="12" />
 						</div>
 						<div style="display:flex">
-							<van-icon v-if="reBang" style="margin-right:0.04rem;margin-top: 0.02rem;" :name="require('../../assets/image/huore.png')" size="12" />
-							<van-icon  v-if="chengJiaoBang" style="margin-right:0.04rem;margin-top: 0.02rem;" :name="require('../../assets/image/chengjiao.png')" size="12" />
-							<van-icon  v-if="haoPingBang" style="margin-right:0.04rem;margin-top: 0.02rem;" :name="require('../../assets/image/dianzan.png')" size="12" />
+							<van-icon v-if="reBang" style="margin-right:0.04rem;margin-top: 0.02rem;"
+								:name="require('../../assets/image/huore.png')" size="12" />
+							<van-icon v-if="chengJiaoBang" style="margin-right:0.04rem;margin-top: 0.02rem;"
+								:name="require('../../assets/image/chengjiao.png')" size="12" />
+							<van-icon v-if="haoPingBang" style="margin-right:0.04rem;margin-top: 0.02rem;"
+								:name="require('../../assets/image/dianzan.png')" size="12" />
 							<span v-if="reBang" class="textStyle">{{shangJiItem.hotList}}</span>
 							<span v-if="chengJiaoBang" class="textStyle">{{shangJiItem.dealNum}}</span>
 							<span v-if="haoPingBang" class="textStyle">{{shangJiItem.laimScore}}</span>
@@ -69,69 +79,62 @@
 				</div>
 			</div>
 		</div>
-		<div class="dataOutBox" v-if="$store.state.userMsg.roleId=='00000004'">
-			<van-tabs v-model:active="active" line-width="80" color="#0088FF" title-active-color="#0066FF"
-				title-inactive-color="#8A8A8A">
+		<div class="dataOutBox">
+			<van-tabs v-model:active="active" line-width="80" color="#026DFF" title-active-color="#026DFF"
+				title-inactive-color="#8C8C8C" @change="changeDataTab">
 				<van-tab title="客户维护情况" />
-				<van-tab title="" disabled />
+				<van-tab title="" disabled v-if="$store.state.userMsg.roleId=='00000004'" />
+				<van-tab title="登录数据统计" v-else />
 				<van-tab title="" disabled />
 			</van-tabs>
-			<div class="custDate" ref="dateDrop" @click="showDate=!showDate">
-				<span>{{dataDate}} </span>
-				<van-icon v-if="showDate" name="arrow-up" />
-				<van-icon v-else name="arrow-down" />
-			</div>
-			<div style="width: 100%; height: 0.1rem;"></div>
-			<div class="dataBox">
-				<div class="dataItem" v-for="(dataItem,i) in list1" :key="'data1Item'+i" v-show="active==0">
-					<div class="dataValue" :style="{color: dataItem.value==0?'#7D7D7D':'#0088FF'}">{{dataItem.value}}
-					</div>
-					<div class="dataTitle">{{dataItem.title}}</div>
-				</div>
-				<div class="dataItem" v-for="(dataItem,i) in list2" :key="'data2Item'+i" v-show="active==1">
-					<div class="dataValue" :style="{color: dataItem.value==0?'#7D7D7D':'#0088FF'}">{{dataItem.value}}
-					</div>
-					<div class="dataTitle">{{dataItem.title}}</div>
-				</div>
-			</div>
-		</div>
-		<div class="dataOutBox" v-else>
-			<van-tabs v-model:active="active" line-width="80" color="#0088FF" title-active-color="#0066FF"
-				title-inactive-color="#8A8A8A">
-				<van-tab title="客户维护情况" />
-				<van-tab title="登录数据统计" />
-				<van-tab title="" disabled />
-			</van-tabs>
-			<van-dropdown-menu :close-on-click-outside="false" active-color="#1989fa">
-				<van-dropdown-item ref="orgDrop" :title="chooseOrg.text" @open="$refs.orgList.showPopup()"
-					@close="$refs.orgList.cancle()" />
-				<van-dropdown-item ref="custDrop" :title="chooseCust.custManagerName" @open="$refs.custList.showPopup()"
-					@close="$refs.custList.cancle()" />
+			<van-dropdown-menu :overlay="false" :close-on-click-outside="false" active-color="#026DFF">
+				<van-dropdown-item v-if="$store.state.userMsg.roleId!='00000004'" ref="orgDrop" :title="chooseOrg.text"
+					@open="$refs.orgList.showPopup()" @close="$refs.orgList.cancle()" />
+				<van-dropdown-item v-if="$store.state.userMsg.roleId!='00000004'&&active==0" ref="custDrop"
+					:title="chooseCust.empName" @open="$refs.custList.showPopup()" @close="$refs.custList.cancle()" />
 				<van-dropdown-item ref="dateDrop" :title="dataDate" @open="showDate=true" @close="showDate=false" />
 			</van-dropdown-menu>
 			<div class="dataBox">
 				<div class="dataItem" v-for="(dataItem,i) in list1" :key="'data1Item'+i" v-show="active==0">
-					<div class="dataValue" :style="{color: dataItem.value==0?'#7D7D7D':'#0088FF'}">{{dataItem.value}}
+					<div class="dataValue" :style="{color: dataItem.value==0?'#8C8C8C':dataItem.value=='-'?'#8C8C8C':'#026DFF'}">
+						{{dataItem.value||"-"}}
 					</div>
 					<div class="dataTitle">{{dataItem.title}}</div>
 				</div>
-				<div class="dataItem" v-for="(dataItem,i) in list2" :key="'data2Item'+i" v-show="active==1">
-					<div class="dataValue" :style="{color: dataItem.value==0?'#7D7D7D':'#0088FF'}">{{dataItem.value}}
+				<div class="dataItem" style="width: calc(50% - 0.035rem);" v-for="(dataItem,i) in list2"
+					:key="'data2Item'+i" v-show="active==1" @click="showDetail(dataItem)">
+					<div class="dataValue" :style="{color: dataItem.value==0?'#8C8C8C':dataItem.value=='-'?'#8C8C8C':'#026DFF'}">
+						{{dataItem.value||"-"}}
 					</div>
 					<div class="dataTitle">{{dataItem.title}}</div>
 				</div>
 			</div>
 		</div>
-		<van-popup v-model:show="showDate" :overlay="false" position="bottom">
-			<van-datetime-picker v-model="currentDate" type="date" title="选择日期" :min-date="minDate" :max-date="maxDate"
-				@cancel="showDate=false;$refs.dateDrop.toggle(false)" @confirm="activeDate" />
-		</van-popup>
-		<org-list ref="orgList" :type="2" :overlay="false" @close="closeOrg" @activeOrg="activeOrg" />
-		<cust-list ref="custList" :overlay="false" :orgId="chooseOrg.value" @close="closeCust"
-			@activeCust="activeCust" />
 		<div class="bottomLine">
 			<div class="bottomText">到底啦，我是有底线的</div>
 		</div>
+		<div class="bottomZW"></div>
+		<van-popup v-model:show="showDate" position="bottom">
+			<van-datetime-picker v-model="currentDate" type="date" title="选择日期" :min-date="minDate" :max-date="maxDate"
+				@cancel="showDate=false;$refs.dateDrop.toggle(false)" @confirm="activeDate" />
+		</van-popup>
+		<org-list ref="orgList" :type="2" @close="closeOrg" @activeOrg="activeOrg" />
+		<customer-list ref="custList" @close="closeCust" @activeCust="activeCust" />
+		<van-popup v-model:show="showDetailBox" position="bottom" :style="{ height: '70%' }" round >
+			<div class="detailTitle">详情</div>
+			<div class="detailItem">
+				<div class="detailItem_child">机构</div>
+				<div class="detailItem_child">工号</div>
+				<div class="detailItem_child">姓名</div>
+			</div>
+			<div class="detailList">
+				<div class="detailItem" v-for="(detailItem,i) in detailList" :key="'detailItem'+i">
+					<div class="detailItem_child">{{detailItem.orgName}}</div>
+					<div class="detailItem_child">{{detailItem.userId}}</div>
+					<div class="detailItem_child">{{detailItem.userName}}</div>
+				</div>
+			</div>
+		</van-popup>
 	</div>
 </template>
 
@@ -141,17 +144,24 @@
 	} from "../../request/index.js";
 	import {
 		queryCmrcOpportRankList,
+		queryCustMaintainInfo,
 		// custServiceDetail
 	} from "../../request/market.js";
 	import {
+		queryCustMgrSticReport,
+		queryCustMgrSticLoginDtl
+	} from "../../request/report.js";
+	import {
 		Toast
 	} from "vant";
+	import customerList from "../../components/common/customerList.vue";
+	import moment from "moment";
 	export default {
 		data() {
 			return {
-				reBang:true,
-				chengJiaoBang:false,
-				haoPingBang:false,
+				reBang: true,
+				chengJiaoBang: false,
+				haoPingBang: false,
 				swipeImg: [
 					require('../../assets/image/tabbar_cust_main_swipe1.png'),
 					require('../../assets/image/tabbar_cust_main_swipe1.png'),
@@ -239,7 +249,7 @@
 				busiBdValue: ["商户有效率提升", "金卡客户数提升", "VIP客户提升-代发客群"],
 				active: 0,
 				dataDate: "",
-				dataDateS:'',
+				dataDateS: '',
 				showDate: false,
 				currentDate: "",
 				minDate: new Date(2020, 0, 1),
@@ -249,42 +259,47 @@
 					value: ""
 				},
 				chooseCust: {
-					custManagerName: "客户经理",
-					custManagerID: ""
+					empName: "客户经理",
+					empId: ""
 				},
 				list1: [{
 						title: "商机跟进数",
-						value: "3"
+						value: ""
 					},
 					{
 						title: "提醒阅读数",
-						value: "0"
+						value: ""
 					},
 					{
 						title: "必办完成数",
-						value: "0"
+						value: ""
 					},
 					{
 						title: "潜客录入数",
-						value: "6"
+						value: ""
 					},
 				],
 				list2: [{
-						title: "已登录人数",
-						value: "21"
+						title: "登录人数",
+						value: ""
 					},
 					{
 						title: "未登录人数",
-						value: "36"
+						value: ""
 					},
-				]
+				],
+				showDetailBox: false,
+				detailList: [],
 			}
+		},
+		components: {
+			customerList
 		},
 		methods: {
 			// getbiBan(){
 			// 	custServiceDetail(null, (res) => {
 			// 		if (res.data) {
-						
+
 			// 			console.log('res.data1111',res.data)
 
 			// 		} else {
@@ -294,23 +309,19 @@
 			// 		this.loading = false;
 			// 	});
 			// },
-			getCmrcOpportRankList(etlDt){
+			getCmrcOpportRankList(etlDt) {
 				let params = {
 					pageNum: '1',
 					pageSize: "3",
-					etlDt:etlDt,
+					etlDt: etlDt,
 					orderField: this.orderField,
 				};
 				this.params = JSON.stringify(params);
-				console.log('params',params)
 				queryCmrcOpportRankList(params, (res) => {
 					if (res.data) {
-						this.busiBdValue=res.data.records
-						console.log('res.data',res.data)
-
+						this.busiBdValue = res.data.records
 					} else {
 						Toast.fail("审批失败");
-
 					}
 					this.loading = false;
 				});
@@ -318,21 +329,21 @@
 			changeBusiBdTab(i) {
 				if (this.busiBdIndex == i) return;
 				this.busiBdIndex = i;
-				if(this.busiBdIndex=='0'){
-					this.orderField='HOT_LIST_RANK'
-					this.reBang=true
-					this.chengJiaoBang=false
-					this.haoPingBang=false
-				}else if(this.busiBdIndex=='1'){
-					this.orderField='DEAL_NUM_RANK'
-					this.reBang=false
-					this.chengJiaoBang=true
-					this.haoPingBang=false
-				}else{
-					this.orderField='LAIM_SCORE_RANK'
-					this.reBang=false
-					this.chengJiaoBang=false
-					this.haoPingBang=true
+				if (this.busiBdIndex == '0') {
+					this.orderField = 'HOT_LIST_RANK'
+					this.reBang = true
+					this.chengJiaoBang = false
+					this.haoPingBang = false
+				} else if (this.busiBdIndex == '1') {
+					this.orderField = 'DEAL_NUM_RANK'
+					this.reBang = false
+					this.chengJiaoBang = true
+					this.haoPingBang = false
+				} else {
+					this.orderField = 'LAIM_SCORE_RANK'
+					this.reBang = false
+					this.chengJiaoBang = false
+					this.haoPingBang = true
 				}
 				this.getCmrcOpportRankList(this.dataDateS)
 
@@ -340,9 +351,9 @@
 			// 打开商机热榜
 			showMore() {
 				this.$router.push({
-					name:'shangJiHot',
-					query:{
-						etlDt:this.dataDateS
+					name: 'shangJiHot',
+					query: {
+						etlDt: this.dataDateS
 					}
 				})
 			},
@@ -423,22 +434,17 @@
 						value: ""
 					}
 				};
-				this.chooseCust = {
-					custManagerName: "客户经理",
-					custManagerID: ""
-				};
-				this.$refs.custList.clear();
 				this.$refs.orgDrop.toggle(false);
 				this.getData();
 			},
 			activeCust(custMsg) {
-				if (custMsg.custManagerID) {
+				if (custMsg.empId) {
 					this.chooseCust = custMsg
 				} else {
 					this.chooseCust = {
-						custManagerName: "客户经理",
-						custManagerID: ""
-					};
+						empName: "客户经理",
+						empId: ""
+					}
 				};
 				this.getData();
 			},
@@ -450,8 +456,96 @@
 				this.$refs.dateDrop.toggle(false);
 				this.getData();
 			},
+			changeDataTab() {
+				this.$refs.orgList.clearOrg();
+				this.chooseOrg = {
+					text: "选择机构",
+					value: ""
+				};
+				this.chooseCust = {
+					empName: "客户经理",
+					empId: ""
+				};
+				this.getData();
+			},
 			getData() {
+				this.list1.forEach(item => item.value = "-");
+				this.list2.forEach(item => item.value = "-");
+				switch (this.active) {
+					case 0:
+						queryCustMaintainInfo({
+							dataDate: moment(this.currentDate).format('YYYYMMDD'),
+							orgID: this.chooseOrg.value,
+							custManager: this.chooseCust.empId,
+						}, (res) => {
+							if (res.data) {
+								this.list1.forEach((item) => {
+									switch (item.title) {
+										case "商机跟进数":
+											item.value = res.data.mktNum;
+											break;
+										case "提醒阅读数":
+											item.value = res.data.warReadNum;
+											break;
+										case "必办完成数":
+											item.value = res.data.mbNum;
+											break;
+										case "潜客录入数":
+											item.value = res.data.potentialNum;
+											break;
+									}
+								})
+							}
+						})
+						break;
+					case 1:
+						queryCustMgrSticReport({
+							dataDate: moment(this.currentDate).format('YYYYMMDD'),
+							orgID: this.chooseOrg.value,
+						}, (res) => {
+							if (res.data) {
+								this.list2.forEach((item) => {
+									switch (item.title) {
+										case "登录人数":
+											item.value = res.data.loginCnt.toLocaleString();
+											break;
+										case "未登录人数":
+											item.value = res.data.noLoginCnt.toLocaleString();
+											break;
+									}
+								})
+							}
+						})
+						break;
+				}
 
+			},
+			showDetail(item) {
+				if(item.value==0||item.value=="-"){
+					Toast("暂无详情数据");
+					return;
+				};
+				Toast.loading({
+					message: "正在加载",
+					forbidClick: true,
+					duration: 0
+				});
+				var params = {
+					etlDt: moment(this.currentDate).format('YYYYMMDD'),
+					orgID: this.chooseOrg.value,
+					isLogin: item.title=="登录人数"?"1":"0",
+					pageSize: "9999",
+					pageNum: "1"
+				}
+				queryCustMgrSticLoginDtl(params, (res) => {
+					if (res.data && res.data.records) {
+						this.detailList = res.data.records;
+						Toast.clear();
+						this.showDetailBox = true;
+					} else {
+						Toast.fail("详情数据为空")
+					}
+				});
 			},
 		},
 		async mounted() {
@@ -504,11 +598,10 @@
 			})
 			let showMenu = this.menuList1.map(item => item.show);
 			this.fiveMenu = showMenu.length > 8;
-			querySysDate({},(res) => {
+			querySysDate({}, (res) => {
 				if (res.data) {
-					console.log('querySysDate',res.data)
-					this.dataDateS=res.data
-					this.orderField='HOT_LIST_RANK'
+					this.dataDateS = res.data
+					this.orderField = 'HOT_LIST_RANK'
 					this.getCmrcOpportRankList(res.data)
 					this.dataDate = res.data.slice(0, 4) + "." + res.data.slice(4, 6) + "." + res.data.slice(6,
 						8);
@@ -525,8 +618,7 @@
 					Toast.fail("系统跑批日期数据为空")
 				}
 			})
-			console.log('this.dataDate',this.dataDate)
-			
+
 		},
 	}
 </script>
@@ -543,7 +635,7 @@
 		background-color: #FFFFFF;
 		margin-top: calc(calc(constant(safe-area-inset-top) + 0.5rem) * -1);
 		margin-top: calc(calc(env(safe-area-inset-top) + 0.5rem) * -1);
-		padding-bottom: 0.2rem;
+		padding-bottom: 0.4rem;
 	}
 
 	.menuOutBox {
@@ -718,7 +810,7 @@
 	.bottomLine {
 		height: 0.2rem;
 		width: 60%;
-		margin: 0.1rem auto;
+		margin: 0.05rem auto;
 		border-bottom: solid 0.01rem #F4F4F4;
 		position: relative;
 		display: flex;
@@ -742,6 +834,23 @@
 		margin: 0.1rem 3.2%;
 		padding-bottom: 0.18rem;
 		position: relative;
+	}
+
+	.dataOutBox :deep(.van-dropdown-menu__bar) {
+		width: 100%;
+		box-sizing: border-box;
+		padding: 0 0.12rem;
+	}
+
+	.dataOutBox :deep(.van-dropdown-menu__item) {
+		flex: inherit;
+		max-width: calc(calc(100% - 0.2rem) / 3);
+		min-width: 25%;
+		margin-right: 0.1rem;
+	}
+
+	.dataOutBox :deep(.van-dropdown-menu__item:last-child) {
+		margin-right: 0;
 	}
 
 	.dataBox {
@@ -788,42 +897,88 @@
 		top: 0.15rem;
 		right: 0.25rem;
 	}
+
 	.shangJiCardOutBox {
 		border-bottom: solid 1px #F2F2F2;
 		padding: 0.15rem 0;
 		width: 90%;
 		margin: 0 auto;
-        
+
 	}
 
 	.shangJiCardOutBox:last-child {
 		border: 0;
 	}
-	.shangJiHeader{
+
+	.shangJiHeader {
 		display: flex;
-        align-items: center;
+		align-items: center;
 		font-size: 0.15rem;
 		text-align: left;
 		max-width: 80%;
 	}
-	.shangJiTitle{
+
+	.shangJiTitle {
 		font-size: 0.13rem;
 		font-weight: 500;
 		color: #262626;
 	}
-	.textStyle{
+
+	.textStyle {
 		font-size: 0.11rem;
 		font-family: PingFangSC-Medium, PingFang SC;
 		font-weight: 500;
 		color: #262626;
 	}
-	.shangJiCreator{
+
+	.shangJiCreator {
 		/* height: 0.28rem; */
 		margin-top: 0.06rem;
 		/* margin-bottom: 0.0rem; */
 		text-align: left;
 		margin-left: 0.26rem;
 		font-size: 0.11rem;
-		color:#BFBFBF ;
+		color: #BFBFBF;
+	}
+	
+	.detailTitle {
+		width: 100%;
+		height: 0.45rem;
+		box-shadow: inset 0rem 0.01rem 0rem 0rem #E7E9EC;
+		font-size: 0.14rem;
+		font-family: PingFangSC-Regular, PingFang SC;
+		font-weight: 400;
+		color: #262626;
+		line-height: 0.45rem;
+	}
+	
+	.detailList {
+		width: 100%;
+		height: calc(100% - 1.01rem - constant(safe-area-inset-bottom));
+		height: calc(100% - 1.01rem - env(safe-area-inset-bottom));
+		overflow: auto;
+	}
+	
+	.detailItem {
+		width: 3.75rem;
+		height: 0.56rem;
+		box-shadow: inset 0rem 0.01rem 0rem 0rem #E7E9EC;
+		display: flex;
+		flex-wrap: nowrap;
+		align-items: center;
+		font-size: 0.15rem;
+		font-family: PingFangSC-Regular, PingFang SC;
+		font-weight: 400;
+		color: #262626;
+		padding: 0 0.12rem;
+	}
+	
+	.detailItem_child {
+		width: calc(100% / 3);
+		overflow:hidden;
+		text-overflow:ellipsis; 
+		display:-webkit-box;
+		-webkit-box-orient:vertical; 
+		-webkit-line-clamp:2;
 	}
 </style>

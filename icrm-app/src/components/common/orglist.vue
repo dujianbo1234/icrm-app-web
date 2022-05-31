@@ -82,6 +82,9 @@
 				this.show = false;
 				this.$emit("close");
 			},
+			clearOrg() {
+				this.chooseOrg = {};
+			},
 			checkOrg(item) {
 				if (item.value == "-1") return;
 				this.chooseOrg = item;
