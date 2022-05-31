@@ -1,7 +1,7 @@
 <template>
   <!-- 柱状图组件 -->
   <div class="echarts-barNew">
-    <div class="echarts" ref="echarts"></div>
+    <div class="echarts" ref="echart"></div>
     <div class="title">
       <span class="left">
         <span class="timeText" v-if="timeUnit == 0">{{moment(axisValue).format('YYYY-MM-DD')}}</span>
@@ -139,7 +139,7 @@ export default {
   methods: {
     moment,
     initData(xAxis, series) {
-      let myChart = this.$echarts.init(this.$refs.echarts);
+      let myChart = this.$echarts.init(this.$refs.echart);
       // 使用刚指定的配置项和数据显示图表
       this.option.xAxis.data = xAxis
       this.option.series[0].data = this.setNum(series)
@@ -170,7 +170,7 @@ export default {
       return newArr
     },
     numFliter(value, tip){
-      if(value == undefined){
+      if(value == undefined && value == NaN){
         return '0'
       }
       value = this.unit == "元" ? Number(value).toFixed(2) : Number(value).toFixed(0)
