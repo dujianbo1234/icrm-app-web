@@ -143,7 +143,7 @@ export default {
       this.option.xAxis.data = xAxis
       this.option.series[0].data = this.setNum(series)
       // myChart.clear()
-      myChart.setOption(this.option);
+      myChart && myChart.setOption(this.option);
     },
     /* 判断每条数据显示的颜色 */
     setNum(arr){

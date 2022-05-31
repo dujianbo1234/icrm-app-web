@@ -541,10 +541,8 @@ export default {
     },
     async queryTagList(custNum){
       this.tagList = []
-      let definedTag = await this.queryDefinedTag(custNum)
-      let custTag = await this.queryCustTag(custNum)
-      definedTag()
-      custTag()
+      await this.queryDefinedTag(custNum)
+      await this.queryCustTag(custNum)
       // await this.queryDefinedTag(custNum)
       // this.queryCustTag(custNum)
     },
