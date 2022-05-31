@@ -3,7 +3,7 @@
     <!-- title选择 -->
     <van-tabs class="cust" v-model:active="active" :shrink="true" @change="change">
       <van-tab v-for="(item, index) in dataArr" :title="item" :key="index">
-        <echartsBar ref="echartsBar" :yName="['增长人数','增长(万元)','增长(元)'][type]" :unit="['人','万元','元'][type]" :numType="numType" :numUnit="numUnit" :timeUnit="timeUnit" :barData="barData"></echartsBar>
+        <echarts-bar ref="echartsBar" :yName="['增长人数','增长(万元)','增长(元)'][type]" :unit="['人','万元','元'][type]" :numType="numType" :numUnit="numUnit" :timeUnit="timeUnit" :barData="barData"></echarts-bar>
       </van-tab>
     </van-tabs>
     <!-- 下方月份选择 -->
@@ -53,7 +53,6 @@ export default {
   methods: {
     // 选择title类型
     change(v){
-      console.log(v)
       this.$emit('change', v)
     },
     // 选择月份时重置title

@@ -377,9 +377,9 @@ export default {
         { name: '信托余额', a: '', b: '', c: '' },
         { name: '合计', a: '', b: '', c: '' }
       ],
-      barData: {},
-      aumData: {},
-      loanData: {},
+      barData: { series : [], xAxis: [] },
+      aumData: { series : [], xAxis: [] },
+      loanData: { series : [], xAxis: [] },
       barDataxData: [],
       aumDataxData: [],
       loanDataxData: [],

@@ -24,7 +24,10 @@ export default {
     barData: {
       type: Object,
       default: ()=>{
-        return {}
+        return {
+          xAxis: [],
+          series: []
+        }
       }
     },
     timeUnit: Number,
@@ -47,6 +50,7 @@ export default {
   },
   watch: {
     barData(newData, oldData){
+      console.log('newData',newData)
       this.initData(newData.xAxis, newData.series)
     }
   },
