@@ -31,7 +31,7 @@
           <span>筛选结果：共{{formatNums(total)}}条数据 </span>
         </div>
         <div class="sendAll" v-if="msgOrPhone" @click="sendFrom">
-          <span v-if="showBatchSend">取消</span>
+          <span v-if="showBatchSend">取消批量发送</span>
           <span v-else>批量发送</span>
         </div>
         <div v-else></div>
@@ -72,11 +72,11 @@
               <div class="custItem1_2_1">{{item.cstName}}</div>
               <div class="custItem1_2_2" :style="`background-image:url(${require(`@/assets/image/business_chooseCust_type${item.svcLvlCount || 0}.png`)})`"></div>
               <div class="custItem1_2_3">
-                <template v-for="(text, j) in ['vipCstFlg','agentPayCstFlg', 'basicCstCnt', 'merntCstFlg', 'ioinHoldLoan']">
-                  <div :class="text" v-if="item[text] =='1'" :key="j">{{['财','代','新','商','贷'][j]}}</div>
+                <template v-for="(text, j) in ['vipCstFlg','agentPayCstFlg', 'basicCstCnt', 'merntCstFlg', 'ioinHoldLoan', 'crdtCrdCstFlg']">
+                  <div :class="text" v-if="item[text] =='1'" :key="j">{{['财','代','新','商','贷','信'][j]}}</div>
                 </template>
-                <template v-for="(text, s) in ['ioinSgnAlpy','ioinSgnWchtPymt', 'ioinSgnYsf']" :key="s">
-                  <van-icon :name="require(`@/assets/image/business_chooseCust_${['zfb','wx','ysf'][s]}${['.png','_a.png'][item[text] || 0]}`)" size="16" style="margin-right: 0.04rem;" />
+                <template v-for="(text, s) in ['ioinSgnMobbank','ioinSgnAlpy','ioinSgnWchtPymt', 'ioinSgnYsf']" :key="s">
+                  <van-icon :name="require(`@/assets/image/business_chooseCust_${['jjyh','zfb','wx','ysf'][s]}${['.png','_a.png'][item[text] || 0]}`)" size="16" style="margin-right: 0.04rem;" />
                 </template>
               </div>
             </div>
@@ -90,7 +90,7 @@
             <template v-for="cust in custItemArr" :key="cust.key">
               <div class="custItem2_child">
                 <span class="custItem2_childName">{{cust.value}}：</span>
-                <span class="custItem2_childValue">{{formatNum(item[cust.key] || 0)}}万元</span>
+                <span class="custItem2_childValue">{{formatNumW(item[cust.key] || 0)}}万元</span>
               </div>
             </template>
           </div>
@@ -104,8 +104,13 @@
     </van-list>
     <div style=" height: calc(constant(safe-area-inset-bottom) + 0.6rem); height: calc(env(safe-area-inset-bottom) + 0.6rem);" v-show="showBatchSend"></div>
     <div class="sendMsgBtnBox" v-if="showBatchSend">
-      <div class="sendMsgBtn" @click="msgBatchSend(true)">全部发送</div>
-      <div class="sendMsgBtn" @click="msgBatchSend(false)">批量发送</div>
+      <van-checkbox v-model="checkAll" ref="checkAll" @click="chooseAll">
+        <span style="color: #8C8C8C; font-size: 0.14rem;">全选</span>
+      </van-checkbox>
+      <div class="sendBox">
+        <div class="sendMsgBtn" style="margin-right: 0.1rem;" @click="msgBatchSend(false)">批量发送</div>
+        <div class="sendMsgBtn" @click="msgBatchSend(true)">全部发送</div>
+      </div>
     </div>
     <!-- 选择机构组件 -->
     <org-list ref="orgList" :type="2" @close="closeOrg" @activeOrg="activeOrg" />
@@ -115,7 +120,7 @@
 </template>
 <script>
 import { getSysCodeByType } from "../../request/common.js";
-import { formatNum, formatNums } from "@/api/common.js";
+import { formatNumW , formatNums } from "@/api/common.js";
 import { custServiceAdd, queryCustSearchList } from "@/request/custinfo.js";
 import { Toast } from "vant";
 import sendMessage from "../../components/common/sendMessage.vue";
@@ -241,10 +246,19 @@ export default {
     // }
   },
   methods: {
-    formatNum,
+    formatNumW,
     formatNums,
     /* 存量客户查询接口 */
     queryList(){
+      if (this.searchValue) {
+        if (this.searchValue.length == 11) {
+          this.params.ctcTel = this.searchValue;
+        } else if (this.searchValue.length == 18) {
+          this.params.certNum = this.searchValue;
+        } else {
+          this.params.cstName = this.searchValue;
+        }
+      }
       this.finished = false;
       this.loading = true;
       // this.total = 0
@@ -253,7 +267,6 @@ export default {
         forbidClick: true,
         duration: 0,
       });
-      console.log('this.params',this.params)
       queryCustSearchList(this.params, (res) => {
         if (res.data && res.data.records) {
           this.total = res.data.total;
@@ -302,15 +315,9 @@ export default {
     getCustList() {
       this.pageIndex++;
       this.params.pageNum = this.pageIndex.toString()
-      if (this.searchValue) {
-        if (this.searchValue.length == 11) {
-          this.params.ctcTel = this.searchValue;
-        } else if (this.searchValue.length == 18) {
-          this.params.certNum = this.searchValue;
-        } else {
-          this.params.cstName = this.searchValue;
-        }
-      }
+      this.params.ctcTel = ''
+      this.params.certNum = ''
+      this.params.cstName = ''
       this.queryList()
     },
     gaveCall(item, type) {
@@ -361,6 +368,10 @@ export default {
           shrtmsgCnl: "1"
         }
       }else{
+        if(this.chooseItems && this.chooseItems.length < 1){
+          Toast.fail('请选择客户!')
+          return
+        }
         let list = this.chooseItems.map(item => {
           return {
             cstName: item.cstName,
@@ -401,6 +412,9 @@ export default {
     },
     /* 初始化查询条件后查询 */
     initQueryList(){
+      this.params.ctcTel = ''
+      this.params.certNum = ''
+      this.params.cstName = ''
       this.pageIndex = 0;
       this.custList = [];
       this.showBatchSend = false;
@@ -419,6 +433,10 @@ export default {
 					query: {custNum: item.custNum}
 				})
       }
+    },
+    /* 全选 */
+    chooseAll(){
+			this.$refs.checkboxGroup.toggleAll(this.checkAll);
     }
   },
 };
@@ -559,7 +577,8 @@ export default {
               .agentPayCstFlg,
               .basicCstCnt,
               .merntCstFlg,
-              .ioinHoldLoan{
+              .ioinHoldLoan,
+              .crdtCrdCstFlg {
                 width: 0.19rem;
                 height: 0.16rem;
                 border-radius: 0.02rem;
@@ -589,6 +608,10 @@ export default {
               .ioinHoldLoan {
                 background-color: rgba(55,205,55,0.08);
                 color: #13AD13;
+              }
+              .crdtCrdCstFlg {
+                background-color: rgba(176,177,255,0.08);
+                color: #B0B1FF
               }
           }
         }
@@ -728,18 +751,18 @@ export default {
   left: 0;
   background-color: #ffffff;
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
   align-items: center;
 }
-
+.sendBox {
+  display: flex;
+}
 .sendMsgBtn {
-  width: 42.5%;
-  line-height: 0.35rem;
-  font-size: 0.15rem;
-  border: solid 1px #3399ff;
-  background-color: #e2f7ff;
-  color: #3399ff;
+  font-size: 0.14rem;
+  padding: 0.1rem 0.15rem;
+  background-color: #026DFF;
+  color: #fff;
   text-align: center;
-  border-radius: 1.599147rem;
+  border-radius: 0.04rem;
 }
 </style>
