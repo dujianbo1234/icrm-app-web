@@ -23,11 +23,11 @@
 						<div class="orderItem" v-for="(orderItem,i) in orderList" :key="'orderItem'+i"
 							@click="changeOrder(i)">
 							<span>{{orderItem}}</span>
-							<van-icon v-if="i!=orderIndex" :name="require('../../assets/image/cust_zyqk_order0.png')"
-								size="10" />
-							<van-icon v-else-if="orderType" :name="require('../../assets/image/cust_zyqk_order1.png')"
-								size="10" />
-							<van-icon v-else :name="require('../../assets/image/cust_zyqk_order2.png')" size="10" />
+							<van-icon v-if="i!=orderIndex" :name="require('../../assets/image/common_order_none.png')"
+								size="20" />
+							<van-icon v-else-if="orderType" :name="require('../../assets/image/common_order_down.png')"
+								size="20" />
+							<van-icon v-else :name="require('../../assets/image/common_order_up.png')" size="20" />
 						</div>
 					</div>
 				</div>

@@ -13,9 +13,9 @@
       <div class="orderList">
         <div class="orderItem" v-for="(item, index) in orderList" :key="item.key" @click="changeOrder(item, index)">
           <span>{{ item.value }}</span> 
-          <van-icon v-if="params.orderType == `${item.key}D`" :name="require('@/assets/image/cust_zyqk_order1.png')" size="10"/>
-          <van-icon v-else-if="params.orderType == `${item.key}Z`" :name="require('@/assets/image/cust_zyqk_order2.png')" size="10"/>
-          <van-icon v-else :name="require('@/assets/image/cust_zyqk_order0.png')" size="10"/>
+          <van-icon v-if="params.orderType == `${item.key}D`" :name="require('@/assets/image/common_order_down.png')" size="20"/>
+          <van-icon v-else-if="params.orderType == `${item.key}Z`" :name="require('@/assets/image/common_order_up.png')" size="20"/>
+          <van-icon v-else :name="require('@/assets/image/common_order_none.png')" size="20"/>
         </div>
       </div>
       <!-- 选择tabs -->
