@@ -1,7 +1,7 @@
 export default [{
-	path: '/chenxihui',
-	name: 'chenxihui',
-	component: () => import('@/views/index/chenxihui.vue')
+	path: '/MorningEvening',
+	name: 'MorningEvening',
+	component: () => import('@/views/index/MorningEvening.vue')
 }, {
 	path: '/message',
 	name: 'message',

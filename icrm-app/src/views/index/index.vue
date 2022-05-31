@@ -12,7 +12,7 @@
           <div class="topTips">{{manifesto}}</div>
         </div>
         <div class="topMsgBar">
-          <div class="msgBarItem" @click="$router.push('/chenxihui')">
+          <div class="msgBarItem" @click="morningEvening">
             <i class="msg-icon icon-meeting"></i>晨夕会
           </div>
           <i class="msg-line"></i>
@@ -1096,6 +1096,10 @@ export default {
           this.manifesto = res.data.manifesto
         }
       })
+    },
+    /* 晨夕会 */
+    morningEvening(){
+      this.$router.push('/MorningEvening')
     }
   },
   mounted() {

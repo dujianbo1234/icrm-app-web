@@ -173,7 +173,7 @@ export default {
 			params: {
 				pageSize: "10",
 				pageNum: "1",
-				orderType: "",      // 排序
+				// orderType: "",      // 排序
 				cstName: "",        // 客户名称
         svcLvl: '',         // 服务等级
         ctcTel: "",         // 联系电话
@@ -251,10 +251,8 @@ export default {
     /* 存量客户查询接口 */
     queryList(){
       if (this.searchValue) {
-        if (this.searchValue.length == 11) {
-          this.params.ctcTel = this.searchValue;
-        } else if (this.searchValue.length == 18) {
-          this.params.certNum = this.searchValue;
+        if (this.searchValue.length == 6) {
+      
         } else {
           this.params.cstName = this.searchValue;
         }
@@ -288,7 +286,7 @@ export default {
 			this.params = {
 				pageSize: "10",
 				pageNum: "1",
-				orderType: "",                    // 排序
+				// orderType: "",                    // 排序
 				cstName: "",                      // 客户名称
         svcLvl: '',                       // 服务等级
         ctcTel: "",                       // 联系电话
@@ -315,8 +313,6 @@ export default {
     getCustList() {
       this.pageIndex++;
       this.params.pageNum = this.pageIndex.toString()
-      this.params.ctcTel = ''
-      this.params.certNum = ''
       this.params.cstName = ''
       this.queryList()
     },
@@ -412,8 +408,6 @@ export default {
     },
     /* 初始化查询条件后查询 */
     initQueryList(){
-      this.params.ctcTel = ''
-      this.params.certNum = ''
       this.params.cstName = ''
       this.pageIndex = 0;
       this.custList = [];
