@@ -416,6 +416,10 @@
 				}, (res) => {
 					Toast.success(res.msg);
 					this.showVisit = false;
+					this.pageIndex = 0;
+					this.loading = true;
+					this.mustDoList = [];
+					this.onLoad();
 					Toast.clear();
 				})
 			},
