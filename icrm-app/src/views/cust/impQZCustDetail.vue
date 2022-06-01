@@ -45,7 +45,7 @@
 			<van-step v-if="curTage1List.length">
 				<div class="YXTitle">意向阶段</div>
 				<div class="YXItem" v-for="(item,i) in curTage1List" :key="'curTage1Item'+i">
-					<div class="YXDesc" :style="{'-webkit-line-clamp':item.showDesc?'100':'15'}" @click="item.showDesc=!item.showDesc">
+					<div class="YXDesc" :style="{'-webkit-line-clamp':item.showDesc?'100':'5'}" @click="item.showDesc=!item.showDesc">
 						{{item.tageDesc}}</div>
 					<div class="YXTime">跟进人：{{item.cstMagName}}（{{item.cstMagNo}}）</div>
 					<div class="YXTime">跟进时间：{{item.markTime}}</div>
@@ -69,7 +69,7 @@
 			<van-step v-if="curTage2List.length">
 				<div class="YXTitle">促成阶段</div>
 				<div class="YXItem" v-for="(item,i) in curTage2List" :key="'curTage2Item'+i">
-					<div class="YXDesc" :style="{'-webkit-line-clamp':item.showDesc?'100':'15'}" @click="item.showDesc=!item.showDesc">
+					<div class="YXDesc" :style="{'-webkit-line-clamp':item.showDesc?'100':'5'}" @click="item.showDesc=!item.showDesc">
 						{{item.tageDesc}}</div>
 					<div class="YXTime">跟进人：{{item.cstMagName}}（{{item.cstMagNo}}）</div>
 					<div class="YXTime">跟进时间：{{item.markTime}}</div>
@@ -93,7 +93,7 @@
 			<van-step v-if="curTage3List.length">
 				<div class="YXTitle">已完成</div>
 				<div class="YXItem" v-for="(item,i) in curTage3List" :key="'curTage3Item'+i">
-					<div class="YXDesc" :style="{'-webkit-line-clamp':item.showDesc?'100':'15'}" @click="item.showDesc=!item.showDesc">
+					<div class="YXDesc" :style="{'-webkit-line-clamp':item.showDesc?'100':'5'}" @click="item.showDesc=!item.showDesc">
 						{{item.tageDesc}}</div>
 					<div class="YXTime">跟进人：{{item.cstMagName}}（{{item.cstMagNo}}）</div>
 					<div class="YXTime">跟进时间：{{item.markTime}}</div>
@@ -118,7 +118,7 @@
 			<van-step v-if="curTage4List.length">
 				<div class="YXTitle">已流失</div>
 				<div class="YXItem" v-for="(item,i) in curTage4List" :key="'curTage4Item'+i">
-					<div class="YXDesc" :style="{'-webkit-line-clamp':item.showDesc?'100':'15'}" @click="item.showDesc=!item.showDesc">
+					<div class="YXDesc" :style="{'-webkit-line-clamp':item.showDesc?'100':'5'}" @click="item.showDesc=!item.showDesc">
 						{{item.tageDesc}}</div>
 					<div class="YXTime">跟进人：{{item.cstMagName}}（{{item.cstMagNo}}）</div>
 					<div class="YXTime">跟进时间：{{item.markTime}}</div>

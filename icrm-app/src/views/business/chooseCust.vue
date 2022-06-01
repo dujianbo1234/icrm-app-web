@@ -157,7 +157,7 @@
 		</van-list>
 		<div class="bottomZW"></div>
 		<org-list ref="orgList" :type="2" @close="openOrgList=false" @activeOrg="activeOrg" />
-		<customer-list ref="custList" @close="openCustList=false" @activeCust="activeCust" />
+		<customer-list ref="custList" :orgId="chooseOrg.value" @close="openCustList=false" @activeCust="activeCust" />
 	</div>
 </template>
 
@@ -235,6 +235,10 @@
 						text: "选择机构",
 						value: ""
 					}
+				};
+				this.chooseCust = {
+					empName: "客户经理",
+					empId: ""
 				};
 				this.openOrgList = false;
 				this.pageIndex = 0;
