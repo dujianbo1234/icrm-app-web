@@ -47,7 +47,7 @@
         <div class="editBtn">编辑</div>
       </div>
       <div class="card">
-        <div class="audioTitle">正在播放：{{'录音2备份'}}</div>
+        <PlayAudio/>
       </div>
     </div>
     <!-- 会议照片 -->
@@ -87,9 +87,13 @@
 </template>
 
 <script>
+import PlayAudio from "@/components/common/PlayAudio.vue"
 import moment from 'moment';
 export default {
   name: 'MorningEvening',
+  components: {
+    PlayAudio
+  },
   data() {
     return {
       showWeekDetial: true,
@@ -203,11 +207,6 @@ export default {
     }
   }
   .audioManagement {
-    .audioTitle {
-      text-align: left;
-      color: #131313;
-      font-size: 0.15rem;
-    }
   }
   .addRecord {
     position: fixed;
