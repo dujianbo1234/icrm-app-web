@@ -173,6 +173,7 @@ export default {
 			params: {
 				pageSize: "10",
 				pageNum: "1",
+        belgCustMgr: '', // 客户号
 				// orderType: "",      // 排序
 				cstName: "",        // 客户名称
         svcLvl: '',         // 服务等级
@@ -252,7 +253,7 @@ export default {
     queryList(){
       if (this.searchValue) {
         if (this.searchValue.length == 6) {
-      
+          this.params.belgCustMgr = this.searchValue
         } else {
           this.params.cstName = this.searchValue;
         }
@@ -286,6 +287,7 @@ export default {
 			this.params = {
 				pageSize: "10",
 				pageNum: "1",
+        belgCustMgr: '',                  // 客户经理
 				// orderType: "",                    // 排序
 				cstName: "",                      // 客户名称
         svcLvl: '',                       // 服务等级
@@ -314,6 +316,7 @@ export default {
       this.pageIndex++;
       this.params.pageNum = this.pageIndex.toString()
       this.params.cstName = ''
+      this.params.belgCustMgr = ''
       this.queryList()
     },
     gaveCall(item, type) {
@@ -409,6 +412,7 @@ export default {
     /* 初始化查询条件后查询 */
     initQueryList(){
       this.params.cstName = ''
+      this.params.belgCustMgr = ''
       this.pageIndex = 0;
       this.custList = [];
       this.showBatchSend = false;
