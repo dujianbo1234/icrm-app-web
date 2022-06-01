@@ -48,6 +48,16 @@
       </div>
       <div class="card">
         <PlayAudio/>
+        <div class="audioList">
+          <div class="audioList_title">录音记录</div>
+          <div class="audioList_list">
+            <div>1</div>
+            <div>2</div>
+            <div>3</div>
+            <div>4</div>
+            <div>5</div>
+          </div>
+        </div>
       </div>
     </div>
     <!-- 会议照片 -->
@@ -207,6 +217,23 @@ export default {
     }
   }
   .audioManagement {
+    .audioList {
+      padding-top: 0.36rem;
+      font-size: 0.15rem;
+      color: #131313;
+      .audioList_title {
+        text-align: left;
+      }
+      .audioList_list {
+        width: 100%;
+        overflow: hidden;
+        &>div {
+          float: left;
+          width: 25%;
+          height: 1.025rem;
+        }
+      }
+    }
   }
   .addRecord {
     position: fixed;

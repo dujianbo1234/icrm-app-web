@@ -1,19 +1,19 @@
 <template>
-<div class="PlayAudio">
-  <div class="audioTitle">正在播放：{{ "录音2备份" }}</div>
-  <van-progress :percentage="percentage" :show-pivot="false" />
-  <div class="time">
-    <span>{{tiemInit(currentDuration)}}</span>
-    <span>{{tiemInit(totalDuration)}}</span>
+  <!-- 音频播放组件 -->
+  <div class="PlayAudio">
+    <div class="audioTitle">正在播放：{{ "录音2备份" }}</div>
+    <van-progress :percentage="percentage" :show-pivot="false" />
+    <div class="time">
+      <span>{{tiemInit(currentDuration)}}</span>
+      <span>{{tiemInit(totalDuration)}}</span>
+    </div>
+    <div class="playBtn">
+      <van-icon :name="require('@/assets/image/play_left.png')" size="0.2rem" @click="forwardBack(true)"/>
+      <van-icon :name="play ? 'pause-circle-o' : 'play-circle-o'" size="0.4rem" color="#1D70F5" @click="playBtn" style="padding: 0 0.35rem;"/>
+      <van-icon :name="require('@/assets/image/play_right.png')" size="0.2rem" @click="forwardBack(false)"/>
+    </div>
   </div>
-  <div class="playBtn">
-    <van-icon :name="require('@/assets/image/play_left.png')" size="0.2rem" @click="forwardBack(true)"/>
-    <van-icon :name="play ? 'pause-circle-o' : 'play-circle-o'" size="0.4rem" color="#1D70F5" @click="playBtn" style="padding: 0 0.35rem;"/>
-    <van-icon :name="require('@/assets/image/play_right.png')" size="0.2rem" @click="forwardBack(false)"/>
-  </div>
-</div>
 </template>
-
 <script>
 import moment from 'moment'
 export default {
@@ -86,6 +86,7 @@ export default {
 
 <style lang="less" scoped>
 .PlayAudio {
+  border-bottom: 0.005rem solid #EBEBEB;
   .audioTitle {
     text-align: left;
     color: #131313;
