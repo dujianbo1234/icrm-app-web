@@ -119,7 +119,7 @@
 				@cancel="showDate=false;$refs.dateDrop.toggle(false)" @confirm="activeDate" />
 		</van-popup>
 		<org-list ref="orgList" :type="2" @close="closeOrg" @activeOrg="activeOrg" />
-		<customer-list ref="custList" @close="closeCust" @activeCust="activeCust" />
+		<customer-list ref="custList" :orgId="chooseOrg.value" @close="closeCust" @activeCust="activeCust" />
 		<van-popup v-model:show="showDetailBox" position="bottom" :style="{ height: '70%' }" round >
 			<div class="detailTitle">详情</div>
 			<div class="detailItem">
@@ -433,6 +433,10 @@
 						text: "选择机构",
 						value: ""
 					}
+				};
+				this.chooseCust = {
+					empName: "客户经理",
+					empId: ""
 				};
 				this.$refs.orgDrop.toggle(false);
 				this.getData();

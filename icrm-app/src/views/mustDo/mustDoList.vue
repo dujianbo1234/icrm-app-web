@@ -72,7 +72,7 @@
 							<div class="msgValue1Right" >
 								<div class="msgValue1RightItem"
 									:style="{'background-color':mustDoItem.mastDoSt == '01'? '#52C41A': mustDoItem.mastDoSt == '02'? '#E93030': '#bfbfbf',}">
-									{{ mustDoItem.mastDoSt=='01'?'已办':mustDoItem.mastDoSt=='02'?'待办':'逾期'}}
+									{{ mustDoItem.mastDoSt=='01'?'已办':mustDoItem.mastDoSt=='02'?'待办':'逾期未办'}}
 								</div>
 							</div>
 						</div>
@@ -266,7 +266,7 @@
 				this.beginDate = moment(date).format('YYYY-MM-DD');
 				this.dateShow1 = false;
 				this.pageIndex = 0;
-				this.msgList = [];
+				this.mustDoList = [];
 				this.onLoad();
 			},
 			chooseDate2(date) {
@@ -278,21 +278,21 @@
 				this.endDate = moment(date).format('YYYY-MM-DD');
 				this.dateShow2 = false;
 				this.pageIndex = 0;
-				this.msgList = [];
+				this.mustDoList = [];
 				this.onLoad();
 			},
 			resetDate1() {
 				this.beginDate = "";
 				this.dateShow1 = false;
 				this.pageIndex = 0;
-				this.msgList = [];
+				this.mustDoList = [];
 				this.onLoad();
 			},
 			resetDate2() {
 				this.endDate = "";
 				this.dateShow2 = false;
 				this.pageIndex = 0;
-				this.msgList = [];
+				this.mustDoList = [];
 				this.onLoad();
 			},
 			activeOrg(orgValue) {
