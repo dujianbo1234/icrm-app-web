@@ -17,7 +17,7 @@
           </div>
           <i class="msg-line"></i>
           <div class="msgBarItem" @click="mustDo">
-            <i class="msg-icon icon-todo"></i>必办<span class="msgCount1">1</span>
+            <i class="msg-icon icon-todo"></i>必办<span  v-if="mustDoNum > 0" :class="mustDoNum > 9 ? 'msgCount2' : 'msgCount1'">{{showMustDoNum}}</span>
           </div>
           <i class="msg-line"></i>
           <div class="msgBarItem" @click="$router.push('/message')">
@@ -227,6 +227,9 @@ import { getEmpInfo } from "../../request/theme.js";
 import { queryBusiDt, queryHomeDayReportList, queryHomeOrgDayReportList, queryHomPeCstAum, queryHomPeCstBalDgrm, queryAst, queryCustomertrends, queryAUMGrowthTrend, queryLoanGrowthTrend } from "../../request/index.js";
 import { queryWarningRmdMgtSum } from "../../request/product.js";
 import { Toast } from "vant";
+import {
+		queryEmployeeMustDoList,
+	} from "../../request/market.js";
 import echartsPie from "../../components/common/echarts-pie.vue";
 import echartsLine from "../../components/common/echarts-line.vue";
 import echartsFunnel from "../../components/common/echarts-funnel.vue";
@@ -252,8 +255,10 @@ export default {
       dataDate: "",
       weekList: [],
       messageNum: 0,
+      mustDoNum:0,
       showWeekDetial: false,
       showMessageNum: "",
+      showMustDoNum:'',
       clickDalongShow: false,
       dalongShow: {
         title: '测试',
@@ -397,6 +402,29 @@ export default {
     },
   },
   methods: {
+    // 获取必办数量
+    getMustDoList(){
+      let params = {
+					belongOrg: '',
+					belgCustMgr: '',
+					mastDoBclass:'',
+					mastDoNm:'',
+					pageNum: '1',
+					pageSize: "10",
+					expDayStart:'',
+					expDayEnd:''
+				};
+				this.params = JSON.stringify(params);
+				queryEmployeeMustDoList(params, (res) => {
+					console.log('getMustDoList',params,'res',res)
+					if (res.data && res.data.records) {
+            this.mustDoNum = res.data.total;
+            this.showMustDoNum = res.data.total > 99 ? "99+" : res.data.total;
+					} else {
+						Toast.fail("必办列表为空");
+					}
+				});
+    },
     /* 开发中提示 */
     mustDo(){
      this.$router.push('mustDoList')
@@ -1129,6 +1157,7 @@ export default {
         this.customertrends(this.dataDate)     // 客户增长趋势
         this.aumGrowthTrend(this.dataDate)     // AUM增长趋势
         this.loanGrowthTrend(this.dataDate)    // 贷款增长趋势
+        this.getMustDoList()
       } else {
         Toast.fail("数据日期数据为空");
       }
