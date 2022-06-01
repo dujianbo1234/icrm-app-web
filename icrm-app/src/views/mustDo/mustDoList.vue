@@ -106,7 +106,7 @@
 			</div>
 		</van-list>
 		<org-list ref="orgList" type="2" @close="openOrgList=false" @activeOrg="activeOrg" />
-		<customer-list ref="custList" @close="openCustList=false" @activeCust="activeCust" />
+		<customer-list ref="custList" :orgId="chooseOrg.value" @close="openCustList=false" @activeCust="activeCust" />
 		<van-popup v-model:show="showVisit" round position="bottom" z-index="99999" :close-on-click-overlay="false"
 			style="background-color: #F8F8F8;height: 80%;">
 			<div class="popTitle">
@@ -165,26 +165,16 @@
 					:key="'file'+j" @click="openPhoto(this.$store.state.baseUrl + file.fileServerPath)">
 					<img :src="this.$store.state.baseUrl + file.fileServerPath">
 				</div>
-				<!-- <div class="followItem5_2" v-if="followItem.fileList.length>4&&!followItem.showAllPhoto"
-					@click="followItem.showAllPhoto=true">
-					<van-icon :name="require('../../assets/image/common_more.png')" color="##8C8C8C"
-						size="21" />
-				</div> -->
 			</div>
 			<div class="popPlate3">
 				<van-icon :name="require('../../assets/image/common_dingwei_blue.png')" size="15"
 					style="margin-right: 0.04rem;flex-shrink: 0;padding: 0.03rem 0;" />
-				<div class="popPlate3_1" v-if="openLocation">
-					<div class="popPlate3_1_1">{{dingwei.split("------")[1]?dingwei.split("------")[1]:dingwei.split("------")[0]}}</div>
-					<div class="popPlate3_1_2">{{dingwei.split("------")[1]?dingwei.split("------")[0]:""}}</div>
+				<div class="popPlate3_1">
+					<div class="popPlate3_1_1">{{followItem.onsiteInspLctng.split("------")[1]?followItem.onsiteInspLctng.split("------")[1]:followItem.onsiteInspLctng.split("------")[0]}}</div>
+					<div class="popPlate3_1_2">{{followItem.onsiteInspLctng.split("------")[1]?followItem.onsiteInspLctng.split("------")[0]:""}}</div>
 				</div>
-				<div class="popPlate3_1" v-else>
-					<div class="popPlate3_1_1">未获取到定位信息！</div>
-					<div class="popPlate3_1_2">请确认设备是否已开启APP定位权限及GPS信号是否正常</div>
-				</div>
-				<van-icon class="popPlate3_2" :name="require('../../assets/image/common_reset.png')" size="20"
-					@click="getLocation" />
 			</div>
+			
 		</van-popup>
 	</div>
 </template>
@@ -260,7 +250,8 @@
 				id:'',
 				newVisit:false,
 				followItem:{
-					fileList: []
+					fileList: [],
+					onsiteInspLctng:''
 				}
 			};
 		},
@@ -313,6 +304,10 @@
 						value: ""
 					}
 				};
+				this.chooseCust={
+					empName: "客户经理",
+					empId: ""
+				}
 				this.openOrgList = false;
 				this.pageIndex = 0;
 				this.loading = true;
@@ -853,8 +848,7 @@
 		color: #026DFF;
 	}
 	.popTime{
-		display: flex;
-		justify-content: right;
+		text-align: right;
 	}
 	.popTimeDate{
 		font-size: 0.14rem;
@@ -984,5 +978,6 @@
 	.followItem5_1>img {
 		width: 100%;
 	}
+	
 
 </style>

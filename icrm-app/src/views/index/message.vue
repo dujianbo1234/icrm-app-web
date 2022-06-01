@@ -95,7 +95,7 @@
 					<div class="msgCard">
 						<div class="msgCard1">
 							<div class="msgCard1_1 ycsl">{{msgItem.evName}}</div>
-							<div class="msgCard1_2">{{moment(msgItem.redDt).format('YYYY-MM-DD')}}</div>
+							<div class="msgCard1_2">{{moment(msgItem.rmdDt).format('YYYY-MM-DD')}}</div>
 							<div class="msgCard1_3">
 								<div class="msgCard1_3_item" v-for="i of Number(msgItem.impScore)"></div>
 							</div>
@@ -107,7 +107,7 @@
 							<div class="msgCard2_1">
 								<div class="msgCard2_1_1">
 									<div class="msgCard2_1_1_1">{{msgItem.rmdCntnt}}</div>
-									<div class="msgCard2_1_1_2" @click="phoneNo=msgItem.phoneNo;showCall=true">
+									<div class="msgCard2_1_1_2" @click="checkItem=msgItem;showCall=true">
 										<van-icon :name="require('../../assets/image/callPhone.png')" size="24" />
 									</div>
 									<div class="msgCard2_1_1_2" @click="openMbox([msgItem],false)">
@@ -147,7 +147,7 @@
 		</van-popup>
 		<div class="bottomZW"></div>
 		<org-list ref="orgList" :type="2" @close="openOrgList=false" @activeOrg="activeOrg" />
-		<customer-list ref="custList" @close="openCustList=false" @activeCust="activeCust" />
+		<customer-list ref="custList" :orgId="chooseOrg.value" @close="openCustList=false" @activeCust="activeCust" />
 		<van-calendar v-model:show="dateShow1" :show-confirm="false" :show-cancle="false" color="#026DFF"
 			:min-date="minDate" :max-date="maxDate" @confirm="chooseDate1">
 			<template #title>
@@ -169,19 +169,22 @@
 		<van-overlay :show="showCall">
 			<div class="plate6">
 				<div class="plate6_1">提示</div>
-				<div class="plate6_5">是否拨打电话：{{phoneNo}}</div>
+				<div class="plate6_5">是否拨打电话：{{checkItem.phoneNo}}</div>
 				<div class="plate6_4">
 					<div class="palte6_4_1" @click="showCall=false">取消</div>
 					<div class="palte6_4_2" @click="callCust">确定</div>
 				</div>
 			</div>
 		</van-overlay>
-		<send-message ref="sendMessage" />
+		<send-message ref="sendMessage" @commitSuccess="cancleCheck" />
 	</div>
 </template>
 
 <script>
 	import moment from "moment";
+	import {
+		custServiceAdd
+	} from "../../request/custinfo.js";
 	import {
 		getSysCodeByType
 	} from "../../request/common.js";
@@ -264,7 +267,7 @@
 				checked: [],
 				checkAll: false,
 				showCall: false,
-				phoneNo: "",
+				checkItem: {},
 			}
 		},
 		components: {
@@ -375,12 +378,26 @@
 				this.openMbox(list,false);
 			},
 			callCust() {
-				if (isNaN(this.phoneNo)) {
+				if (isNaN(this.checkItem.phoneNo)) {
 					Toast.fail("电话号码格式有误");
 					return;
-				}
+				};
 				AlipayJSBridge.call('callHandler', {
-					phone: this.phoneNo
+					phone: this.checkItem.phoneNo
+				},(res1)=>{
+					if(res1.status=="000000"){
+						custServiceAdd({
+							custName: this.checkItem.cstName,
+							custNo: this.checkItem.custNum,
+							mobileNum: this.checkItem.phoneNo,
+							communictionChannel: "02",
+							custType: '1',
+						}, (res2) => {
+							this.showCall = false;
+						})
+					}else{
+						Toast.fail(res1.msg)
+					}
 				});
 			},
 			openMbox(list, type) {
@@ -436,6 +453,10 @@
 						text: "选择机构",
 						value: ""
 					}
+				};
+				this.chooseCust = {
+					empName: "客户经理",
+					empId: ""
 				};
 				this.openOrgList = false;
 				this.pageIndex = 0;

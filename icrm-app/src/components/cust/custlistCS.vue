@@ -100,7 +100,7 @@
 					empName: "",
 					pageSize: "20",
 					pageNum: this.pageIndex.toString(),
-					orgID: this.orgId
+					orgId: this.orgId
 				}
 				if (Number(this.searchValue)) {
 					params.empName = "";
