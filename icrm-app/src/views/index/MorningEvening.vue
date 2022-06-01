@@ -18,11 +18,83 @@
     <div class="minutesMeeting">
       <div class="title">
         <div class="label">会议记录</div>
+        <div class="editBtn" @click="minutesEdit">{{minuDisabled ? '编辑' : '保存'}}</div>
+      </div>
+      <div class="card">
+        <div style="display: flex">
+          <el-input type="textarea" :rows="4" :disabled="minuDisabled" placeholder="请输入内容" v-model="textarea"></el-input>
+        </div>
+        <div class="minutesList">
+          <div>
+            <span>创建人</span>
+            <span>李白</span>
+          </div>
+          <div>
+            <span>机构</span>
+            <span>九江银行八里湖支行</span>
+          </div>
+          <div>
+            <span>创建时间</span>
+            <span>2021-12-01 08:00-10</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- 音频管理 -->
+    <div class="minutesMeeting">
+      <div class="title">
+        <div class="label">音频管理</div>
         <div class="editBtn">编辑</div>
       </div>
       <div class="card">
-        aaa
+        <div class="minutesList">
+          <div>
+            <span>创建人</span>
+            <span>李白</span>
+          </div>
+          <div>
+            <span>机构</span>
+            <span>九江银行八里湖支行</span>
+          </div>
+          <div>
+            <span>创建时间</span>
+            <span>2021-12-01 08:00-10</span>
+          </div>
+        </div>
       </div>
+    </div>
+    <!-- 会议照片 -->
+    <div class="minutesMeeting">
+      <div class="title">
+        <div class="label">会议照片</div>
+        <div class="editBtn">编辑</div>
+      </div>
+      <div class="card">
+        <div class="minutesList">
+          <div>
+            <span>创建人</span>
+            <span>李白</span>
+          </div>
+          <div>
+            <span>机构</span>
+            <span>九江银行八里湖支行</span>
+          </div>
+          <div>
+            <span>创建时间</span>
+            <span>2021-12-01 08:00-10</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- 新增记录 -->
+    <div class="addRecord">
+      <van-button class="addBtn" type="primary" block @click="addNewRecord">新增记录</van-button>
+    </div>
+    <!-- 这是底线 -->
+    <div class="bottomLine">
+      <span></span>
+      <div class="bottomText">到底啦，我是有底线的</div>
+      <span></span>
     </div>
   </div>
 </template>
@@ -33,11 +105,13 @@ export default {
   name: 'MorningEvening',
   data() {
     return {
-      showWeekDetial: false,
+      showWeekDetial: true,
       defaultDate: moment(),
       showTime: moment().format('YYYY年MM月DD日'),
       minDate: moment().subtract(3, 'month'),
       maxDate: moment(),
+      textarea: '',
+      minuDisabled: true
     };
   },
   methods: {
@@ -54,6 +128,14 @@ export default {
     toDay(){
       this.showTime = moment().format('YYYY年MM月DD日')
       this.$refs['calendar'].reset()
+    },
+    /* 会议记录修改 */
+    minutesEdit(){
+      this.minuDisabled = !this.minuDisabled
+    },
+    /* 新增记录 */
+    addNewRecord(){
+      this.$router.push('/addNewRecord')
     }
   },
   mounted() {
@@ -106,7 +188,7 @@ export default {
       display: flex;
       justify-content: space-between;
       padding: 0.12rem;
-      font-size: 0.17rem;
+      font-size: 0.15rem;
       font-family: PingFangSC-Regular, PingFang SC;
       font-weight: 400;
       .label {
@@ -116,6 +198,54 @@ export default {
         color: #026DFF;
       }
     }
+    .minutesList {
+      // background: pink;
+      font-size: 0.15rem;
+      &>div {
+        display: flex;
+        justify-content: space-between;
+        padding: 0.12rem 0;
+      }
+      div:nth-child(2){
+        border-top: 0.005rem solid #E5E5E5;
+        border-bottom: 0.005rem solid #E5E5E5;
+      }
+      div:nth-child(3){
+        padding-bottom: 0;
+      }
+    }
   }
+  .addRecord {
+    position: fixed;
+    width: 92%;
+    bottom: 0;
+    left: 0;
+    z-index: 99;
+    background: #fff;
+    padding: 0.12rem 0.15rem 0.46rem;
+    .addBtn {
+      border-radius: 0.08rem;
+    }
+  }
+	.bottomLine {
+		width: 60%;
+		margin: 0.5rem auto 0.35rem;
+    padding-bottom: 0.2rem;
+		display: flex;
+		justify-content: space-between;
+    align-items: center;
+    &>span {
+      width: 10.7%;
+      height: 0.005rem;
+      opacity: 0.7;
+      border-top: 0.005rem solid rgba(191,191,191,1);
+    }
+    .bottomText {
+      margin: 0 2.7%;
+      font-size: 0.12rem;
+      padding: 0 0.1rem;
+      color: #BFBFBF;
+    }
+	}
 }
 </style>
