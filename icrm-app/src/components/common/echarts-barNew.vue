@@ -21,6 +21,10 @@ import moment from "moment"
 export default {
   name: "echarts-barNew",
   props: {
+    dataDate: {
+      type: String,
+      default: ''
+    },
     barData: {
       type: Object,
       default: ()=>{
@@ -151,16 +155,13 @@ export default {
       arr.forEach((item, index) => {
         let obj = {
           value: item.value,
-          // toYstd: item.toYstd,
           time: item.time,
           totalBalance: item.totalBalance,
-          itemStyle: {
-            color: item.value < 0 ? '#8C8C8C' : '#026DFF'
-          }
+          itemStyle: { color: item.value < 0 ? '#8C8C8C' : '#026DFF' }
         }
         newArr.push(obj)
-        // 初始化顶部展示
-        if(index == 0){
+        // 初始化顶部展示数据日期
+        if(index == arr.length - 1){
           this.axisValue = item.time
           this.currentNum = item.value   // 较上日
           this.pepoe = item.totalBalance  // 总数

@@ -41,26 +41,13 @@
       </div>
     </div>
     <!-- 音频管理 -->
-    <div class="minutesMeeting">
+    <div class="audioManagement">
       <div class="title">
         <div class="label">音频管理</div>
         <div class="editBtn">编辑</div>
       </div>
       <div class="card">
-        <div class="minutesList">
-          <div>
-            <span>创建人</span>
-            <span>李白</span>
-          </div>
-          <div>
-            <span>机构</span>
-            <span>九江银行八里湖支行</span>
-          </div>
-          <div>
-            <span>创建时间</span>
-            <span>2021-12-01 08:00-10</span>
-          </div>
-        </div>
+        <div class="audioTitle">正在播放：{{'录音2备份'}}</div>
       </div>
     </div>
     <!-- 会议照片 -->
@@ -110,7 +97,7 @@ export default {
       showTime: moment().format('YYYY年MM月DD日'),
       minDate: moment().subtract(3, 'month'),
       maxDate: moment(),
-      textarea: '',
+      textarea: '测试内容',
       minuDisabled: true
     };
   },
@@ -153,7 +140,6 @@ export default {
   .calendar {
     position: relative;
     padding: 0.12rem;
-    // height: 0.45rem;
     font-size: 0.15rem;
     text-align: center;
     border: 0.005rem solid #E5E5E5;
@@ -171,7 +157,6 @@ export default {
     }
   }
   .arrow {
-    // padding: 0 0.12rem;
     background: #fff;
     border-radius: 0 0 0.08rem 0.08rem;
     &:deep(.van-calendar__selected-day){
@@ -179,32 +164,34 @@ export default {
       height: 0.28rem;
       border-radius: 50%;
     }
-    // margin-top: 0;
-    // width: 100%;
-    // font-size: 0.12rem;
+  }
+  .title {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.12rem;
+    font-size: 0.15rem;
+    font-family: PingFangSC-Regular, PingFang SC;
+    font-weight: 400;
+    .label {
+      color: #222222;
+    }
+    .editBtn {
+      color: #026DFF;
+    }
   }
   .minutesMeeting {
-    .title {
-      display: flex;
-      justify-content: space-between;
-      padding: 0.12rem;
-      font-size: 0.15rem;
-      font-family: PingFangSC-Regular, PingFang SC;
-      font-weight: 400;
-      .label {
-        color: #222222;
-      }
-      .editBtn {
-        color: #026DFF;
-      }
-    }
     .minutesList {
-      // background: pink;
       font-size: 0.15rem;
       &>div {
         display: flex;
         justify-content: space-between;
         padding: 0.12rem 0;
+      }
+      div:nth-child(1){
+        span:nth-child(2) {
+          font-size: 0.14rem;
+          color: #666666;
+        }
       }
       div:nth-child(2){
         border-top: 0.005rem solid #E5E5E5;
@@ -213,6 +200,13 @@ export default {
       div:nth-child(3){
         padding-bottom: 0;
       }
+    }
+  }
+  .audioManagement {
+    .audioTitle {
+      text-align: left;
+      color: #131313;
+      font-size: 0.15rem;
     }
   }
   .addRecord {
