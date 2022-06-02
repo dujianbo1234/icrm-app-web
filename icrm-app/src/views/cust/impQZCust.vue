@@ -98,8 +98,8 @@
 						@click="checked=[];checkAll=false;openPLFP=true;">分配</div>
 				</div>
 				<div class="total">
-					<div>预估获客数：{{Number(estCstSum).toLocaleString()}}</div>
-					<div>预估成交额：{{fixedNum(estAmtSum)}}</div>
+					<div>预估获客数：{{Number(estCstSum).toLocaleString()}}人</div>
+					<div>预估成交额：{{fixedNum(estAmtSum)}}万元</div>
 				</div>
 			</div>
 		</div>
