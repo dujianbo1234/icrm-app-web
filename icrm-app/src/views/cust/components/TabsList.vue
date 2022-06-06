@@ -5,7 +5,8 @@
       <van-tab :title="item.name" :disabled="item.disabled" v-for="(item, index) in listData" :key="index">
         <el-table size="small" :data="item.list" fit :header-row-style="headerStyle">
             <el-table-column :prop="i.key" :label="i.label" :fixed="i.fixed" :show-overflow-tooltip="i.tooltip" :align="i.align || 'center'" :width="i.width" v-for="(i, iIindex) in item.label" :key="iIindex">
-              <template  #default="scope">{{scope.row[i.key] || scope.row[i.key] == 0 ? scope.row[i.key] : '-'}}</template>
+              <template #default="scope" v-if="item.num">{{scope.row[i.key] || 0}}</template>
+              <template #default="scope" v-else>{{scope.row[i.key]}}</template>
             </el-table-column>
         </el-table>
       </van-tab>

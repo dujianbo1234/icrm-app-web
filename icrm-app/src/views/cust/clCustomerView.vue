@@ -1151,8 +1151,8 @@ export default {
                   item.label = [
                     { label: "存款种类", key: 'depKnd', width: '100' },
                     { label: "存期", key: 'depte', width: '100' },
-                    { label: "利率", key: 'intRat', width: '100' },
-                    { label: "余额", key: 'currBal', width: '100' },
+                    { label: "利率", key: 'intRat', width: '100', num: true },
+                    { label: "余额", key: 'currBal', width: '100', num: true },
                     { label: "到期日期", key: 'expDt', width: '100' },
                     { label: "账户状态", key: 'acctSt', width: '100' },
                   ]
@@ -1167,10 +1167,10 @@ export default {
                   item.label = [
                     { label: "存款种类", key: 'depKnd', width: '100' },
                     { label: "卡号", key: 'cardNum', width: '150' },
-                    { label: "利率", key: 'intRat', width: '100' },
-                    { label: "时点余额", key: 'currBal', width: '100' },
-                    { label: "可用余额", key: 'usablBal', width: '100' },
-                    { label: "控制金额", key: 'cntrlAmt', width: '100' },
+                    { label: "利率", key: 'intRat', width: '100', num: true },
+                    { label: "时点余额", key: 'currBal', width: '100', num: true },
+                    { label: "可用余额", key: 'usablBal', width: '100', num: true },
+                    { label: "控制金额", key: 'cntrlAmt', width: '100', num: true },
                     { label: "账户状态", key: 'acctSt', width: '100' },
                   ]
                 }
@@ -1184,9 +1184,9 @@ export default {
                   item.label = [
                     { label: "贷款类别", key: 'loanCtgry', width: '100' },
                     { label: "贷款名称", key: 'loanNm', width: '100' },
-                    { label: "利率", key: 'intRat', width: '100' },
-                    { label: "发放金额", key: 'dstrbtAmt', width: '100' },
-                    { label: "当前余额", key: 'currBal', width: '100' },
+                    { label: "利率", key: 'intRat', width: '100', num: true },
+                    { label: "发放金额", key: 'dstrbtAmt', width: '100', num: true },
+                    { label: "当前余额", key: 'currBal', width: '100', num: true },
                     { label: "贷款状态", key: 'loanSt', width: '100' },
                   ]
                 }
@@ -1200,12 +1200,12 @@ export default {
                   item.label = [
                     { label: "产品名称", key: 'pdNm', width: '100' },
                     { label: "卡号", key: 'cardNum', width: '150' },
-                    { label: "产品余额", key: 'acctBal', width: '100' },
+                    { label: "产品余额", key: 'acctBal', width: '100', num: true },
                     { label: "产品状态", key: 'acctStCd', width: '100' },
                     { label: "到期日期", key: 'expDayPrd', width: '100' },
                     { label: "产品开放期", key: 'otpuBeginDt', width: '100' },
                     // 拼接的部分                    
-                    { label: "购买金额", key: 'prchsdAmt', width: '100' },
+                    { label: "购买金额", key: 'prchsdAmt', width: '100', num: true },
                     { label: "购买日期", key: 'prchsdDt', width: '100' },
                     { label: "起息日期", key: 'stIntDt', width: '100' },
                     { label: "购买渠道", key: 'cnlKnd', width: '100' },
@@ -1226,8 +1226,8 @@ export default {
                     { label: "产品名称", key: 'pdNm', width: '100' },
                     { label: "基金代码", key: 'fndCd', width: '100' },
                     { label: "基金风险等级", key: 'fndRskLvl', width: '100' },
-                    { label: "当前份额", key: 'currLot', width: '100' },
-                    { label: "累计买入金额", key: 'acmlPrchsdAmt', width: '100' },
+                    { label: "当前份额", key: 'currLot', width: '100', num: true },
+                    { label: "累计买入金额", key: 'acmlPrchsdAmt', width: '100', num: true },
                     { label: "账户状态", key: 'fndAcctStCd', width: '100' },
                   ]
                 }
@@ -1257,12 +1257,12 @@ export default {
                   item.label = [
                     { label: "产品名称", key: 'pdNm', width: '100' },
                     { label: "卡号", key: 'cardNum', width: '150' },
-                    { label: "产品余额", key: 'acctBal', width: '100' },
+                    { label: "产品余额", key: 'acctBal', width: '100', num: true },
                     { label: "产品状态", key: 'acctStCd', width: '100' },
                     { label: "到期日期", key: 'expDayPrd', width: '100' },
                     { label: "产品开放期", key: 'otpuBeginDt', width: '100' },
                     // 拼接的部分                    
-                    { label: "购买金额", key: 'buyAmt', width: '100' },
+                    { label: "购买金额", key: 'buyAmt', width: '100', num: true },
                     { label: "购买日期", key: 'prchsdDt', width: '100' },
                     { label: "起息日期", key: 'stIntDt', width: '100' },
                     { label: "购买渠道", key: 'cnlKnd', width: '100' },
