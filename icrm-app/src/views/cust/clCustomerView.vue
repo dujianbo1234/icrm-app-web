@@ -1139,183 +1139,159 @@ export default {
       }
       // 持有产品
       this.prdList.forEach(item => {
-        if(item.disabled){
-          item.list = []
-        }else{
-          switch(item.name){
-            case '定期存款':
-              /*  定期存款产品明细查询 */
-              queryCustTimeDepAcctInfo(body,res => {
-                if(res && res.data){
-                  item.list = res.data.records
-                  item.label = [
-                    { label: "存款种类", key: 'depKnd', width: '120' },
-                    { label: "存期", key: 'depte', width: '100' },
-                    { label: "利率", key: 'intRat', width: '100', num: true },
-                    { label: "余额", key: 'currBal', width: '100', num: true },
-                    { label: "到期日期", key: 'expDt', width: '100' },
-                    { label: "账户状态", key: 'acctSt', width: '100' },
-                  ]
-                }
-              })
-            break;
-            case '活期存款':
-              /*  活期存款产品明细查询 */
-              queryCustCurrDepAcctInfo(body,res => {
-                if(res && res.data){
-                  item.list = res.data.records
-                  item.label = [
-                    { label: "存款种类", key: 'depKnd', width: '120' },
-                    { label: "卡号", key: 'cardNum', width: '150' },
-                    { label: "利率", key: 'intRat', width: '100', num: true },
-                    { label: "时点余额", key: 'currBal', width: '100', num: true },
-                    { label: "可用余额", key: 'usablBal', width: '100', num: true },
-                    { label: "控制金额", key: 'cntrlAmt', width: '100', num: true },
-                    { label: "账户状态", key: 'acctSt', width: '100' },
-                  ]
-                }
-              })
-            break;
-            case '贷款':
-              /* 贷款产品明细查询 */
-              queryCustLoanAcctInfo(body,res => {
-                if(res && res.data){
-                  item.list = res.data.records
-                  item.label = [
-                    { label: "贷款类别", key: 'loanCtgry', width: '120' },
-                    { label: "贷款名称", key: 'loanNm', width: '100' },
-                    { label: "利率", key: 'intRat', width: '100', num: true },
-                    { label: "发放金额", key: 'dstrbtAmt', width: '100', num: true },
-                    { label: "当前余额", key: 'currBal', width: '100', num: true },
-                    { label: "贷款状态", key: 'loanSt', width: '100' },
-                  ]
-                }
-              })
-            break;
-            case '理财':
-              /*  理财产品明细查询 */
-              queryCustFinaAcctInfo(body,res => {
-                if(res && res.data){
-                  item.list = res.data.records
-                  item.label = [
-                    { label: "产品名称", key: 'pdNm', width: '120' },
-                    { label: "卡号", key: 'cardNum', width: '150' },
-                    { label: "产品余额", key: 'acctBal', width: '100', num: true },
-                    { label: "产品状态", key: 'acctStCd', width: '100' },
-                    { label: "到期日期", key: 'expDayPrd', width: '100' },
-                    { label: "产品开放期", key: 'otpuBeginDt', width: '100' },
-                    // 拼接的部分                    
-                    { label: "购买金额", key: 'prchsdAmt', width: '100', num: true },
-                    { label: "购买日期", key: 'prchsdDt', width: '100' },
-                    { label: "起息日期", key: 'stIntDt', width: '100' },
-                    { label: "购买渠道", key: 'cnlKnd', width: '100' },
-                  ]
-                }
-              })
-              /* 理财交易明细查询(暂不用) */
-              // queryCustFinaTranInfo(body, res => {
-              //   console.log('理财交易明细查询(暂不用)',res)
-              // })
-            break;
-            case '基金':
-              /*  基金产品明细查询 */
-              queryCustFundAcctInfo(body,res => {
-                if(res && res.data){
-                  item.list = res.data.records
-                  item.label = [
-                    { label: "产品名称", key: 'pdNm', width: '120' },
-                    { label: "基金代码", key: 'fndCd', width: '100' },
-                    { label: "基金风险等级", key: 'fndRskLvl', width: '100' },
-                    { label: "当前份额", key: 'currLot', width: '100', num: true },
-                    { label: "累计买入金额", key: 'acmlPrchsdAmt', width: '100', num: true },
-                    { label: "账户状态", key: 'fndAcctStCd', width: '100' },
-                  ]
-                }
-              })
-            break;
-            case '保险':
-              /*  保险产品明细查询 */
-              queryCustBassAcctInfo(body,res => {
-                if(res && res.data){
-                  item.list = res.data.records
-                  item.label = [
-                    { label: "保险公司名称", key: 'insCoNm', width: '120' },
-                    { label: "保险产品名称", key: 'insPdNm', width: '120' },
-                    { label: "险种类别", key: 'typeOfInsureCtgry', width: '100' },
-                    { label: "缴费方式", key: 'ptfMd', width: '100' },
-                    { label: "缴费期限", key: 'currActYld', width: '100' },
-                    { label: "保险费", key: 'prem', width: '100' },
-                  ]
-                }
-              })
-            break;
-            case '信托':
-              /*  信托产品明细查询 */
-              queryCustTrustAcctInfo(body,res => {
-                if(res && res.data){
-                  item.list = res.data.records
-                  item.label = [
-                    { label: "产品名称", key: 'pdNm', width: '120' },
-                    { label: "卡号", key: 'cardNum', width: '150' },
-                    { label: "产品余额", key: 'acctBal', width: '100', num: true },
-                    { label: "产品状态", key: 'acctStCd', width: '100' },
-                    { label: "到期日期", key: 'expDayPrd', width: '100' },
-                    { label: "产品开放期", key: 'otpuBeginDt', width: '100' },
-                    // 拼接的部分                    
-                    { label: "购买金额", key: 'buyAmt', width: '100', num: true },
-                    { label: "购买日期", key: 'prchsdDt', width: '100' },
-                    { label: "起息日期", key: 'stIntDt', width: '100' },
-                    { label: "购买渠道", key: 'cnlKnd', width: '100' },
-                  ]
-                }
-              })
-            break;
-          }
+        switch(item.name){
+          case '定期存款':
+            /*  定期存款产品明细查询 */
+            queryCustTimeDepAcctInfo(body,res => {
+              item.list = res.data.records || []
+              item.label = [
+                { label: "存款种类", key: 'depKnd', width: '120' },
+                { label: "存期", key: 'depte', width: '100' },
+                { label: "利率", key: 'intRat', width: '100', num: true },
+                { label: "余额", key: 'currBal', width: '100', num: true },
+                { label: "到期日期", key: 'expDt', width: '100' },
+                { label: "账户状态", key: 'acctSt', width: '100' },
+              ]
+            })
+          break;
+          case '活期存款':
+            /*  活期存款产品明细查询 */
+            queryCustCurrDepAcctInfo(body,res => {
+              item.list = res.data.records || []
+              item.label = [
+                { label: "存款种类", key: 'depKnd', width: '120' },
+                { label: "卡号", key: 'cardNum', width: '150' },
+                { label: "利率", key: 'intRat', width: '100', num: true },
+                { label: "时点余额", key: 'currBal', width: '100', num: true },
+                { label: "可用余额", key: 'usablBal', width: '100', num: true },
+                { label: "控制金额", key: 'cntrlAmt', width: '100', num: true },
+                { label: "账户状态", key: 'acctSt', width: '100' },
+              ]
+            })
+          break;
+          case '贷款':
+            /* 贷款产品明细查询 */
+            queryCustLoanAcctInfo(body,res => {
+              item.list = res.data.records || []
+              item.label = [
+                { label: "贷款类别", key: 'loanCtgry', width: '120' },
+                { label: "贷款名称", key: 'loanNm', width: '100' },
+                { label: "利率", key: 'intRat', width: '100', num: true },
+                { label: "发放金额", key: 'dstrbtAmt', width: '100', num: true },
+                { label: "当前余额", key: 'currBal', width: '100', num: true },
+                { label: "贷款状态", key: 'loanSt', width: '100' },
+              ]
+            })
+          break;
+          case '理财':
+            /*  理财产品明细查询 */
+            queryCustFinaAcctInfo(body,res => {
+              item.list = res.data.records || []
+              item.label = [
+                { label: "产品名称", key: 'pdNm', width: '120' },
+                { label: "卡号", key: 'cardNum', width: '150' },
+                { label: "产品余额", key: 'acctBal', width: '100', num: true },
+                { label: "产品状态", key: 'acctStCd', width: '100' },
+                { label: "到期日期", key: 'expDayPrd', width: '100' },
+                { label: "产品开放期", key: 'otpuBeginDt', width: '100' },
+                // 拼接的部分                    
+                { label: "购买金额", key: 'prchsdAmt', width: '100', num: true },
+                { label: "购买日期", key: 'prchsdDt', width: '100' },
+                { label: "起息日期", key: 'stIntDt', width: '100' },
+                { label: "购买渠道", key: 'cnlKnd', width: '100' },
+              ]
+            })
+            /* 理财交易明细查询(暂不用) */
+            // queryCustFinaTranInfo(body, res => {
+            //   console.log('理财交易明细查询(暂不用)',res)
+            // })
+          break;
+          case '基金':
+            /*  基金产品明细查询 */
+            queryCustFundAcctInfo(body,res => {
+              item.list = res.data.records || []
+              item.label = [
+                { label: "产品名称", key: 'pdNm', width: '120' },
+                { label: "基金代码", key: 'fndCd', width: '100' },
+                { label: "基金风险等级", key: 'fndRskLvl', width: '100' },
+                { label: "当前份额", key: 'currLot', width: '100', num: true },
+                { label: "累计买入金额", key: 'acmlPrchsdAmt', width: '100', num: true },
+                { label: "账户状态", key: 'fndAcctStCd', width: '100' },
+              ]
+            })
+          break;
+          case '保险':
+            /*  保险产品明细查询 */
+            queryCustBassAcctInfo(body,res => {
+              item.list = res.data.records
+              item.label = [
+                { label: "保险公司名称", key: 'insCoNm', width: '120' },
+                { label: "保险产品名称", key: 'insPdNm', width: '120' },
+                { label: "险种类别", key: 'typeOfInsureCtgry', width: '100' },
+                { label: "缴费方式", key: 'ptfMd', width: '100' },
+                { label: "缴费期限", key: 'currActYld', width: '100' },
+                { label: "保险费", key: 'prem', width: '100' },
+              ]
+            })
+          break;
+          case '信托':
+            /*  信托产品明细查询 */
+            queryCustTrustAcctInfo(body,res => {
+              item.list = res.data.records
+              item.label = [
+                { label: "产品名称", key: 'pdNm', width: '120' },
+                { label: "卡号", key: 'cardNum', width: '150' },
+                { label: "产品余额", key: 'acctBal', width: '100', num: true },
+                { label: "产品状态", key: 'acctStCd', width: '100' },
+                { label: "到期日期", key: 'expDayPrd', width: '100' },
+                { label: "产品开放期", key: 'otpuBeginDt', width: '100' },
+                // 拼接的部分                    
+                { label: "购买金额", key: 'buyAmt', width: '100', num: true },
+                { label: "购买日期", key: 'prchsdDt', width: '100' },
+                { label: "起息日期", key: 'stIntDt', width: '100' },
+                { label: "购买渠道", key: 'cnlKnd', width: '100' },
+              ]
+            })
+          break;
         }
       })
       // 签约产品
       this.sgnList.forEach(item => {
-        if(item.disabled){
-          item.list = []
-        }else{
-          let queryItemList = (type) => {
-            body.sgnPdCtgry = type
-            queryCustSignPrdList(body, res => {
-              if(res && res.data){
-                item.list = res.data.records
-                item.label = [
-                  { label: "签约账号", key: 'sgnAcctNo', width: '150' },
-                  { label: "签约手机号", key: 'sgnMobileNum', width: '100' },
-                  { label: "签约机构", key: 'sgnInstNm', width: '100' },
-                  { label: "签约日期", key: 'sgnDt', width: '100' },
-                ]
-              }
-            })
-          }
-          /*  签约产品明细查询 */
-          switch (item.name) {
-            case '手机银行':
-              queryItemList('20401')
-            break;
-            case '网上银行':
-              queryItemList('20101')
-            break;
-            case '微信银行':
-              queryItemList('20201')
-            break;
-            case '微信支付':
-              queryItemList('40301')
-            break;
-            case '支付宝':
-              queryItemList('40302')
-            break;
-            case '云闪付':
-              queryItemList('40105')
-            break;
-            case '九银合伙人':
-              queryItemList('70234')
-            break;
-          }
+        let queryItemList = (type) => {
+          body.sgnPdCtgry = type
+          queryCustSignPrdList(body, res => {
+            item.list = res.data.records || []
+            item.label = [
+              { label: "签约账号", key: 'sgnAcctNo', width: '150' },
+              { label: "签约手机号", key: 'sgnMobileNum', width: '100' },
+              { label: "签约机构", key: 'sgnInstNm', width: '100' },
+              { label: "签约日期", key: 'sgnDt', width: '100' },
+            ]
+          })
+        }
+        /*  签约产品明细查询 */
+        switch (item.name) {
+          case '手机银行':
+            queryItemList('20401')
+          break;
+          case '网上银行':
+            queryItemList('20101')
+          break;
+          case '微信银行':
+            queryItemList('20201')
+          break;
+          case '微信支付':
+            queryItemList('40301')
+          break;
+          case '支付宝':
+            queryItemList('40302')
+          break;
+          case '云闪付':
+            queryItemList('40105')
+          break;
+          case '九银合伙人':
+            queryItemList('70234')
+          break;
         }
       })
     },
