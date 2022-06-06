@@ -259,17 +259,6 @@
 		},
 		methods: {
 			onSearch() {
-				if (this.$store.state.userMsg.roleId == '00000004') {
-					this.params.cstName = this.searchValue;
-				} else {
-					if (Number(this.searchValue)) {
-						this.params.cstName = "";
-						this.params.cstMagNo = this.searchValue;
-					} else {
-						this.params.cstName = this.searchValue;
-						this.params.cstMagNo = "";
-					}
-				}
 				this.pageIndex = 0;
 				this.msgList = [];
 				this.onLoad();
@@ -330,14 +319,14 @@
 				this.params.estAmtEnd = this.value4;
 				if ((this.params.estCstStart || this.params.estCstStart === 0) && (this.params.estCstEnd || this.params
 						.estCstEnd === 0)) {
-					if (this.params.estCstStart > this.params.estCstEnd) {
+					if (Number(this.params.estCstStart) > Number(this.params.estCstEnd)) {
 						Toast.fail("最大值不能小于最小值")
 						return;
 					}
 				}
 				if ((this.params.estAmtStart || this.params.estAmtStart === 0) && (this.params.estAmtEnd || this.params
 						.estAmtEnd === 0)) {
-					if (this.params.estAmtStart > this.params.estAmtEnd) {
+					if (Number(this.params.estAmtStart) > Number(this.params.estAmtEnd)) {
 						Toast.fail("最大值不能小于最小值")
 						return;
 					}
@@ -463,9 +452,25 @@
 				this.params.orgId = this.chooseOrg.value;
 				this.loading = true;
 				if (this.pageIndex == "1") {
+					if (this.$store.state.userMsg.roleId == '00000004') {
+						this.params.cstName = this.searchValue;
+					} else {
+						if (Number(this.searchValue)) {
+							this.params.cstName = "";
+							this.params.cstMagNo = this.searchValue;
+						} else {
+							this.params.cstName = this.searchValue;
+							this.params.cstMagNo = "";
+						}
+					}
 					queryCustBaseSummary(this.params, (res) => {
-						this.estCstSum = res.data.records[0].estCstSum;
-						this.estAmtSum = res.data.records[0].estAmtSum;
+						if(res.data.records.length){
+							this.estCstSum = res.data.records[0].estCstSum;
+							this.estAmtSum = res.data.records[0].estAmtSum;
+						}else{
+							this.estCstSum = "0";
+							this.estAmtSum = "0";
+						}
 					})
 				};
 				queryCustomersInfoList(this.params, (res) => {
