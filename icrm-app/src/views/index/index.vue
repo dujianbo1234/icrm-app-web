@@ -416,7 +416,6 @@ export default {
 				};
 				this.params = JSON.stringify(params);
 				queryEmployeeMustDoList(params, (res) => {
-					console.log('getMustDoList',params,'res',res)
 					if (res.data && res.data.records) {
             this.mustDoNum = res.data.total;
             this.showMustDoNum = res.data.total > 99 ? "99+" : res.data.total;

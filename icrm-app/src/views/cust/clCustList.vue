@@ -1,5 +1,5 @@
 <template>
-  <div class="home">
+  <div class="clCustList">
     <div class="top">
       <!-- 顶部title -->
       <nav-bar title="存量客户列表" type="2" leftIcon :rightText="$store.state.userMsg.roleId != '00000004' ? '选择机构' : ''" rightColor="rgba(2, 109, 255, 1)" @touchRight="$refs.orgList.showPopup()"/>
@@ -30,7 +30,7 @@
         <div class="total">
           <span>筛选结果：共{{formatNums(total)}}条数据 </span>
         </div>
-        <div class="sendAll" v-if="msgOrPhone" @click="sendFrom">
+        <div class="sendAll" v-if="$store.state.userMsg.orgClass != '90000001'" @click="sendFrom">
           <span v-if="showBatchSend">取消批量发送</span>
           <span v-else>批量发送</span>
         </div>
@@ -125,6 +125,7 @@ import { custServiceAdd, queryCustSearchList } from "@/request/custinfo.js";
 import { Toast } from "vant";
 import sendMessage from "../../components/common/sendMessage.vue";
 export default {
+  name: 'clCustList',
   components: {
     sendMessage
   },
@@ -151,7 +152,6 @@ export default {
       pageIndex: 0,
       custList: [],
       total: 0,
-      msgOrPhone: false,
       showBatchSend: false,
       chooseItems: [],
       // custNum        客户编号
@@ -203,61 +203,11 @@ export default {
       tageListActive: 0,
     };
   },
-  mounted() {
-    this.msgOrPhone = this.$store.state.userMsg.orgClass != "90000001";
-    // getSysCodeByType({codeType: "CST_LVL"},(res) => {
-    //     if (res.data) {
-    //       this.cstLvlList = [
-    //         {
-    //           text: "全部",
-    //           value: "",
-    //         },
-    //         ...res.data.map((item) => {
-    //           return {
-    //             text: item.codeName,
-    //             value: item.codeValue,
-    //           };
-    //         }),
-    //       ];
-    //     } else {
-    //       Toast.fail("AUM等级列表数据为空");
-    //     }
-    //   });
-    // getSysCodeByType({codeType: "SVC_LVL"},(res) => {
-    //     if (res.data) {
-    //       this.svcLvlList = [
-    //         {
-    //           text: "全部",
-    //           value: "",
-    //         },
-    //         ...res.data.map((item) => {
-    //           return {
-    //             text: item.codeName,
-    //             value: item.codeValue,
-    //           };
-    //         }),
-    //       ];
-    //     } else {
-    //       Toast.fail("服务等级列表数据为空");
-    //     }
-    //   });
-    // var oldParams = JSON.parse(localStorage.getItem("oldParams"));
-    // if (oldParams) {
-    // } else {
-    // }
-  },
   methods: {
     formatNumW,
     formatNums,
     /* 存量客户查询接口 */
     queryList(){
-      if (this.searchValue) {
-        if (this.searchValue.length == 6) {
-          this.params.belgCustMgr = this.searchValue
-        } else {
-          this.params.cstName = this.searchValue;
-        }
-      }
       this.finished = false;
       this.loading = true;
       // this.total = 0
@@ -283,43 +233,40 @@ export default {
     },
     /* 初始化查询条件 */
     initParams(){
+      this.pageIndex = 0;
       this.tageListActive = 0
-			this.params = {
-				pageSize: "10",
-				pageNum: "1",
-        belgCustMgr: '',                  // 客户经理
-				// orderType: "",                    // 排序
-				cstName: "",                      // 客户名称
-        svcLvl: '',                       // 服务等级
-        ctcTel: "",                       // 联系电话
-        certNum: "",                      // 证件号
-        cstLvl: "",                       // 客户等级
-        // belongOrg: '',                    // 归属机构
-			}
+      this.params.pageSize = '10'
+      this.params.pageNum = '1'
+      this.custList = [];
+      this.showBatchSend = false;
     },
     /* 选择机构 */
     activeOrg(orgValue) {
       this.initParams()
       this.params.belongOrg = orgValue.value || ''
-      this.pageIndex = 0;
-      this.custList = [];
-      this.showBatchSend = false;
       this.getCustList();
     },
     /* 点击搜索 */
     reload() {
       this.initParams()
-      this.pageIndex = 0;
-      this.custList = [];
-      this.showBatchSend = false;
+      if (this.searchValue) {
+        if (this.searchValue.length == 6) {
+          this.params.belgCustMgr = this.searchValue
+        } else {
+          this.params.cstName = this.searchValue;
+        }
+      }else{
+        this.params.belgCustMgr = ''
+        this.params.cstName = ''
+      }
       this.getCustList();
     },
     /* 通过reload事件调用 */
     getCustList() {
       this.pageIndex++;
       this.params.pageNum = this.pageIndex.toString()
-      this.params.cstName = ''
-      this.params.belgCustMgr = ''
+      // this.params.cstName = ''
+      // this.params.belgCustMgr = ''
       this.queryList()
     },
     gaveCall(item, type) {
@@ -414,8 +361,8 @@ export default {
     },
     /* 初始化查询条件后查询 */
     initQueryList(){
-      this.params.cstName = ''
-      this.params.belgCustMgr = ''
+      // this.params.cstName = ''
+      // this.params.belgCustMgr = ''
       this.pageIndex = 0;
       this.custList = [];
       this.showBatchSend = false;
@@ -443,7 +390,7 @@ export default {
 };
 </script>
 <style lang="less" scoped>
-.home {
+.clCustList {
   font-size: 0.14rem;
   .top {
     position: fixed;
