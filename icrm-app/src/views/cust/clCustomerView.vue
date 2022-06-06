@@ -1401,14 +1401,14 @@ export default {
   },
 };
 </script>
-
+<style scoped>
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+</style>
 <style lang="less" scoped>
-// * {
-//   box-sizing: border-box;
-//   margin: 0;
-//   padding: 0;
-//   /* border: 0; */
-// }
 .clCustomerView {
   box-sizing: border-box;
   padding: 0.11rem 0.12rem;
@@ -1436,8 +1436,6 @@ export default {
 	}
   .dialog,
   .dialogs {
-    // --van-cell-vertical-padding: 0;
-    // --van-cell-horizontal-padding: 0.215rem;
     .bootomBtn {
       padding: 0.2rem 0 0.145rem;
       .btnL,
@@ -1455,7 +1453,6 @@ export default {
   .dialog {
     &:deep(.van-field__control){
       background: #FAFAFA;
-      // height: 0.215rem;
       padding: 0.105rem 0.085rem;
     }
   }
@@ -1487,9 +1484,6 @@ export default {
         color: #262626;
       }
     }
-    // .bom {
-    //   border-bottom: 0.005rem solid #E7E9EC;
-    // }
   }
   .card {
     background: #fff;
@@ -1535,8 +1529,6 @@ export default {
     }
   }
   .custInfo {
-    // display: flex;
-    // justify-content: space-between;
     .custInfoName {
       width: 100%;
       display: flex;
@@ -1559,7 +1551,6 @@ export default {
             height: 0.24rem;
             font-family: PingFangSC-Medium;
             font-size: 0.16rem;
-            // color: #262626;
             letter-spacing: 0;
             line-height: 0.24rem;
             font-weight: 500;
@@ -1623,7 +1614,6 @@ export default {
       text-align: left;
       font-family: PingFangSC-Regular, PingFang SC;
       font-weight: 400;
-      // color: #8C8C8C;
       line-height: 0.18rem;
       padding: 0.07rem 0;
       box-shadow: inset 0px -1px 0px 0px rgba(0, 0, 0, 0.04);
@@ -1652,13 +1642,6 @@ export default {
           width: 63%;
           text-align: right;
         }
-        // .phoneStyle {
-        //   // padding-right: 0.07rem;
-        //   text-align: right;
-        // }
-        // .textStyle {
-        //   text-align: right;
-        // }
         .icon {
           margin-left: 0.1rem;
           padding-top: 0.02rem;
@@ -1725,7 +1708,6 @@ export default {
       font-family: PingFangSC-Regular, PingFang SC;
       font-weight: 400;
       font-size: 0.11rem;
-      // line-height: 0.18rem;
       color: #595959;
       text-align: left;
       transition: 0.3s;
@@ -1756,7 +1738,6 @@ export default {
       .labelD {
         display: inline-block;
         padding: 0.01rem 0.04rem;
-        // font-size: 0.11rem;
         color: #026DFF;
         background: #E6F4FF;
         border-radius: 0.04rem 0 0.04rem 0;
@@ -1800,7 +1781,6 @@ export default {
         }
         .titleBot {
           display: flex;
-          // justify-content: space-around;
           text-align: left;
           letter-spacing: 0;
           font-weight: 400;
@@ -1812,8 +1792,6 @@ export default {
             color: #8C8C8C;
           }
           .textS {
-            // display: flex;
-            // justify-content: flex-start;
             align-items: center;
             color: #262626;
           }
@@ -1830,7 +1808,6 @@ export default {
       justify-content: space-between;
       justify-items: center;
       padding: 0.16rem 0.12rem;
-      // margin-top: 0.12rem;
       box-shadow: inset 0 0.005rem 0 0 rgba(0, 0, 0, 0.08);
       .textL {
         margin: auto 0;

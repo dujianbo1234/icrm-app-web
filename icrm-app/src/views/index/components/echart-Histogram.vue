@@ -83,7 +83,7 @@ export default {
     --van-tab-font-size: 0.14rem;
     margin-bottom: 0.12rem;
     .van-tabs__content {
-      margin-top: 0.28rem;
+      margin-top: 0.28rem !important;
     }
   }
   &:deep(.month) {
