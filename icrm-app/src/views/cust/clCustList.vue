@@ -72,7 +72,7 @@
               <div class="custItem1_2_1">{{item.cstName}}</div>
               <div class="custItem1_2_2" :style="`background-image:url(${require(`@/assets/image/business_chooseCust_type${item.svcLvlCount || 0}.png`)})`"></div>
               <div class="custItem1_2_3">
-                <template v-for="(text, j) in ['vipCstFlg','agentPayCstFlg', 'basicCstCnt', 'merntCstFlg', 'ioinHoldLoan', 'crdtCrdCstFlg']">
+                <template v-for="(text, j) in ['vipCstFlg','agentPayCstFlg', 'newCstFlg', 'merntCstFlg', 'ioinHoldLoan', 'crdtCrdCstFlg']">
                   <div :class="text" v-if="item[text] =='1'" :key="j">{{['财','代','新','商','贷','信'][j]}}</div>
                 </template>
                 <template v-for="(text, s) in ['ioinSgnMobbank','ioinSgnAlpy','ioinSgnWchtPymt', 'ioinSgnYsf']" :key="s">
@@ -576,7 +576,7 @@ export default {
             flex-wrap: nowrap;
               .vipCstFlg,
               .agentPayCstFlg,
-              .basicCstCnt,
+              .newCstFlg,
               .merntCstFlg,
               .ioinHoldLoan,
               .crdtCrdCstFlg {
@@ -598,7 +598,7 @@ export default {
                 background-color: rgba(255,133,0,0.08);
                 color: #FF8500;
               }
-              .basicCstCnt {
+              .newCstFlg {
                 background-color: rgba(255,58,58,0.08);
                 color: #FF3A3A;
               }
