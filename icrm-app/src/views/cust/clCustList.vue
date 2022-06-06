@@ -203,6 +203,15 @@ export default {
       tageListActive: 0,
     };
   },
+  /* 判断是从哪个路由过来的，若是判断是否需要开启缓存 */
+  beforeRouteEnter(to, from, next) {
+    if(from.name === 'clCustomerView') {
+      to.meta.keepAlive = true;
+    }else{
+      to.meta.keepAlive = false;
+    }
+    next();
+  },
   methods: {
     formatNumW,
     formatNums,
