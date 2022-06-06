@@ -1401,13 +1401,6 @@ export default {
   },
 };
 </script>
-<style scoped>
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-</style>
 <style lang="less" scoped>
 .clCustomerView {
   box-sizing: border-box;
