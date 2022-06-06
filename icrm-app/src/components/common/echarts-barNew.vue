@@ -3,14 +3,17 @@
   <div class="echarts-barNew">
     <div class="echarts" ref="echart"></div>
     <div class="title">
-      <span class="left">
+      <div class="top">
         <span class="timeText" v-if="timeUnit == 0">{{moment(axisValue).format('YYYY-MM-DD')}}</span>
         <span class="timeText" v-else>{{moment(axisValue).format('YYYY-MM')}}</span>
-        <span :style="{'color': currentNum > 0 ? 'red' : (currentNum < 0 ? '#37cd37' : '#8C8C8C') }">
-          {{`${currentNum > 0 ? '+' : ''}${numFliter(currentNum)}${unit}`}}
+      </div>
+      <div class="bottom">
+        <span class="left">
+          {{yName}}:
+          <span :style="{'color': currentNum > 0 ? 'red' : (currentNum < 0 ? '#37cd37' : '#8C8C8C') }">{{`${currentNum > 0 ? '+' : ''}${numFliter(currentNum)}${unit}`}}</span>
         </span>
-      </span>
-      <span class="right" v-if="numType != 'no'">{{numType}}：<span class="text">{{unit == '万元' ? numFliter(pepoe) : pepoe}}{{numUnit}}</span></span>
+        <span class="right" v-if="numType != 'no'">{{numType}}：<span class="text">{{unit == '万元' ? numFliter(pepoe) : pepoe}}{{numUnit}}</span></span>
+      </div>
     </div>
     <span class="time">{{['日期','月份'][timeUnit]}}</span>
   </div>
@@ -113,7 +116,7 @@ export default {
         },
         yAxis: {
           type: "value",
-          name: this.yName,
+          // name: this.yName,
           nameTextStyle: {
             color: '#8C8C8C',
             // align: "center"
@@ -200,30 +203,42 @@ export default {
   }
   .title {
     position: absolute;
-    display: flex;
-    justify-content: space-between;
-    top: 3.5%;
-    right: 0;
+    top: -10%;
+    left: 0;
     padding-right: 0.1rem;
-    &>span {
-      padding: 0.02rem 0.08rem;
-      background: rgba(2,109,255,0.08);
-      border-radius: 0.04rem;
-      color: #595959;
-      letter-spacing: 0;
-      margin: auto 0;
-    }
-    .left {
+    .top {
+      text-align: left;
+      margin-bottom: 0.06rem;
       font-size: 0.12rem;
-      margin-right: 0.1rem;
       .timeText {
-        margin-right: 0.02rem ;
+        padding: 0.02rem 0.08rem;
+        background: rgba(2,109,255,0.08);
+        border-radius: 0.04rem;
+        color: #595959;
+        letter-spacing: 0;
+        margin: auto 0;
       }
     }
-    .right {
-      font-size: 0.12rem;
-      .text {
-        font-size: 0.1rem;
+    .bottom {
+      display: flex;
+      justify-content: space-between;
+      &>span {
+        padding: 0.02rem 0.08rem;
+        background: rgba(2,109,255,0.08);
+        border-radius: 0.04rem;
+        color: #595959;
+        letter-spacing: 0;
+        margin: auto 0;
+      }
+      .left {
+        font-size: 0.12rem;
+        margin-right: 0.1rem;
+      }
+      .right {
+        font-size: 0.12rem;
+        .text {
+          font-size: 0.1rem;
+        }
       }
     }
   }

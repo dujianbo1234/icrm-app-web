@@ -294,14 +294,17 @@ export default {
         ctcTel: "",                       // 联系电话
         certNum: "",                      // 证件号
         cstLvl: "",                       // 客户等级
-        belongOrg: '',                    // 归属机构
+        // belongOrg: '',                    // 归属机构
 			}
     },
     /* 选择机构 */
     activeOrg(orgValue) {
       this.initParams()
       this.params.belongOrg = orgValue.value || ''
-      this.reload();
+      this.pageIndex = 0;
+      this.custList = [];
+      this.showBatchSend = false;
+      this.getCustList();
     },
     /* 点击搜索 */
     reload() {

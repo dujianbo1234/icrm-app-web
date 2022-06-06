@@ -82,6 +82,9 @@ export default {
     --van-tabs-bottom-bar-color: #026DFF;
     --van-tab-font-size: 0.14rem;
     margin-bottom: 0.12rem;
+    .van-tabs__content {
+      margin-top: 0.28rem;
+    }
   }
   &:deep(.month) {
     .van-tabs__nav--card {

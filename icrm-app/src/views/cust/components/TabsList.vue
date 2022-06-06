@@ -1,22 +1,17 @@
 <template>
   <!-- 客户视图-产品信息列表 -->
   <div class="tabsLists">
-
     <van-tabs class="tabss" v-model:active="active">
-      <template v-for="(item, index) in setList" :key="index">
-        <van-tab :title="item.name" :disabled="item.disabled">
-
-          <el-table size="small" :data="item.list" fit :header-row-style="headerStyle">
-            <template v-for="(i, iIindex) in item.label" :key="iIindex">
-              <el-table-column :prop="i.key" :label="i.label" :fixed="i.fixed" :show-overflow-tooltip="i.tooltip" :align="i.align || 'center'" :width="i.width">
-              </el-table-column>
-            </template>
-          </el-table>
-
-        </van-tab>
-      </template>
+      <van-tab :title="item.name" :disabled="item.disabled" v-for="(item, index) in setList" :key="index">
+        <el-table size="small" :data="item.list" fit :header-row-style="headerStyle">
+            <el-table-column :prop="i.key" :label="i.label" :fixed="i.fixed" :show-overflow-tooltip="i.tooltip" :align="i.align || 'center'" :width="i.width" v-for="(i, iIindex) in item.label" :key="iIindex">
+              <template  #default="scope">
+                {{scope.row[i.key] || scope.row[i.key] == 0 ? scope.row[i.key] : '-'}}
+              </template>
+            </el-table-column>
+        </el-table>
+      </van-tab>
     </van-tabs>
-
   </div>
 </template>
 
