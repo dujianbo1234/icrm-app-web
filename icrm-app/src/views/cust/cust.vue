@@ -134,6 +134,9 @@
 					<div class="detailItem_child">{{detailItem.userName}}</div>
 				</div>
 			</div>
+			<div class="detailBtnBox">
+				<div class="detailBtn" @click="showDetailBox=false">确认</div>
+			</div>
 		</van-popup>
 	</div>
 </template>
@@ -958,8 +961,8 @@
 	
 	.detailList {
 		width: 100%;
-		height: calc(100% - 1.01rem - constant(safe-area-inset-bottom));
-		height: calc(100% - 1.01rem - env(safe-area-inset-bottom));
+		height: calc(100% - 1.7rem - constant(safe-area-inset-bottom));
+		height: calc(100% - 1.7rem - env(safe-area-inset-bottom));
 		overflow: auto;
 	}
 	
@@ -985,4 +988,29 @@
 		-webkit-box-orient:vertical; 
 		-webkit-line-clamp:2;
 	}
+	
+	.detailBtnBox {
+		width: 100%;
+		height: 0.69rem;
+		background: #FFFFFF;
+		box-shadow: 0rem -0.02rem 0.03rem 0rem rgba(0, 0, 0, 0.03);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+	
+	.detailBtn {
+		width: 91.47%;
+		height: 0.45rem;
+		line-height: 0.45rem;
+		text-align: center;
+		background: #026DFF;
+		box-shadow: inset 0rem 0rem 0rem 0rem rgba(220, 220, 220, 0.5);
+		border-radius: 0.08rem;
+		font-size: 0.16rem;
+		font-family: PingFangSC-Medium, PingFang SC;
+		font-weight: 500;
+		color: #FFFFFF;
+	}
+	
 </style>

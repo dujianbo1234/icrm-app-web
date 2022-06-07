@@ -32,6 +32,15 @@
 				</van-list>
 			</div>
 		</van-popup>
+		<van-overlay :show="showFP" z-index="1000000">
+			<div class="plate6">
+				<div class="plate6_5">是否分配给该客户经理？</div>
+				<div class="plate6_4">
+					<div class="palte6_4_1" @click="showFP=false">取消</div>
+					<div class="palte6_4_2" @click="checkFP">确定</div>
+				</div>
+			</div>
+		</van-overlay>
 	</div>
 </template>
 
@@ -59,6 +68,8 @@
 				chooseCust: {},
 				loading: false,
 				finished: false,
+				showFP: false,
+				checkCustom: {},
 			}
 		},
 		methods: {
@@ -75,15 +86,14 @@
 				this.$emit("close");
 			},
 			checkCust(item) {
-				Dialog.confirm({
-					message: '是否分配给该客户经理',
-					confirmButtonColor: '#026DFF',
-					cancelButtonColor: '#999999'
-				}).then(() => {
-					this.chooseCust = item;
+				this.checkCustom = item;
+				this.showFP = true;
+			},
+			checkFP() {
+					this.chooseCust = this.checkCustom;
+					this.showFP = false;
 					this.cancle();
-					this.$emit("activeCust", item)
-				});
+					this.$emit("activeCust", this.checkCustom)
 			},
 			search() {
 				this.pageIndex = 0;
@@ -210,5 +220,63 @@
 	.itemTitle3 {
 		width: 40%;
 		text-align: center;
+	}
+
+	.plate6 {
+		width: 74.7%;
+		background: #FFFFFF;
+		border-radius: 0.08rem;
+		position: absolute;
+		top: calc(50% - 1rem);
+		left: 12.65%;
+		padding: 0.2rem 0.12rem;
+	}
+
+	.plate6_4 {
+		width: 100%;
+		height: 0.3rem;
+		margin-top: 0.24rem;
+		display: flex;
+		flex-wrap: nowrap;
+		justify-content: space-around;
+		align-items: center;
+	}
+
+	.palte6_4_1 {
+		width: 1.08rem;
+		height: 0.3rem;
+		border: 0.01rem solid #026DFF;
+		border-radius: 0.15rem;
+		font-family: PingFangSC-Medium;
+		font-size: 0.13rem;
+		color: #026DFF;
+		text-align: center;
+		line-height: 0.3rem;
+		font-weight: 500;
+	}
+
+	.palte6_4_2 {
+		width: 1.08rem;
+		height: 0.3rem;
+		background: #026DFF;
+		border-radius: 0.15rem;
+		font-family: PingFangSC-Medium;
+		font-size: 0.13rem;
+		color: #FFFFFF;
+		text-align: center;
+		line-height: 0.3rem;
+		font-weight: 500;
+	}
+
+	.plate6_5 {
+		width: 100%;
+		font-family: PingFangSC-Medium;
+		font-size: 0.14rem;
+		color: #262626;
+		text-align: center;
+		line-height: 0.22rem;
+		font-weight: 400;
+		margin-bottom: 0.28rem;
+		margin-top: 0.15rem;
 	}
 </style>
