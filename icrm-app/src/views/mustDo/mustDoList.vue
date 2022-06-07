@@ -18,7 +18,7 @@
 				<van-tab  v-for="item in mustDoKind" :key="item.codeValue" :title="item.codeName"/>
 		</van-tabs>
 		<div class="list">
-            <van-tabs class="month" v-model:active="tageListActive" type="card" @change="tageListChange">
+            <van-tabs class="month" v-model:active="tageListActive" type="card" @click-tab="tageListChange">
 				<van-tab v-for="item in mustDoNameList" :key="item.codeValue" :title="item.codeName">
 				</van-tab>
             </van-tabs>
@@ -330,23 +330,22 @@
 				this.onLoad();
 			},
 			tageListChange(el){
-				console.log(el,this.mastDoBclass)
 				if(this.mastDoBclass=='01'){
-					if(el=='0'){
+					if(el.name=='0'){
 						this.mastDoNm=''
 					}else{
 						this.mastDoNm='0101'
 					}
 				}else if(this.mastDoBclass=='02'){
-					if(el=='0'){
+					if(el.name=='0'){
 						this.mastDoNm=''
 					}else{
 						this.mastDoNm='0201'
 					}
 				}else{
-					if(el=='0'){
+					if(el.name=='0'){
 						this.mastDoNm=''
-					}else if(el=='1'){
+					}else if(el.name=='1'){
 						this.mastDoNm='0101'
 					}else{
 						this.mastDoNm='0201'
@@ -492,6 +491,10 @@
 
 					this.mustDoNameList=this.mustDoName
 				}
+				this.pageIndex = 0;
+				this.loading = true;
+				this.mustDoList = [];
+				this.onLoad();
             },
 			onLoad() {
 				this.finished = false;
@@ -513,7 +516,6 @@
 				};
 				this.params = JSON.stringify(params);
 				queryEmployeeMustDoList(params, (res) => {
-					console.log('params',params,'res',res)
 					if (res.data && res.data.records) {
 						Toast.clear();
 						this.allNum = res.data.total.toLocaleString();
