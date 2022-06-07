@@ -119,11 +119,10 @@
   </div>
 </template>
 <script>
-import { getSysCodeByType } from "../../request/common.js";
 import { formatNumW , formatNums } from "@/api/common.js";
 import { custServiceAdd, queryCustSearchList } from "@/request/custinfo.js";
 import { Toast } from "vant";
-import sendMessage from "../../components/common/sendMessage.vue";
+import sendMessage from "@/components/common/sendMessage.vue";
 export default {
   name: 'clCustList',
   components: {

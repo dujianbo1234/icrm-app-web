@@ -4,7 +4,7 @@
       <div class="plate5_item_icon dx"></div>
       <div class="plate5_item_text">发送短信</div>
     </div>
-    <div class="plate5_item" @click="showCall = true">
+    <div class="plate5_item" @click="callPhone">
       <div class="plate5_item_icon dh"></div>
       <div class="plate5_item_text">拨打电话</div>
     </div>
@@ -66,7 +66,6 @@
 <script>
 import { custServiceAdd, custServUpload } from "@/request/custinfo.js";
 import { Toast, ImagePreview } from "vant";
-import { opportCustServUploadMpaas, saveOpportCustServInfo } from "@/request/market";
 import sendMessage from "@/components/common/sendMessage.vue";
 export default {
   components: {
@@ -91,6 +90,9 @@ export default {
     };
   },
   methods: {
+    callPhone(){
+      this.showCall = true
+    },
     /* 发送短信 */
     openMbox(type) {
       if (isNaN(this.custBase.ctcTel)) {
