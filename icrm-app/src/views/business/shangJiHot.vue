@@ -155,7 +155,9 @@
 		mounted() {
 			this.getHeight()
 			this.orderField='HOT_LIST_RANK'
-
+			// this.active=Number(this.$route.query.busiBdIndex)
+			this.active=(this.$route.query.busiBdIndex)*1
+			this.onClickTab({name:this.active})
             
         }
 	}

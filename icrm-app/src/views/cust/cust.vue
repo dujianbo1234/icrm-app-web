@@ -356,7 +356,8 @@
 				this.$router.push({
 					name: 'shangJiHot',
 					query: {
-						etlDt: this.dataDateS
+						etlDt: this.dataDateS,
+						busiBdIndex:this.busiBdIndex
 					}
 				})
 			},
