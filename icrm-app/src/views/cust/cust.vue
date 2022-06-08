@@ -70,7 +70,7 @@
 								:name="require('../../assets/image/dianzan.png')" size="12" />
 							<span v-if="reBang" class="textStyle">{{shangJiItem.hotList}}</span>
 							<span v-if="chengJiaoBang" class="textStyle">{{(Number(shangJiItem.dealNum)*100).toFixed(1)}}%</span>
-							<span v-if="haoPingBang" class="textStyle">{{shangJiItem.laimScore}}</span>
+							<span v-if="haoPingBang" class="textStyle">{{Number(shangJiItem.laimScore).toFixed(1)}}</span>
 						</div>
 					</div>
 					<div class="shangJiCreator">

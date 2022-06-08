@@ -23,7 +23,7 @@
 						<van-icon  v-if="haoPingBang" style="margin-right:0.04rem;margin-top: 0.02rem;" :name="require('../../assets/image/dianzan.png')" size="12" />
 						<span v-if="reBang" class="textStyle">{{shangJiItem.hotList}}</span>
 						<span v-if="chengJiaoBang" class="textStyle">{{(Number(shangJiItem.dealNum)*100).toFixed(1)}}%</span>
-						<span v-if="haoPingBang" class="textStyle">{{shangJiItem.laimScore}}</span>
+						<span v-if="haoPingBang" class="textStyle">{{Number(shangJiItem.laimScore).toFixed(1)}}</span>
 					</div>
 				</div>
                 <div class="shangJiCreator">
@@ -46,7 +46,7 @@
 						<van-icon  v-if="haoPingBang" style="margin-right:0.04rem;margin-top: 0.02rem;" :name="require('../../assets/image/dianzan_gray.png')" size="12" />
 						<span v-if="reBang" class="textStyle1">{{shangJiItem.hotList}}</span>
 						<span v-if="chengJiaoBang" class="textStyle1">{{(Number(shangJiItem.dealNum)*100).toFixed(1)}}%</span>
-						<span v-if="haoPingBang" class="textStyle1">{{shangJiItem.laimScore}}</span>
+						<span v-if="haoPingBang" class="textStyle1">{{Number(shangJiItem.laimScore).toFixed(1)}}</span>
 					</div>
 				</div>
 				
