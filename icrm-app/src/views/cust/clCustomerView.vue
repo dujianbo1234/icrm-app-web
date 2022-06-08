@@ -998,8 +998,9 @@ export default {
       }
       queryAssetsAUMGrowthTrend(body, res => {
         let data = res.data.records || []
+        console.log(data)
         // 全部, 活期存款, 定期存款, 理财, 基金, 保险, 信托
-        let arr = ['aumBal','currDpsitBal','timeDpsitBal','cftBal','fndBal','insBal','entrstBal']
+        let arr = ['aumBal','currDpsitBal','timeDpsitBal','cftBal','fndBal','insBal','entrstVal']
         let xData = [[],[],[],[],[],[],[]] 
         // 根据生成的X轴去拿到接口返回的每一条X轴的数据
         xAxis.forEach(itemX => {

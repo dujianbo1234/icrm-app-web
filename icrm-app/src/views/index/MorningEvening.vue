@@ -73,14 +73,16 @@
         <div class="editBtn">编辑</div>
       </div>
       <div class="img">
-          <div class="imgList">
-            <template v-for="(item, index) in imgList" :key="item">
-              <div class="imgItem"><van-image src="https://fastly.jsdelivr.net/npm/@vant/assets/cat.jpeg"/></div>
-            </template>
+        <template v-for="(item, index) in imgList" :key="item">
+          <div class="imgList" v-if="openImg ? index < 6 : true">
+            <div v-if="openImg ? index < 5 : true">
+              <van-image width="100%" height="100%" src="https://fastly.jsdelivr.net/npm/@vant/assets/cat.jpeg" style="display: flex"/>
+            </div>
+            <div v-if="openImg && index == 5" style="align-items: center;" @click="openImg = !openImg">
+              <van-icon name="ellipsis" size="0.3rem" color="#E6E6E6" style="margin: 0 auto;"/>
+            </div>
           </div>
-          <!-- <div class="imgList" v-if="index == 5">
-            <van-icon name="ellipsis" size="0.3rem" color="#E6E6E6"/>
-          </div> -->
+        </template>
       </div>
     </div>
     <!-- 新增记录 -->
@@ -115,6 +117,7 @@ export default {
       minuDisabled: true,
       iconSize: 0,
       openPlay: true,
+      openImg: true,
       audioList: ['录音1','录音2','录音3','录音4','录音5'],
       audioTitle: '',
       imgList: [1,2,3,4,5,6,7]
@@ -159,6 +162,11 @@ export default {
   },
 };
 </script>
+<style scoped>
+* {
+  box-sizing: border-box;
+}
+</style>
 <style lang="less" scoped>
 .MorningEvening {
   .card {
@@ -263,22 +271,22 @@ export default {
   .meetingPhotos {
     .img {
       background: #fff;
-      padding: 0.15rem 0.125rem 0;
       border-radius: 0.08rem;
       border: 0.005rem solid #E5E5E5;
+      padding-bottom: 0.12rem;
+      width: 100%;
+      overflow: hidden;
       .imgList {
-        padding-bottom: 0.15rem;
-        display: flex;
-        // justify-content: space-evenly;
+        float: left;
+        padding-left: 0.11rem;
+        padding-top: 0.12rem;
         &>div {
-          flex-direction: column-reverse;
-        flex-wrap: wrap;
-          background: #026DFF;
           display: flex;
-          width: 31.5%;
+          width: 1.1rem;
           height: 0.85rem;
-          border-radius: 0.03rem;
+          border-radius: 0.04rem;
           overflow: hidden;
+          border: 0.005rem solid #E5E5E5;
         }
       }
     }
