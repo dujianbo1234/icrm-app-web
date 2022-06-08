@@ -47,15 +47,21 @@
         <div class="editBtn">编辑</div>
       </div>
       <div class="card">
-        <PlayAudio/>
+        <play-audio ref="PlayAudio"></play-audio>
         <div class="audioList">
           <div class="audioList_title">录音记录</div>
           <div class="audioList_list">
-            <div>1</div>
-            <div>2</div>
-            <div>3</div>
-            <div>4</div>
-            <!-- <div>5</div> -->
+            <template v-for="(item, index) in [1,2,3,4,5]" :key="item">
+              <div v-if="openPlay ? index < 4 : true">
+                <div class="list_item" @click="selectSound(item, index)" v-if="openPlay ? index < 3 : true">
+                  <van-icon :name="require(`@/assets/image/play-mp3.png`)" :size="iconSize == index ? '0.45rem' : '0.3rem'" style="margin-right: 0.04rem;" />
+                  <div>录音{{item}}</div>
+                </div>
+                <div class="list_item" v-if="openPlay && index == 3" @click="openPlay = !openPlay">
+                  <van-icon name="ellipsis" size="0.3rem"/>
+                </div>
+              </div>
+            </template>
           </div>
         </div>
       </div>
@@ -112,7 +118,9 @@ export default {
       minDate: moment().subtract(3, 'month'),
       maxDate: moment(),
       textarea: '测试内容',
-      minuDisabled: true
+      minuDisabled: true,
+      iconSize: 0,
+      openPlay: true
     };
   },
   methods: {
@@ -137,6 +145,12 @@ export default {
     /* 新增记录 */
     addNewRecord(){
       this.$router.push('/addNewRecord')
+    },
+    /* 选择录音 */
+    selectSound(item, index){
+      console.log(item)
+      this.$refs['PlayAudio'].init()
+      this.iconSize = index
     }
   },
   mounted() {
@@ -228,9 +242,17 @@ export default {
         width: 100%;
         overflow: hidden;
         &>div {
+          display: flex;
           float: left;
           width: 25%;
           height: 1.025rem;
+          // background: #026DFF;
+          .list_item {
+            // height: 100%;
+            // width: 100%;
+            // background: pink;
+            margin: auto;
+          }
         }
       }
     }

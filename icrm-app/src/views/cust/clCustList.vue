@@ -2,7 +2,7 @@
   <div class="clCustList">
     <div class="top">
       <!-- 顶部title -->
-      <nav-bar title="存量客户列表" type="2" leftIcon :rightText="$store.state.userMsg.roleId != '00000004' ? '选择机构' : ''" rightColor="rgba(2, 109, 255, 1)" @touchRight="$refs.orgList.showPopup()"/>
+      <nav-bar title="存量客户列表" type="2" leftIcon :rightText="$store.state.userMsg.roleId != '00000004' ? orgName : ''" rightColor="rgba(2, 109, 255, 1)" @touchRight="$refs.orgList.showPopup()"/>
       <!-- 搜索栏 -->
       <van-search class="searchBox" v-model="searchValue" shape="round" show-action placeholder="请输入客户名称/归属客户经理工号" @search="reload">
         <template #action>
@@ -102,7 +102,7 @@
         </div>
       </van-checkbox-group>
     </van-list>
-    <div style=" height: calc(constant(safe-area-inset-bottom) + 0.6rem); height: calc(env(safe-area-inset-bottom) + 0.6rem);" v-show="showBatchSend"></div>
+    <div style="height: calc(constant(safe-area-inset-bottom) + 0.6rem); height: calc(env(safe-area-inset-bottom) + 0.6rem);" v-show="showBatchSend"></div>
     <div class="sendMsgBtnBox" v-if="showBatchSend">
       <van-checkbox v-model="checkAll" ref="checkAll" @click="chooseAll">
         <span style="color: #8C8C8C; font-size: 0.14rem;">全选</span>
@@ -172,22 +172,14 @@ export default {
 			params: {
 				pageSize: "10",
 				pageNum: "1",
-        belgCustMgr: '', // 客户号
+        belgCustMgr: '',    // 客户经理
 				// orderType: "",      // 排序
 				cstName: "",        // 客户名称
         svcLvl: '',         // 服务等级
-        ctcTel: "",         // 联系电话
-        certNum: "",        // 证件号
+        // ctcTel: "",         // 联系电话
+        // certNum: "",        // 证件号
         cstLvl: "",         // 客户等级
         belongOrg: '',      // 归属机构
-				// cstMagNo: "",       // ?
-				// busiType: "",       // ?
-				// curTage: "",        // ?
-				// estCstStart: "",    // ?
-				// estCstEnd: "",      // ?
-				// estAmtStart: "",    // ?
-				// estAmtEnd: "",      // ?
-				// orgId: "",          // ?
 			},
       tageList: [
         { key: '', title: "全部" },
@@ -200,6 +192,7 @@ export default {
         { key: 0, title: "未达标" }
       ],
       tageListActive: 0,
+      orgName: '选择机构'
     };
   },
   /* 判断是从哪个路由过来的，若是判断是否需要开启缓存 */

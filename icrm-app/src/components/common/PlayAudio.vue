@@ -33,6 +33,12 @@ export default {
   },
   methods: {
     moment,
+    /* 初始化状态 */
+    init(){
+      this.play = false
+      this.currentDuration = 0
+      clearInterval(this.player)
+    },
     /* 点击播放按钮 */
     playBtn(){
       this.play = !this.play

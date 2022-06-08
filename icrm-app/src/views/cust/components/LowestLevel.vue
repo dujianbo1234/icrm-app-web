@@ -1,11 +1,11 @@
 <template>
   <div class="plate5">
     <div class="plate5_item" @click="openMbox(false)">
-      <div class="plate5_item_icon dx"></div>
+      <div :class="`plate5_item_icon ${this.custBase.ctcTel ? 'dx' : 'dx_g' }`"></div>
       <div class="plate5_item_text">发送短信</div>
     </div>
     <div class="plate5_item" @click="callPhone">
-      <div class="plate5_item_icon dh"></div>
+      <div :class="`plate5_item_icon ${this.custBase.ctcTel ? 'dh' : 'dh_g' }`"></div>
       <div class="plate5_item_text">拨打电话</div>
     </div>
     <div class="plate5_item" @click="openVisit">
@@ -91,10 +91,16 @@ export default {
   },
   methods: {
     callPhone(){
+      if(!this.custBase.ctcTel){
+        return
+      }
       this.showCall = true
     },
     /* 发送短信 */
     openMbox(type) {
+      if(!this.custBase.ctcTel){
+        return
+      }
       if (isNaN(this.custBase.ctcTel)) {
         Toast.fail("电话号码格式有误");
         return;
@@ -256,8 +262,14 @@ export default {
   .dx {
     background-image: url(~@/assets/image/business_detail_message.png);
   }
+  .dx_g {
+    background-image: url(~@/assets/image/dx_gray.png);
+  }
   .dh {
     background-image: url(~@/assets/image/business_detail_call.png);
+  }
+  .dh_g {
+    background-image: url(~@/assets/image/dh_gray.png);
   }
   .bf {
     background-image: url(~@/assets/image/business_detail_visit.png);

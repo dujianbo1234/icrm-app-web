@@ -1783,7 +1783,11 @@ export default {
       padding: 0.16rem 0.12rem;
       box-shadow: inset 0 0.005rem 0 0 rgba(0, 0, 0, 0.08);
       .textL {
+        max-width: 70%;
         margin: auto 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
       }
       .textR {
         color: #026DFF;
