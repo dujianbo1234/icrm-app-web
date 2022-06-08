@@ -116,7 +116,6 @@
 					shrtmsgCnl: "8",
 					custList: [],
 					searchData: {},
-					// acsry: ""
 				},
 				haveTest: false,
 				testTel: "",
@@ -145,7 +144,6 @@
 					shrtmsgCnl: msg.shrtmsgCnl,
 					custList: [],
 					searchData: {},
-					// acsry: msg.list[0].sysId
 				};
 				switch (msg.type) {
 					case "CLCustListSendAll":
@@ -159,7 +157,8 @@
 							return {
 								custNum: item.custNo || item.custNum,
 								cstName: item.custName || item.cstName || item.custNm,
-								mobileNum: item.ctcTel || item.phoneNo || item.telPhone
+								mobileNum: item.ctcTel || item.phoneNo || item.telPhone,
+								shrtmsgTaskId: item.sysId
 							}
 						});
 						break;
