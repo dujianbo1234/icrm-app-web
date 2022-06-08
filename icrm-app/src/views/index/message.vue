@@ -516,12 +516,16 @@
 				})
 			},
 			toCustView(item) {
-				this.$router.push({
-					name: 'clCustomerView',
-					query: {
-						custNum: item.custNum
-					}
-				})
+				if(item.custNum[0]=="P"){
+					this.$router.push({
+						name: 'clCustomerView',
+						query: {
+							custNum: item.custNum
+						}
+					})
+				}else{
+					Toast("非存量客户，无法查看客户视图！")
+				}
 			},
 		},
 		mounted() {
