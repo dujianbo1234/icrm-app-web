@@ -138,7 +138,8 @@
 		</van-list>
 		<van-popup v-model:show="openPLFS" position="bottom" :overlay="false" :lock-scroll="false" safe-area-inset-bottom>
 			<div class="bottomBox">
-				<van-checkbox v-model="checkAll" ref="checkAll" @click="chooseAll">全选</van-checkbox>
+				<div></div>
+				<!-- <van-checkbox v-model="checkAll" ref="checkAll" @click="chooseAll">全选</van-checkbox> -->
 				<div class="btnBox">
 					<div class="bottomBtn" @click="confirmCheck">批量发送</div>
 					<div class="bottomBtn" @click="openMbox([],true)">全部发送</div>
