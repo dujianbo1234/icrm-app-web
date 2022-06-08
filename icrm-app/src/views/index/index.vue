@@ -329,7 +329,7 @@ export default {
           value3: "",
         },
         {
-          title: "有效客户数",
+          title: "有效商户数",
           unit: "(人)",
           text: [
             '（1）商户收款累计交易天数≥12天，且付款人不为同一人；',
@@ -582,7 +582,7 @@ export default {
                     return item <= 0 || index == 0 ? formatNums(item) : `+${formatNums(item)}`;
                   });
                   break;
-                case "有效客户数":
+                case "有效商户数":
                   [item.value0, item.value1, item.value2, item.value3] = [
                     dataObj.merntCstCnt,
                     dataObj.merntCstCntToYstd,
@@ -841,7 +841,7 @@ export default {
       }
       queryCustomertrends(body, (res) => {
         let data = res.data.records
-        // 零售客户数（全部), 财富客户数, 贷款客户数, 代发客户数, 基础客户数, 有效客户数
+        // 零售客户数（全部), 财富客户数, 贷款客户数, 代发客户数, 基础客户数, 有效商户数
         let arr = ['custCnt','vipCustCnt','loanCustCnt','agentCustCnt','basicCstCnt','merntCstCnt']
         let xData = [[],[],[],[],[],[]] 
         // 根据生成的X轴去拿到接口返回的每一条X轴的数据
