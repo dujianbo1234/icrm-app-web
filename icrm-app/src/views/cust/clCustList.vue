@@ -65,7 +65,7 @@
       <van-checkbox-group v-model="chooseItems" ref="checkboxGroup">
         <div class="custItem" v-for="(item,i) in custList" :key="'item'+i" :style="{'margin-left':showBatchSend?'10%':'0%'}" @click="openDetails(item)">
 					<div class="leftCheckBox">
-						<van-checkbox :name="item" @click="checkAll=false"></van-checkbox>
+						<van-checkbox :name="item" @click="checkAll=false" :disabled="!item.ctcTel"></van-checkbox>
 					</div>
           <div class="custItem1">
             <div class="custItem1_2">
@@ -104,9 +104,10 @@
     </van-list>
     <div style="height: calc(constant(safe-area-inset-bottom) + 0.6rem); height: calc(env(safe-area-inset-bottom) + 0.6rem);" v-show="showBatchSend"></div>
     <div class="sendMsgBtnBox" v-if="showBatchSend">
-      <van-checkbox v-model="checkAll" ref="checkAll" @click="chooseAll">
+      <!-- <van-checkbox v-model="checkAll" ref="checkAll" @click="chooseAll">
         <span style="color: #8C8C8C; font-size: 0.14rem;">全选</span>
-      </van-checkbox>
+      </van-checkbox> -->
+      <div></div>
       <div class="sendBox">
         <div class="sendMsgBtn" style="margin-right: 0.1rem;" @click="msgBatchSend(false)">批量发送</div>
         <div class="sendMsgBtn" @click="msgBatchSend(true)">全部发送</div>

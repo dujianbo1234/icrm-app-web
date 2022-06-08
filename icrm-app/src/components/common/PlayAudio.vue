@@ -1,7 +1,7 @@
 <template>
   <!-- 音频播放组件 -->
   <div class="PlayAudio">
-    <div class="audioTitle">正在播放：{{ "录音2备份" }}</div>
+    <div class="audioTitle">正在播放：{{audioTitle}}</div>
     <van-progress :percentage="percentage" :show-pivot="false" />
     <div class="time">
       <span>{{tiemInit(currentDuration)}}</span>
@@ -17,6 +17,9 @@
 <script>
 import moment from 'moment'
 export default {
+  props: {
+    audioTitle: String
+  },
   data(){
     return {
       currentDuration: 0, // 初始时间(秒)

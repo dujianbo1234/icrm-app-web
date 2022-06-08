@@ -47,18 +47,18 @@
         <div class="editBtn">编辑</div>
       </div>
       <div class="card">
-        <play-audio ref="PlayAudio"></play-audio>
+        <play-audio ref="PlayAudio" :audioTitle="audioTitle"></play-audio>
         <div class="audioList">
           <div class="audioList_title">录音记录</div>
           <div class="audioList_list">
-            <template v-for="(item, index) in [1,2,3,4,5]" :key="item">
+            <template v-for="(item, index) in audioList" :key="item">
               <div v-if="openPlay ? index < 4 : true">
                 <div class="list_item" @click="selectSound(item, index)" v-if="openPlay ? index < 3 : true">
                   <van-icon :name="require(`@/assets/image/play-mp3.png`)" :size="iconSize == index ? '0.45rem' : '0.3rem'" style="margin-right: 0.04rem;" />
-                  <div>录音{{item}}</div>
+                  <div :style="{color : iconSize == index ? '#026DFF' : '#131313'}">{{item}}</div>
                 </div>
                 <div class="list_item" v-if="openPlay && index == 3" @click="openPlay = !openPlay">
-                  <van-icon name="ellipsis" size="0.3rem"/>
+                  <van-icon name="ellipsis" size="0.3rem" color="#E6E6E6"/>
                 </div>
               </div>
             </template>
@@ -67,26 +67,20 @@
       </div>
     </div>
     <!-- 会议照片 -->
-    <div class="minutesMeeting">
+    <div class="meetingPhotos">
       <div class="title">
         <div class="label">会议照片</div>
         <div class="editBtn">编辑</div>
       </div>
-      <div class="card">
-        <div class="minutesList">
-          <div>
-            <span>创建人</span>
-            <span>李白</span>
+      <div class="img">
+          <div class="imgList">
+            <template v-for="(item, index) in imgList" :key="item">
+              <div class="imgItem"><van-image src="https://fastly.jsdelivr.net/npm/@vant/assets/cat.jpeg"/></div>
+            </template>
           </div>
-          <div>
-            <span>机构</span>
-            <span>九江银行八里湖支行</span>
-          </div>
-          <div>
-            <span>创建时间</span>
-            <span>2021-12-01 08:00-10</span>
-          </div>
-        </div>
+          <!-- <div class="imgList" v-if="index == 5">
+            <van-icon name="ellipsis" size="0.3rem" color="#E6E6E6"/>
+          </div> -->
       </div>
     </div>
     <!-- 新增记录 -->
@@ -120,8 +114,15 @@ export default {
       textarea: '测试内容',
       minuDisabled: true,
       iconSize: 0,
-      openPlay: true
+      openPlay: true,
+      audioList: ['录音1','录音2','录音3','录音4','录音5'],
+      audioTitle: '',
+      imgList: [1,2,3,4,5,6,7]
     };
+  },
+  created(){
+    this.audioList = ['录音1','录音2','录音3','录音4','录音5']
+    this.audioTitle = this.audioList[0]
   },
   methods: {
     moment,
@@ -148,8 +149,8 @@ export default {
     },
     /* 选择录音 */
     selectSound(item, index){
-      console.log(item)
       this.$refs['PlayAudio'].init()
+      this.audioTitle = item
       this.iconSize = index
     }
   },
@@ -164,6 +165,7 @@ export default {
     background: #fff;
     padding: 0.12rem;
     border-radius: 0.08rem;
+    border: 0.005rem solid #E5E5E5;
   }
   .calendar {
     position: relative;
@@ -248,11 +250,35 @@ export default {
           height: 1.025rem;
           // background: #026DFF;
           .list_item {
+            font-size: 0.15rem;
             // height: 100%;
             // width: 100%;
             // background: pink;
             margin: auto;
           }
+        }
+      }
+    }
+  }
+  .meetingPhotos {
+    .img {
+      background: #fff;
+      padding: 0.15rem 0.125rem 0;
+      border-radius: 0.08rem;
+      border: 0.005rem solid #E5E5E5;
+      .imgList {
+        padding-bottom: 0.15rem;
+        display: flex;
+        // justify-content: space-evenly;
+        &>div {
+          flex-direction: column-reverse;
+        flex-wrap: wrap;
+          background: #026DFF;
+          display: flex;
+          width: 31.5%;
+          height: 0.85rem;
+          border-radius: 0.03rem;
+          overflow: hidden;
         }
       }
     }

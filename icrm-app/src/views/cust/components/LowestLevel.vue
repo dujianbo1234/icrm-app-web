@@ -184,6 +184,7 @@ export default {
 				duration: 0
 			});
       let body = {
+        serviceContent: this.followValue,
         custName: this.custBase.cstName,
         custNo: this.custBase.custNum,
         mobileNum: this.custBase.ctcTel,
