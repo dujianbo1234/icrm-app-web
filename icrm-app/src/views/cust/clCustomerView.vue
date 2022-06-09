@@ -998,7 +998,6 @@ export default {
       }
       queryAssetsAUMGrowthTrend(body, res => {
         let data = res.data.records || []
-        console.log(data)
         // 全部, 活期存款, 定期存款, 理财, 基金, 保险, 信托
         let arr = ['aumBal','currDpsitBal','timeDpsitBal','cftBal','fndBal','insBal','entrstVal']
         let xData = [[],[],[],[],[],[],[]] 
