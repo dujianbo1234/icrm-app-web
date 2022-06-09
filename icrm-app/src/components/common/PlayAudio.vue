@@ -67,8 +67,9 @@ export default {
       switch(type){
         case true:
           if(this.currentDuration < num){
-            this.$emit('playStop', 6)
+            this.$emit('playStop', 6) // 快退到0,结束播放
             this.currentDuration = 0
+            this.init()
           }else{
             this.$emit('playStop', 5)
             this.currentDuration -= num
@@ -76,8 +77,9 @@ export default {
         break;
         case false:
           if(this.totalDuration - this.currentDuration < num){
-            this.$emit('playStop', 6)
+            this.$emit('playStop', 6) // 快退到结束
             this.currentDuration = this.totalDuration
+            this.init()
           }else{
             this.$emit('playStop', 4)
             this.currentDuration += num
