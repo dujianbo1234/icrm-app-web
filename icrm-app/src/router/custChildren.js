@@ -2,7 +2,7 @@ export default [{
   path: '/clCustList',
   name: 'clCustList',
   meta: {
-    keepAlive: false
+    keepAlive: true
   },
   component: () => import('@/views/cust/clCustList.vue')
 },

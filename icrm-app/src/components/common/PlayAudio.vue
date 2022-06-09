@@ -18,12 +18,12 @@
 import moment from 'moment'
 export default {
   props: {
-    audioTitle: String
+    audioTitle: String,
+    totalDuration: Number, // 录音总时长(毫秒)
   },
   data(){
     return {
-      currentDuration: 0, // 初始时间(秒)
-      totalDuration: 90,  // 录音总时长(秒)
+      currentDuration: 0, // 初始时间(毫秒)
       play: false,
       player: null,
     }
@@ -46,7 +46,8 @@ export default {
     playBtn(){
       this.play = !this.play
       if(this.play){
-       this.player = setInterval(()=> {
+        this.$emit('playStop', 2)
+        this.player = setInterval(()=> {
           if(this.currentDuration < this.totalDuration){
             this.currentDuration += 1
           }else{
@@ -56,24 +57,29 @@ export default {
           }
         }, 1000)
       }else{
+        this.$emit('playStop', 3)
         clearInterval(this.player)
       }
     },
     /* 快进/快退 */
     forwardBack(type){
-      let num = 5 // 这里修改每次前进后退的时间
+      let num = 15 // 这里修改每次前进后退的时间
       switch(type){
         case true:
           if(this.currentDuration < num){
+            this.$emit('playStop', 6)
             this.currentDuration = 0
           }else{
+            this.$emit('playStop', 5)
             this.currentDuration -= num
           }
         break;
         case false:
           if(this.totalDuration - this.currentDuration < num){
+            this.$emit('playStop', 6)
             this.currentDuration = this.totalDuration
           }else{
+            this.$emit('playStop', 4)
             this.currentDuration += num
           }
         break;
@@ -101,6 +107,10 @@ export default {
     color: #131313;
     font-size: 0.15rem;
     margin-bottom: 0.3rem;
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
   .time {
     display: flex;

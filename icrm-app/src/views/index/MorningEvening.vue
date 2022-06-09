@@ -44,7 +44,7 @@
     <div class="audioManagement">
       <div class="title">
         <div class="label">音频管理</div>
-        <div class="editBtn">编辑</div>
+        <!-- <div class="editBtn">编辑</div> -->
       </div>
       <div class="card">
         <play-audio ref="PlayAudio" :audioTitle="audioTitle"></play-audio>
@@ -70,19 +70,10 @@
     <div class="meetingPhotos">
       <div class="title">
         <div class="label">会议照片</div>
-        <div class="editBtn">编辑</div>
+        <div class="editBtn" @click="deleBtn">{{deletable ? '保存' : '编辑'}}</div>
       </div>
-      <div class="img">
-        <template v-for="(item, index) in imgList" :key="item">
-          <div class="imgList" v-if="openImg ? index < 6 : true">
-            <div v-if="openImg ? index < 5 : true">
-              <van-image width="100%" height="100%" src="https://fastly.jsdelivr.net/npm/@vant/assets/cat.jpeg" style="display: flex"/>
-            </div>
-            <div v-if="openImg && index == 5" style="align-items: center;" @click="openImg = !openImg">
-              <van-icon name="ellipsis" size="0.3rem" color="#E6E6E6" style="margin: 0 auto;"/>
-            </div>
-          </div>
-        </template>
+      <div class="imgContent">
+        <van-uploader v-model="fileList" :upload-icon="require('@/assets/image/common_more.png')" preview-size="1.1rem" :deletable="deletable" :readonly="true" :show-upload="initFileList.length > 5 && showUpload" @click-upload="clickUpload" @delete="deleteImg"/>
       </div>
     </div>
     <!-- 新增记录 -->
@@ -120,12 +111,36 @@ export default {
       openImg: true,
       audioList: ['录音1','录音2','录音3','录音4','录音5'],
       audioTitle: '',
-      imgList: [1,2,3,4,5,6,7]
+      showUpload: true,
+      deletable: false,
+      initFileList: [
+        // Uploader 根据文件后缀来判断是否为图片文件
+        // 如果图片 URL 中不包含类型信息，可以添加 isImage 标记来声明
+        { url: 'https://fastly.jsdelivr.net/npm/@vant/assets/leaf.jpeg' },
+        { url: 'https://cloud-image', isImage: true },
+        { url: 'https://fastly.jsdelivr.net/npm/@vant/assets/cat.jpeg' },
+        { url: 'https://fastly.jsdelivr.net/npm/@vant/assets/leaf.jpeg' },
+        { url: 'https://fastly.jsdelivr.net/npm/@vant/assets/cat.jpeg' },
+        { url: 'https://fastly.jsdelivr.net/npm/@vant/assets/leaf.jpeg' },
+        { url: 'https://cloud-image', isImage: true },
+        { url: 'https://fastly.jsdelivr.net/npm/@vant/assets/cat.jpeg' },
+      ],
+      fileList: []
     };
+  },
+  /* 判断是从哪个路由过来的，若是判断是否需要开启缓存 */
+  beforeRouteEnter(to, from, next) {
+    if(from.name === 'addNewRecord') {
+      to.meta.keepAlive = true;
+    }else{
+      to.meta.keepAlive = false;
+    }
+    next();
   },
   created(){
     this.audioList = ['录音1','录音2','录音3','录音4','录音5']
     this.audioTitle = this.audioList[0]
+    this.fileList = this.initFileList.length > 5 ? this.initFileList.slice(0,5) : this.initFileList
   },
   methods: {
     moment,
@@ -148,17 +163,33 @@ export default {
     },
     /* 新增记录 */
     addNewRecord(){
-      this.$router.push('/addNewRecord')
+      this.$refs['PlayAudio'].init()
+      this.$nextTick(()=>{
+        this.$router.push('/addNewRecord')
+      })
     },
     /* 选择录音 */
     selectSound(item, index){
       this.$refs['PlayAudio'].init()
       this.audioTitle = item
       this.iconSize = index
+    },
+    /* 点击上传区 */
+    clickUpload(){
+      this.showUpload = !this.showUpload
+      this.fileList = this.initFileList
+    },
+    /* 编辑图片 */
+    deleBtn(){
+      this.deletable = !this.deletable
+    },
+    /* 文件删除时的回调 */
+    deleteImg(v){
+      if(this.showUpload){
+        this.initFileList = this.initFileList.filter(item => item != v)
+        this.fileList = this.initFileList.length > 5 ? this.initFileList.slice(0,5) : this.initFileList
+      }
     }
-  },
-  mounted() {
-    
   },
 };
 </script>
@@ -256,12 +287,8 @@ export default {
           float: left;
           width: 25%;
           height: 1.025rem;
-          // background: #026DFF;
           .list_item {
             font-size: 0.15rem;
-            // height: 100%;
-            // width: 100%;
-            // background: pink;
             margin: auto;
           }
         }
@@ -269,31 +296,24 @@ export default {
     }
   }
   .meetingPhotos {
-    .img {
+    .imgContent {
       background: #fff;
       border-radius: 0.08rem;
       border: 0.005rem solid #E5E5E5;
-      padding-bottom: 0.12rem;
+      padding: 0.11rem 0 0 0.11rem;
       width: 100%;
-      overflow: hidden;
-      .imgList {
-        float: left;
-        padding-left: 0.11rem;
-        padding-top: 0.12rem;
-        &>div {
-          display: flex;
-          width: 1.1rem;
-          height: 0.85rem;
-          border-radius: 0.04rem;
-          overflow: hidden;
-          border: 0.005rem solid #E5E5E5;
-        }
+      display: flex;
+      &:deep(.van-uploader__preview){
+        margin: 0 0.11rem 0.11rem 0;
+      }
+      &:deep(.van-uploader__upload){
+        background: #fff;
       }
     }
   }
   .addRecord {
     position: fixed;
-    width: 92%;
+    width: 100%;
     bottom: 0;
     left: 0;
     z-index: 99;

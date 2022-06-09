@@ -1126,8 +1126,8 @@ export default {
     },
     /* 晨夕会 */
     morningEvening(){
-      Toast.fail("尽请期待")
-      return;
+      // Toast.fail("尽请期待")
+      // return;
       this.$router.push('/MorningEvening')
     }
   },
