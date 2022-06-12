@@ -10,7 +10,7 @@
         <div class="custInfoRight">
           <div class="custName">
             <div class="custItem1_2_1">{{custBase.cstName}}</div>
-            <div class="custItem1_2_2" :style="`background-image:url(${require(`@/assets/image/business_chooseCust_type0.png`)})`"></div>
+            <div class="custItem1_2_2" :style="`background-image:url(${require(`@/assets/image/business_chooseCust_type${custBase.svcLvlCount || 0}.png`)})`"></div>
           </div>
           <div class="custItem1_2_3">
             <template v-for="(text, j) in ['vipCstFlg','agentPayCstFlg', 'newCstFlg', 'merntCstFlg', 'ioinHoldLoan', 'crdtCrdCstFlg']">
