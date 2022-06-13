@@ -170,7 +170,6 @@
 					require('../../assets/image/tabbar_cust_main_swipe1.png'),
 					require('../../assets/image/tabbar_cust_main_swipe1.png'),
 				],
-				topOpacity: 0,
 				fiveMenu: false,
 				menuList1: [{
 						title: "重要潜客",
@@ -219,7 +218,7 @@
 					},
 					{
 						title: "更多",
-						icon: require('../../assets/image/tabbar_cust_main_menu10.png'),
+						icon: require('../../assets/image/common_menu_more.png'),
 						show: false
 					}
 				],

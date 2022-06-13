@@ -137,7 +137,7 @@
 						</div>
 						<div class="followItem5_2" v-if="followItem.fileList.length>4&&!followItem.showAllPhoto"
 							@click="followItem.showAllPhoto=true">
-							<van-icon :name="require('../../assets/image/common_more.png')" color="##8C8C8C"
+							<van-icon :name="require('../../assets/image/common_more.png')" color="#8C8C8C"
 								size="21" />
 						</div>
 					</div>
@@ -248,7 +248,7 @@
 			</div>
 			<div class="popPlate2">
 				<div class="cameraBox" v-for="(photo,i) in photoList" :key="'photo'+i">
-					<van-icon class="delBtn" :name="require('../../assets/image/common_delete.png')" color="##8C8C8C"
+					<van-icon class="delBtn" :name="require('../../assets/image/common_delete.png')" color="#8C8C8C"
 						size="20" @click="delPhoto(i)" />
 					<div class="imgBox" @click="openPhoto('data:image/jpeg;base64,' + photo.url)">
 						<img :src="'data:image/jpeg;base64,' + photo.url">
