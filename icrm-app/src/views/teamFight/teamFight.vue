@@ -142,4 +142,12 @@
 		color: #262626;
 		line-height: 0.18rem;
 	}
+
+	:deep(.van-notice-bar) {
+		margin: 0 3%;
+		padding: 0 0.05rem;
+		border: solid 0.01rem #F7F7F7;
+		font-size: 0.13rem;
+		border-radius: 0.02rem;
+	}
 </style>
