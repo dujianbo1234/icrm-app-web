@@ -2,6 +2,9 @@ export default [
   {
     path: '/MorningEvening',
     name: 'MorningEvening',
+    // meta: {
+    //   keepAlive: true
+    // },
     component: () => import('@/views/index/MorningEvening.vue')
   },
   {
