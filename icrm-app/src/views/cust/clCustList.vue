@@ -323,6 +323,7 @@
 			},
 			/* 选择机构 */
 			activeOrg(orgValue) {
+				this.orgName = orgValue.text;
 				this.initParams()
 				this.params.belongOrg = orgValue.value || ''
 				this.getCustList();

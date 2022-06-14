@@ -6,16 +6,23 @@
 			</van-swipe-item>
 		</van-swipe>
 		<div class="menuBox">
-			<div class="menuItem" v-for="(menuItem,i) in mainMenu" v-show="mainMenu.show" :key="'mainMenu'+i"
+			<div class="menuItem" v-for="(menuItem,i) in mainMenu" v-show="menuItem.show" :key="'mainMenu'+i"
 				@click="openModel(menuItem)">
 				<div class="menuIcon" :style="{'background-image':'url('+menuItem.icon+')'}"></div>
 				<div class="menuName">{{menuItem.title}}</div>
 			</div>
 		</div>
+		<van-empty style="margin-top: 0.5rem;" :image="require('../../assets/image/common_waiting.png')" image-size="120" description="页面开发中" />
+		<div class="bottomLine">
+			<div class="bottomText">到底啦，我是有底线的</div>
+		</div>
 	</div>
 </template>
 
 <script>
+	import {
+		Toast
+	} from "vant";
 	export default {
 		data() {
 			return {
@@ -106,10 +113,14 @@
 		margin-top: calc(calc(constant(safe-area-inset-top) + 0.5rem) * -1);
 		margin-top: calc(calc(env(safe-area-inset-top) + 0.5rem) * -1);
 		padding-bottom: 0.4rem;
+
+
+		height: calc(100vh - 0.5rem);
+		position: relative;
 	}
 
 	.menuBox {
-		margin: 0 auto 0.11rem;
+		width: 100%;
 		display: flex;
 		justify-content: flex-start;
 		flex-wrap: wrap;
@@ -143,11 +154,24 @@
 		line-height: 0.18rem;
 	}
 
-	:deep(.van-notice-bar) {
-		margin: 0 3%;
-		padding: 0 0.05rem;
-		border: solid 0.01rem #F7F7F7;
-		font-size: 0.13rem;
-		border-radius: 0.02rem;
+	.bottomLine {
+		height: 0.2rem;
+		width: 60%;
+		margin: 0.05rem auto;
+		border-bottom: solid 0.01rem #F4F4F4;
+		position: absolute;
+		display: flex;
+		justify-content: center;
+		bottom: 0.2rem;
+		left: 20%;
+	}
+
+	.bottomText {
+		font-size: 0.12rem;
+		padding: 0 0.1rem;
+		color: #D8D8D8;
+		background-color: #FFFFFF;
+		position: absolute;
+		bottom: -50%;
 	}
 </style>

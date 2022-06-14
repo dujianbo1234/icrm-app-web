@@ -382,7 +382,6 @@
 				queryEmployeeMustDoDetail({
 					id: this.id,
 				}, (res) => {
-					console.log('res',res)
 					this.followItem=res.data
 					this.followItem.showAllPhoto = false;
 					Toast.clear();
@@ -426,7 +425,6 @@
 				AlipayJSBridge.call('openPickerV', {
 					openType: "0",
 				}, (res1) => {
-					console.log("000",res1)
 					if (res1.status == "000000") {
 						Toast.loading({
 							message: "正在上传",
@@ -467,8 +465,6 @@
 				var listHeight = document.getElementById('listHeight');
 				var toTop =  listHeight.offsetTop;
 				this.listHeight = mainHeight-toTop
-				console.log('列表的高度',this.listHeight)
-
 			},
 			
 			
@@ -521,7 +517,6 @@
 						this.allNum = res.data.total.toLocaleString();
 						this.mustDoList = this.mustDoList.concat(res.data.records);
 						if (this.mustDoList.length >= this.allNum) this.finished = true;
-						console.log('mustDoList',this.mustDoList)
 					} else {
 						Toast.fail("必办列表为空");
 						this.finished = true;
@@ -559,7 +554,6 @@
 					Toast.fail("必办名称数据为空")
 				}
 			})
-			console.log('this.mustDoName',this.mustDoName)
 		},
 	};
 </script>

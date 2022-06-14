@@ -1,6 +1,6 @@
 <template>
 	<div class="home">
-		<van-swipe :autoplay="3000" indicator-color="#026DFF">
+		<van-swipe :autoplay="0" indicator-color="#026DFF">
 			<van-swipe-item v-for="image in swipeImg" :key="image">
 				<img style="width: 100vw;" :src="image" />
 			</van-swipe-item>

@@ -55,109 +55,143 @@
 					</div>
 				</div>
 			</div>
+			<div class="total">
+				<div>筛选结果：共{{Number(total).toLocaleString()}}条数据</div>
+				<div class="fpBtn" v-if="$store.state.userMsg.roleId!='00000004'&&!openFP" @click="openFP=true">分配</div>
+				<div class="fpBtn" v-else-if="$store.state.userMsg.roleId!='00000004'&&openFP"
+					@click="checked=[];openFP=false;">取消分配</div>
+			</div>
 		</div>
 		<div :style="{height: fixedHeight}"></div>
 		<van-list v-model:loading="loading" :finished="finished" finished-text="已加载全部数据" @load="onLoad">
-			<div class="custItem" v-for="(item,i) in custList" :key="'item'+i" @click="openDetail(item)">
-				<div class="custItem1">
-					<div class="custItem1_1"></div>
-					<div class="custItem1_2">
-						<div class="custItem1_2_1">{{item.custNm}}</div>
-						<div class="custItem1_2_2" v-if="item.svcLvl=='0'"
-							:style="{'background-image': 'url('+require('../../assets/image/business_chooseCust_type0.png')+')'}">
-						</div>
-						<div class="custItem1_2_2" v-if="item.svcLvl=='1'"
-							:style="{'background-image': 'url('+require('../../assets/image/business_chooseCust_type1.png')+')'}">
-						</div>
-						<div class="custItem1_2_2" v-if="item.svcLvl=='2'"
-							:style="{'background-image': 'url('+require('../../assets/image/business_chooseCust_type2.png')+')'}">
-						</div>
-						<div class="custItem1_2_2" v-if="item.svcLvl=='3'"
-							:style="{'background-image': 'url('+require('../../assets/image/business_chooseCust_type3.png')+')'}">
-						</div>
-						<div class="custItem1_2_2" v-if="item.svcLvl=='4'"
-							:style="{'background-image': 'url('+require('../../assets/image/business_chooseCust_type4.png')+')'}">
-						</div>
-						<div class="custItem1_2_2" v-if="item.svcLvl=='5'"
-							:style="{'background-image': 'url('+require('../../assets/image/business_chooseCust_type5.png')+')'}">
-						</div>
-						<div class="custItem1_2_2" v-if="item.svcLvl=='6'"
-							:style="{'background-image': 'url('+require('../../assets/image/business_chooseCust_type6.png')+')'}">
-						</div>
-						<div class="custItem1_2_3">
-							<div class="custItem1_2_3_item" v-if="item.vipCstFlg=='1'"
-								style="background-color: rgba(2,109,255,0.08);color: #026DFF;">财</div>
-							<div class="custItem1_2_3_item" v-if="item.agentPayCstFlg=='1'"
-								style="background-color: rgba(255,133,0,0.08);color: #FF8500;">代</div>
-							<div class="custItem1_2_3_item" v-if="item.basicCstCnt=='1'"
-								style="background-color: rgba(255,58,58,0.08);color: #FF3A3A;">新</div>
-							<div class="custItem1_2_3_item" v-if="item.merntCstFlg=='1'"
-								style="background-color: rgba(68,107,161,0.08);color: #446BA1;">商</div>
-							<div class="custItem1_2_3_item" v-if="item.ioinHoldLoan=='1'"
-								style="background-color: rgba(55,205,55,0.08);color: #13AD13;">贷</div>
-							<van-icon v-if="item.value08=='1'"
-								:name="require('../../assets/image/business_chooseCust_zfb_a.png')" size="16"
-								style="margin-right: 0.04rem;" />
-							<van-icon v-else :name="require('../../assets/image/business_chooseCust_zfb.png')" size="16"
-								style="margin-right: 0.04rem;" />
-							<van-icon v-if="item.value09=='1'"
-								:name="require('../../assets/image/business_chooseCust_wx_a.png')" size="16"
-								style="margin-right: 0.04rem;" />
-							<van-icon v-else :name="require('../../assets/image/business_chooseCust_wx.png')" size="16"
-								style="margin-right: 0.04rem;" />
-							<van-icon v-if="item.value10=='1'"
-								:name="require('../../assets/image/business_chooseCust_ysf_a.png')" size="16"
-								style="margin-right: 0.04rem;" />
-							<van-icon v-else :name="require('../../assets/image/business_chooseCust_ysf.png')" size="16"
-								style="margin-right: 0.04rem;" />
-						</div>
+			<van-checkbox-group v-model="checked" ref="checkboxGroup">
+				<div v-for="(item,i) in custList" :key="'item'+i" class="msgCardOutBox"
+					:style="{'margin-left':openFP?'15%':'0%'}">
+					<div class="leftCheckBox">
+						<van-checkbox :name="item.sysId"></van-checkbox>
 					</div>
-					<div class="custItem1_3" v-if="item.cmrcOpptSt=='2'" style="background-color: #026DFF;">待跟进</div>
-					<div class="custItem1_3" v-if="item.cmrcOpptSt=='4'" style="background-color: #FFBA00;">已跟进</div>
-					<div class="custItem1_3" v-if="item.cmrcOpptSt=='5'" style="background-color: #52C41A;">已成交</div>
+						<div class="msgCardBox">
+							<div class="custItem" @click="openDetail(item)">
+								<div class="custItem1">
+									<div class="custItem1_1"></div>
+									<div class="custItem1_2">
+										<div class="custItem1_2_1">{{item.custNm}}</div>
+										<div class="custItem1_2_2" v-if="item.svcLvl=='0'"
+											:style="{'background-image': 'url('+require('../../assets/image/business_chooseCust_type0.png')+')'}">
+										</div>
+										<div class="custItem1_2_2" v-if="item.svcLvl=='1'"
+											:style="{'background-image': 'url('+require('../../assets/image/business_chooseCust_type1.png')+')'}">
+										</div>
+										<div class="custItem1_2_2" v-if="item.svcLvl=='2'"
+											:style="{'background-image': 'url('+require('../../assets/image/business_chooseCust_type2.png')+')'}">
+										</div>
+										<div class="custItem1_2_2" v-if="item.svcLvl=='3'"
+											:style="{'background-image': 'url('+require('../../assets/image/business_chooseCust_type3.png')+')'}">
+										</div>
+										<div class="custItem1_2_2" v-if="item.svcLvl=='4'"
+											:style="{'background-image': 'url('+require('../../assets/image/business_chooseCust_type4.png')+')'}">
+										</div>
+										<div class="custItem1_2_2" v-if="item.svcLvl=='5'"
+											:style="{'background-image': 'url('+require('../../assets/image/business_chooseCust_type5.png')+')'}">
+										</div>
+										<div class="custItem1_2_2" v-if="item.svcLvl=='6'"
+											:style="{'background-image': 'url('+require('../../assets/image/business_chooseCust_type6.png')+')'}">
+										</div>
+										<div class="custItem1_2_3">
+											<div class="custItem1_2_3_item" v-if="item.vipCstFlg=='1'"
+												style="background-color: rgba(2,109,255,0.08);color: #026DFF;">财</div>
+											<div class="custItem1_2_3_item" v-if="item.agentPayCstFlg=='1'"
+												style="background-color: rgba(255,133,0,0.08);color: #FF8500;">代</div>
+											<div class="custItem1_2_3_item" v-if="item.basicCstCnt=='1'"
+												style="background-color: rgba(255,58,58,0.08);color: #FF3A3A;">新</div>
+											<div class="custItem1_2_3_item" v-if="item.merntCstFlg=='1'"
+												style="background-color: rgba(68,107,161,0.08);color: #446BA1;">商</div>
+											<div class="custItem1_2_3_item" v-if="item.ioinHoldLoan=='1'"
+												style="background-color: rgba(55,205,55,0.08);color: #13AD13;">贷</div>
+											<van-icon v-if="item.value08=='1'"
+												:name="require('../../assets/image/business_chooseCust_zfb_a.png')" size="16"
+												style="margin-right: 0.04rem;" />
+											<van-icon v-else :name="require('../../assets/image/business_chooseCust_zfb.png')" size="16"
+												style="margin-right: 0.04rem;" />
+											<van-icon v-if="item.value09=='1'"
+												:name="require('../../assets/image/business_chooseCust_wx_a.png')" size="16"
+												style="margin-right: 0.04rem;" />
+											<van-icon v-else :name="require('../../assets/image/business_chooseCust_wx.png')" size="16"
+												style="margin-right: 0.04rem;" />
+											<van-icon v-if="item.value10=='1'"
+												:name="require('../../assets/image/business_chooseCust_ysf_a.png')" size="16"
+												style="margin-right: 0.04rem;" />
+											<van-icon v-else :name="require('../../assets/image/business_chooseCust_ysf.png')" size="16"
+												style="margin-right: 0.04rem;" />
+										</div>
+									</div>
+									<div class="custItem1_3" v-if="item.cmrcOpptSt=='2'" style="background-color: #026DFF;">待跟进</div>
+									<div class="custItem1_3" v-if="item.cmrcOpptSt=='4'" style="background-color: #FFBA00;">已跟进</div>
+									<div class="custItem1_3" v-if="item.cmrcOpptSt=='5'" style="background-color: #52C41A;">已成交</div>
+								</div>
+								<div class="custItem2">
+									<div class="custItem2_child">
+										<span class="custItem2_childName">极差值：</span>
+										<span class="custItem2_childValue">{{formatNum(item.aumDifVal/10000)}}万元</span>
+									</div>
+									<div class="custItem2_child">
+										<span class="custItem2_childName">历史最高资产：</span>
+										<span class="custItem2_childValue">{{formatNum(item.aumHistHestVal/10000)}}万元</span>
+									</div>
+									<div class="custItem2_child">
+										<span class="custItem2_childName">AUM资产：</span>
+										<span class="custItem2_childValue">{{formatNum(item.aumBal/10000)}}万元</span>
+									</div>
+									<div class="custItem2_child">
+										<span class="custItem2_childName">定期：</span>
+										<span class="custItem2_childValue">{{formatNum(item.timeDpsitBal/10000)}}万元</span>
+									</div>
+									<div class="custItem2_child">
+										<span class="custItem2_childName">活期：</span>
+										<span class="custItem2_childValue">{{formatNum(item.currDpsitBal/10000)}}万元</span>
+									</div>
+									<div class="custItem2_child">
+										<span class="custItem2_childName">贷款：</span>
+										<span class="custItem2_childValue">{{formatNum(item.loanBal/10000)}}万元</span>
+									</div>
+									<div class="custItem2_child">
+										<span class="custItem2_childName">客户经理：</span>
+										<span class="custItem2_childValue">{{item.belgCustMgrNm}}</span>
+									</div>
+									<div class="custItem2_child">
+										<span class="custItem2_childName">机构：</span>
+										<span class="custItem2_childValue ycsl">{{item.belongOrgNm}}</span>
+									</div>
+								</div>
+								<div class="custItem3"></div>
+								<div class="custItem4">
+									<div class="custItem4_1" :class="item.openRecomRea?'':'ycsl'">
+										<span style="color: #026DFF;font-weight: 600;">#推荐理由#</span>
+										<span>{{item.recomRea}}</span>
+									</div>
+									<div class="custItem4_2" @click.stop="item.openRecomRea=!item.openRecomRea">
+										<van-icon v-if="item.openRecomRea" name="arrow-up" color="#8C8C8C" size="16" />
+										<van-icon v-else name="arrow-down" color="#8C8C8C" size="16" />
+									</div>
+								</div>
+							</div>
+						</div>
 				</div>
-				<div class="custItem2">
-					<div class="custItem2_child">
-						<span class="custItem2_childName">极差值：</span>
-						<span class="custItem2_childValue">{{formatNum(item.aumDifVal/10000)}}万元</span>
-					</div>
-					<div class="custItem2_child">
-						<span class="custItem2_childName">历史最高资产：</span>
-						<span class="custItem2_childValue">{{formatNum(item.aumHistHestVal/10000)}}万元</span>
-					</div>
-					<div class="custItem2_child">
-						<span class="custItem2_childName">AUM资产：</span>
-						<span class="custItem2_childValue">{{formatNum(item.aumBal/10000)}}万元</span>
-					</div>
-					<div class="custItem2_child">
-						<span class="custItem2_childName">定期：</span>
-						<span class="custItem2_childValue">{{formatNum(item.timeDpsitBal/10000)}}万元</span>
-					</div>
-					<div class="custItem2_child">
-						<span class="custItem2_childName">活期：</span>
-						<span class="custItem2_childValue">{{formatNum(item.currDpsitBal/10000)}}万元</span>
-					</div>
-					<div class="custItem2_child">
-						<span class="custItem2_childName">贷款：</span>
-						<span class="custItem2_childValue">{{formatNum(item.loanBal/10000)}}万元</span>
-					</div>
-				</div>
-				<div class="custItem3"></div>
-				<div class="custItem4">
-					<div class="custItem4_1" :class="item.openRecomRea?'':'ycsl'">
-						<span style="color: #026DFF;font-weight: 600;">#推荐理由#</span>
-						<span>{{item.recomRea}}</span>
-					</div>
-					<div class="custItem4_2" @click.stop="item.openRecomRea=!item.openRecomRea">
-						<van-icon v-if="item.openRecomRea" name="arrow-up" color="#8C8C8C" size="16" />
-						<van-icon v-else name="arrow-down" color="#8C8C8C" size="16" />
-					</div>
-				</div>
-			</div>
+			</van-checkbox-group>
 		</van-list>
 		<div class="bottomZW"></div>
 		<org-list ref="orgList" :type="2" @close="openOrgList=false" @activeOrg="activeOrg" />
 		<customer-list ref="custList" :orgId="chooseOrg.value" @close="openCustList=false" @activeCust="activeCust" />
+		<van-popup v-model:show="openFP" position="bottom" :overlay="false" :lock-scroll="false"
+			safe-area-inset-bottom z-index="99998">
+			<div class="bottomBox">
+				<div></div>
+				<div class="btnBox">
+					<div class="bottomBtn" @click="allFP">全部分配</div>
+					<div class="bottomBtn" @click="confirmCheck">分配</div>
+				</div>
+			</div>
+		</van-popup>
 	</div>
 </template>
 
@@ -203,6 +237,9 @@
 				loading: false,
 				finished: false,
 				pageIndex: 0,
+				total: "0",
+				openFP: false,
+				checked: [],
 			}
 		},
 		components: {
@@ -221,6 +258,8 @@
 				this.pageIndex = 0;
 				this.loading = true;
 				this.custList = [];
+				this.checked = [];
+				this.openFP = false;
 				this.onLoad();
 			},
 			onCancel() {
@@ -244,6 +283,8 @@
 				this.pageIndex = 0;
 				this.loading = true;
 				this.custList = [];
+				this.checked = [];
+				this.openFP = false;
 				this.onLoad();
 			},
 			activeCust(custValue) {
@@ -259,6 +300,8 @@
 				this.pageIndex = 0;
 				this.loading = true;
 				this.custList = [];
+				this.checked = [];
+				this.openFP = false;
 				this.onLoad();
 			},
 			changeLevel(i) {
@@ -266,6 +309,8 @@
 				this.pageIndex = 0;
 				this.loading = true;
 				this.custList = [];
+				this.checked = [];
+				this.openFP = false;
 				this.onLoad();
 			},
 			openDetail(item) {
@@ -276,6 +321,12 @@
 						custNo: item.custNo
 					}
 				})
+			},
+			allFP() {
+				
+			},
+			confirmCheck() {
+				
 			},
 			onLoad() {
 				this.loading = true;
@@ -296,10 +347,12 @@
 					belongOrg: this.chooseOrg.value
 				}, (res) => {
 					if (res.data && res.data.records) {
+						this.total = res.data.total;
 						res.data.records.forEach((item) => {
 							item.openRecomRea = false
 						});
 						this.custList = this.custList.concat(res.data.records);
+						console.log(this.custList)
 						if (this.custList.length >= res.data.total) this.finished = true;
 					} else {
 						this.finished = true;
@@ -308,31 +361,66 @@
 					this.loading = false;
 				})
 			},
+			mounted_m() {
+				this.baseMsg.cmrcOpptId = this.$route.params.cmrcOpptId || localStorage.getItem("cmrcOpptId");
+				queryCmrcOpportunitySumInfo({
+					cmrcOpptId: this.baseMsg.cmrcOpptId
+				}, (res) => {
+					this.baseMsg = res.data;
+					this.resetTop();
+				})
+				getSysCodeByType({
+					codeType: "SVC_LVL_SHOW"
+				}, (res) => {
+					if (res.data) {
+						var arr = res.data.map((item) => {
+							return {
+								text: item.codeName,
+								value: item.codeValue
+							}
+						})
+						this.levelList = this.levelList.concat(arr);
+						this.resetTop();
+					} else {
+						Toast.fail("服务等级数据为空")
+					}
+				});
+			}
+		},
+		activated() {
+			if (this.$route.params.cmrcOpptId && this.pageIndex > 0) {
+				this.baseMsg = {};
+				this.openDesc = false;
+				this.openSearch = false;
+				this.openOrgList = false;
+				this.chooseOrg = {
+					text: "全部机构",
+					value: ""
+				};
+				this.openCustList = false;
+				this.chooseCust = {
+					empName: "客户经理",
+					empId: ""
+				};
+				this.searchValue = "";
+				this.levelIndex = 0;
+				this.levelList = [{
+					text: "全部",
+					value: ""
+				}];
+				this.fixedHeight = "2.5rem";
+				this.loading = false;
+				this.finished = false;
+				this.pageIndex = 0;
+				this.custList = [];
+				this.total = "0";
+				this.openFP = false;
+				this.checked = [];
+				this.mounted_m();
+			}
 		},
 		mounted() {
-			this.baseMsg.cmrcOpptId = this.$route.params.cmrcOpptId||localStorage.getItem("cmrcOpptId");
-			queryCmrcOpportunitySumInfo({
-				cmrcOpptId: this.baseMsg.cmrcOpptId
-			},(res)=>{
-				this.baseMsg = res.data;
-				this.resetTop();
-			})
-			getSysCodeByType({
-				codeType: "SVC_LVL_SHOW"
-			}, (res) => {
-				if (res.data) {
-					var arr = res.data.map((item) => {
-						return {
-							text: item.codeName,
-							value: item.codeValue
-						}
-					})
-					this.levelList = this.levelList.concat(arr);
-					this.resetTop();
-				} else {
-					Toast.fail("服务等级数据为空")
-				}
-			});
+			this.mounted_m();
 		}
 	}
 </script>
@@ -347,6 +435,7 @@
 
 	.home {
 		background-color: #F8F8F8;
+		overflow-x: hidden;
 	}
 
 	.fixedPlace {
@@ -711,5 +800,79 @@
 		height: 0.16rem;
 		display: flex;
 		justify-content: flex-end;
+	}
+
+	.total {
+		font-size: 0.1rem;
+		color: #262626;
+		height: 0.36rem;
+		padding: 0.04rem 0.15rem 0;
+		display: flex;
+		flex-wrap: nowrap;
+		justify-content: space-between;
+		align-items: center;
+	}
+
+	.fpBtn {
+		font-size: 0.13rem;
+		color: #0066FF;
+	}
+
+	.bottomBox {
+		display: flex;
+		flex-wrap: nowrap;
+		justify-content: space-between;
+		align-items: center;
+		height: 0.55rem;
+		font-size: 0.12rem;
+		padding-left: 6.5%;
+		padding-right: 3%;
+		border-top: solid 1px #F5F5F5;
+	}
+
+	.bottomBox :deep(.van-checkbox__label) {
+		color: #888888;
+	}
+
+	.btnBox {
+		display: flex;
+		flex-wrap: nowrap;
+	}
+
+	.bottomBtn {
+		width: 0.88rem;
+		height: 0.4rem;
+		background: #026DFF;
+		border-radius: 0.08rem;
+		font-size: 0.14rem;
+		font-family: PingFangSC-Regular, PingFang SC;
+		font-weight: 400;
+		color: #FFFFFF;
+		line-height: 0.4rem;
+		text-align: center;
+		margin-right: 0.1rem;
+	}
+
+	.msgCardOutBox {
+		width: 100%;
+		position: relative;
+		display: flex;
+		flex-wrap: nowrap;
+		align-items: center;
+		transition: margin-left 0.3s;
+	}
+
+	.leftCheckBox {
+		width: 12%;
+		height: 0.2rem;
+		flex-shrink: 0;
+		position: absolute;
+		left: -15%;
+		display: flex;
+		justify-content: flex-end;
+	}
+
+	.msgCardBox {
+		width: 100%;
 	}
 </style>

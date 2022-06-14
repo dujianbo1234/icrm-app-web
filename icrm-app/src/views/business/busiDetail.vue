@@ -126,7 +126,10 @@
 			<div class="empty" v-if="!followMsg.length">-暂无跟进记录-</div>
 			<van-steps direction="vertical" :active="0">
 				<van-step v-for="(followItem,i) in followMsg" :key="'followItem'+i">
-					<div class="followItem1">{{followItem.serviceTypeNm}}</div>
+					<div class="followItem1">
+						<div class="followItem1_1">{{followItem.serviceTypeNm}}</div>
+						<div class="followItem1_2">跟进人：{{followItem.createPersonNm}}（{{followItem.createPerson}}）</div>
+					</div>
 					<div class="followItem2" :style="{'-webkit-line-clamp':followItem.showDesc?'100':'15'}"
 						@click="followItem.showDesc=!followItem.showDesc">{{followItem.serviceContent}}</div>
 					<div class="followItem5" v-if="followItem.serviceType=='01'&&followItem.fileList.length">
@@ -480,7 +483,6 @@
 				AlipayJSBridge.call('openPickerV', {
 					openType: "0",
 				}, (res1) => {
-					console.log("000",res1)
 					if (res1.status == "000000") {
 						Toast.loading({
 							message: "正在上传",
@@ -992,13 +994,26 @@
 	.followItem1 {
 		width: calc(100% - 0.12rem);
 		height: 0.21rem;
-		line-height: 0.21rem;
 		margin-bottom: 0.04rem;
-		font-family: PingFangSC-Medium;
+		display: flex;
+		flex-wrap: nowrap;
+		align-items: center;
+		justify-content: space-between;
+	}
+
+	.followItem1_1 {
 		font-size: 0.14rem;
-		color: #262626;
-		letter-spacing: 0;
+		font-family: PingFangSC-Medium, PingFang SC;
 		font-weight: 500;
+		color: #262626;
+	}
+
+	.followItem1_2 {
+		font-size: 0.12rem;
+		font-family: PingFangSC-Regular, PingFang SC;
+		font-weight: 400;
+		color: #8C8C8C;
+		margin-right: 0.28rem;
 	}
 
 	.followItem2 {

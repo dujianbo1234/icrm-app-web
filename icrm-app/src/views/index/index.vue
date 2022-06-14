@@ -333,7 +333,7 @@
 					{
 						title: "财富客户数",
 						unit: "(人)",
-						text: ['AUM资产上月月日均≥5万。'],
+						text: ['广义AUM当月月日均大于等于5万元'],
 						value0: "",
 						value1: "",
 						value2: "",

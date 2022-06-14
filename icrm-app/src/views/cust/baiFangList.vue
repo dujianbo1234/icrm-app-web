@@ -90,12 +90,8 @@
 			getFollowMsg() {
 				queryCustomeServicFollow({
 					custNo: this.$route.query.custNo
-					// custNo: 'P900010000395059'
-					// custNo: 'P900010002921439'
-                    
 				}, (res) => {
 					this.followMsg = res.data;
-                    console.log('this.followMsg',this.followMsg)
 					this.followMsg.forEach((item) => {
 						item.serviceValue=''
 						item.showDesc = false;
@@ -110,13 +106,11 @@
 				});
 			},
 			saveTelInfo(value){
-				console.log('55',value)
 				custServiceUpdate({
 					serviceId:value.serviceId,
 					serviceContent: value.serviceValue
 				}, (res) => {
 					this.getFollowMsg()
-					console.log('res',res)
 				})
 			}
 		},
