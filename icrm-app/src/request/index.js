@@ -42,3 +42,13 @@ export const queryCustomertrends = (params,fun) => {request("index.queryCustomer
 export const queryAUMGrowthTrend = (params,fun) => {request("index.queryAUMGrowthTrend", params, fun)}
 // 贷款增长趋势
 export const queryLoanGrowthTrend = (params,fun) => {request("index.queryLoanGrowthTrend", params, fun)}
+/* 晨夕会-查询列表 */
+export const queryMemSoundRecList = (params,fun) => {request("index.queryMemSoundRecList", params, fun)}
+/* 晨夕会-保存信息 */
+export const saveMemSoundRec = (params,fun) => {request("index.saveMemSoundRec", params, fun)}
+/* 晨夕会-图片上传 */
+export const memSoundPicUpload = (params,fun) => {request("index.memSoundPicUpload", params, fun)}
+/* 晨夕会-音频上传 */
+export const memSoundRecUpload = (params,fun) => {request("index.memSoundRecUpload", params, fun)}
+/* 晨夕会-删除文件信息 */
+export const fieDelete = (params,fun) => {request("file.delete", params, fun)}

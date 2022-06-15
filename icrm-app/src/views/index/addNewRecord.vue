@@ -1,43 +1,45 @@
 <template>
   <div class="addNewRecord">
     <!-- 顶部title -->
-    <nav-bar type="2" title="新增记录" leftIcon />
+    <div class="topTitle">
+      <div class="left" @click="clearBtn">取消</div>
+      <div class="mid">{{type ? '新增记录' : '修改记录'}}</div>
+      <div class="right" @click="saveBtn">保存</div>
+    </div>
+    <!-- <nav-bar type="2" title="新增记录" leftIcon rightText="保存" rightColor="rgba(2, 109, 255, 1)"/> -->
     <!-- 会议记录 -->
     <div class="minutesMeeting">
-      <div class="title">
-        <div class="label">会议记录</div>
-      </div>
+      <div class="label">会议主题</div>
       <div class="card">
-        <div style="display: flex">
-          <el-input type="textarea" :rows="4" placeholder="请输入会议记录…" v-model="textarea"></el-input>
-        </div>
-        <div class="minutesList">
-          <van-field v-model="creatUser" label="创建人" size="large" input-align="right" :border="false" placeholder="请输入"/>
-          <van-field v-model="orgValue.text" is-link readonly label="机构" size="large" input-align="right" :border="false" placeholder="请选择" @click="$refs.orgList.showPopup()"/>
-          <van-field v-model="creatDate" label="创建时间" size="large" input-align="right"/>
-        </div>
+        <van-field v-model="soundRecCaption" rows="4" autosize type="textarea" maxlength="100" placeholder="请输入会议主题" show-word-limit/>
       </div>
     </div>
-    <!-- 音频管理 -->
-    <div class="audioManagement">
-      <div class="title">
-        <div class="label">音频管理</div>
+    <!-- 上传录音 -->
+    <!-- <div class="meetingPhotos">
+      <div class="label">上传录音</div>
+      <div class="imgContent">
+        <van-uploader ref="upload" v-model="soundList" :after-read="afterReads" max-count="3" preview-size="0.73rem" accept="audio/*, .aac, .m4a">
+          <template #default>
+            <van-icon :name="require(`@/assets/image/index_upload.png`)" size="0.735rem" color="#E6E6E6" style="display: flex;"/>
+          </template>
+        </van-uploader>
       </div>
-      <div class="audio">
-        <play-audio ref="PlayAudio" :audioTitle="audioItem.name" :totalDuration="totalDuration" @playStop="playStop"></play-audio>
-        <div class="audioList">
-          <div class="audioList_title">录音记录</div>
-          <div class="audioList_list">
-            <div v-for="(item, index) in fileList_audio" :key="item">
-              <div class="list_item" @click="selectSound(item, index)">
-                <van-icon :name="require(`@/assets/image/play-mp3.png`)" size="0.35rem" style="margin-right: 0.04rem;" />
-                <div class="audioName" :style="{color : iconSize == index ? '#026DFF' : '#131313'}">{{item.name}}</div>
-              </div>
+    </div> -->
+    <div class="audioManagement">
+      <div class="label">上传录音</div>
+      <div class="card">
+        <div class="audioList_list">
+          <div v-for="(item, index) in soundList" :key="item">
+            <div class="list_item">
+              <van-icon class="iconR" :name="require(`@/assets/image/play-mp3.png`)" size="0.35rem" >
+                <van-icon class="iconA" :name="require(`@/assets/image/common_delete.png`)" size="0.2rem" @click.stop="itemDel(item, index)"/>
+              </van-icon>
+              <div class="audioName" :style="{color : iconSize == index ? '#026DFF' : '#131313'}">{{item.name}}</div>
             </div>
-            <div >
-              <div class="list_item" @click="uploadAudio(0)">
-                <van-icon :name="require(`@/assets/image/index_upload.png`)" size="0.735rem" color="#E6E6E6"/>
-              </div>
+          </div>
+          <div v-if="soundList.length < 3">
+            <div class="list_item" @click="uploadAudio(0)">
+              <van-icon :name="require(`@/assets/image/index_upload.png`)" size="0.735rem" color="#E6E6E6" style="display: flex;"/>
             </div>
           </div>
         </div>
@@ -45,68 +47,65 @@
     </div>
     <!-- 会议照片 -->
     <div class="meetingPhotos">
-      <div class="title">
-        <div class="label">会议照片</div>
-      </div>
+      <div class="label">上传照片</div>
       <div class="imgContent">
-        <van-uploader v-model="fileList_img" preview-size="0.78rem" accept="image/*"/>
+        <van-uploader v-model="photoList" :after-read="afterRead" max-count="6" preview-size="0.73rem" accept="image/*"/>
       </div>
     </div>
-    <!-- 新增记录 -->
-    <div class="addRecord">
-      <van-button class="addBtn" type="primary" block @click="addNewRecord">保存</van-button>
-    </div>
-    <!-- 选择机构组件 -->
-    <org-list ref="orgList" :type="2" @activeOrg="activeOrg" />
-    <!-- 这是底线 -->
-    <div class="bottomLine">
-      <span></span>
-      <div class="bottomText">到底啦，我是有底线的</div>
-      <span></span>
-    </div>
+    <div class="bottomZW"></div>
   </div>
 </template>
 
 <script>
 import PlayAudio from "@/components/common/PlayAudio.vue"
 import moment from "moment";
+import { Toast } from 'vant';
+import { memSoundPicUpload, memSoundRecUpload } from "@/request/index"
 export default {
   name: "addNewRecord",
   components: {
     PlayAudio
   },
+  props: {
+    type: Boolean,
+    record: Object
+  },
   data() {
     return {
-      textarea: "",
-      creatUser: this.$store.state.userMsg.empname,
+      soundRecCaption: "",
+      // creatUser: this.$store.state.userMsg.empname,
       orgValue: {},
-      creatDate:'2021-05-18 08:00-10:00',
+      // creatDate:'2021-05-18 08:00-10:00',
       audioItem: {},
-      fileList_audio: [],
+      soundList: [],
       totalDuration: 0, // 录音总时长(毫秒)
       initFileList: [
-        // Uploader 根据文件后缀来判断是否为图片文件
-        // 如果图片 URL 中不包含类型信息，可以添加 isImage 标记来声明
-        { url: 'https://fastly.jsdelivr.net/npm/@vant/assets/leaf.jpeg' },
-        { url: 'https://cloud-image', isImage: true },
-        { url: 'https://fastly.jsdelivr.net/npm/@vant/assets/cat.jpeg' },
-        { url: 'https://fastly.jsdelivr.net/npm/@vant/assets/leaf.jpeg' },
-        { url: 'https://fastly.jsdelivr.net/npm/@vant/assets/cat.jpeg' },
-        { url: 'https://fastly.jsdelivr.net/npm/@vant/assets/leaf.jpeg' },
-        { url: 'https://cloud-image', isImage: true },
-        { url: 'https://fastly.jsdelivr.net/npm/@vant/assets/cat.jpeg' },
+        // // Uploader 根据文件后缀来判断是否为图片文件
+        // // 如果图片 URL 中不包含类型信息，可以添加 isImage 标记来声明
+        { url: 'http://devmap.eqianjin.com.cn/icrmmap/home/appuser/jjbank/upload/sound/001343_2022061510591718.jpg' },
+        // { url: 'https://cloud-image', isImage: true },
+        // { url: 'https://fastly.jsdelivr.net/npm/@vant/assets/cat.jpeg' },
+        // { url: 'https://fastly.jsdelivr.net/npm/@vant/assets/leaf.jpeg' },
+        // { url: 'https://fastly.jsdelivr.net/npm/@vant/assets/cat.jpeg' },
+        // { url: 'https://fastly.jsdelivr.net/npm/@vant/assets/leaf.jpeg' },
+        // { url: 'https://cloud-image', isImage: true },
+        // { url: 'https://fastly.jsdelivr.net/npm/@vant/assets/cat.jpeg' },
       ],
-      fileList_img: [
-        { url: 'https://fastly.jsdelivr.net/npm/@vant/assets/leaf.jpeg' },
-        { url: 'https://fastly.jsdelivr.net/npm/@vant/assets/leaf.jpeg' },
-        { url: 'https://fastly.jsdelivr.net/npm/@vant/assets/leaf.jpeg' },
-        { url: 'https://fastly.jsdelivr.net/npm/@vant/assets/cat.jpeg' },
-      ],
-      audioFile: 'file:///private/var/mobile/Containers/Data/Application/C9BBC1D5-B1B2-40CD-A53D-E1BB821ADE94/tmp/com.JJbank.pactera-Inbox/%E9%87%91%E8%9E%8D%E6%B8%AF%E8%B7%AF.m4a'
+      photoList: []
+      // audioFile: 'file:///private/var/mobile/Containers/Data/Application/C9BBC1D5-B1B2-40CD-A53D-E1BB821ADE94/tmp/com.JJbank.pactera-Inbox/%E9%87%91%E8%9E%8D%E6%B8%AF%E8%B7%AF.m4a'
     };
   },
   mounted() {
-    this.fileList_audio = []
+    if(this.type){
+      this.soundList = []
+      this.photoList = []
+      this.soundRecCaption = ''
+    }else{
+      // console.log(this.record)
+      this.soundList = this.record.soundList || []
+      this.photoList = this.record.photoList || []
+      this.soundRecCaption = this.record.soundRecCaption
+    }
   },
   methods: {
     moment,
@@ -115,11 +114,15 @@ export default {
       this.orgValue = orgValue
     },
     /* 选择录音 */
-    selectSound(item, index){
-      this.$refs['PlayAudio'].init()
-      this.audioItem = item
-      this.iconSize = index
-      this.uploadAudio(1)
+    // selectSound(item, index){
+    //   this.$refs['PlayAudio'].init()
+    //   this.audioItem = item
+    //   this.iconSize = index
+    //   this.uploadAudio(1)
+    // },
+    /* 删除录音 */
+    itemDel(v, i){
+      this.soundList = this.soundList.filter((item , index) => index != i)
     },
     /* 音频控制 */
     uploadAudio(type){
@@ -130,11 +133,13 @@ export default {
       AlipayJSBridge.call("openRecord", body, (res) => {
         switch (body.type) {
           case 0 :
-            let obj = {
-              url: res.result,
-              name: decodeURI(res.result.substring(res.result.lastIndexOf("/")+1))
+            if(res.status == '000000'){
+              let obj = {
+                url: res.result,
+                name: decodeURI(res.result.substring(res.result.lastIndexOf("/")+1))
+              }
+              this.soundList.push(obj)
             }
-            this.fileList_audio.push(obj)
           break;
           case 1 :
             this.totalDuration = Number(res.result).toFixed(0) || 0
@@ -164,13 +169,98 @@ export default {
     },
     /* 播放暂停按钮 */
     playStop(v){
-      if(this.fileList_audio.length > 0 && this.audioItem.name){
+      if(this.soundList.length > 0 && this.audioItem.name){
         this.uploadAudio(v)
       }
     },
     /* 保存 */
-    addNewRecord(){
-
+    saveBtn(){
+      if (!this.soundRecCaption) {
+        Toast('请输入会议主题')
+      } else if (!this.soundList.length) {
+        Toast('请上传录音')
+      } else if (!this.photoList.length) {
+        Toast('请上传照片')
+      } else {
+        let body = {
+          soundRecCaption: this.soundRecCaption,
+          soundList: this.soundList,
+          photoList: this.photoList
+        }
+        this.$emit('saveBtn', body)
+      }
+    },
+    /* 取消 */
+    clearBtn(){
+      this.$emit('clearBtn')
+    },
+    /* 点击上传区域时 */
+    clickUpload(){
+      // AlipayJSBridge.call('openPickerV', {openType: "2"}, (res) => {
+			// 	if (res.status == "000000") {
+      //     // console.log(res)
+			// 		Toast.loading({	message: "正在上传", forbidClick: true, duration: 0 });
+			// 		memSoundPicUpload({file: res.result},(img)=>{
+			// 			Toast.success("上传成功");
+			// 			this.photoList.push({
+			// 				url: res1.result,
+			// 				tableKey: img.data[0].tableKey
+			// 			})
+			// 		})
+			// 	} else if (res.status != "000004") {
+			// 		Toast.fail(res.msg)
+			// 	}
+      // })
+    },
+    // afterReads(file) {
+    //   Toast.loading({message: "正在上传",duration: 0});
+    //   // console.log(file);
+    //   var formdata = new FormData();
+    //   formdata.append("file",file.file);
+    //   memSoundRecUpload(formdata, res => {
+    //     console.log(res)
+    //   })
+    // },
+    afterReads(file){
+      console.log(file)
+      let body = {
+        file: file.content.replace(`${file.content.split(',')[0]},`, '')
+      }
+      memSoundRecUpload(body, res => {
+        console.log('上传音频',res)
+        // Toast.success("上传成功");
+        let obj = {
+          url: `./assets/image/play-mp3.png`,
+          tableKey: res.data[0].tableKey,
+          audio: `${this.$store.state.baseUrl}${res.data[0].fileServerPath}${res.data[0].fileName}`,
+          isImage: true
+        }
+        this.soundList[this.soundList.length - 1] = obj
+      })
+    },
+    /* 上传图片至服务器 */
+    afterRead(img){
+			Toast.loading({	message: "正在上传", forbidClick: true, duration: 0 });
+      let body = {
+        file: img.content.replace('data:image/jpeg;base64,','')
+      }
+      memSoundPicUpload(body, res => {
+        // console.log('上传图片',res)
+        Toast.success("上传成功");
+        let obj = {
+          url: `${this.$store.state.baseUrl}${res.data[0].fileServerPath}${res.data[0].fileName}`,
+          tableKey: res.data[0].tableKey
+        }
+        this.photoList[this.photoList.length - 1] = obj
+        // this.photoList[this.photoList.length - 1].url = `${this.$store.state.baseUrl}${res.data[0].fileServerPath}${res.data[0].fileName}`
+        // this.photoList[this.photoList.length - 1].tableKey = res.data[0].tableKey
+				// this.photoList.push({
+				// 	url: `${this.$store.state.baseUrl}${res.data[0].fileServerPath}${res.data[0].fileName}`,
+				// 	tableKey: res.data[0].tableKey
+				// })
+        // console.log(this.photoList[this.photoList.length - 1].url)
+      })
+      // this.photoList.push(file)
     },
   },
 };
@@ -182,74 +272,136 @@ export default {
 </style>
 <style lang="less" scoped>
 .addNewRecord {
+  padding: 0.12rem;
+  font-family: PingFangSC-Regular, PingFang SC;
+  .label {
+    text-align: left;
+    padding: 0.065rem 0;
+    font-size: 0.17rem;
+    font-weight: 400;
+    color: #222222;
+  }
+  .topTitle {
+    display: flex;
+    justify-content: space-between;
+    .left,
+    .right {
+      font-size: 0.16rem;
+      font-weight: 400;
+    }
+    .mid {
+      font-size: 0.18rem;
+      font-weight: 500;
+      color: #262626;
+    }
+    .left {
+      color: #8C8C8C;
+    }
+    .right {
+      color: #026DFF;
+    }
+  }
+  .minutesMeeting {
+    
+  }
   .card {
     background: #fff;
     padding: 0.12rem;
     border-radius: 0.08rem;
-  }
-  .title {
-    display: flex;
-    justify-content: space-between;
-    padding: 0.12rem;
-    font-size: 0.15rem;
-    font-family: PingFangSC-Regular, PingFang SC;
-    font-weight: 400;
-    .label {
-      color: #222222;
+    &:deep(.van-cell){
+      padding: 0;
     }
   }
-  .minutesMeeting {
-    .minutesList {
-      // background: pink;
-      font-size: 0.15rem;
-      --van-field-label-color: #222222;
-      & > div {
-        // display: flex;
-        // justify-content: space-between;
-        padding: 0.12rem 0;
-      }
-      div:nth-child(2) {
-        border-top: 0.005rem solid #e5e5e5;
-        border-bottom: 0.005rem solid #e5e5e5;
-      }
-      div:nth-child(3) {
-        padding-bottom: 0;
-      }
-    }
-  }
+  // .title {
+  //   display: flex;
+  //   justify-content: space-between;
+  //   padding: 0.12rem;
+  //   font-size: 0.15rem;
+  //   font-family: PingFangSC-Regular, PingFang SC;
+  //   font-weight: 400;
+  //   .label {
+  //     color: #222222;
+  //   }
+  // }
+  // .minutesMeeting {
+  //   .minutesList {
+  //     // background: pink;
+  //     font-size: 0.15rem;
+  //     --van-field-label-color: #222222;
+  //     & > div {
+  //       // display: flex;
+  //       // justify-content: space-between;
+  //       padding: 0.12rem 0;
+  //     }
+  //     div:nth-child(2) {
+  //       border-top: 0.005rem solid #e5e5e5;
+  //       border-bottom: 0.005rem solid #e5e5e5;
+  //     }
+  //     div:nth-child(3) {
+  //       padding-bottom: 0;
+  //     }
+  //   }
+  // }
   .audioManagement {
-    .audio {
-      background: #fff;
-      padding: 0.12rem 0.12rem 0 0.12rem;
-      .audioList {
-        padding-top: 0.36rem;
-        font-size: 0.15rem;
-        color: #131313;
-        .audioList_title {
-          text-align: left;
-        }
-        .audioList_list {
-          width: 100%;
-          overflow: hidden;
-          &>div {
-            display: flex;
-            float: left;
-            width: 25%;
-            height: 1.025rem;
-            .list_item {
-              font-size: 0.15rem;
-              margin: auto;
-              .audioName {
-                max-width: 0.8rem;
-                overflow: hidden;
-                text-overflow: ellipsis;
-                white-space: nowrap;
-              }
+    .audioList_list {
+      width: 100%;
+      display: flex;
+      justify-content: flex-start;
+      &>div {
+        display: flex;
+        height: 0.735rem;
+        margin-right: 0.12rem;
+        .list_item {
+          font-size: 0.15rem;
+          .iconR {
+            padding-top: 0.11rem;
+            position: relative;
+            .iconA {
+              position: absolute;
+              top: 0;
+              right: -0.1rem;
             }
+          }
+          .audioName {
+            max-width: 0.73rem;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
           }
         }
       }
-    }
+    }    // .audio {
+    //   background: #fff;
+    //   padding: 0.12rem 0.12rem 0 0.12rem;
+    //   .audioList {
+    //     padding-top: 0.36rem;
+    //     font-size: 0.15rem;
+    //     color: #131313;
+    //     .audioList_title {
+    //       text-align: left;
+    //     }
+    //     .audioList_list {
+    //       width: 100%;
+    //       overflow: hidden;
+    //       &>div {
+    //         display: flex;
+    //         float: left;
+    //         width: 25%;
+    //         height: 1.025rem;
+    //         .list_item {
+    //           font-size: 0.15rem;
+    //           margin: auto;
+    //           .audioName {
+    //             max-width: 0.8rem;
+    //             overflow: hidden;
+    //             text-overflow: ellipsis;
+    //             white-space: nowrap;
+    //           }
+    //         }
+    //       }
+    //     }
+    //   }
+    // }
   }
   .meetingPhotos {
     .imgContent {
@@ -258,43 +410,27 @@ export default {
       border: 0.005rem solid #E5E5E5;
       padding: 0.12rem 0 0 0.12rem;
       width: 100%;
+      min-height: 0.97rem;
       display: flex;
       &:deep(.van-uploader__preview){
-        margin: 0 0.12rem 0.12rem 0;
+        margin: 0 0.11rem 0.12rem 0;
+      }
+      &:deep(.van-uploader__preview-image){
+        border-radius: 0.08rem;
       }
     }
   }
-  .addRecord {
-    position: fixed;
-    width: 100%;
-    bottom: 0;
-    left: 0;
-    z-index: 99;
-    background: #fff;
-    padding: 0.12rem 0.15rem 0.46rem;
-    .addBtn {
-      border-radius: 0.08rem;
-    }
-  }
-  .bottomLine {
-    width: 60%;
-    margin: 0.5rem auto 0.35rem;
-    padding-bottom: 0.2rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    & > span {
-      width: 10.7%;
-      height: 0.005rem;
-      opacity: 0.7;
-      border-top: 0.005rem solid rgba(191, 191, 191, 1);
-    }
-    .bottomText {
-      margin: 0 2.7%;
-      font-size: 0.12rem;
-      padding: 0 0.1rem;
-      color: #bfbfbf;
-    }
-  }
+  // .addRecord {
+  //   position: fixed;
+  //   width: 100%;
+  //   bottom: 0;
+  //   left: 0;
+  //   z-index: 99;
+  //   background: #fff;
+  //   padding: 0.12rem 0.15rem 0.46rem;
+  //   .addBtn {
+  //     border-radius: 0.08rem;
+  //   }
+  // }
 }
 </style>

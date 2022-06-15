@@ -1,7 +1,6 @@
 <template>
   <!-- 音频播放组件 -->
   <div class="PlayAudio">
-    <div class="audioTitle">正在播放：{{audioTitle}}</div>
     <van-progress :percentage="percentage" :show-pivot="false" />
     <div class="time">
       <span>{{tiemInit(currentDuration)}}</span>
@@ -18,8 +17,11 @@
 import moment from 'moment'
 export default {
   props: {
-    audioTitle: String,
-    totalDuration: Number, // 录音总时长(毫秒)
+    // 录音总时长(毫秒)
+    totalDuration: {
+      type: Number,
+      default: 0
+    },
   },
   data(){
     return {
@@ -31,7 +33,7 @@ export default {
   computed: {
     /* 进度条当前进度 */
     percentage(){
-      return (this.currentDuration/this.totalDuration)*100 || 0
+      return (this.currentDuration / this.totalDuration)*100 || 0
     }
   },
   methods: {
@@ -89,7 +91,7 @@ export default {
     },
     /* 格式化时间 */
     tiemInit(num){
-      if(num == 0){
+      if(!num || num == 0){
         return '00:00'
       }else{
         let mm = (num - (num%60)) / 60 
@@ -103,17 +105,9 @@ export default {
 
 <style lang="less" scoped>
 .PlayAudio {
-  border-bottom: 0.005rem solid #EBEBEB;
-  .audioTitle {
-    text-align: left;
-    color: #131313;
-    font-size: 0.15rem;
-    margin-bottom: 0.3rem;
-    width: 100%;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
+  // border-bottom: 0.005rem solid #EBEBEB;
+  padding: 0.12rem;
+  background: #fff;
   .time {
     display: flex;
     justify-content: space-between;
@@ -127,7 +121,7 @@ export default {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 0.23rem 0;
+    padding-top: 0.23rem;
   }
 }
 </style>

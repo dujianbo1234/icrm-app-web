@@ -1,7 +1,8 @@
 <template>
   <div class="MorningEvening">
     <!-- 顶部title -->
-    <nav-bar type="2" title="晨夕会" leftIcon/>
+    <nav-bar type="2" title="晨夕会" v-if="show"/>
+    <nav-bar type="2" title="晨夕会" leftIcon :rightText="$store.state.userMsg.roleId != '00000004' ? orgName : ''" rightColor="rgba(2, 109, 255, 1)" @touchRight="$refs.orgList.showPopup()" v-else/>
     <!-- 日历 -->
     <div class="calendar">
       <div class="date">{{showTime}}</div>
@@ -10,76 +11,76 @@
     <!-- 日历选择器 -->
     <div class="arrow">
       <!-- 2022.06.24 -->
-      <van-calendar ref="calendar" :default-date="defaultDate._d" :min-date="minDate._d" :max-date="maxDate._d" row-height="40" :poppable="false" teleport=".arrow" color="#026DFF" :show-confirm="false" :show-title="false" :show-subtitle="false" :safe-area-inset-bottom="false" :style="{ height: '3rem' }" @select="selectDate" v-if="showWeekDetial"/>
+      <van-calendar ref="calendar" :default-date="defaultDate._d" :min-date="minDate._d" :max-date="maxDate._d" row-height="40" :poppable="false" teleport=".arrow" color="#026DFF" :show-confirm="false" :show-title="false" :show-subtitle="false" :safe-area-inset-bottom="false" :style="{ height: '3rem' }" @select="selectDate"/>
       <!-- 分割线 -->
-      <van-divider style="margin: 0; padding: 0 0.12rem;" @click.stop="showDate"><van-icon :name="showWeekDetial ? 'arrow-up' : 'arrow-down'" size="0.22rem" color="#ccc"/></van-divider>
     </div>
-    <!-- 会议记录 -->
-    <div class="minutesMeeting">
-      <div class="title">
-        <div class="label">会议记录</div>
-        <div class="editBtn" @click="minutesEdit">{{minuDisabled ? '编辑' : '保存'}}</div>
-      </div>
-      <div class="card">
-        <div style="display: flex">
-          <el-input type="textarea" :rows="4" :disabled="minuDisabled" placeholder="请输入内容" v-model="textarea"></el-input>
-        </div>
-        <div class="minutesList">
-          <div>
-            <span>创建人</span>
-            <span>李白</span>
-          </div>
-          <div>
-            <span>机构</span>
-            <span>九江银行八里湖支行</span>
-          </div>
-          <div>
-            <span>创建时间</span>
-            <span>2021-12-01 08:00-10</span>
-          </div>
-        </div>
-      </div>
+    <!-- 播放组件 -->
+    <div class="playAudio" v-if="dataList.length">
+      <play-audio ref="PlayAudio"></play-audio>
     </div>
-    <!-- 音频管理 -->
-    <div class="audioManagement">
-      <div class="title">
-        <div class="label">音频管理</div>
-        <!-- <div class="editBtn">编辑</div> -->
-      </div>
-      <div class="card">
-        <play-audio ref="PlayAudio" :audioTitle="audioTitle"></play-audio>
-        <div class="audioList">
-          <div class="audioList_title">录音记录</div>
-          <div class="audioList_list">
-            <template v-for="(item, index) in audioList" :key="item">
-              <div v-if="openPlay ? index < 4 : true">
-                <div class="list_item" @click="selectSound(item, index)" v-if="openPlay ? index < 3 : true">
-                  <van-icon :name="require(`@/assets/image/play-mp3.png`)" :size="iconSize == index ? '0.45rem' : '0.3rem'" style="margin-right: 0.04rem;" />
-                  <div :style="{color : iconSize == index ? '#026DFF' : '#131313'}">{{item}}</div>
+    <!-- 会议列表 -->
+		<van-list class="vanListStyle" v-model:loading="loading" :finished="finished" finished-text="没有更多了" @load="queryLsit">
+      <van-swipe-cell v-for="(item,i) in dataList" :key="'item'+i" style="padding-bottom: 0.12rem;" :disabled="item.crtUsrNo != $store.state.userMsg.empno">
+        <!-- 会议主题 -->
+        <div class="minutesMeeting">
+          <div class="card">
+            <div class="title">
+              <div class="label">会议主题</div>
+              <div class="editBtn">{{item.crtTm}}</div>
+            </div>
+            <!-- input -->
+            <div style="display: flex; margin: 0.1rem 0;">
+              <el-input type="textarea" :rows="4" :disabled="true" placeholder="请输入内容" v-model="item.soundRecCaption"></el-input>
+            </div>
+            <!-- 录音列表 -->
+            <div class="audioList_list">
+              <template v-for="(items, indexs) in audioList" :key="items">
+                <div class="list_item" @click="selectSound(items, indexs)">
+                  <van-icon :name="require(`@/assets/image/play-mp3.png`)" size="0.45rem" style="margin-right: 0.04rem;" />
+                  <div :style="{color : iconSize == indexs ? '#026DFF' : '#131313'}">{{items}}</div>
                 </div>
-                <div class="list_item" v-if="openPlay && index == 3" @click="openPlay = !openPlay">
-                  <van-icon name="ellipsis" size="0.3rem" color="#E6E6E6"/>
-                </div>
+              </template>
+            </div>
+            <!-- 照片列表 -->
+            <div class="photos">
+              <van-uploader v-model="fileList" preview-size="0.5rem" :deletable="deletable" :readonly="true" :show-upload="false" @delete="deleteImg"/>
+            </div>
+            <!-- 创建人 机构 -->
+            <div class="creatMsg">
+              <div>
+                <div class="label">创建人:</div>
+                <div class="text">{{item.crtUsrName}}</div>
               </div>
-            </template>
+              <div>
+                <div class="label">机构:</div>
+                <div class="text">{{item.belongOrgName}}</div>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-    </div>
-    <!-- 会议照片 -->
-    <div class="meetingPhotos">
-      <div class="title">
-        <div class="label">会议照片</div>
-        <div class="editBtn" @click="deleBtn">{{deletable ? '保存' : '编辑'}}</div>
-      </div>
-      <div class="imgContent">
-        <van-uploader v-model="fileList" :upload-icon="require('@/assets/image/common_more.png')" preview-size="1.1rem" :deletable="deletable" :readonly="true" :show-upload="initFileList.length > 5 && showUpload" @click-upload="clickUpload" @delete="deleteImg"/>
-      </div>
-    </div>
+        <template #right>
+          <div class="rightBtn">
+            <div @click.stop="itemEdit(item)">
+              <van-icon :name="require(`@/assets/image/eidt_icon.png`)" size="0.3rem"/>
+              <div class="text">编辑</div>
+            </div>
+            <div @click.stop="itemDel(item)">
+              <van-icon :name="require(`@/assets/image/cust_zyqk_delete.png`)" size="0.3rem"/>
+              <div class="text">删除</div>
+            </div>
+          </div>
+        </template>
+      </van-swipe-cell>
+		</van-list>
+		<!-- 选择机构组件 -->
+		<org-list ref="orgList" :type="2" @activeOrg="activeOrg" />
     <!-- 新增记录 -->
-    <div class="addRecord">
-      <van-button class="addBtn" type="primary" block @click="addNewRecord">新增记录</van-button>
-    </div>
+    <van-icon class="addRecord" name="add" size="0.58rem" color="#026DFF" @click.stop="addNewRecord" v-if="addBtn"/>
+    <!-- <van-icon class="addRecord" :name="require(`@/assets/image/btn_add.png`)" size="0.58rem" color="#026DFF" @click.stop="addNewRecord" v-if="addBtn"/> -->
+    <!-- 底部弹出 -->
+    <van-popup v-model:show="show" round position="bottom" :style="{ background: '#F8F8F8' }">
+      <AddNewRecord :type="recordType" :record="record" @clearBtn="show = false"/>
+    </van-popup>
     <!-- 这是底线 -->
     <div class="bottomLine">
       <span></span>
@@ -90,16 +91,28 @@
 </template>
 
 <script>
+import { queryMemSoundRecList } from "@/request/index.js";
+import { Toast } from 'vant';
 import PlayAudio from "@/components/common/PlayAudio.vue"
+import AddNewRecord from "@/views/index/addNewRecord.vue"
 import moment from 'moment';
 export default {
   name: 'MorningEvening',
   components: {
-    PlayAudio
+    PlayAudio,
+    AddNewRecord
   },
   data() {
     return {
-      showWeekDetial: true,
+      orgName: '选择机构',
+      dataList: [],
+      show: false,
+      loading: false,
+      finished: true,
+      pageIndex: 0,
+      params: {},
+      chooseItems: [],
+			showBatchSend: false,
       defaultDate: moment(),
       showTime: moment().format('YYYY年MM月DD日'),
       minDate: moment().subtract(3, 'month'),
@@ -109,45 +122,25 @@ export default {
       iconSize: 0,
       openPlay: true,
       openImg: true,
-      audioList: ['录音1','录音2','录音3','录音4','录音5'],
-      audioTitle: '',
-      showUpload: true,
+      audioList: [],
       deletable: false,
-      initFileList: [
+      recordType: true,
+      record: {},
+      fileList: [
         // Uploader 根据文件后缀来判断是否为图片文件
         // 如果图片 URL 中不包含类型信息，可以添加 isImage 标记来声明
-        { url: 'https://fastly.jsdelivr.net/npm/@vant/assets/leaf.jpeg' },
-        { url: 'https://cloud-image', isImage: true },
-        { url: 'https://fastly.jsdelivr.net/npm/@vant/assets/cat.jpeg' },
-        { url: 'https://fastly.jsdelivr.net/npm/@vant/assets/leaf.jpeg' },
-        { url: 'https://fastly.jsdelivr.net/npm/@vant/assets/cat.jpeg' },
-        { url: 'https://fastly.jsdelivr.net/npm/@vant/assets/leaf.jpeg' },
-        { url: 'https://cloud-image', isImage: true },
-        { url: 'https://fastly.jsdelivr.net/npm/@vant/assets/cat.jpeg' },
+        { url: "http://devmap.eqianjin.com.cn/icrmmap/home/appuser/jjbank/upload/sound/001343_2022061515571562.jpg" },
       ],
-      fileList: []
+      addBtn: false
     };
   },
-  /* 判断是从哪个路由过来的，若是判断是否需要开启缓存 */
-  beforeRouteEnter(to, from, next) {
-    if(from.name === 'addNewRecord') {
-      to.meta.keepAlive = true;
-    }else{
-      to.meta.keepAlive = false;
-    }
-    next();
-  },
   created(){
-    this.audioList = ['录音1','录音2','录音3','录音4','录音5']
-    this.audioTitle = this.audioList[0]
-    this.fileList = this.initFileList.length > 5 ? this.initFileList.slice(0,5) : this.initFileList
+    this.queryLsit()
+    this.addBtn = this.$store.state.userMsg.roleId == '00000003' || this.$store.state.userMsg.roleId == '00000008'
+    this.audioList = ['录音1','录音2','录音3']
   },
   methods: {
     moment,
-    /* 展开或者收起日历 */
-    showDate(){
-      this.showWeekDetial = !this.showWeekDetial
-    },
     /* 选中日期时 */
     selectDate(value){
       this.showTime = moment(value).format('YYYY年MM月DD日')
@@ -158,38 +151,63 @@ export default {
       this.$refs['calendar'].reset()
     },
     /* 会议记录修改 */
-    minutesEdit(){
-      this.minuDisabled = !this.minuDisabled
+    itemEdit(item){
+      this.record = item
+      this.recordType = false
+      this.show = true
+    },
+    /* 会议记录删除 */
+    itemDel(){
+      Toast.fail('删除!')
     },
     /* 新增记录 */
     addNewRecord(){
-      this.$refs['PlayAudio'].init()
-      this.$nextTick(()=>{
-        this.$router.push('/addNewRecord')
-      })
+      if(this.dataList.length){
+        this.$refs['PlayAudio'].init()
+      }
+      this.record = {}
+      this.recordType = true
+      this.show = true
+      // this.$nextTick(()=>{
+      //   this.$router.push('/addNewRecord')
+      // })
     },
     /* 选择录音 */
     selectSound(item, index){
       this.$refs['PlayAudio'].init()
-      this.audioTitle = item
       this.iconSize = index
     },
-    /* 点击上传区 */
-    clickUpload(){
-      this.showUpload = !this.showUpload
-      this.fileList = this.initFileList
-    },
-    /* 编辑图片 */
-    deleBtn(){
-      this.deletable = !this.deletable
-    },
-    /* 文件删除时的回调 */
-    deleteImg(v){
-      if(this.showUpload){
-        this.initFileList = this.initFileList.filter(item => item != v)
-        this.fileList = this.initFileList.length > 5 ? this.initFileList.slice(0,5) : this.initFileList
+    /* 查询列表 */
+    queryLsit(orgNo){
+			this.finished = false;
+			this.loading = true;
+			this.pageIndex++;
+			Toast.loading({
+				message: "正在加载",
+				forbidClick: true,
+				duration: 0,
+			});
+      let body = {
+        belongOrg: orgNo || '',
+        pageNum: this.pageIndex.toString(),
+        pageSize: '10'
       }
-    }
+      queryMemSoundRecList(body, res => {
+        if(res && res.data){
+					this.dataList = this.dataList.concat(res.data.records || []);
+					if (this.dataList.length >= res.data.total) this.finished = true;
+        }else{
+          this.finished = true
+        }
+        Toast.clear();
+      })
+    },
+		/* 选择机构 */
+		activeOrg(value) {
+			this.orgName = value.text || '选择机构'
+			this.pageIndex = 0
+      this.queryLsit(value.value)
+		},
   },
 };
 </script>
@@ -229,99 +247,143 @@ export default {
     background: #fff;
     border-radius: 0 0 0.08rem 0.08rem;
     &:deep(.van-calendar__selected-day){
-      width: 0.28rem;
-      height: 0.28rem;
+      width: 0.24rem;
+      height: 0.24rem;
       border-radius: 50%;
     }
   }
   .title {
+    // background: pink;
     display: flex;
     justify-content: space-between;
-    padding: 0.12rem;
-    font-size: 0.15rem;
+    // padding: 0.12rem;
     font-family: PingFangSC-Regular, PingFang SC;
     font-weight: 400;
     .label {
+      font-size: 0.15rem;
       color: #222222;
     }
     .editBtn {
-      color: #026DFF;
+      font-size: 0.14rem;
+      color: #666666;
     }
   }
-  .minutesMeeting {
-    .minutesList {
-      font-size: 0.15rem;
-      &>div {
+  .playAudio {
+    margin: 0.12rem 0;
+  }
+	.vanListStyle {
+		// padding: 1.83rem 0.12rem 0;
+		max-width: 100%;
+		overflow: hidden;
+		// .custItem {
+		// 	width: 100%;
+		// 	margin: 0.12rem auto;
+		// 	background: #FFFFFF;
+		// 	// box-shadow: 0 0.02rem 0.2rem 0 rgba(217, 229, 242, 0.6);
+		// 	border-radius: 0.08rem;
+		// 	// padding: 0.12rem;
+		// 	position: relative;
+		// 	transition: margin-left 0.3s;
+		// 	.leftCheckBox {
+		// 		width: 0.2rem;
+		// 		height: 0.2rem;
+		// 		flex-shrink: 0;
+		// 		position: absolute;
+		// 		top: 50%;
+		// 		left: -10%;
+		// 		transform: translateY(-50%);
+		// 		display: flex;
+		// 		justify-content: flex-end;
+		// 	}
+		// }
+    .minutesMeeting {
+      .audioList_list {
         display: flex;
         justify-content: space-between;
-        padding: 0.12rem 0;
-      }
-      div:nth-child(1){
-        span:nth-child(2) {
-          font-size: 0.14rem;
-          color: #666666;
+        .list_item {
+          padding: 0.175rem 0.25rem;
+          font-size: 0.15rem;
         }
       }
-      div:nth-child(2){
-        border-top: 0.005rem solid #E5E5E5;
-        border-bottom: 0.005rem solid #E5E5E5;
+      .photos {
+        display: flex;
+        padding: 0.12rem 0 0.12rem 0.0425rem;
+        &:deep(.van-uploader__preview){
+          margin-bottom: 0;
+        }      
       }
-      div:nth-child(3){
-        padding-bottom: 0;
-      }
-    }
-  }
-  .audioManagement {
-    .audioList {
-      padding-top: 0.36rem;
-      font-size: 0.15rem;
-      color: #131313;
-      .audioList_title {
+      .creatMsg {
+        display: flex;
         text-align: left;
-      }
-      .audioList_list {
-        width: 100%;
-        overflow: hidden;
-        &>div {
+        & > div {
+          flex: 1;
           display: flex;
-          float: left;
-          width: 25%;
-          height: 1.025rem;
-          .list_item {
+          align-items: center;
+          .label {
             font-size: 0.15rem;
-            margin: auto;
+            font-family: PingFangSC-Regular, PingFang SC;
+            font-weight: 400;
+            color: #595959;
+          }
+          .text {
+            width: 1.25rem;
+            padding-left: 0.05rem;
+            font-size: 0.14rem;
+            font-family: PingFangSC-Regular, PingFang SC;
+            font-weight: 400;
+            color: #595959;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
           }
         }
       }
     }
-  }
-  .meetingPhotos {
-    .imgContent {
-      background: #fff;
-      border-radius: 0.08rem;
-      border: 0.005rem solid #E5E5E5;
-      padding: 0.11rem 0 0 0.11rem;
-      width: 100%;
+    .rightBtn {
+      height: 100%;
+      padding: 0 0.4rem;
       display: flex;
-      &:deep(.van-uploader__preview){
-        margin: 0 0.11rem 0.11rem 0;
+      align-items: center;
+      div:first-child {
+        padding-right: 0.35rem;
       }
-      &:deep(.van-uploader__upload){
-        background: #fff;
+      &>div {
+          font-size: 0.09rem;
+          font-family: PingFangSC-Regular, PingFang SC;
+          font-weight: 400;
+          color: #262626;
+        .text {
+          font-size: 0.09rem;
+          font-family: PingFangSC-Regular, PingFang SC;
+          font-weight: 400;
+          color: #262626;
+        }
       }
     }
-  }
+	}
+  // .meetingPhotos {
+  //   .imgContent {
+  //     background: #fff;
+  //     border-radius: 0.08rem;
+  //     border: 0.005rem solid #E5E5E5;
+  //     padding: 0.11rem 0 0 0.11rem;
+  //     width: 100%;
+  //     display: flex;
+  //     &:deep(.van-uploader__preview){
+  //       margin: 0 0.11rem 0.11rem 0;
+  //     }
+  //     &:deep(.van-uploader__upload){
+  //       background: #fff;
+  //     }
+  //   }
+  // }
   .addRecord {
     position: fixed;
-    width: 100%;
-    bottom: 0;
-    left: 0;
+    bottom: 0.645rem;
+    right: 0.12rem;
     z-index: 99;
-    background: #fff;
-    padding: 0.12rem 0.15rem 0.46rem;
-    .addBtn {
-      border-radius: 0.08rem;
-    }
+    // background: #fff;
+    // border-radius: 50%;
   }
 	.bottomLine {
 		width: 60%;
