@@ -17,7 +17,10 @@
     <div class="meetingPhotos">
       <div class="label">上传录音</div>
       <div class="imgContent">
-        <van-uploader ref="upload" v-model="soundList" @click-upload="uploadAudio(0)" max-count="3" preview-size="0.73rem" accept="audio/*, .m4a">
+        <van-uploader ref="upload" v-model="soundList" :after-read="afterReads" :preview-full-image="false" max-count="3" preview-size="0.73rem" accept="audio/*, .m4a">
+          <!-- <template #preview-cover="{ file }">
+            <div class="preview-cover van-ellipsis">{{ file.name }}</div>
+          </template>           -->
           <template #default>
             <van-icon :name="require(`@/assets/image/index_upload.png`)" size="0.735rem" color="#E6E6E6" style="display: flex;"/>
           </template>
@@ -61,7 +64,7 @@ import { memSoundUpload } from "@/api/api"
 import PlayAudio from "@/components/common/PlayAudio.vue"
 import moment from "moment";
 import { Toast } from 'vant';
-import { memSoundPicUpload, memSoundRecUpload, uploadImg } from "@/request/index"
+import { memSoundPicUpload, memSoundRecUpload, uploadImg, saveMemSoundRec } from "@/request/index"
 export default {
   name: "addNewRecord",
   components: {
@@ -97,13 +100,14 @@ export default {
     };
   },
   mounted() {
-    console.log(this.type)
+    // console.log(this.type)
     if(this.type){
       this.soundList = []
       this.photoList = []
       this.soundRecCaption = ''
     }else{
-      // console.log(this.record)
+      console.log(this.record)
+      this.soundRecCaption = this.record.soundRecCaption
       this.soundList = this.record.soundList || []
       this.photoList = this.record.photoList || []
       // let arrImg = []
@@ -113,8 +117,6 @@ export default {
       //   arr.push(obj)
       // })
       // this.photoList = arrImg
-
-      this.soundRecCaption = this.record.soundRecCaption
     }
   },
   methods: {
@@ -131,58 +133,58 @@ export default {
     //   this.uploadAudio(1)
     // },
     /* 删除录音 */
-    itemDel(v, i){
-      this.soundList = this.soundList.filter((item , index) => index != i)
-    },
+    // itemDel(v, i){
+    //   this.soundList = this.soundList.filter((item , index) => index != i)
+    // },
     /* 音频控制 */
-    uploadAudio(type){
-      let body = {
-        type: type,
-        url: this.audioItem.url
-      }
-      AlipayJSBridge.call("openRecord", body, (res) => {
-        switch (body.type) {
-          case 0 :
-            if(res.status == '000000'){
-              let obj = {
-                url: res.result,
-                name: decodeURI(res.result.substring(res.result.lastIndexOf("/")+1))
-              }
-              this.soundList.push(obj)
-            }
-          break;
-          case 1 :
-            this.totalDuration = Number(res.result).toFixed(0) || 0
-          break;
-          case 2 :
-            // console.log('播放',res)
-            if(res.msg == '播放完成'){
-              this.$refs['PlayAudio'].init()
-            }
-          break;
-          case 3 :
-            console.log('暂停',res)
-          break;
-          case 4 :
-            // 无法控制前进秒数单位(需改造接口)
-            console.log('快进',res)
-          break;
-          case 5 :
-            // 无法控制后退秒数单位(需改造接口)
-            console.log('快退',res)
-          break;
-          case 6 :
-            console.log('停止',res)
-          break;
-        }
-      });
-    },
+    // uploadAudio(type){
+    //   let body = {
+    //     type: type,
+    //     url: this.audioItem.url
+    //   }
+    //   AlipayJSBridge.call("openRecord", body, (res) => {
+    //     switch (body.type) {
+    //       case 0 :
+    //         if(res.status == '000000'){
+    //           let obj = {
+    //             url: res.result,
+    //             name: decodeURI(res.result.substring(res.result.lastIndexOf("/")+1))
+    //           }
+    //           this.soundList.push(obj)
+    //         }
+    //       break;
+    //       case 1 :
+    //         this.totalDuration = Number(res.result).toFixed(0) || 0
+    //       break;
+    //       case 2 :
+    //         // console.log('播放',res)
+    //         if(res.msg == '播放完成'){
+    //           this.$refs['PlayAudio'].init()
+    //         }
+    //       break;
+    //       case 3 :
+    //         console.log('暂停',res)
+    //       break;
+    //       case 4 :
+    //         // 无法控制前进秒数单位(需改造接口)
+    //         console.log('快进',res)
+    //       break;
+    //       case 5 :
+    //         // 无法控制后退秒数单位(需改造接口)
+    //         console.log('快退',res)
+    //       break;
+    //       case 6 :
+    //         console.log('停止',res)
+    //       break;
+    //     }
+    //   });
+    // },
     /* 播放暂停按钮 */
-    playStop(v){
-      if(this.soundList.length > 0 && this.audioItem.name){
-        this.uploadAudio(v)
-      }
-    },
+    // playStop(v){
+    //   if(this.soundList.length > 0 && this.audioItem.name){
+    //     this.uploadAudio(v)
+    //   }
+    // },
     /* 保存 */
     saveBtn(){
       if (!this.soundRecCaption) {
@@ -192,36 +194,55 @@ export default {
       } else if (!this.photoList.length) {
         Toast('请上传照片')
       } else {
+        Toast.loading({message: "正在保存",duration: 0});
+        // 遍历数组生成一个只有ID的列表
+        let getId = (arr) => {
+          let newList = []
+          if(arr.length > 0){
+            arr.forEach(item => {
+              newList.push(item.fileId)
+            })
+          }
+          return newList
+        }
         let body = {
           soundRecCaption: this.soundRecCaption,
-          soundList: this.soundList,
-          photoList: this.photoList
+          soundList: getId(this.soundList),
+          photoList: getId(this.photoList)
         }
-        this.$emit('saveBtn', body)
+        if(!this.type){
+          body.id = this.record.id
+        }
+        saveMemSoundRec(body, res => {
+          // console.log(res)
+          Toast.clear()
+          this.$emit('clearBtn', true)
+        })
       }
     },
     /* 取消 */
     clearBtn(){
-      this.$emit('clearBtn')
+      this.$emit('clearBtn', true)
     },
     /* 点击上传区域时 */
-    clickUpload(){
-      AlipayJSBridge.call('openRecord', {openType: "0"}, (res) => {
-				if (res.status == "000000") {
-          // console.log(res)
-					Toast.loading({	message: "正在上传", forbidClick: true, duration: 0 });
-					memSoundPicUpload({file: res.result},(img)=>{
-						Toast.success("上传成功");
-						this.photoList.push({
-							url: res1.result,
-							tableKey: img.data[0].tableKey
-						})
-					})
-				} else if (res.status != "000004") {
-					Toast.fail(res.msg)
-				}
-      })
-    },
+    // clickUpload(){
+      // AlipayJSBridge.call('openPickerV', {openType: "2"}, (res) => {
+			// 	if (res.status == "000000") {
+      //     // console.log(res)
+			// 		Toast.loading({	message: "正在上传", forbidClick: true, duration: 0 });
+			// 		memSoundPicUpload({file: res.result},(img)=>{
+			// 			Toast.success("上传成功");
+			// 			this.photoList.push({
+			// 				url: res1.result,
+			// 				tableKey: img.data[0].tableKey
+			// 			})
+			// 		})
+			// 	} else if (res.status != "000004") {
+			// 		Toast.fail(res.msg)
+			// 	}
+      // })
+    // },
+    // 文件流
     // afterReads(file) {
     //   // Toast.loading({message: "正在上传",duration: 0});
     //   // console.log(file);
@@ -261,22 +282,38 @@ export default {
     //     console.log(error)
     //   })
     // },
-    // afterReads(file){
-    //   let body = {
-    //     file: file.content.replace(`${file.content.split(',')[0]},`, '')
-    //   }
-    //   memSoundRecUpload(body, res => {
-    //     console.log('上传音频',res)
-    //     // Toast.success("上传成功");
-    //     let obj = {
-    //       // url: `./assets/image/play-mp3.png`,
-    //       url: `${this.$store.state.baseUrl}${res.data[0].fileServerPath}${res.data[0].fileName}`,
-    //       tableKey: res.data[0].tableKey,
-    //       isImage: true
-    //     }
-    //     this.soundList[this.soundList.length - 1] = obj
-    //   })
-    // },
+    // bsea64音频文件
+    async afterReads(file){
+      Toast.loading({message: "正在上传",duration: 0});
+      let body = {
+        file: file.content.replace(`${file.content.split(',')[0]},`, '')
+      }
+      let res = await memSoundUpload(body)
+      if(res.code==0){
+        let obj = {
+          // url: `./assets/image/play-mp3.png`,
+          url: `${this.$store.state.baseUrl}${res.data[0].fileServerPath}${res.data[0].fileName}`,
+          fileId: res.data[0].tableKey,
+          // isImage: false
+        }
+        this.soundList[this.soundList.length - 1] = obj
+        // console.log(this.soundList)
+        Toast.clear();
+      }else{
+        Toast.fail("上传失败")
+      }
+      // memSoundUpload(body, res => {
+      //   console.log('上传音频',res)
+      //   // Toast.success("上传成功");
+      //   // let obj = {
+      //   //   // url: `./assets/image/play-mp3.png`,
+      //   //   url: `${this.$store.state.baseUrl}${res.data[0].fileServerPath}${res.data[0].fileName}`,
+      //   //   tableKey: res.data[0].tableKey,
+      //   //   isImage: true
+      //   // }
+      //   // this.soundList[this.soundList.length - 1] = obj
+      // })
+    },
     /* 上传图片至服务器 */
     afterRead(img){
 			Toast.loading({	message: "正在上传", forbidClick: true, duration: 0 });
@@ -288,7 +325,7 @@ export default {
         Toast.success("上传成功");
         let obj = {
           url: `${this.$store.state.baseUrl}${res.data[0].fileServerPath}${res.data[0].fileName}`,
-          tableKey: res.data[0].tableKey
+          fileId: res.data[0].tableKey
         }
         this.photoList[this.photoList.length - 1] = obj
         // this.photoList[this.photoList.length - 1].url = `${this.$store.state.baseUrl}${res.data[0].fileServerPath}${res.data[0].fileName}`
@@ -301,6 +338,7 @@ export default {
       })
       // this.photoList.push(file)
     },
+
   },
 };
 </script>
@@ -458,6 +496,17 @@ export default {
       &:deep(.van-uploader__preview-image),
       &:deep(.van-uploader__upload){
         border-radius: 0.08rem;
+      }
+      .preview-cover {
+        position: absolute;
+        bottom: 0;
+        box-sizing: border-box;
+        width: 100%;
+        padding: 0.02rem;
+        color: #fff;
+        font-size: 0.06rem;
+        text-align: center;
+        background: rgba(0, 0, 0, 0.3);
       }
     }
   }

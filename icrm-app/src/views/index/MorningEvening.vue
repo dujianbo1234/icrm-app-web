@@ -35,15 +35,15 @@
             <!-- 录音列表 -->
             <div class="audioList_list">
               <template v-for="(items, indexs) in item.soundList" :key="items">
-                <div class="list_item" @click="selectSound(items, indexs)">
+                <div class="list_item" @click="selectSound(items)">
                   <van-icon :name="require(`@/assets/image/play-mp3.png`)" size="0.45rem" style="margin-right: 0.04rem;" />
-                  <div :style="{color : audioItem == items ? '#026DFF' : '#131313'}">{{`录音${indexs + 1}`}}</div>
+                  <div :style="{color : audioItem == items.url ? '#026DFF' : '#131313'}">{{`录音${indexs + 1}`}}</div>
                 </div>
               </template>
             </div>
             <!-- 照片列表 -->
             <div class="photos">
-              <van-uploader v-model="fileList" preview-size="0.5rem" :deletable="deletable" :readonly="true" :show-upload="false" @delete="deleteImg"/>
+              <van-uploader v-model="item.photoList" preview-size="0.5rem" :deletable="deletable" :readonly="true" :show-upload="false" @delete="deleteImg"/>
             </div>
             <!-- 创建人 机构 -->
             <div class="creatMsg">
@@ -78,7 +78,7 @@
     <van-icon class="addRecord" name="add" size="0.58rem" color="#026DFF" @click.stop="addNewRecord" v-if="addBtn"/>
     <!-- 底部弹出 -->
     <van-popup v-model:show="show" round position="bottom" :style="{ background: '#F8F8F8' }">
-      <AddNewRecord :type="recordType" :record="record" @clearBtn="show = false"/>
+      <AddNewRecord :type="recordType" :record="record" @clearBtn="clearBtn"/>
     </van-popup>
     <!-- 这是底线 -->
     <div class="bottomLine">
@@ -90,7 +90,7 @@
 </template>
 
 <script>
-import { queryMemSoundRecList } from "@/request/index.js";
+import { queryMemSoundRecList, deleteMemSoundRec } from "@/request/index.js";
 import { Toast } from 'vant';
 import PlayAudio from "@/components/common/PlayAudio.vue"
 import AddNewRecord from "@/views/index/addNewRecord.vue"
@@ -125,11 +125,6 @@ export default {
       deletable: false,
       recordType: true,
       record: {},
-      fileList: [
-        // Uploader 根据文件后缀来判断是否为图片文件
-        // 如果图片 URL 中不包含类型信息，可以添加 isImage 标记来声明
-        { url: "http://devmap.eqianjin.com.cn/icrmmap/home/appuser/jjbank/upload/sound/001343_2022061515571562.jpg" },
-      ],
       addBtn: false,
       // showPlayTime: 0, // 录音总时长(毫秒)
       // totalDuration: 0
@@ -160,9 +155,22 @@ export default {
         this.show = true
       })
     },
+    /* 关闭弹窗 */
+    clearBtn(v){
+      this.show = false
+      if(v){
+        this.clickQuery()
+      }
+    },
     /* 会议记录删除 */
-    itemDel(){
-      Toast.fail('删除!')
+    itemDel(item){
+      let body = {
+        id: item.id
+      }
+      deleteMemSoundRec(body, res => {
+        console.log(res)
+        this.clickQuery()
+      })
     },
     /* 新增记录 */
     addNewRecord(){
@@ -186,6 +194,7 @@ export default {
     },
     /* 查询列表 */
     queryLsit(orgNo){
+      window.recordsAudio.pause();
 			this.finished = false;
 			this.loading = true;
 			Toast.loading({
@@ -201,14 +210,24 @@ export default {
       }
       queryMemSoundRecList(body, res => {
         if(res && res.data){
-          // console.log(res.data.records)
-
+          console.log(res.data.records)
 					this.dataList = this.dataList.concat(res.data.records || []);
-
           this.dataList.forEach(item => {
-            item.soundList = [`${this.$store.state.baseUrl}${item.soundRec}`]
+            if(item.soundList instanceof Array){
+              item.soundList.forEach(i => {
+                i.url = `${this.$store.state.baseUrl}${i.fileServerPath}`
+              })
+            }else{
+              item.soundList = []
+            }
+            if(item.photoList instanceof Array){
+              item.photoList.forEach(i => {
+                i.url = `${this.$store.state.baseUrl}${i.fileServerPath}`
+              })
+            }else{
+              item.photoList = []
+            }
           })
-
 					if (this.dataList.length >= res.data.total) this.finished = true;
         }else{
           this.finished = true
@@ -223,8 +242,11 @@ export default {
       this.queryLsit(value.value)
 		},
     /* 选择录音 */
-    selectSound(item, index){
-      this.audioItem = item
+    selectSound(item){
+      if(this.audioItem){
+        window.recordsAudio.pause();
+      }
+      this.audioItem = item.url
       this.$nextTick(()=>{
         this.$refs['PlayAudio'].init()
       })
