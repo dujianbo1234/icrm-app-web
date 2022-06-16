@@ -175,7 +175,7 @@
 				<!-- 客户增长趋势-图 -->
 				<echartHistogram ref="Histogram" :dataArr="['全部','财富客群','贷款客群','代发客群','基础客群','商户客群']"
 					:selectTime="selectTime" :barData="barData" @change="barChange" @change2="barChange2"
-					:timeUnit="timeUnit" v-show="custType === 0"></echartHistogram>
+					:timeUnit="timeUnit" :dataDate="dataDate" v-show="custType === 0"></echartHistogram>
 				<!-- 客户服务等级-图 -->
 				<echarts-funnel v-show="custType === 1" :data="custLvDisDiaData" ref="custLvDisDiaChart" />
 			</div>
@@ -212,7 +212,7 @@
 				</div>
 				<echartHistogram :type="1" ref="Histogram2" :dataArr="['全部','活期存款','定期存款','理财','基金','保险','信托']"
 					:numType="'余额总计'" :selectTime="selectTime" :barData="aumData" @change="aumChange"
-					@change2="aumChange2" :timeUnit="timeUnit2"></echartHistogram>
+					@change2="aumChange2" :timeUnit="timeUnit2" :dataDate="dataDate"></echartHistogram>
 			</div>
 			<!-- 贷款余额(万元) -->
 			<div class="contentItem" style="margin-top: 0.12rem">
@@ -229,7 +229,7 @@
 				</div>
 				<echartHistogram :type="1" ref="Histogram3" :dataArr="['全部','按揭贷款','消费贷款','经营贷款']" :numType="'余额总计'"
 					:selectTime="selectTime" :barData="loanData" @change="loanChange" @change2="loanChange2"
-					:timeUnit="timeUnit3"></echartHistogram>
+					:timeUnit="timeUnit3" :dataDate="dataDate"></echartHistogram>
 			</div>
 			<van-dialog v-model:show="clickDalongShow" :title="dalongShow.title" theme="round-button"
 				confirmButtonColor="#026DFF" class="dialogBox">

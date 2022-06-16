@@ -11,7 +11,8 @@ export const queryHomPeCstAum = (params,fun) => {request("index.queryHomPeCstAum
 // 查询首页客户aum余额分布图
 export const queryHomPeCstBalDgrm = (params,fun) => {request("index.queryHomPeCstBalDgrm", params, fun)}
 // 查询首页客户资产等级分布图
-export const queryAst = (params,fun) => {request("index.queryAst", params, fun)}
+// export const queryAst = (params,fun) => {request("index.queryAst", params, fun)}
+export const queryAst = (params,fun) => {request("index.queryHomPeCstSvrLvlDgrm", params, fun)}
 // 查询首页客户服务等级分布图
 export const queryHomPeCstSvrLvlDgrm = (params,fun) => {request("index.queryHomPeCstSvrLvlDgrm", params, fun)}
 // 查询首页VIP客户数
@@ -52,3 +53,5 @@ export const memSoundPicUpload = (params,fun) => {request("index.memSoundPicUplo
 export const memSoundRecUpload = (params,fun) => {request("index.memSoundRecUpload", params, fun)}
 /* 晨夕会-删除文件信息 */
 export const fieDelete = (params,fun) => {request("file.delete", params, fun)}
+/* 晨夕会-音频上传 */
+export const uploadImg = (params,fun) => {request("theme.uploadImg", params, fun)}

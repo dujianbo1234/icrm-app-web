@@ -70,13 +70,14 @@ const http = {
 				url,
 				data: params,
 				headers: {
-					'Content-Type': 'application/json;charset=UTF-8'
+					'Content-Type': 'multipart/form-data'
 				},
 				method: 'POST'
 			}).then(res => {
 				resolve(res.data)
 				return res
 			}).catch(error => {
+        console.log(error)
 				reject(error)
 			})
 		})

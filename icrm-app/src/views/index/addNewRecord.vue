@@ -6,7 +6,6 @@
       <div class="mid">{{type ? '新增记录' : '修改记录'}}</div>
       <div class="right" @click="saveBtn">保存</div>
     </div>
-    <!-- <nav-bar type="2" title="新增记录" leftIcon rightText="保存" rightColor="rgba(2, 109, 255, 1)"/> -->
     <!-- 会议记录 -->
     <div class="minutesMeeting">
       <div class="label">会议主题</div>
@@ -15,17 +14,17 @@
       </div>
     </div>
     <!-- 上传录音 -->
-    <!-- <div class="meetingPhotos">
+    <div class="meetingPhotos">
       <div class="label">上传录音</div>
       <div class="imgContent">
-        <van-uploader ref="upload" v-model="soundList" :after-read="afterReads" max-count="3" preview-size="0.73rem" accept="audio/*, .aac, .m4a">
+        <van-uploader ref="upload" v-model="soundList" @click-upload="uploadAudio(0)" max-count="3" preview-size="0.73rem" accept="audio/*, .m4a">
           <template #default>
             <van-icon :name="require(`@/assets/image/index_upload.png`)" size="0.735rem" color="#E6E6E6" style="display: flex;"/>
           </template>
         </van-uploader>
       </div>
-    </div> -->
-    <div class="audioManagement">
+    </div>
+    <!-- <div class="audioManagement">
       <div class="label">上传录音</div>
       <div class="card">
         <div class="audioList_list">
@@ -44,7 +43,7 @@
           </div>
         </div>
       </div>
-    </div>
+    </div> -->
     <!-- 会议照片 -->
     <div class="meetingPhotos">
       <div class="label">上传照片</div>
@@ -57,10 +56,12 @@
 </template>
 
 <script>
+import axios from 'axios' //引入
+import { memSoundUpload } from "@/api/api"
 import PlayAudio from "@/components/common/PlayAudio.vue"
 import moment from "moment";
 import { Toast } from 'vant';
-import { memSoundPicUpload, memSoundRecUpload } from "@/request/index"
+import { memSoundPicUpload, memSoundRecUpload, uploadImg } from "@/request/index"
 export default {
   name: "addNewRecord",
   components: {
@@ -96,6 +97,7 @@ export default {
     };
   },
   mounted() {
+    console.log(this.type)
     if(this.type){
       this.soundList = []
       this.photoList = []
@@ -104,6 +106,14 @@ export default {
       // console.log(this.record)
       this.soundList = this.record.soundList || []
       this.photoList = this.record.photoList || []
+      // let arrImg = []
+      // this.record.photoList.forEach(item => {
+      //   let obj = item
+      //   obj.url = `${this.$store.state.baseUrl}${item.fileId}` // 必须有个url组件才能回显
+      //   arr.push(obj)
+      // })
+      // this.photoList = arrImg
+
       this.soundRecCaption = this.record.soundRecCaption
     }
   },
@@ -196,53 +206,82 @@ export default {
     },
     /* 点击上传区域时 */
     clickUpload(){
-      // AlipayJSBridge.call('openPickerV', {openType: "2"}, (res) => {
-			// 	if (res.status == "000000") {
-      //     // console.log(res)
-			// 		Toast.loading({	message: "正在上传", forbidClick: true, duration: 0 });
-			// 		memSoundPicUpload({file: res.result},(img)=>{
-			// 			Toast.success("上传成功");
-			// 			this.photoList.push({
-			// 				url: res1.result,
-			// 				tableKey: img.data[0].tableKey
-			// 			})
-			// 		})
-			// 	} else if (res.status != "000004") {
-			// 		Toast.fail(res.msg)
-			// 	}
-      // })
+      AlipayJSBridge.call('openRecord', {openType: "0"}, (res) => {
+				if (res.status == "000000") {
+          // console.log(res)
+					Toast.loading({	message: "正在上传", forbidClick: true, duration: 0 });
+					memSoundPicUpload({file: res.result},(img)=>{
+						Toast.success("上传成功");
+						this.photoList.push({
+							url: res1.result,
+							tableKey: img.data[0].tableKey
+						})
+					})
+				} else if (res.status != "000004") {
+					Toast.fail(res.msg)
+				}
+      })
     },
     // afterReads(file) {
-    //   Toast.loading({message: "正在上传",duration: 0});
+    //   // Toast.loading({message: "正在上传",duration: 0});
     //   // console.log(file);
-    //   var formdata = new FormData();
-    //   formdata.append("file",file.file);
-    //   memSoundRecUpload(formdata, res => {
+    //   const formData = new FormData();
+    //   formData.append("file", file.file);
+    //   formData.append("fileList", file.file);
+    //   formData.append("multipartFile", file.file);
+    //   memSoundUpload(formData, res => {
     //     console.log(res)
     //   })
     // },
-    afterReads(file){
-      console.log(file)
-      let body = {
-        file: file.content.replace(`${file.content.split(',')[0]},`, '')
-      }
-      memSoundRecUpload(body, res => {
-        console.log('上传音频',res)
-        // Toast.success("上传成功");
-        let obj = {
-          url: `./assets/image/play-mp3.png`,
-          tableKey: res.data[0].tableKey,
-          audio: `${this.$store.state.baseUrl}${res.data[0].fileServerPath}${res.data[0].fileName}`,
-          isImage: true
-        }
-        this.soundList[this.soundList.length - 1] = obj
-      })
-    },
+    // async afterReads(file) {
+    //   var formdata = new FormData();
+    //   formdata.append("file",file.file);
+    //   console.log('formdata',formdata)
+    //   let upRes = await memSoundUpload(formdata);
+    //   if(upRes.code==0){
+    //     console.log(upRes)
+    //     // Toast.clear();
+    //   }else{
+    //     // Toast.fail("上传失败："+msg)
+    //   }
+    // },
+    // afterReads(file){
+    //   // console.log(file.file)
+    //   const serivce = axios.create({withCredentials: true})
+    //   let formdata = new FormData();
+    //   formdata.append("file", file.file);
+    //   formdata.append("data", {})
+    //   let config = {
+    //     headers: {'Content-Type': 'multipart/form-data'},
+    //     method: 'POST'
+    //   }
+    //   serivce.post(`${this.store.state.baseUrl}/jjbank/api/memsound/memSoundRecUpload`, formdata, config).then(res => {
+    //     console.log(res)
+    //   }).catch(error => {
+    //     console.log(error)
+    //   })
+    // },
+    // afterReads(file){
+    //   let body = {
+    //     file: file.content.replace(`${file.content.split(',')[0]},`, '')
+    //   }
+    //   memSoundRecUpload(body, res => {
+    //     console.log('上传音频',res)
+    //     // Toast.success("上传成功");
+    //     let obj = {
+    //       // url: `./assets/image/play-mp3.png`,
+    //       url: `${this.$store.state.baseUrl}${res.data[0].fileServerPath}${res.data[0].fileName}`,
+    //       tableKey: res.data[0].tableKey,
+    //       isImage: true
+    //     }
+    //     this.soundList[this.soundList.length - 1] = obj
+    //   })
+    // },
     /* 上传图片至服务器 */
     afterRead(img){
 			Toast.loading({	message: "正在上传", forbidClick: true, duration: 0 });
       let body = {
-        file: img.content.replace('data:image/jpeg;base64,','')
+        file: img.content.replace(`${img.content.split(',')[0]},`, '')
       }
       memSoundPicUpload(body, res => {
         // console.log('上传图片',res)
@@ -301,9 +340,9 @@ export default {
       color: #026DFF;
     }
   }
-  .minutesMeeting {
+  // .minutesMeeting {
     
-  }
+  // }
   .card {
     background: #fff;
     padding: 0.12rem;
@@ -370,7 +409,8 @@ export default {
           }
         }
       }
-    }    // .audio {
+    }
+    // .audio {
     //   background: #fff;
     //   padding: 0.12rem 0.12rem 0 0.12rem;
     //   .audioList {
@@ -415,7 +455,8 @@ export default {
       &:deep(.van-uploader__preview){
         margin: 0 0.11rem 0.12rem 0;
       }
-      &:deep(.van-uploader__preview-image){
+      &:deep(.van-uploader__preview-image),
+      &:deep(.van-uploader__upload){
         border-radius: 0.08rem;
       }
     }

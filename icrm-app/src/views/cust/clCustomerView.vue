@@ -136,7 +136,7 @@
 						</div>
 						<!-- 列表 -->
 						<div style="margin-top: 0.07rem;" v-if="assetFlag">
-							<Table :unit="1" :listLabel="listLabel" :listData="listData" :listType="listType"
+							<Table :unit="1" :color="false" :listLabel="listLabel" :listData="listData" :listType="listType"
 								:lableArr="['a','b','c','d']"></Table>
 						</div>
 						<echarts-pie ref="aumDisDiaChart" :unit="'元'" :data="pieData" v-else />
@@ -151,7 +151,7 @@
 						</div>
 						<echartHistogram ref="Histogram2" :type="2" :dataArr="['全部','活期存款','定期存款','理财','基金','保险','信托']"
 							:numType="'no'" :selectTime="selectTime" :barData="aumData" @change="aumChange"
-							@change2="aumChange2" :timeUnit="timeUnit"></echartHistogram>
+							@change2="aumChange2" :timeUnit="timeUnit" :dataDate="dataDate"></echartHistogram>
 					</div>
 					<!-- 负债总览(元) -->
 					<div class="card" style="margin-top: 0.12rem;">

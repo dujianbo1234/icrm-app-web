@@ -2,10 +2,10 @@
   <div class="MorningEvening">
     <!-- 顶部title -->
     <nav-bar type="2" title="晨夕会" v-if="show"/>
-    <nav-bar type="2" title="晨夕会" leftIcon :rightText="$store.state.userMsg.roleId != '00000004' ? orgName : ''" rightColor="rgba(2, 109, 255, 1)" @touchRight="$refs.orgList.showPopup()" v-else/>
+    <nav-bar type="2" title="晨夕会" leftIcon :rightText="$store.state.userMsg.roleId != '00000004' ? orgName : ''" rightColor="rgba(2, 109, 255, 1)" @back="goback" @touchRight="$refs.orgList.showPopup()" v-else/>
     <!-- 日历 -->
     <div class="calendar">
-      <div class="date">{{showTime}}</div>
+      <div class="date">{{showTime.format('YYYY年MM月DD日')}}</div>
       <span class="toDay" @click="toDay">当日</span>
     </div>
     <!-- 日历选择器 -->
@@ -16,10 +16,10 @@
     </div>
     <!-- 播放组件 -->
     <div class="playAudio" v-if="dataList.length">
-      <play-audio ref="PlayAudio"></play-audio>
+      <play-audio ref="PlayAudio" :audioItem="audioItem"></play-audio>
     </div>
     <!-- 会议列表 -->
-		<van-list class="vanListStyle" v-model:loading="loading" :finished="finished" finished-text="没有更多了" @load="queryLsit">
+		<van-list class="vanListStyle" v-model:loading="loading" :finished="finished" finished-text="没有更多了" @load="loadQuery">
       <van-swipe-cell v-for="(item,i) in dataList" :key="'item'+i" style="padding-bottom: 0.12rem;" :disabled="item.crtUsrNo != $store.state.userMsg.empno">
         <!-- 会议主题 -->
         <div class="minutesMeeting">
@@ -34,10 +34,10 @@
             </div>
             <!-- 录音列表 -->
             <div class="audioList_list">
-              <template v-for="(items, indexs) in audioList" :key="items">
+              <template v-for="(items, indexs) in item.soundList" :key="items">
                 <div class="list_item" @click="selectSound(items, indexs)">
                   <van-icon :name="require(`@/assets/image/play-mp3.png`)" size="0.45rem" style="margin-right: 0.04rem;" />
-                  <div :style="{color : iconSize == indexs ? '#026DFF' : '#131313'}">{{items}}</div>
+                  <div :style="{color : audioItem == items ? '#026DFF' : '#131313'}">{{`录音${indexs + 1}`}}</div>
                 </div>
               </template>
             </div>
@@ -76,7 +76,6 @@
 		<org-list ref="orgList" :type="2" @activeOrg="activeOrg" />
     <!-- 新增记录 -->
     <van-icon class="addRecord" name="add" size="0.58rem" color="#026DFF" @click.stop="addNewRecord" v-if="addBtn"/>
-    <!-- <van-icon class="addRecord" :name="require(`@/assets/image/btn_add.png`)" size="0.58rem" color="#026DFF" @click.stop="addNewRecord" v-if="addBtn"/> -->
     <!-- 底部弹出 -->
     <van-popup v-model:show="show" round position="bottom" :style="{ background: '#F8F8F8' }">
       <AddNewRecord :type="recordType" :record="record" @clearBtn="show = false"/>
@@ -114,12 +113,12 @@ export default {
       chooseItems: [],
 			showBatchSend: false,
       defaultDate: moment(),
-      showTime: moment().format('YYYY年MM月DD日'),
-      minDate: moment().subtract(3, 'month'),
+      showTime: moment(),
+      minDate: moment().subtract(12, 'month'),
       maxDate: moment(),
       textarea: '测试内容',
       minuDisabled: true,
-      iconSize: 0,
+      audioItem: '',
       openPlay: true,
       openImg: true,
       audioList: [],
@@ -131,30 +130,35 @@ export default {
         // 如果图片 URL 中不包含类型信息，可以添加 isImage 标记来声明
         { url: "http://devmap.eqianjin.com.cn/icrmmap/home/appuser/jjbank/upload/sound/001343_2022061515571562.jpg" },
       ],
-      addBtn: false
+      addBtn: false,
+      // showPlayTime: 0, // 录音总时长(毫秒)
+      // totalDuration: 0
     };
   },
   created(){
-    this.queryLsit()
+    this.clickQuery()
     this.addBtn = this.$store.state.userMsg.roleId == '00000003' || this.$store.state.userMsg.roleId == '00000008'
-    this.audioList = ['录音1','录音2','录音3']
   },
   methods: {
     moment,
     /* 选中日期时 */
     selectDate(value){
-      this.showTime = moment(value).format('YYYY年MM月DD日')
+      this.showTime = moment(value)
+      this.clickQuery()
     },
     /* 当日 */
     toDay(){
-      this.showTime = moment().format('YYYY年MM月DD日')
+      this.showTime = moment()
       this.$refs['calendar'].reset()
+      this.clickQuery()
     },
     /* 会议记录修改 */
     itemEdit(item){
       this.record = item
       this.recordType = false
-      this.show = true
+      this.$nextTick(()=>{
+        this.show = true
+      })
     },
     /* 会议记录删除 */
     itemDel(){
@@ -162,26 +166,28 @@ export default {
     },
     /* 新增记录 */
     addNewRecord(){
-      if(this.dataList.length){
-        this.$refs['PlayAudio'].init()
-      }
+      // if(this.dataList.length){
+      //   this.$refs['PlayAudio'].init()
+      // }
       this.record = {}
       this.recordType = true
       this.show = true
-      // this.$nextTick(()=>{
-      //   this.$router.push('/addNewRecord')
-      // })
     },
-    /* 选择录音 */
-    selectSound(item, index){
-      this.$refs['PlayAudio'].init()
-      this.iconSize = index
+    /* 下拉加载更多 */
+    loadQuery(){
+			this.pageIndex++;
+      this.queryLsit()
+    },
+    /* 选择日期查询列表 */
+    clickQuery(){
+      this.pageIndex = 1
+      this.dataList = []
+      this.queryLsit()
     },
     /* 查询列表 */
     queryLsit(orgNo){
 			this.finished = false;
 			this.loading = true;
-			this.pageIndex++;
 			Toast.loading({
 				message: "正在加载",
 				forbidClick: true,
@@ -189,12 +195,20 @@ export default {
 			});
       let body = {
         belongOrg: orgNo || '',
+        crtTm: moment(this.showTime).format('YYYY-MM-DD'),
         pageNum: this.pageIndex.toString(),
         pageSize: '10'
       }
       queryMemSoundRecList(body, res => {
         if(res && res.data){
+          // console.log(res.data.records)
+
 					this.dataList = this.dataList.concat(res.data.records || []);
+
+          this.dataList.forEach(item => {
+            item.soundList = [`${this.$store.state.baseUrl}${item.soundRec}`]
+          })
+
 					if (this.dataList.length >= res.data.total) this.finished = true;
         }else{
           this.finished = true
@@ -205,9 +219,59 @@ export default {
 		/* 选择机构 */
 		activeOrg(value) {
 			this.orgName = value.text || '选择机构'
-			this.pageIndex = 0
+			this.pageIndex = 1
       this.queryLsit(value.value)
 		},
+    /* 选择录音 */
+    selectSound(item, index){
+      this.audioItem = item
+      this.$nextTick(()=>{
+        this.$refs['PlayAudio'].init()
+      })
+      // this.chooseRecord()
+      // console.log(this.audioItem)
+    },
+    /* 返回路由时触发 */
+    goback(){
+      window.recordsAudio.pause();
+    },
+    /**
+      * 选择录音
+      */
+    chooseRecord(){
+      // this.recordPlay = false;
+      // this.showPlayTime = 0;
+      // this.recordPlaying = this.recordList[i];
+      window.recordsAudio = new Audio();
+      window.recordsAudio.src = this.audioItem;
+      // this.totalDuration = window.recordsAudio.duration
+      // window.recordsAudio.ontimeupdate = ()=>{
+      //   this.showPlayTime = this.resetTime(window.recordsAudio.currentTime)
+      // };
+      // console.log('录音时间',this.showPlayTime)
+      // window.recordsAudio.onended = ()=>{this.recordPS()};
+    },
+    /**
+      * 时间格式转换
+      */
+    // resetTime(time){
+    //   let result = parseInt(time)
+    //   let m = Math.floor((result / 60));
+    //   let s = Math.floor((result % 60)) < 10 ? '0' + Math.floor((result % 60)) : Math.floor((result % 60));
+    //   let newTime = `${m}:${s}`;
+    //   return newTime;
+    // },
+    /**
+      * 录音播放与暂停
+      */
+    // recordPS(){
+    //   // this.recordPlay = !this.recordPlay;
+    //   if(this.recordPlay){
+    //     window.recordsAudio.play()
+    //   }else{
+    //     window.recordsAudio.pause()
+    //   };
+    // },
   },
 };
 </script>

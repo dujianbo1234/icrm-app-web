@@ -8,7 +8,7 @@ export const request = (url, params, fun) => {
 		requestData = [{
 			"_requestBody": params
 		}],
-		headers = {};
+		headers = {}
 	AlipayJSBridge.call("rpc", {
 		operationType,
 		requestData,

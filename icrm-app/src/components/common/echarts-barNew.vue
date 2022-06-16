@@ -24,10 +24,7 @@ import moment from "moment"
 export default {
   name: "echarts-barNew",
   props: {
-    dataDate: {
-      type: String,
-      default: ''
-    },
+    dataDate: String,
     barData: {
       type: Object,
       default: ()=>{
@@ -164,10 +161,29 @@ export default {
         }
         newArr.push(obj)
         // 初始化顶部展示数据日期
-        if(index == arr.length - 1){
-          this.axisValue = item.time
-          this.currentNum = item.value   // 较上日
-          this.pepoe = item.totalBalance  // 总数
+        if(moment(item.time).format('YYYY-MM') == moment(this.dataDate).format('YYYY-MM')){
+          switch (this.timeUnit) {
+            case 0:
+              if(moment(item.time).format('YYYY-MM-DD') == moment(this.dataDate).format('YYYY-MM-DD')){
+                this.axisValue = item.time
+                this.currentNum = item.value   // 较上日
+                this.pepoe = item.totalBalance  // 总数
+              }
+            break;
+            case 1:
+              if(moment(item.time).format('YYYY-MM') == moment(this.dataDate).format('YYYY-MM')){
+                this.axisValue = item.time
+                this.currentNum = item.value   // 较上日
+                this.pepoe = item.totalBalance  // 总数
+              }
+            break;
+          }
+        }else{
+          if(index == arr.length - 1){
+            this.axisValue = item.time
+            this.currentNum = item.value   // 较上日
+            this.pepoe = item.totalBalance  // 总数
+          }
         }
       })
       return newArr

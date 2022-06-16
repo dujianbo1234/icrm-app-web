@@ -8,6 +8,10 @@ export const getlist = function(params) {
 	return https.get('/api/getlist', params)
 }
 
+export const memSoundUpload = function(params) {
+	return https.post('/jjbank/api/memsound/memSoundRecUploadEx', params)
+}
+
 /* 新增保存检查计划 */
 //保存都是post
 export const saveJcInfo = function(params) {
