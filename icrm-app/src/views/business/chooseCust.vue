@@ -352,7 +352,6 @@
 							item.openRecomRea = false
 						});
 						this.custList = this.custList.concat(res.data.records);
-						console.log(this.custList)
 						if (this.custList.length >= res.data.total) this.finished = true;
 					} else {
 						this.finished = true;

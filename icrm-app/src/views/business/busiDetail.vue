@@ -118,6 +118,15 @@
 				<van-icon name="arrow" color="#026DFF" />
 			</div>
 		</div>
+		<div class="card">
+			<div class="titleTop">
+				<div class="titleL">
+					<van-icon :name="require('@/assets/image/cust_cycp.png')" size="0.2rem" />
+					<h3>持有产品</h3>
+				</div>
+			</div>
+			<TabsList :setList="prdList" style="margin-top: 0.1rem" />
+		</div>
 		<div class="plate3">
 			<div class="plateTitle" style="margin-bottom: 0.2rem;">
 				<div class="plateTitle1"></div>
@@ -140,8 +149,7 @@
 						</div>
 						<div class="followItem5_2" v-if="followItem.fileList.length>4&&!followItem.showAllPhoto"
 							@click="followItem.showAllPhoto=true">
-							<van-icon :name="require('../../assets/image/common_more.png')" color="#8C8C8C"
-								size="21" />
+							<van-icon :name="require('../../assets/image/common_more.png')" color="#8C8C8C" size="21" />
 						</div>
 					</div>
 					<div class="followItem6" v-if="followItem.serviceType=='01'&&followItem.visitAddress">
@@ -150,7 +158,9 @@
 								style="margin-right: 0.04rem;flex-shrink: 0;padding: 0.03rem 0;" />
 							<span>{{followItem.visitAddress.split("------")[1]?followItem.visitAddress.split("------")[1]:followItem.visitAddress.split("------")[0]}}</span>
 						</div>
-						<div class="followItem6_2">{{followItem.visitAddress.split("------")[1]?followItem.visitAddress.split("------")[0]:""}}</div>
+						<div class="followItem6_2">
+							{{followItem.visitAddress.split("------")[1]?followItem.visitAddress.split("------")[0]:""}}
+						</div>
 					</div>
 					<div class="followItem3" v-if="i!=followMsg.length-1"></div>
 					<div class="followItem4">
@@ -265,7 +275,8 @@
 				<van-icon :name="require('../../assets/image/common_dingwei_blue.png')" size="15"
 					style="margin-right: 0.04rem;flex-shrink: 0;padding: 0.03rem 0;" />
 				<div class="popPlate3_1" v-if="openLocation">
-					<div class="popPlate3_1_1">{{dingwei.split("------")[1]?dingwei.split("------")[1]:dingwei.split("------")[0]}}</div>
+					<div class="popPlate3_1_1">
+						{{dingwei.split("------")[1]?dingwei.split("------")[1]:dingwei.split("------")[0]}}</div>
 					<div class="popPlate3_1_2">{{dingwei.split("------")[1]?dingwei.split("------")[0]:""}}</div>
 				</div>
 				<div class="popPlate3_1" v-else>
@@ -280,6 +291,9 @@
 </template>
 
 <script>
+	import {
+		queryCustHoldPrdInfo
+	} from "@/request/custinfo.js"
 	import {
 		formatNum
 	} from "../../api/common.js";
@@ -300,6 +314,7 @@
 	import {
 		opportCustServUpload
 	} from "../../api/api.js";
+	import TabsList from "@/views/cust/components/TabsList.vue"
 	export default {
 		data() {
 			return {
@@ -325,10 +340,12 @@
 				photoList: [],
 				dingwei: "",
 				openLocation: true,
+				prdList: [],
 			}
 		},
 		components: {
-			sendMessage
+			sendMessage,
+			TabsList
 		},
 		methods: {
 			formatNum,
@@ -362,6 +379,7 @@
 					sysId: this.$route.params.sysId
 				}, (res) => {
 					this.baseMsg = res.data;
+					this.queryCustHoldPrd(this.baseMsg.custNo);
 				});
 			},
 			getScore() {
@@ -421,14 +439,14 @@
 				this.getOtherBusi();
 			},
 			callCust() {
-				if(isNaN(this.baseMsg.ctcTel)){
+				if (isNaN(this.baseMsg.ctcTel)) {
 					Toast.fail("电话号码格式有误");
 					return;
 				}
 				AlipayJSBridge.call('callHandler', {
 					phone: this.baseMsg.ctcTel
-				},(res1)=>{
-					if(res1.status=="000000"){
+				}, (res1) => {
+					if (res1.status == "000000") {
 						saveOpportCustServInfo({
 							sysId: this.baseMsg.sysId,
 							custNum: this.baseMsg.custNo,
@@ -441,7 +459,7 @@
 							this.getFollowMsg();
 							this.showCall = false;
 						})
-					}else{
+					} else {
 						Toast.fail(res1.msg)
 					}
 				});
@@ -491,26 +509,13 @@
 						});
 						opportCustServUploadMpaas({
 							file: res1.result
-						},(res2)=>{
+						}, (res2) => {
 							Toast.success("上传成功");
 							this.photoList.push({
 								url: res1.result,
 								tableKey: res2.data[0].tableKey
 							})
 						})
-						// opportCustServUpload({
-						// 	file: res1.result
-						// }).then((res2) => {
-						// 	if (res2.code == 0) {
-						// 		Toast.success("上传成功");
-						// 		this.photoList.push({
-						// 			url: res1.result,
-						// 			tableKey: res2.data[0].tableKey
-						// 		})
-						// 	} else {
-						// 		Toast.fail(res.msg)
-						// 	}
-						// })
 					} else if (res.status != "000004") {
 						Toast.fail(res.msg)
 					}
@@ -567,7 +572,60 @@
 					images: [file],
 					showIndex: false
 				});
-			}
+			},
+			/* 客户持有产品查询 */
+			queryCustHoldPrd(custNo) {
+				queryCustHoldPrdInfo({
+					custNum: custNo
+				}, res => {
+					if (res && res.data && res.data.prdList) {
+						let arr = [{
+								name: '定期存款',
+								key: 'HOLD_TIME_DPSIT',
+								disabled: true
+							},
+							{
+								name: '活期存款',
+								key: 'HOLD_CURR_DPSIT',
+								disabled: true
+							},
+							{
+								name: '贷款',
+								key: 'HOLD_LOAN',
+								disabled: true
+							},
+							{
+								name: '理财',
+								key: 'HOLD_CFT',
+								disabled: true
+							},
+							{
+								name: '基金',
+								key: 'HOLD_FND',
+								disabled: true
+							},
+							{
+								name: '保险',
+								key: 'HOLD_INS',
+								disabled: true
+							},
+							{
+								name: '信托',
+								key: 'HOLD_ENTRST',
+								disabled: true
+							}
+						]
+						res.data.prdList.forEach(item => {
+							arr.forEach(i => {
+								if (i.key == item) {
+									i.disabled = false
+								}
+							})
+						})
+						this.prdList = arr
+					}
+				})
+			},
 		},
 		mounted() {
 			this.getBaseMsg();
@@ -1352,12 +1410,12 @@
 		justify-content: center;
 		align-items: center;
 	}
-	
+
 	.followItem6 {
 		width: calc(100% - 0.12rem);
 		margin-top: 0.12rem;
 	}
-	
+
 	.followItem6_1 {
 		font-family: PingFangSC-Regular;
 		font-size: 0.12rem;
@@ -1368,7 +1426,7 @@
 		display: flex;
 		flex-wrap: nowrap;
 	}
-	
+
 	.followItem6_2 {
 		font-family: PingFangSC-Regular;
 		font-size: 0.12rem;
@@ -1377,5 +1435,33 @@
 		line-height: 0.18rem;
 		font-weight: 400;
 	}
-	
+
+	.card {
+		background: #fff;
+		padding: 0.12rem;
+		border-radius: 0.08rem;
+	}
+
+	.titleTop {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+	}
+
+	.titleL {
+		display: flex;
+		justify-content: flex-start;
+		align-items: center;
+		height: 0.2rem;
+		text-align: left;
+	}
+
+	h3 {
+		margin: 0 0.08rem;
+		font-family: PingFangSC-Medium;
+		font-size: 0.14rem;
+		font-weight: 500;
+		color: rgba(0, 0, 0, 0.85);
+		font-weight: 500;
+	}
 </style>
