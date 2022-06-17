@@ -117,6 +117,7 @@ export default {
                 mobileNum: this.custBase.ctcTel,
                 communictionChannel: "02",
                 custType: '1',
+				serviceChn: "9"
               };
               custServiceAdd(body, (ress) => {
                 this.showCall = false;
@@ -137,7 +138,7 @@ export default {
               ctcTel: this.custBase.ctcTel,
             },
           ],
-          shrtmsgCnl: "1",
+          shrtmsgCnl: "9",
         });
       }
     },
@@ -190,7 +191,8 @@ export default {
         mobileNum: this.custBase.ctcTel,
         communictionChannel: "01",
         custType: '1',
-        uploadIds: this.photoList.map(item => item.tableKey)
+        uploadIds: this.photoList.map(item => item.tableKey),
+		serviceChn: "9"
       };
 			custServiceAdd(body, (res) => {
 				// this.getFollowMsg();

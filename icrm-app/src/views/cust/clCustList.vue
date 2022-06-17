@@ -368,6 +368,7 @@
 									mobileNum: item.ctcTel,
 									communictionChannel: "02",
 									custType: '1',
+									serviceChn: "9"
 								};
 								custServiceAdd(body, (ress) => {
 									// this.showCall = false;

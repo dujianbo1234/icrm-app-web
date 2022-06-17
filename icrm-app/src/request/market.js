@@ -44,3 +44,21 @@ export const queryEmployeeMustDoDetail = (params,fun) => {request("market.queryE
 export const queryCustMaintainInfo = (params,fun) => {request("market.queryCustMaintainInfo", params, fun)}
 //分配商机信息
 export const distributeCmrcOpport = (params,fun) => {request("market.distributeCmrcOpport", params, fun)}
+//查询商机客户持有产品
+export const queryOpportCustHoldPrd = (params,fun) => {request("market.queryOpportCustHoldPrd", params, fun)}
+//定期存款产品明细查询
+export const queryCustTimeDepAcctInfo = (params,fun) => {request("market.queryCustTimeDepAcctInfo", params, fun)}
+//活期存款产品明细查询
+export const queryCustCurrDepAcctInfo = (params,fun) => {request("market.queryCustCurrDepAcctInfo", params, fun)}
+//贷款产品明细查询
+export const queryCustLoanAcctInfo = (params,fun) => {request("market.queryCustLoanAcctInfo", params, fun)}
+//理财产品明细查询
+export const queryCustFinaAcctInfo = (params,fun) => {request("market.queryCustFinaAcctInfo", params, fun)}
+//理财交易明细查询
+export const queryCustFinaTranInfo = (params,fun) => {request("market.queryCustFinaTranInfo", params, fun)}
+//基金产品明细查询
+export const queryCustFundAcctInfo = (params,fun) => {request("market.queryCustFundAcctInfo", params, fun)}
+//保险产品明细查询
+export const queryCustBassAcctInfo = (params,fun) => {request("market.queryCustBassAcctInfo", params, fun)}
+//信托产品明细查询
+export const queryCustTrustAcctInfo = (params,fun) => {request("market.queryCustTrustAcctInfo", params, fun)}

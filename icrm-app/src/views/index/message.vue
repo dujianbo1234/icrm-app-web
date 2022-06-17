@@ -136,7 +136,8 @@
 				</div>
 			</van-checkbox-group>
 		</van-list>
-		<van-popup v-model:show="openPLFS" position="bottom" :overlay="false" :lock-scroll="false" safe-area-inset-bottom>
+		<van-popup v-model:show="openPLFS" position="bottom" :overlay="false" :lock-scroll="false"
+			safe-area-inset-bottom>
 			<div class="bottomBox">
 				<div></div>
 				<!-- <van-checkbox v-model="checkAll" ref="checkAll" @click="chooseAll">全选</van-checkbox> -->
@@ -373,10 +374,10 @@
 					return;
 				};
 				var list = [];
-				this.checked.forEach((item)=>{
-					list.push(this.msgList.find(msgItem=>msgItem.sysId==item))
+				this.checked.forEach((item) => {
+					list.push(this.msgList.find(msgItem => msgItem.sysId == item))
 				});
-				this.openMbox(list,false);
+				this.openMbox(list, false);
 			},
 			callCust() {
 				if (isNaN(this.checkItem.phoneNo)) {
@@ -385,18 +386,19 @@
 				};
 				AlipayJSBridge.call('callHandler', {
 					phone: this.checkItem.phoneNo
-				},(res1)=>{
-					if(res1.status=="000000"){
+				}, (res1) => {
+					if (res1.status == "000000") {
 						custServiceAdd({
 							custName: this.checkItem.cstName,
 							custNo: this.checkItem.custNum,
 							mobileNum: this.checkItem.phoneNo,
 							communictionChannel: "02",
 							custType: '1',
+							serviceChn: "9"
 						}, (res2) => {
 							this.showCall = false;
 						})
-					}else{
+					} else {
 						Toast.fail(res1.msg)
 					}
 				});
@@ -516,14 +518,14 @@
 				})
 			},
 			toCustView(item) {
-				if(item.custNum[0]=="P"){
+				if (item.custNum[0] == "P") {
 					this.$router.push({
 						name: 'clCustomerView',
 						query: {
 							custNum: item.custNum
 						}
 					})
-				}else{
+				} else {
 					Toast("非存量客户，无法查看客户视图！")
 				}
 			},
@@ -883,7 +885,7 @@
 		background-repeat: no-repeat;
 		background-size: contain;
 	}
-	
+
 	.msgCard1_3_item:last-child {
 		margin-right: 0;
 	}
@@ -1096,7 +1098,7 @@
 		line-height: 0.4rem;
 		margin-right: 0.1rem;
 	}
-	
+
 	:deep(.van-field__left-icon) {
 		display: flex;
 		align-items: center;

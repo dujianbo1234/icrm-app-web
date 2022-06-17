@@ -8,5 +8,12 @@ export default [{
 }, {
 	path: '/busiDetail',
 	name: 'busiDetail',
+	meta: {
+		keepAlive: true
+	},
 	component: () => import('@/views/business/busiDetail.vue')
-}, ];
+}, {
+	path: '/cycpList',
+	name: 'cycpList',
+	component: () => import('@/views/business/cycpList.vue')
+}];
