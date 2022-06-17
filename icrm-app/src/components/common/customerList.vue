@@ -1,12 +1,12 @@
 <template>
 	<div class="home">
 		<div class="custBtnType"></div>
-		<van-popup v-model:show="show" v-if="show" round duration="0" position="bottom" :style="{ height: '70%' }" z-index="99999"
-			:close-on-click-overlay="false">
+		<van-popup v-model:show="show" v-if="show" round duration="0" position="bottom" :style="{ height: '70%' }"
+			z-index="99999" :close-on-click-overlay="false">
 			<div class="popTitle">
-				<div class="popTitle1" @click="cancle">取消</div>
+				<div class="popTitle1" v-show="cancleBtn" @click="cancle">{{cancleText}}</div>
 				<div class="popTitle2">客户经理</div>
-				<div class="popTitle3" @click="checkAll">全部选择</div>
+				<div class="popTitle3" v-show="allBtn" @click="checkAll">{{allText}}</div>
 			</div>
 			<van-search class="searchBox" shape="round" v-model="searchValue" show-action placeholder="请输入工号、姓名"
 				@search="search" :left-icon="require('../../assets/image/common_search.png')">
@@ -49,6 +49,26 @@
 				type: String,
 				default: ""
 			},
+			cancleBtn: {
+				type: Boolean,
+				default: true
+			},
+			cancleText: {
+				type: String,
+				default: "取消"
+			},
+			allBtn: {
+				type: Boolean,
+				default: true
+			},
+			allText: {
+				type: String,
+				default: "全部选择"
+			},
+			selfAct: {
+				type: Boolean,
+				default: true
+			},
 		},
 		data() {
 			return {
@@ -76,8 +96,11 @@
 			},
 			checkCust(item) {
 				this.chooseCust = item;
-				this.cancle();
 				this.$emit("activeCust", item)
+				if (this.selfAct) {
+					this.cancle();
+				}
+
 			},
 			checkAll() {
 				this.chooseCust = {};
@@ -148,7 +171,7 @@
 		letter-spacing: 0;
 		font-weight: 400;
 		position: relative;
-		box-shadow: inset 0 -0.005rem 0 0 rgba(231,233,236,1);
+		box-shadow: inset 0 -0.005rem 0 0 rgba(231, 233, 236, 1);
 	}
 
 	.popTitle1 {
@@ -231,7 +254,7 @@
 		width: 40%;
 		text-align: center;
 	}
-	
+
 	:deep(.van-search__field) {
 		align-items: center;
 	}

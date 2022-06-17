@@ -42,3 +42,5 @@ export const followEmployeeMustDo = (params,fun) => {request("market.followEmplo
 export const queryEmployeeMustDoDetail = (params,fun) => {request("market.queryEmployeeMustDoDetail", params, fun)}
 //查询客户维护信息
 export const queryCustMaintainInfo = (params,fun) => {request("market.queryCustMaintainInfo", params, fun)}
+//分配商机信息
+export const distributeCmrcOpport = (params,fun) => {request("market.distributeCmrcOpport", params, fun)}

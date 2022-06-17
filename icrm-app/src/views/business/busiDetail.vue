@@ -140,8 +140,7 @@
 						</div>
 						<div class="followItem5_2" v-if="followItem.fileList.length>4&&!followItem.showAllPhoto"
 							@click="followItem.showAllPhoto=true">
-							<van-icon :name="require('../../assets/image/common_more.png')" color="#8C8C8C"
-								size="21" />
+							<van-icon :name="require('../../assets/image/common_more.png')" color="#8C8C8C" size="21" />
 						</div>
 					</div>
 					<div class="followItem6" v-if="followItem.serviceType=='01'&&followItem.visitAddress">
@@ -150,7 +149,9 @@
 								style="margin-right: 0.04rem;flex-shrink: 0;padding: 0.03rem 0;" />
 							<span>{{followItem.visitAddress.split("------")[1]?followItem.visitAddress.split("------")[1]:followItem.visitAddress.split("------")[0]}}</span>
 						</div>
-						<div class="followItem6_2">{{followItem.visitAddress.split("------")[1]?followItem.visitAddress.split("------")[0]:""}}</div>
+						<div class="followItem6_2">
+							{{followItem.visitAddress.split("------")[1]?followItem.visitAddress.split("------")[0]:""}}
+						</div>
 					</div>
 					<div class="followItem3" v-if="i!=followMsg.length-1"></div>
 					<div class="followItem4">
@@ -265,7 +266,8 @@
 				<van-icon :name="require('../../assets/image/common_dingwei_blue.png')" size="15"
 					style="margin-right: 0.04rem;flex-shrink: 0;padding: 0.03rem 0;" />
 				<div class="popPlate3_1" v-if="openLocation">
-					<div class="popPlate3_1_1">{{dingwei.split("------")[1]?dingwei.split("------")[1]:dingwei.split("------")[0]}}</div>
+					<div class="popPlate3_1_1">
+						{{dingwei.split("------")[1]?dingwei.split("------")[1]:dingwei.split("------")[0]}}</div>
 					<div class="popPlate3_1_2">{{dingwei.split("------")[1]?dingwei.split("------")[0]:""}}</div>
 				</div>
 				<div class="popPlate3_1" v-else>
@@ -421,14 +423,14 @@
 				this.getOtherBusi();
 			},
 			callCust() {
-				if(isNaN(this.baseMsg.ctcTel)){
+				if (isNaN(this.baseMsg.ctcTel)) {
 					Toast.fail("电话号码格式有误");
 					return;
 				}
 				AlipayJSBridge.call('callHandler', {
 					phone: this.baseMsg.ctcTel
-				},(res1)=>{
-					if(res1.status=="000000"){
+				}, (res1) => {
+					if (res1.status == "000000") {
 						saveOpportCustServInfo({
 							sysId: this.baseMsg.sysId,
 							custNum: this.baseMsg.custNo,
@@ -441,7 +443,7 @@
 							this.getFollowMsg();
 							this.showCall = false;
 						})
-					}else{
+					} else {
 						Toast.fail(res1.msg)
 					}
 				});
@@ -491,7 +493,7 @@
 						});
 						opportCustServUploadMpaas({
 							file: res1.result
-						},(res2)=>{
+						}, (res2) => {
 							Toast.success("上传成功");
 							this.photoList.push({
 								url: res1.result,
@@ -1352,12 +1354,12 @@
 		justify-content: center;
 		align-items: center;
 	}
-	
+
 	.followItem6 {
 		width: calc(100% - 0.12rem);
 		margin-top: 0.12rem;
 	}
-	
+
 	.followItem6_1 {
 		font-family: PingFangSC-Regular;
 		font-size: 0.12rem;
@@ -1368,7 +1370,7 @@
 		display: flex;
 		flex-wrap: nowrap;
 	}
-	
+
 	.followItem6_2 {
 		font-family: PingFangSC-Regular;
 		font-size: 0.12rem;
@@ -1377,5 +1379,4 @@
 		line-height: 0.18rem;
 		font-weight: 400;
 	}
-	
 </style>
