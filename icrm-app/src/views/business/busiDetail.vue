@@ -118,6 +118,15 @@
 				<van-icon name="arrow" color="#026DFF" />
 			</div>
 		</div>
+		<div class="card">
+			<div class="titleTop">
+				<div class="titleL">
+					<van-icon :name="require('@/assets/image/cust_cycp.png')" size="0.2rem" />
+					<h3>持有产品</h3>
+				</div>
+			</div>
+			<TabsList :setList="prdList" style="margin-top: 0.1rem" />
+		</div>
 		<div class="plate3">
 			<div class="plateTitle" style="margin-bottom: 0.2rem;">
 				<div class="plateTitle1"></div>
@@ -283,6 +292,9 @@
 
 <script>
 	import {
+		queryCustHoldPrdInfo
+	} from "@/request/custinfo.js"
+	import {
 		formatNum
 	} from "../../api/common.js";
 	import {
@@ -302,6 +314,7 @@
 	import {
 		opportCustServUpload
 	} from "../../api/api.js";
+	import TabsList from "@/views/cust/components/TabsList.vue"
 	export default {
 		data() {
 			return {
@@ -327,10 +340,12 @@
 				photoList: [],
 				dingwei: "",
 				openLocation: true,
+				prdList: [],
 			}
 		},
 		components: {
-			sendMessage
+			sendMessage,
+			TabsList
 		},
 		methods: {
 			formatNum,
@@ -364,6 +379,7 @@
 					sysId: this.$route.params.sysId
 				}, (res) => {
 					this.baseMsg = res.data;
+					this.queryCustHoldPrd(this.baseMsg.custNo);
 				});
 			},
 			getScore() {
@@ -500,19 +516,6 @@
 								tableKey: res2.data[0].tableKey
 							})
 						})
-						// opportCustServUpload({
-						// 	file: res1.result
-						// }).then((res2) => {
-						// 	if (res2.code == 0) {
-						// 		Toast.success("上传成功");
-						// 		this.photoList.push({
-						// 			url: res1.result,
-						// 			tableKey: res2.data[0].tableKey
-						// 		})
-						// 	} else {
-						// 		Toast.fail(res.msg)
-						// 	}
-						// })
 					} else if (res.status != "000004") {
 						Toast.fail(res.msg)
 					}
@@ -569,7 +572,60 @@
 					images: [file],
 					showIndex: false
 				});
-			}
+			},
+			/* 客户持有产品查询 */
+			queryCustHoldPrd(custNo) {
+				queryCustHoldPrdInfo({
+					custNum: custNo
+				}, res => {
+					if (res && res.data && res.data.prdList) {
+						let arr = [{
+								name: '定期存款',
+								key: 'HOLD_TIME_DPSIT',
+								disabled: true
+							},
+							{
+								name: '活期存款',
+								key: 'HOLD_CURR_DPSIT',
+								disabled: true
+							},
+							{
+								name: '贷款',
+								key: 'HOLD_LOAN',
+								disabled: true
+							},
+							{
+								name: '理财',
+								key: 'HOLD_CFT',
+								disabled: true
+							},
+							{
+								name: '基金',
+								key: 'HOLD_FND',
+								disabled: true
+							},
+							{
+								name: '保险',
+								key: 'HOLD_INS',
+								disabled: true
+							},
+							{
+								name: '信托',
+								key: 'HOLD_ENTRST',
+								disabled: true
+							}
+						]
+						res.data.prdList.forEach(item => {
+							arr.forEach(i => {
+								if (i.key == item) {
+									i.disabled = false
+								}
+							})
+						})
+						this.prdList = arr
+					}
+				})
+			},
 		},
 		mounted() {
 			this.getBaseMsg();
@@ -1378,5 +1434,34 @@
 		letter-spacing: 0;
 		line-height: 0.18rem;
 		font-weight: 400;
+	}
+
+	.card {
+		background: #fff;
+		padding: 0.12rem;
+		border-radius: 0.08rem;
+	}
+
+	.titleTop {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+	}
+
+	.titleL {
+		display: flex;
+		justify-content: flex-start;
+		align-items: center;
+		height: 0.2rem;
+		text-align: left;
+	}
+
+	h3 {
+		margin: 0 0.08rem;
+		font-family: PingFangSC-Medium;
+		font-size: 0.14rem;
+		font-weight: 500;
+		color: rgba(0, 0, 0, 0.85);
+		font-weight: 500;
 	}
 </style>

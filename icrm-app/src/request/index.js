@@ -52,6 +52,8 @@ export const memSoundPicUpload = (params,fun) => {request("index.memSoundPicUplo
 /* 晨夕会-音频上传 */
 export const memSoundRecUpload = (params,fun) => {request("index.memSoundRecUpload", params, fun)}
 /* 晨夕会-删除文件信息 */
-export const fieDelete = (params,fun) => {request("file.delete", params, fun)}
+// export const fieDelete = (params,fun) => {request("file.delete", params, fun)}
 /* 晨夕会-音频上传 */
 export const uploadImg = (params,fun) => {request("theme.uploadImg", params, fun)}
+/* 晨夕会-删除记录 */
+export const deleteMemSoundRec = (params,fun) => {request("index.deleteMemSoundRec", params, fun)}
