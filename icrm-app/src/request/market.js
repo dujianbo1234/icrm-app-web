@@ -62,3 +62,7 @@ export const queryCustFundAcctInfo = (params,fun) => {request("market.queryCustF
 export const queryCustBassAcctInfo = (params,fun) => {request("market.queryCustBassAcctInfo", params, fun)}
 //信托产品明细查询
 export const queryCustTrustAcctInfo = (params,fun) => {request("market.queryCustTrustAcctInfo", params, fun)}
+//保存应用浏览记录
+export const saveSmAppVisitInfo = (params,fun) => {request("market.saveSmAppVisitInfo", params, fun)}
+//查询应用浏览记录汇总
+export const querySmAppVisitSum = (params,fun) => {request("market.querySmAppVisitSum", params, fun)}

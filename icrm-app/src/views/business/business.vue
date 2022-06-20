@@ -79,6 +79,10 @@
 				</div>
 			</div>
 		</van-list>
+		<div class="vuNum">
+			<span>使用人数：{{useNum?Number(useNum).toLocaleString():"-"}}</span>
+			<span>浏览人数：{{visitNum?Number(visitNum).toLocaleString():"-"}}</span>
+		</div>
 		<div class="bottomZW"></div>
 	</div>
 </template>
@@ -89,7 +93,9 @@
 	} from "../../request/common.js";
 	import {
 		queryCmrcOpportunitySum,
-		queryCmrcOpportunitySumList
+		queryCmrcOpportunitySumList,
+		saveSmAppVisitInfo,
+		querySmAppVisitSum
 	} from "../../request/market.js";
 	import {
 		Toast
@@ -122,6 +128,8 @@
 				loading: false,
 				finished: false,
 				pageIndex: 0,
+				visitNum: "",
+				useNum: "",
 			}
 		},
 		methods: {
@@ -185,16 +193,16 @@
 					forbidClick: true,
 					duration: 0
 				});
-				if(this.kequnList[this.kequnIndex]){
+				if (this.kequnList[this.kequnIndex]) {
 					this.getList()
-				}else{
-					var timer = setInterval(()=>{
-						if(this.kequnList[this.kequnIndex]) {
+				} else {
+					var timer = setInterval(() => {
+						if (this.kequnList[this.kequnIndex]) {
 							clearInterval(timer);
 							timer = "";
 							this.getList();
 						}
-					},100)
+					}, 100)
 				}
 			},
 		},
@@ -222,6 +230,19 @@
 					Toast.fail("商机大类数据为空")
 				}
 			})
+			// saveSmAppVisitInfo({
+			// 	busiType: "4"
+			// }, (res) => {
+
+			// });
+			// querySmAppVisitSum({
+			// 	busiType: "4"
+			// }, (res) => {
+			// 	if (res.data) {
+			// 		this.visitNum = res.data.visitNum;
+			// 		this.useNum = res.data.useNum;
+			// 	}
+			// });
 		}
 	}
 </script>
@@ -474,5 +495,19 @@
 		top: 0;
 		right: 0;
 		padding-left: 0.16rem;
+	}
+
+	.vuNum {
+		font-size: 0.11rem;
+		font-family: PingFangSC-Regular, PingFang SC;
+		font-weight: 400;
+		color: #8C8C8C;
+		height: 0.44rem;
+		width: 100%;
+		display: flex;
+		flex-wrap: nowrap;
+		align-items: center;
+		justify-content: space-between;
+		padding: 0 3.2%;
 	}
 </style>

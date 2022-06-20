@@ -69,8 +69,10 @@
 							<van-icon v-if="haoPingBang" style="margin-right:0.04rem;margin-top: 0.02rem;"
 								:name="require('../../assets/image/dianzan.png')" size="12" />
 							<span v-if="reBang" class="textStyle">{{shangJiItem.hotList}}</span>
-							<span v-if="chengJiaoBang" class="textStyle">{{(Number(shangJiItem.dealNum)*100).toFixed(1)}}%</span>
-							<span v-if="haoPingBang" class="textStyle">{{Number(shangJiItem.laimScore).toFixed(1)}}</span>
+							<span v-if="chengJiaoBang"
+								class="textStyle">{{(Number(shangJiItem.dealNum)*100).toFixed(1)}}%</span>
+							<span v-if="haoPingBang"
+								class="textStyle">{{Number(shangJiItem.laimScore).toFixed(1)}}</span>
 						</div>
 					</div>
 					<div class="shangJiCreator">
@@ -96,19 +98,25 @@
 			</van-dropdown-menu>
 			<div class="dataBox">
 				<div class="dataItem" v-for="(dataItem,i) in list1" :key="'data1Item'+i" v-show="active==0">
-					<div class="dataValue" :style="{color: dataItem.value==0?'#8C8C8C':dataItem.value=='-'?'#8C8C8C':'#026DFF'}">
+					<div class="dataValue"
+						:style="{color: dataItem.value==0?'#8C8C8C':dataItem.value=='-'?'#8C8C8C':'#026DFF'}">
 						{{dataItem.value||"-"}}
 					</div>
 					<div class="dataTitle">{{dataItem.title}}</div>
 				</div>
 				<div class="dataItem" style="width: calc(50% - 0.035rem);" v-for="(dataItem,i) in list2"
 					:key="'data2Item'+i" v-show="active==1" @click="showDetail(dataItem)">
-					<div class="dataValue" :style="{color: dataItem.value==0?'#8C8C8C':dataItem.value=='-'?'#8C8C8C':'#026DFF'}">
+					<div class="dataValue"
+						:style="{color: dataItem.value==0?'#8C8C8C':dataItem.value=='-'?'#8C8C8C':'#026DFF'}">
 						{{dataItem.value||"-"}}
 					</div>
 					<div class="dataTitle">{{dataItem.title}}</div>
 				</div>
 			</div>
+		</div>
+		<div class="vuNum">
+			<span>使用人数：{{useNum?Number(useNum).toLocaleString():"-"}}</span>
+			<span>浏览人数：{{visitNum?Number(visitNum).toLocaleString():"-"}}</span>
 		</div>
 		<div class="bottomLine">
 			<div class="bottomText">到底啦，我是有底线的</div>
@@ -120,7 +128,7 @@
 		</van-popup>
 		<org-list ref="orgList" :type="2" @close="closeOrg" @activeOrg="activeOrg" />
 		<customer-list ref="custList" :orgId="chooseOrg.value" @close="closeCust" @activeCust="activeCust" />
-		<van-popup v-model:show="showDetailBox" position="bottom" :style="{ height: '70%' }" round >
+		<van-popup v-model:show="showDetailBox" position="bottom" :style="{ height: '70%' }" round>
 			<div class="detailTitle">详情</div>
 			<div class="detailItem">
 				<div class="detailItem_child">机构</div>
@@ -148,6 +156,8 @@
 	import {
 		queryCmrcOpportRankList,
 		queryCustMaintainInfo,
+		saveSmAppVisitInfo,
+		querySmAppVisitSum
 		// custServiceDetail
 	} from "../../request/market.js";
 	import {
@@ -292,6 +302,8 @@
 				],
 				showDetailBox: false,
 				detailList: [],
+				visitNum: "",
+				useNum: "",
 			}
 		},
 		components: {
@@ -356,7 +368,7 @@
 					name: 'shangJiHot',
 					query: {
 						etlDt: this.dataDateS,
-						busiBdIndex:this.busiBdIndex
+						busiBdIndex: this.busiBdIndex
 					}
 				})
 			},
@@ -528,7 +540,7 @@
 
 			},
 			showDetail(item) {
-				if(item.value==0||item.value=="-"){
+				if (item.value == 0 || item.value == "-") {
 					Toast("暂无详情数据");
 					return;
 				};
@@ -540,7 +552,7 @@
 				var params = {
 					etlDt: moment(this.currentDate).format('YYYYMMDD'),
 					orgID: this.chooseOrg.value,
-					isLogin: item.title=="登录人数"?"1":"0",
+					isLogin: item.title == "登录人数" ? "1" : "0",
 					pageSize: "9999",
 					pageNum: "1"
 				}
@@ -625,7 +637,19 @@
 					Toast.fail("系统跑批日期数据为空")
 				}
 			})
+			// saveSmAppVisitInfo({
+			// 	busiType: "3"
+			// }, (res) => {
 
+			// });
+			// querySmAppVisitSum({
+			// 	busiType: "3"
+			// }, (res) => {
+			// 	if (res.data) {
+			// 		this.visitNum = res.data.visitNum;
+			// 		this.useNum = res.data.useNum;
+			// 	}
+			// });
 		},
 	}
 </script>
@@ -947,7 +971,7 @@
 		font-size: 0.11rem;
 		color: #BFBFBF;
 	}
-	
+
 	.detailTitle {
 		width: 100%;
 		height: 0.45rem;
@@ -958,14 +982,14 @@
 		color: #262626;
 		line-height: 0.45rem;
 	}
-	
+
 	.detailList {
 		width: 100%;
 		height: calc(100% - 1.7rem - constant(safe-area-inset-bottom));
 		height: calc(100% - 1.7rem - env(safe-area-inset-bottom));
 		overflow: auto;
 	}
-	
+
 	.detailItem {
 		width: 3.75rem;
 		height: 0.56rem;
@@ -979,16 +1003,16 @@
 		color: #262626;
 		padding: 0 0.12rem;
 	}
-	
+
 	.detailItem_child {
 		width: calc(100% / 3);
-		overflow:hidden;
-		text-overflow:ellipsis; 
-		display:-webkit-box;
-		-webkit-box-orient:vertical; 
-		-webkit-line-clamp:2;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		display: -webkit-box;
+		-webkit-box-orient: vertical;
+		-webkit-line-clamp: 2;
 	}
-	
+
 	.detailBtnBox {
 		width: 100%;
 		height: 0.69rem;
@@ -998,7 +1022,7 @@
 		align-items: center;
 		justify-content: center;
 	}
-	
+
 	.detailBtn {
 		width: 91.47%;
 		height: 0.45rem;
@@ -1012,5 +1036,18 @@
 		font-weight: 500;
 		color: #FFFFFF;
 	}
-	
+
+	.vuNum {
+		font-size: 0.11rem;
+		font-family: PingFangSC-Regular, PingFang SC;
+		font-weight: 400;
+		color: #8C8C8C;
+		height: 0.44rem;
+		width: 100%;
+		display: flex;
+		flex-wrap: nowrap;
+		align-items: center;
+		justify-content: space-between;
+		padding: 0 3.2%;
+	}
 </style>

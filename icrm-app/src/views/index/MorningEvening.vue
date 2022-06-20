@@ -184,7 +184,6 @@
 					id: item.id
 				}
 				deleteMemSoundRec(body, res => {
-					console.log(res)
 					this.clickQuery()
 				})
 			},
@@ -229,7 +228,6 @@
 				}
 				queryMemSoundRecList(body, res => {
 					if (res && res.data) {
-						console.log(res.data.records)
 						this.dataList = this.dataList.concat(res.data.records || []);
 						this.dataList.forEach(item => {
 							if (item.soundList instanceof Array) {
@@ -269,8 +267,6 @@
 				this.$nextTick(() => {
 					this.$refs['PlayAudio'].init()
 				})
-				// this.chooseRecord()
-				// console.log(this.audioItem)
 			},
 			/* 返回路由时触发 */
 			goback() {
@@ -289,7 +285,6 @@
 				// window.recordsAudio.ontimeupdate = ()=>{
 				//   this.showPlayTime = this.resetTime(window.recordsAudio.currentTime)
 				// };
-				// console.log('录音时间',this.showPlayTime)
 				// window.recordsAudio.onended = ()=>{this.recordPS()};
 			},
 			/**
@@ -415,9 +410,10 @@
 			.minutesMeeting {
 				.audioList_list {
 					display: flex;
-					justify-content: space-between;
+					justify-content: flex-start;
 
 					.list_item {
+						width: calc(100% / 3);
 						padding: 0.175rem 0.25rem;
 						font-size: 0.15rem;
 					}

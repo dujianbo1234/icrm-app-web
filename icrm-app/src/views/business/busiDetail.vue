@@ -277,7 +277,8 @@
 					style="margin-right: 0.04rem;flex-shrink: 0;padding: 0.03rem 0;" />
 				<div class="popPlate3_1" v-if="openLocation">
 					<div class="popPlate3_1_1">
-						{{dingwei.split("------")[1]?dingwei.split("------")[1]:dingwei.split("------")[0]}}</div>
+						{{dingwei.split("------")[1]?dingwei.split("------")[1]:dingwei.split("------")[0]}}
+					</div>
 					<div class="popPlate3_1_2">{{dingwei.split("------")[1]?dingwei.split("------")[0]:""}}</div>
 				</div>
 				<div class="popPlate3_1" v-else>
@@ -636,23 +637,48 @@
 				})
 			},
 			toMoreCYCP() {
-				if(this.prdList[this.$refs.tabList.active].list&&this.prdList[this.$refs.tabList.active].list.length>5){
+				var list = this.prdList[this.$refs.tabList.active];
+				if (list.list && list.list.length > 5) {
+					switch (list.name) {
+						case "定期存款":
+							list.list.forEach(item => item.colorBlack = item.currBal > 0);
+							break;
+						case "活期存款":
+							list.list.forEach(item => item.colorBlack = item.currBal > 0);
+							break;
+						case "贷款":
+							list.list.forEach(item => item.colorBlack = item.currBal > 0);
+							break;
+						case "理财":
+							list.list.forEach(item => item.colorBlack = item.acctBal > 0);
+							break;
+						case "基金":
+							list.list.forEach(item => item.colorBlack = item.currLot > 0);
+							break;
+						case "保险":
+							list.list.forEach(item => item.colorBlack = item.prem > 0);
+							break;
+						case "信托":
+							list.list.forEach(item => item.colorBlack = item.acctBal > 0);
+							break;
+					}
 					this.$router.push({
 						name: 'cycpList',
 						params: {
-							list: JSON.stringify(this.prdList[this.$refs.tabList.active]),
+							list: JSON.stringify(list),
 						}
 					})
-				}else{
+				} else {
 					Toast("暂无更多数据")
 				}
 			},
 			reActive(active) {
-				console.log(2,active)
+				console.log(2, active)
 			},
 			getCYCP() {
 				let body = {
-					custNum: this.baseMsg.custNo
+					custNum: this.baseMsg.custNo,
+					pageSize: "9999"
 				}
 				// 持有产品
 				this.prdList.forEach(item => {
@@ -661,6 +687,7 @@
 							case '定期存款':
 								/*  定期存款产品明细查询 */
 								queryCustTimeDepAcctInfo(body, res => {
+									console.log(res)
 									item.list = res.data.records || []
 									item.label = [{
 											label: "存款种类",
@@ -989,7 +1016,7 @@
 			},
 		},
 		activated() {
-			if(this.$route.params.sysId&&!this.passMount){
+			if (this.$route.params.sysId && !this.passMount) {
 				this.baseMsg = {
 					aumDifVal: 0,
 					aumHistHestVal: 0,
@@ -1017,7 +1044,7 @@
 				this.getScore();
 				this.getFollowMsg();
 				this.getOtherBusi();
-			}else{
+			} else {
 				this.passMount = false;
 			}
 		},
@@ -1851,7 +1878,7 @@
 		height: 0.2rem;
 		text-align: left;
 	}
-	
+
 	.titleR {
 		width: 0.56rem;
 		height: 0.2rem;

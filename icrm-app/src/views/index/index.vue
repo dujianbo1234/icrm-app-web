@@ -239,6 +239,10 @@
 					</div>
 				</div>
 			</van-dialog>
+			<div class="vuNum">
+				<span>使用人数：{{useNum?Number(useNum).toLocaleString():"-"}}</span>
+				<span>浏览人数：{{visitNum?Number(visitNum).toLocaleString():"-"}}</span>
+			</div>
 			<div class="bottomLine">
 				<span></span>
 				<div class="bottomText">到底啦，我是有底线的</div>
@@ -275,6 +279,8 @@
 	} from "vant";
 	import {
 		queryEmployeeMustDoList,
+		saveSmAppVisitInfo,
+		querySmAppVisitSum
 	} from "../../request/market.js";
 	import echartsPie from "../../components/common/echarts-pie.vue";
 	import echartsLine from "../../components/common/echarts-line.vue";
@@ -555,6 +561,8 @@
 				],
 				titleData: {},
 				dataEncode: '',
+				visitNum: "",
+				useNum: "",
 			};
 		},
 		computed: {
@@ -1080,7 +1088,8 @@
 					let data = res.data.records
 					// 零售客户数（全部), 财富客户数, 贷款客户数, 代发客户数, 基础客户数, 有效商户数
 					let arr = ['custCnt', 'vipCustCnt', 'loanCustCnt', 'agentCustCnt', 'basicCstCnt',
-						'merntCstCnt']
+						'merntCstCnt'
+					]
 					let xData = [
 						[],
 						[],
@@ -1098,7 +1107,7 @@
 									let obj = {
 										value: item[
 											`${name}${['ToYstd','ToLastMonth'][this.timeUnit]}`
-											] || 0,
+										] || 0,
 										time: itemX.time,
 										totalBalance: item[name] || 0,
 									}
@@ -1162,7 +1171,8 @@
 					// 全部, 活期存款, 定期存款, 理财, 基金, 保险, 信托
 					let arr = [
 						['aumBal', 'currDpsitBal', 'timeDpsitBal', 'cftBal', 'fndBal', 'insBal',
-						'entrstBal'], // 余额
+							'entrstBal'
+						], // 余额
 						['aumYearAvgKh', 'currDpsitYearAvg', 'timeDpsitMonthAvg', 'cftYearAvg', 'fndYearAvg',
 							'insYearAvg', 'entrstYearAvg'
 						] // 日均
@@ -1185,7 +1195,7 @@
 									let obj = {
 										value: item[
 											`${name}${[['ToYstd','ToLastMonth'][this.timeUnit2],'ToLm'][this.listType]}`
-											] / 10000 || 0,
+										] / 10000 || 0,
 										time: itemX.time,
 										totalBalance: item[name] / 10000 || 0
 									}
@@ -1272,11 +1282,11 @@
 										if (name == 'loanBal') {
 											obj.value = item[
 												`${name}${['ToYstd','ToLastMonth'][this.timeUnit3]}`
-												] / 10000 || 0
+											] / 10000 || 0
 										} else {
 											obj.value = item[
 												`${name.replace('Bal','')}${['ToYstd','ToLm'][this.timeUnit3]}`
-												] / 10000 || 0
+											] / 10000 || 0
 										}
 									} else {
 										obj.value = item[`${name}ToLm`] / 10000 || 0
@@ -1371,7 +1381,7 @@
 				for (var i = 9; i >= 0; i--) {
 					let obj = {
 						week: ["日", "一", "二", "三", "四", "五", "六"][moment(lastTime).subtract(i, 'day').format(
-						'd')], // 星期几
+							'd')], // 星期几
 						date: moment(lastTime).subtract(i, 'day').format('YYYY-MM-DD'), // 日期YYYY-MM-DD
 						showDate: moment(lastTime).subtract(i, 'day').format('DD'), // 日
 						timeStamp: moment(lastTime).subtract(i, 'day').format('YYYY-MM-DD'), // 日期的时间戳
@@ -1435,6 +1445,19 @@
 					Toast.fail("数据日期数据为空");
 				}
 			});
+			// saveSmAppVisitInfo({
+			// 	busiType: "1"
+			// }, (res) => {
+
+			// });
+			// querySmAppVisitSum({
+			// 	busiType: "1"
+			// }, (res) => {
+			// 	if (res.data) {
+			// 		this.visitNum = res.data.visitNum;
+			// 		this.useNum = res.data.useNum;
+			// 	}
+			// });
 		},
 	};
 </script>
@@ -2012,5 +2035,18 @@
 		top: 0.75rem;
 		right: 5.5%;
 		z-index: 8;
+	}
+	
+	.vuNum {
+		font-size: 0.11rem;
+		font-family: PingFangSC-Regular, PingFang SC;
+		font-weight: 400;
+		color: #8C8C8C;
+		height: 0.44rem;
+		width: 100%;
+		display: flex;
+		flex-wrap: nowrap;
+		align-items: center;
+		justify-content: space-between;
 	}
 </style>

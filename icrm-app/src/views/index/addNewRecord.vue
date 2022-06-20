@@ -15,41 +15,42 @@
 			</div>
 		</div>
 		<!-- 上传录音 -->
-		<div class="meetingPhotos">s
+		<!-- <div class="meetingPhotos">
 			<div class="label">上传录音</div>
 			<div class="imgContent">
 				<van-uploader ref="upload" v-model="soundList" :after-read="afterReads" :preview-full-image="false"
 					max-count="3" preview-size="0.73rem" accept="audio/*, .m4a">
-					<!-- <template #preview-cover="{ file }">
-						<div class="preview-cover van-ellipsis">{{ file.name }}</div>
-					</template> -->
 					<template #default>
 						<van-icon :name="require(`@/assets/image/index_upload.png`)" size="0.735rem" color="#E6E6E6"
 							style="display: flex;" />
 					</template>
 				</van-uploader>
 			</div>
+		</div> -->
+		<div class="audioManagement">
+			<div class="label">上传录音</div>
+			<div class="card">
+				<div class="audioList_list">
+					<div v-for="(item, index) in soundList" :key="item">
+						<div class="list_item">
+							<van-icon class="iconR" :name="require(`@/assets/image/play-mp3.png`)" size="0.35rem">
+								<van-icon class="iconA" :name="require(`@/assets/image/common_delete.png`)"
+									size="0.2rem" @click.stop="itemDel(index)" />
+							</van-icon>
+							<div class="audioName" :style="{color : iconSize == index ? '#026DFF' : '#131313'}">
+								{{item.name}}
+							</div>
+						</div>
+					</div>
+					<div v-if="soundList.length < 3">
+						<div class="list_item" @click="uploadAudio">
+							<van-icon :name="require(`@/assets/image/index_upload.png`)" size="0.735rem" color="#E6E6E6"
+								style="display: flex;" />
+						</div>
+					</div>
+				</div>
+			</div>
 		</div>
-		<!-- <div class="audioManagement">
-      <div class="label">上传录音</div>
-      <div class="card">
-        <div class="audioList_list">
-          <div v-for="(item, index) in soundList" :key="item">
-            <div class="list_item">
-              <van-icon class="iconR" :name="require(`@/assets/image/play-mp3.png`)" size="0.35rem" >
-                <van-icon class="iconA" :name="require(`@/assets/image/common_delete.png`)" size="0.2rem" @click.stop="itemDel(item, index)"/>
-              </van-icon>
-              <div class="audioName" :style="{color : iconSize == index ? '#026DFF' : '#131313'}">{{item.name}}</div>
-            </div>
-          </div>
-          <div v-if="soundList.length < 3">
-            <div class="list_item" @click="uploadAudio(0)">
-              <van-icon :name="require(`@/assets/image/index_upload.png`)" size="0.735rem" color="#E6E6E6" style="display: flex;"/>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div> -->
 		<!-- 会议照片 -->
 		<div class="meetingPhotos">
 			<div class="label">上传照片</div>
@@ -115,13 +116,11 @@
 			};
 		},
 		mounted() {
-			// console.log(this.type)
 			if (this.type) {
 				this.soundList = []
 				this.photoList = []
 				this.soundRecCaption = ''
 			} else {
-				console.log(this.record)
 				this.soundRecCaption = this.record.soundRecCaption
 				this.soundList = this.record.soundList || []
 				this.photoList = this.record.photoList || []
@@ -148,52 +147,32 @@
 			//   this.uploadAudio(1)
 			// },
 			/* 删除录音 */
-			// itemDel(v, i){
-			//   this.soundList = this.soundList.filter((item , index) => index != i)
-			// },
+			itemDel(i) {
+				this.soundList.splice(i, 1);
+			},
 			/* 音频控制 */
-			// uploadAudio(type){
-			//   let body = {
-			//     type: type,
-			//     url: this.audioItem.url
-			//   }
-			//   AlipayJSBridge.call("openRecord", body, (res) => {
-			//     switch (body.type) {
-			//       case 0 :
-			//         if(res.status == '000000'){
-			//           let obj = {
-			//             url: res.result,
-			//             name: decodeURI(res.result.substring(res.result.lastIndexOf("/")+1))
-			//           }
-			//           this.soundList.push(obj)
-			//         }
-			//       break;
-			//       case 1 :
-			//         this.totalDuration = Number(res.result).toFixed(0) || 0
-			//       break;
-			//       case 2 :
-			//         // console.log('播放',res)
-			//         if(res.msg == '播放完成'){
-			//           this.$refs['PlayAudio'].init()
-			//         }
-			//       break;
-			//       case 3 :
-			//         console.log('暂停',res)
-			//       break;
-			//       case 4 :
-			//         // 无法控制前进秒数单位(需改造接口)
-			//         console.log('快进',res)
-			//       break;
-			//       case 5 :
-			//         // 无法控制后退秒数单位(需改造接口)
-			//         console.log('快退',res)
-			//       break;
-			//       case 6 :
-			//         console.log('停止',res)
-			//       break;
-			//     }
-			//   });
-			// },
+			uploadAudio() {
+				Toast.loading({
+					message: "正在操作",
+					forbidClick: true,
+					duration: 0
+				});
+				AlipayJSBridge.call("openRecord", {
+					type: "0",
+					url: ""
+				}, (res) => {
+					if (res.status = "000000" && res.result) {
+						var result = JSON.parse(res.result);
+						this.soundList.push({
+							url: `${this.$store.state.baseUrl}${result.data[0].fileServerPath}${result.data[0].fileName}`,
+							fileId: result.data[0].tableKey,
+						});
+						Toast.clear();
+					} else {
+						Toast(res.msg);
+					}
+				});
+			},
 			/* 播放暂停按钮 */
 			// playStop(v){
 			//   if(this.soundList.length > 0 && this.audioItem.name){
@@ -232,7 +211,6 @@
 						body.id = this.record.id
 					}
 					saveMemSoundRec(body, res => {
-						// console.log(res)
 						Toast.clear()
 						this.$emit('clearBtn', true)
 					})
@@ -465,6 +443,7 @@
 					margin-right: 0.12rem;
 
 					.list_item {
+						width: 0.735rem;
 						font-size: 0.15rem;
 
 						.iconR {

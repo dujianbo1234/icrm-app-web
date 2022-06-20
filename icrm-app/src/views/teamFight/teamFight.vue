@@ -12,7 +12,12 @@
 				<div class="menuName">{{menuItem.title}}</div>
 			</div>
 		</div>
-		<van-empty style="margin-top: 0.5rem;" :image="require('../../assets/image/common_waiting.png')" image-size="120" description="页面开发中" />
+		<van-empty style="margin-top: 0.5rem;" :image="require('../../assets/image/common_waiting.png')"
+			image-size="120" description="页面开发中" />
+		<div class="vuNum">
+			<span>使用人数：{{useNum?Number(useNum).toLocaleString():"-"}}</span>
+			<span>浏览人数：{{visitNum?Number(visitNum).toLocaleString():"-"}}</span>
+		</div>
 		<div class="bottomLine">
 			<div class="bottomText">到底啦，我是有底线的</div>
 		</div>
@@ -23,6 +28,10 @@
 	import {
 		Toast
 	} from "vant";
+	import {
+		saveSmAppVisitInfo,
+		querySmAppVisitSum
+	} from "../../request/market.js";
 	export default {
 		data() {
 			return {
@@ -72,6 +81,8 @@
 						show: true
 					}
 				],
+				visitNum: "",
+				useNum: "",
 			}
 		},
 		methods: {
@@ -95,7 +106,19 @@
 			},
 		},
 		mounted() {
+			// saveSmAppVisitInfo({
+			// 	busiType: "2"
+			// }, (res) => {
 
+			// });
+			// querySmAppVisitSum({
+			// 	busiType: "2"
+			// }, (res) => {
+			// 	if (res.data) {
+			// 		this.visitNum = res.data.visitNum;
+			// 		this.useNum = res.data.useNum;
+			// 	}
+			// });
 		}
 	}
 </script>
@@ -113,8 +136,6 @@
 		margin-top: calc(calc(constant(safe-area-inset-top) + 0.5rem) * -1);
 		margin-top: calc(calc(env(safe-area-inset-top) + 0.5rem) * -1);
 		padding-bottom: 0.4rem;
-
-
 		height: calc(100vh - 0.5rem);
 		position: relative;
 	}
@@ -173,5 +194,19 @@
 		background-color: #FFFFFF;
 		position: absolute;
 		bottom: -50%;
+	}
+
+	.vuNum {
+		font-size: 0.11rem;
+		font-family: PingFangSC-Regular, PingFang SC;
+		font-weight: 400;
+		color: #8C8C8C;
+		height: 0.44rem;
+		width: 100%;
+		display: flex;
+		flex-wrap: nowrap;
+		align-items: center;
+		justify-content: space-between;
+		padding: 0 3.2%;
 	}
 </style>
