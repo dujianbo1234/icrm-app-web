@@ -44,30 +44,6 @@
 				<div v-else></div>
 			</div>
 		</div>
-		<!-- 
-      cstName          客户名称
-      belgCustMgr      管户经理
-      belgCustMgrNm    管户经理名称
-      belongOrg        归属机构
-      belongOrgNm      归属机构名称
-      cstLvl           客户等级
-      svcLvl           服务等级
-      ctcTel           联系电话
-      aumDifVal        aum差额值
-      aumHistHestVal   aum历史最高值
-      aumBal           aum余额
-      loanBal          贷款余额
-      timeDpsitBal     定期存款余额
-      currDpsitBal     活期存款余额
-      newCstFlg        新客客户标志
-      vipCstFlg        财富客户标志
-      agentPayCstFlg   代发客户标志
-      merntCstFlg      商户客户标志
-      ioinHoldLoan     是否持有贷款
-      ioinSgnAlpy      是否签约支付宝
-      ioinSgnWchtPymt  是否签约微信支付
-      ioinSgnYsf       是否签约云闪付 
-    -->
 		<van-list class="vanListStyle" v-model:loading="loading" :finished="finished" finished-text="没有更多了"
 			@load="getCustList">
 			<van-checkbox-group v-model="chooseItems" ref="checkboxGroup">
@@ -125,8 +101,8 @@
 			v-show="showBatchSend"></div>
 		<div class="sendMsgBtnBox" v-if="showBatchSend">
 			<!-- <van-checkbox v-model="checkAll" ref="checkAll" @click="chooseAll">
-        <span style="color: #8C8C8C; font-size: 0.14rem;">全选</span>
-      </van-checkbox> -->
+				<span style="color: #8C8C8C; font-size: 0.14rem;">全选</span>
+			</van-checkbox> -->
 			<div></div>
 			<div class="sendBox">
 				<div class="sendMsgBtn" style="margin-right: 0.1rem;" @click="msgBatchSend(false)">批量发送</div>
@@ -323,7 +299,11 @@
 			},
 			/* 选择机构 */
 			activeOrg(orgValue) {
-				this.orgName = orgValue.text;
+				if (orgValue.value) {
+					this.orgName = orgValue.text;
+				} else {
+					this.orgName = "选择机构";
+				};
 				this.initParams()
 				this.params.belongOrg = orgValue.value || ''
 				this.getCustList();
@@ -361,6 +341,7 @@
 					return;
 				}
 				if (type) {
+					console.log("call")
 					AlipayJSBridge.call("callHandler", {
 						phone: item.ctcTel
 					}, (res) => {
@@ -377,7 +358,7 @@
 								// this.showCall = false;
 							});
 						} else {
-							if(res.msg){
+							if (res.msg) {
 								Toast.fail(res.msg);
 							}
 						}

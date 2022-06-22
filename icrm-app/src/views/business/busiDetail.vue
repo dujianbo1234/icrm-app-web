@@ -468,6 +468,7 @@
 							serviceType: "02",
 							custOrg: this.baseMsg.belongOrg,
 							custMgrNum: this.baseMsg.followUpPrsn,
+							custMgrName: this.baseMsg.followUpPrsnNm,
 							mobileNum: this.baseMsg.ctcTel,
 						}, (res2) => {
 							this.getFollowMsg();
@@ -497,6 +498,7 @@
 					serviceContent: msg,
 					custOrg: this.baseMsg.belongOrg,
 					custMgrNum: this.baseMsg.followUpPrsn,
+					custMgrName: this.baseMsg.followUpPrsnNm,
 					mobileNum: this.baseMsg.ctcTel,
 				}, (res) => {
 					this.getFollowMsg();
@@ -574,6 +576,7 @@
 					visitAddress: this.dingwei,
 					custOrg: this.baseMsg.belongOrg,
 					custMgrNum: this.baseMsg.followUpPrsn,
+					custMgrName: this.baseMsg.followUpPrsnNm,
 					mobileNum: this.baseMsg.ctcTel,
 					uploadIds: this.photoList.map(item => item.tableKey)
 				}, (res) => {
