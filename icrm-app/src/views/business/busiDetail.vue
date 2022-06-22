@@ -448,8 +448,13 @@
 				this.getOtherBusi();
 			},
 			callCust() {
+				this.showCall = false;
 				if (isNaN(this.baseMsg.ctcTel)) {
 					Toast.fail("电话号码格式有误");
+					return;
+				}
+				if (!this.baseMsg.ctcTel) {
+					Toast.fail("电话号码为空");
 					return;
 				}
 				AlipayJSBridge.call('callHandler', {
@@ -466,10 +471,11 @@
 							mobileNum: this.baseMsg.ctcTel,
 						}, (res2) => {
 							this.getFollowMsg();
-							this.showCall = false;
 						})
 					} else {
-						Toast.fail(res1.msg)
+						if (res1.msg) {
+							Toast.fail(res1.msg)
+						}
 					}
 				});
 			},
@@ -672,9 +678,6 @@
 					Toast("暂无更多数据")
 				}
 			},
-			reActive(active) {
-				console.log(2, active)
-			},
 			getCYCP() {
 				let body = {
 					custNum: this.baseMsg.custNo,
@@ -687,7 +690,6 @@
 							case '定期存款':
 								/*  定期存款产品明细查询 */
 								queryCustTimeDepAcctInfo(body, res => {
-									console.log(res)
 									item.list = res.data.records || []
 									item.label = [{
 											label: "存款种类",

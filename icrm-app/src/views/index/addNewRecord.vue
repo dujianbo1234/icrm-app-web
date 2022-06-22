@@ -54,9 +54,17 @@
 		<!-- 会议照片 -->
 		<div class="meetingPhotos">
 			<div class="label">上传照片</div>
-			<div class="imgContent">
-				<van-uploader v-model="photoList" :after-read="afterRead" max-count="6" preview-size="0.73rem"
-					accept="image/*" />
+			<div class="popPlate2">
+				<div class="cameraBox" v-for="(photo,i) in photoList" :key="'photo'+i">
+					<van-icon class="delBtn" :name="require('../../assets/image/common_delete.png')" color="#8C8C8C"
+						size="20" @click="delPhoto(i)" />
+					<div class="imgBox" @click="openPhoto('data:image/jpeg;base64,' + photo.url)">
+						<img :src="'data:image/jpeg;base64,' + photo.url">
+					</div>
+				</div>
+				<div class="cameraBox" v-if="photoList.length<6" @click="openCamera">
+					<van-icon name="photograph" color="#BFBFBF" size="32" />
+				</div>
 			</div>
 		</div>
 		<div class="bottomZW"></div>
@@ -71,7 +79,8 @@
 	import PlayAudio from "@/components/common/PlayAudio.vue"
 	import moment from "moment";
 	import {
-		Toast
+		Toast,
+		ImagePreview
 	} from 'vant';
 	import {
 		memSoundPicUpload,
@@ -135,6 +144,39 @@
 		},
 		methods: {
 			moment,
+			delPhoto(i) {
+				this.photoList.splice(i, 1)
+			},
+			openPhoto(file) {
+				ImagePreview({
+					images: [file],
+					showIndex: false
+				});
+			},
+			openCamera() {
+				AlipayJSBridge.call('openPickerV', {
+					openType: "2",
+				}, (res1) => {
+					if (res1.status == "000000") {
+						Toast.loading({
+							message: "正在上传",
+							forbidClick: true,
+							duration: 0
+						});
+						memSoundPicUpload({
+							file: res1.result
+						}, (res2) => {
+							Toast.success("上传成功");
+							this.photoList.push({
+								url: res1.result,
+								fileId: res2.data[0].tableKey
+							})
+						})
+					} else if (res.status != "000004") {
+						Toast.fail(res.msg)
+					}
+				});
+			},
 			/* 选择机构 */
 			activeOrg(orgValue) {
 				this.orgValue = orgValue
@@ -152,14 +194,9 @@
 			},
 			/* 音频控制 */
 			uploadAudio() {
-				Toast.loading({
-					message: "正在操作",
-					forbidClick: true,
-					duration: 0
-				});
 				AlipayJSBridge.call("openRecord", {
 					type: "0",
-					url: ""
+					url: this.$store.state.baseUrl + "/jjbank/api/memsound/memSoundRecUpload"
 				}, (res) => {
 					if (res.status = "000000" && res.result) {
 						var result = JSON.parse(res.result);
@@ -167,9 +204,10 @@
 							url: `${this.$store.state.baseUrl}${result.data[0].fileServerPath}${result.data[0].fileName}`,
 							fileId: result.data[0].tableKey,
 						});
-						Toast.clear();
 					} else {
-						Toast(res.msg);
+						if (res.msg) {
+							Toast(res.msg);
+						}
 					}
 				});
 			},
@@ -546,5 +584,52 @@
 		//     border-radius: 0.08rem;
 		//   }
 		// }
+	}
+
+	.popPlate2 {
+		width: 100%;
+		padding: 0.12rem 0.12rem 0;
+		background: #FFFFFF;
+		border-radius: 0.08rem;
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: flex-start;
+	}
+
+	.cameraBox {
+		width: 0.73rem;
+		height: 0.73rem;
+		background: #F8F8F8;
+		border-radius: 0.08rem;
+		display: flex;
+		flex-wrap: nowrap;
+		justify-content: center;
+		align-items: center;
+		margin-bottom: 0.12rem;
+		margin-right: calc(calc(100% - 2.92rem) / 3);
+		position: relative;
+	}
+
+	.cameraBox:nth-child(4n) {
+		margin-right: 0;
+	}
+
+	.delBtn {
+		position: absolute;
+		top: -0.06rem;
+		right: -0.06rem;
+	}
+
+	.imgBox {
+		width: 100%;
+		height: 100%;
+		border-radius: 0.08rem;
+		overflow: hidden;
+		display: flex;
+		align-items: center;
+	}
+
+	.imgBox>img {
+		width: 100%;
 	}
 </style>

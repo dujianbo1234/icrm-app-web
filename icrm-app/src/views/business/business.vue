@@ -230,19 +230,19 @@
 					Toast.fail("商机大类数据为空")
 				}
 			})
-			// saveSmAppVisitInfo({
-			// 	busiType: "4"
-			// }, (res) => {
+			saveSmAppVisitInfo({
+				busiType: "4"
+			}, (res) => {
 
-			// });
-			// querySmAppVisitSum({
-			// 	busiType: "4"
-			// }, (res) => {
-			// 	if (res.data) {
-			// 		this.visitNum = res.data.visitNum;
-			// 		this.useNum = res.data.useNum;
-			// 	}
-			// });
+			});
+			querySmAppVisitSum({
+				busiType: "4"
+			}, (res) => {
+				if (res.data) {
+					this.visitNum = res.data.visitNum;
+					this.useNum = res.data.useNum;
+				}
+			});
 		}
 	}
 </script>

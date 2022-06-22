@@ -51,9 +51,11 @@
 				this.totalDuration = 0;
 				clearInterval(this.player);
 				clearInterval(this.timer);
+				Toast("音频加载中，请耐心等待！")
 				this.timer = setInterval(() => {
 					if (window.recordsAudio.duration) {
 						this.totalDuration = window.recordsAudio.duration;
+						this.playBtn();
 						clearInterval(this.timer);
 						this.timer = "";
 					}
@@ -61,9 +63,6 @@
 			},
 			/* 点击播放按钮 */
 			playBtn() {
-				if (this.currentDuration == 0 && !this.play) {
-					Toast("音频加载中，请耐心等待！")
-				}
 				if (this.audioItem) {
 					this.play = !this.play
 					if (this.play) {

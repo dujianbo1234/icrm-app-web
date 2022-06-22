@@ -65,7 +65,8 @@
 		</div>
 		<div :style="{height: fixedHeight}"></div>
 		<div class="autoPlace" ref="autoPlace" :style="{height: `calc(100vh - ${topHeight}px - ${fixedHeight})`}">
-			<van-list v-model:loading="loading" :finished="finished" :immediate-check="false" finished-text="已加载全部数据" @load="onLoad">
+			<van-list v-model:loading="loading" :finished="finished" :immediate-check="false" finished-text="已加载全部数据"
+				@load="onLoad">
 				<van-checkbox-group v-model="checked" ref="checkboxGroup">
 					<div v-for="(item,i) in custList" :key="'item'+i" class="msgCardOutBox"
 						:style="{'margin-left':openFP?'15%':'0%'}">
@@ -104,37 +105,40 @@
 												style="background-color: rgba(2,109,255,0.08);color: #026DFF;">财</div>
 											<div class="custItem1_2_3_item" v-if="item.agentPayCstFlg=='1'"
 												style="background-color: rgba(255,133,0,0.08);color: #FF8500;">代</div>
-											<div class="custItem1_2_3_item" v-if="item.basicCstCnt=='1'"
+											<div class="custItem1_2_3_item" v-if="item.newCstFlg=='1'"
 												style="background-color: rgba(255,58,58,0.08);color: #FF3A3A;">新</div>
 											<div class="custItem1_2_3_item" v-if="item.merntCstFlg=='1'"
 												style="background-color: rgba(68,107,161,0.08);color: #446BA1;">商</div>
 											<div class="custItem1_2_3_item" v-if="item.ioinHoldLoan=='1'"
 												style="background-color: rgba(55,205,55,0.08);color: #13AD13;">贷</div>
-											<van-icon v-if="item.value08=='1'"
+											<van-icon v-if="item.ioinSgnAlpy=='1'"
 												:name="require('../../assets/image/business_chooseCust_zfb_a.png')"
 												size="16" style="margin-right: 0.04rem;" />
 											<van-icon v-else
-												:name="require('../../assets/image/business_chooseCust_zfb.png')" size="16"
-												style="margin-right: 0.04rem;" />
-											<van-icon v-if="item.value09=='1'"
-												:name="require('../../assets/image/business_chooseCust_wx_a.png')" size="16"
-												style="margin-right: 0.04rem;" />
+												:name="require('../../assets/image/business_chooseCust_zfb.png')"
+												size="16" style="margin-right: 0.04rem;" />
+											<van-icon v-if="item.ioinSgnWchtPymt=='1'"
+												:name="require('../../assets/image/business_chooseCust_wx_a.png')"
+												size="16" style="margin-right: 0.04rem;" />
 											<van-icon v-else
-												:name="require('../../assets/image/business_chooseCust_wx.png')" size="16"
-												style="margin-right: 0.04rem;" />
-											<van-icon v-if="item.value10=='1'"
+												:name="require('../../assets/image/business_chooseCust_wx.png')"
+												size="16" style="margin-right: 0.04rem;" />
+											<van-icon v-if="item.ioinSgnYsf=='1'"
 												:name="require('../../assets/image/business_chooseCust_ysf_a.png')"
 												size="16" style="margin-right: 0.04rem;" />
 											<van-icon v-else
-												:name="require('../../assets/image/business_chooseCust_ysf.png')" size="16"
-												style="margin-right: 0.04rem;" />
+												:name="require('../../assets/image/business_chooseCust_ysf.png')"
+												size="16" style="margin-right: 0.04rem;" />
 										</div>
 									</div>
-									<div class="custItem1_3" v-if="item.cmrcOpptSt=='2'" style="background-color: #026DFF;">
+									<div class="custItem1_3" v-if="item.cmrcOpptSt=='2'"
+										style="background-color: #026DFF;">
 										待跟进</div>
-									<div class="custItem1_3" v-if="item.cmrcOpptSt=='4'" style="background-color: #FFBA00;">
+									<div class="custItem1_3" v-if="item.cmrcOpptSt=='4'"
+										style="background-color: #FFBA00;">
 										已跟进</div>
-									<div class="custItem1_3" v-if="item.cmrcOpptSt=='5'" style="background-color: #52C41A;">
+									<div class="custItem1_3" v-if="item.cmrcOpptSt=='5'"
+										style="background-color: #52C41A;">
 										已成交</div>
 								</div>
 								<div class="custItem2">
@@ -144,7 +148,8 @@
 									</div>
 									<div class="custItem2_child">
 										<span class="custItem2_childName">历史最高资产：</span>
-										<span class="custItem2_childValue">{{formatNum(item.aumHistHestVal/10000)}}万元</span>
+										<span
+											class="custItem2_childValue">{{formatNum(item.aumHistHestVal/10000)}}万元</span>
 									</div>
 									<div class="custItem2_child">
 										<span class="custItem2_childName">AUM资产：</span>
@@ -152,23 +157,25 @@
 									</div>
 									<div class="custItem2_child">
 										<span class="custItem2_childName">定期：</span>
-										<span class="custItem2_childValue">{{formatNum(item.timeDpsitBal/10000)}}万元</span>
+										<span
+											class="custItem2_childValue">{{formatNum(item.timeDpsitBal/10000)}}万元</span>
 									</div>
 									<div class="custItem2_child">
 										<span class="custItem2_childName">活期：</span>
-										<span class="custItem2_childValue">{{formatNum(item.currDpsitBal/10000)}}万元</span>
+										<span
+											class="custItem2_childValue">{{formatNum(item.currDpsitBal/10000)}}万元</span>
 									</div>
 									<div class="custItem2_child">
 										<span class="custItem2_childName">贷款：</span>
 										<span class="custItem2_childValue">{{formatNum(item.loanBal/10000)}}万元</span>
 									</div>
-									<div class="custItem2_child">
+									<div class="custItem2_child" v-if="$store.state.userMsg.roleId!='00000004'">
 										<span class="custItem2_childName">客户经理：</span>
 										<span class="custItem2_childValue">{{item.belgCustMgrNm}}</span>
 									</div>
-									<div class="custItem2_child">
+									<div class="custItem2_child ycsl" v-if="$store.state.userMsg.roleId!='00000004'">
 										<span class="custItem2_childName">机构：</span>
-										<span class="custItem2_childValue ycsl">{{item.belongOrgNm}}</span>
+										<span class="custItem2_childValue">{{item.belongOrgNm}}</span>
 									</div>
 								</div>
 								<div class="custItem3"></div>
@@ -191,7 +198,8 @@
 		</div>
 		<org-list ref="orgList" :type="2" @close="openOrgList=false" @activeOrg="activeOrg" />
 		<customer-list ref="custList" :orgId="chooseOrg.value" @close="openCustList=false" @activeCust="activeCust" />
-		<customer-list ref="custList1" :allBtn="false" :selfAct="false" @close="openCustList1=false" @activeCust="activeCust1" />
+		<customer-list ref="custList1" :allBtn="false" :resetIt="true" :selfAct="false" @close="openCustList1=false"
+			@activeCust="activeCust1" />
 		<van-popup v-model:show="openFP" position="bottom" :overlay="false" :lock-scroll="false" safe-area-inset-bottom
 			z-index="99998">
 			<div class="bottomBox">
@@ -268,7 +276,7 @@
 					empId: ""
 				},
 				showFP: false,
-				FPType: ""
+				FPType: "",
 			}
 		},
 		components: {
@@ -344,7 +352,7 @@
 				this.onLoad();
 			},
 			openDetail(item) {
-				localStorage.setItem("autoPlaceScrollTop",String(this.$refs.autoPlace.scrollTop))
+				localStorage.setItem("autoPlaceScrollTop", String(this.$refs.autoPlace.scrollTop))
 				this.$router.push({
 					name: 'busiDetail',
 					params: {
@@ -354,7 +362,7 @@
 				})
 			},
 			confirmCheck(type) {
-				if (type=="choose"&&!this.checked.length) {
+				if (type == "choose" && !this.checked.length) {
 					Toast.fail("请先选择至少1条数据");
 					return;
 				}
@@ -384,7 +392,7 @@
 					followUpOrgNm: this.chooseCust1.orgName,
 					sysIds: [],
 				}
-				switch (this.FPType){
+				switch (this.FPType) {
 					case "all":
 						params.svcLvl = this.levelList[this.levelIndex].value;
 						params.custNm = this.searchValue;
@@ -395,7 +403,7 @@
 						params.sysIds = this.checked;
 						break;
 				}
-				distributeCmrcOpport(params,(res)=>{
+				distributeCmrcOpport(params, (res) => {
 					Toast.success("分配成功");
 					this.$refs.custList1.cancle();
 					this.showFP = false;
@@ -471,7 +479,7 @@
 			}
 		},
 		activated() {
-			if (this.$route.params.cmrcOpptId && this.pageIndex > 0) {
+			if (this.$route.params.cmrcOpptId) {
 				this.baseMsg = {};
 				this.openDesc = false;
 				this.openSearch = false;
@@ -508,13 +516,12 @@
 				this.showFP = false;
 				this.FPType = "";
 				this.mounted_m();
-			}else{
+			} else {
+				this.resetTop();
 				this.$refs.autoPlace.scrollTop = Number(localStorage.getItem("autoPlaceScrollTop"))
 			}
 		},
-		mounted() {
-			this.mounted_m();
-		}
+		mounted() {}
 	}
 </script>
 
@@ -531,7 +538,7 @@
 		overflow-x: hidden;
 		height: calc(100vh - 90px - 2.5rem);
 	}
-	
+
 	.home {
 		background-color: #F8F8F8;
 		overflow: hidden;
@@ -758,7 +765,7 @@
 
 	.custItem {
 		width: 93.6%;
-		margin: 0.12rem auto;
+		margin: 0.06rem auto;
 		background: #FFFFFF;
 		box-shadow: 0 0.02rem 0.2rem 0 rgba(217, 229, 242, 0.6);
 		border-radius: 0.08rem;

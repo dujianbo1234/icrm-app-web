@@ -6,7 +6,7 @@
 				<div class="itemPlate" v-for="(titleItem,i) in titleList" :key="'tt'+i"
 					:style="{width: titleItem.width+'px'}">{{titleItem.label}}</div>
 			</div>
-			<div style="height: 0.55rem;"></div>
+			<div style="height: 0.55rem;background-color: #F5F5F5"></div>
 			<div class="item valuePlace" ref="valuePlace" v-for="(dataItem,m) in dataList" :key="'dd'+m"
 				:style="{color: dataItem.colorBlack?'#262626':'#8C8C8C'}">
 				<div class="itemPlate" v-for="(titleItem,n) in titleList" :key="'dt'+n"

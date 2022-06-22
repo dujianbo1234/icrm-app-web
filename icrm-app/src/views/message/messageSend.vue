@@ -40,7 +40,7 @@
 			</div>
 		</van-list>
 		<div class="bottomZW"></div>
-		<van-overlay :show="showApprove" @click="showApprove = false">
+		<van-overlay :show="showApprove" :lock-scroll="false">
 			<div class="wrapper" @click.stop>
 				<div class="block">
 					<div class="formList">
@@ -69,8 +69,8 @@
 								</template>
 							</van-field>
 							<div class="flexWrap">
-								<van-field v-model="exapOpnn" input-align="left" border autosize="" maxlength="100"
-									rows="4" type="textarea">
+								<van-field v-model="exapOpnn" input-align="left" border autosize maxlength="100"
+									rows="3" type="textarea">
 									<template #label>
 										<span>审批意见</span>
 									</template>
@@ -391,31 +391,37 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
-
-		height: 100%;
 		border-radius: 0.08rem;
+		height: calc(100% - constant(safe-area-inset-top) - 0.46rem);
+		height: calc(100% - env(safe-area-inset-top) - 0.46rem);
+		margin-top: calc(constant(safe-area-inset-top) + 0.46rem);
+		margin-top: calc(env(safe-area-inset-top) + 0.46rem);
 
 	}
 
 	.block {
 		position: relative;
 		width: 90%;
-		height: 68%;
+		max-height: 95%;
 		background-color: #fff;
 		border-radius: 0.08rem;
 		overflow: auto;
-
-
 	}
 
 	.formList {
 		width: 100%;
-		height: 5rem;
-		overflow: auto;
 	}
 
 	.block :deep(.van-hairline--top-bottom:after,.van-hairline-unset--top-bottom:after) {
 		border-width: 0px;
+	}
+	
+	.block :deep(.van-cell) {
+		background-color: transparent;
+	}
+	
+	.block :deep(.van-cell-group) {
+		background-color: transparent;
 	}
 
 	.block :deep(.van-cell-group__title) {
@@ -427,8 +433,7 @@
 		width: 100%;
 		display: flex;
 		justify-content: space-around;
-		position: absolute;
-		bottom: 00.16rem;
+		margin-bottom: 0.2rem;
 	}
 
 	.btnStyle :deep(.van-button--primary) {

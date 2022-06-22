@@ -22,7 +22,7 @@
 					</div>
 					<i class="msg-line"></i>
 					<div class="msgBarItem" @click="$router.push('/message')">
-						<i class="msg-icon icon-message"></i>消息<span v-if="messageNum > 0"
+						<i class="msg-icon icon-message"></i>提醒<span v-if="messageNum > 0"
 							:class="messageNum > 9 ? 'msgCount2' : 'msgCount1'">{{ showMessageNum }}</span>
 					</div>
 				</div>
@@ -1445,19 +1445,19 @@
 					Toast.fail("数据日期数据为空");
 				}
 			});
-			// saveSmAppVisitInfo({
-			// 	busiType: "1"
-			// }, (res) => {
+			saveSmAppVisitInfo({
+				busiType: "1"
+			}, (res) => {
 
-			// });
-			// querySmAppVisitSum({
-			// 	busiType: "1"
-			// }, (res) => {
-			// 	if (res.data) {
-			// 		this.visitNum = res.data.visitNum;
-			// 		this.useNum = res.data.useNum;
-			// 	}
-			// });
+			});
+			querySmAppVisitSum({
+				busiType: "1"
+			}, (res) => {
+				if (res.data) {
+					this.visitNum = res.data.visitNum;
+					this.useNum = res.data.useNum;
+				}
+			});
 		},
 	};
 </script>

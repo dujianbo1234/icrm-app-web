@@ -440,7 +440,6 @@
 								tableKey: res2.data[0].tableKey
 							})
 						})
-						
 					} else if (res.status != "000004") {
 						Toast.fail(res.msg)
 					}

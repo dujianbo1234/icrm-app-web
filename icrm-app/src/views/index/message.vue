@@ -380,10 +380,15 @@
 				this.openMbox(list, false);
 			},
 			callCust() {
+				this.showCall = false;
 				if (isNaN(this.checkItem.phoneNo)) {
 					Toast.fail("电话号码格式有误");
 					return;
 				};
+				if (!this.checkItem.phoneNo) {
+					Toast.fail("电话号码为空");
+					return;
+				}
 				AlipayJSBridge.call('callHandler', {
 					phone: this.checkItem.phoneNo
 				}, (res1) => {
@@ -394,12 +399,14 @@
 							mobileNum: this.checkItem.phoneNo,
 							communictionChannel: "02",
 							custType: '1',
-							serviceChn: "9"
+							serviceChn: "6"
 						}, (res2) => {
-							this.showCall = false;
+							
 						})
 					} else {
-						Toast.fail(res1.msg)
+						if (res1.msg) {
+							Toast.fail(res1.msg)
+						}
 					}
 				});
 			},

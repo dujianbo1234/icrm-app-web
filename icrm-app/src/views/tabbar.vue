@@ -32,7 +32,7 @@
 					},
 					{
 						name: "teamFight",
-						value: "赛场",
+						value: "数据",
 						url: "/teamFight",
 						icon: require("../assets/image/tabbar_teamFight.png"),
 						act_icon: require("../assets/image/tabbar_teamFight_a.png"),

@@ -106,19 +106,19 @@
 			},
 		},
 		mounted() {
-			// saveSmAppVisitInfo({
-			// 	busiType: "2"
-			// }, (res) => {
+			saveSmAppVisitInfo({
+				busiType: "2"
+			}, (res) => {
 
-			// });
-			// querySmAppVisitSum({
-			// 	busiType: "2"
-			// }, (res) => {
-			// 	if (res.data) {
-			// 		this.visitNum = res.data.visitNum;
-			// 		this.useNum = res.data.useNum;
-			// 	}
-			// });
+			});
+			querySmAppVisitSum({
+				busiType: "2"
+			}, (res) => {
+				if (res.data) {
+					this.visitNum = res.data.visitNum;
+					this.useNum = res.data.useNum;
+				}
+			});
 		}
 	}
 </script>

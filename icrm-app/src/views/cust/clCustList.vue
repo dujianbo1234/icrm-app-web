@@ -352,43 +352,47 @@
 				this.queryList()
 			},
 			gaveCall(item, type) {
-				if (item.ctcTel) {
-					if (isNaN(item.ctcTel)) {
-						Toast.fail("电话号码格式有误");
-						return;
-					}
-					if (type) {
-						AlipayJSBridge.call("callHandler", {
-							phone: item.ctcTel
-						}, (res) => {
-							if (res.status == "000000") {
-								let body = {
-									custName: item.cstName,
-									custNo: item.custNum,
-									mobileNum: item.ctcTel,
-									communictionChannel: "02",
-									custType: '1',
-									serviceChn: "9"
-								};
-								custServiceAdd(body, (ress) => {
-									// this.showCall = false;
-								});
-							} else {
+				if (isNaN(item.ctcTel)) {
+					Toast.fail("电话号码格式有误");
+					return;
+				}
+				if (!item.ctcTel) {
+					Toast.fail("电话号码为空");
+					return;
+				}
+				if (type) {
+					AlipayJSBridge.call("callHandler", {
+						phone: item.ctcTel
+					}, (res) => {
+						if (res.status == "000000") {
+							let body = {
+								custName: item.cstName,
+								custNo: item.custNum,
+								mobileNum: item.ctcTel,
+								communictionChannel: "02",
+								custType: '1',
+								serviceChn: "1"
+							};
+							custServiceAdd(body, (ress) => {
+								// this.showCall = false;
+							});
+						} else {
+							if(res.msg){
 								Toast.fail(res.msg);
 							}
-						})
-					} else {
-						this.$refs.sendMessage.openMbox({
-							type: "",
-							searchData: {},
-							list: [{
-								cstName: item.cstName,
-								custNum: item.custNum,
-								ctcTel: item.ctcTel
-							}],
-							shrtmsgCnl: "1"
-						})
-					}
+						}
+					})
+				} else {
+					this.$refs.sendMessage.openMbox({
+						type: "",
+						searchData: {},
+						list: [{
+							cstName: item.cstName,
+							custNum: item.custNum,
+							ctcTel: item.ctcTel
+						}],
+						shrtmsgCnl: "1"
+					})
 				}
 			},
 			/* 批量发送短信的按钮 */

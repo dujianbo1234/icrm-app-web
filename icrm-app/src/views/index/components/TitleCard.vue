@@ -91,7 +91,6 @@ export default {
         font-size: 0.14rem;
         font-weight: 500;
         color: rgba(0, 0, 0, 0.85);
-        font-weight: 500;
       }
     }
     .titleR {

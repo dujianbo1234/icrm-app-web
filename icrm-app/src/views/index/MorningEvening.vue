@@ -2,7 +2,8 @@
 	<div class="MorningEvening">
 		<!-- 顶部title -->
 		<nav-bar type="2" title="晨夕会" v-if="show" />
-		<nav-bar type="2" title="晨夕会" leftIcon :rightText="$store.state.userMsg.roleId != '00000004' ? orgName : ''"
+		<nav-bar type="2" title="晨夕会" leftIcon
+			:rightText="($store.state.userMsg.roleId!='00000003'&&$store.state.userMsg.roleId!='00000004'&&$store.state.userMsg.roleId!='00000008'&&$store.state.userMsg.roleId!='00000009') ? orgName : ''"
 			rightColor="rgba(2, 109, 255, 1)" @back="goback" @touchRight="$refs.orgList.showPopup()" v-else />
 		<!-- 日历 -->
 		<div class="calendar">
@@ -12,18 +13,20 @@
 		<!-- 日历选择器 -->
 		<div class="arrow">
 			<!-- 2022.06.24 -->
-			<van-calendar ref="calendar" :default-date="defaultDate._d" :min-date="minDate._d" :max-date="maxDate._d"
+			<van-calendar ref="calendar" :default-date="defaultDate._d" :min-date="minDate" :max-date="maxDate._d"
 				row-height="40" :poppable="false" teleport=".arrow" color="#026DFF" :show-confirm="false"
 				:show-title="false" :show-subtitle="false" :safe-area-inset-bottom="false" :style="{ height: '3rem' }"
 				@select="selectDate" />
 			<!-- 分割线 -->
 		</div>
+		<van-empty v-if="showEmpty" style="margin-top: 0.5rem;" :image="require('../../assets/image/common_empty.png')"
+			image-size="120" description="暂无数据" />
 		<!-- 播放组件 -->
 		<div class="playAudio" v-if="dataList.length">
 			<play-audio ref="PlayAudio" :audioItem="audioItem"></play-audio>
 		</div>
 		<!-- 会议列表 -->
-		<van-list class="vanListStyle" v-model:loading="loading" :finished="finished" finished-text="没有更多了"
+		<van-list class="vanListStyle" v-model:loading="loading" :finished="finished" finished-text=""
 			@load="loadQuery">
 			<van-swipe-cell v-for="(item,i) in dataList" :key="'item'+i" style="padding-bottom: 0.12rem;"
 				:disabled="item.crtUsrNo != $store.state.userMsg.empno">
@@ -36,17 +39,15 @@
 						</div>
 						<!-- input -->
 						<div style="display: flex; margin: 0.1rem 0;">
-							<el-input type="textarea" :rows="4" :disabled="true" placeholder="请输入内容"
-								v-model="item.soundRecCaption"></el-input>
+							<div class="soundRecCaption">{{item.soundRecCaption}}</div>
 						</div>
 						<!-- 录音列表 -->
 						<div class="audioList_list">
 							<template v-for="(items, indexs) in item.soundList" :key="items">
-								<div class="list_item" @click="selectSound(items)">
-									<van-icon :name="require(`@/assets/image/play-mp3.png`)" size="0.45rem"
-										style="margin-right: 0.04rem;" />
-									<div :style="{color : audioItem == items.url ? '#026DFF' : '#131313'}">
-										{{`录音${indexs + 1}`}}</div>
+								<div class="list_item" :class="audioItem == items.url ? 'list_item_a' : ''"
+									@click="selectSound(items)">
+									<van-icon :name="require(`@/assets/image/play-mp3.png`)" size="0.45rem" />
+									<div class="list_item_title">{{`录音${indexs + 1}`}}</div>
 								</div>
 							</template>
 						</div>
@@ -57,14 +58,8 @@
 						</div>
 						<!-- 创建人 机构 -->
 						<div class="creatMsg">
-							<div>
-								<div class="label">创建人:</div>
-								<div class="text">{{item.crtUsrName}}</div>
-							</div>
-							<div>
-								<div class="label">机构:</div>
-								<div class="text">{{item.belongOrgName}}</div>
-							</div>
+							<div class="creatMsgItem ycsl">创建人：{{item.crtUsrName}}</div>
+							<div class="creatMsgItem ycsl">机构：{{item.belongOrgName}}</div>
 						</div>
 					</div>
 				</div>
@@ -72,9 +67,9 @@
 					<div class="rightBtn">
 						<div @click.stop="itemEdit(item)">
 							<van-icon :name="require(`@/assets/image/eidt_icon.png`)" size="0.3rem" />
-							<div class="text">编辑</div>
+							<div class="text">修改</div>
 						</div>
-						<div @click.stop="itemDel(item)">
+						<div @click.stop="itemDel1(item)">
 							<van-icon :name="require(`@/assets/image/cust_zyqk_delete.png`)" size="0.3rem" />
 							<div class="text">删除</div>
 						</div>
@@ -82,6 +77,16 @@
 				</template>
 			</van-swipe-cell>
 		</van-list>
+		<van-overlay :show="showDel" style="z-index: 99;">
+			<div class="plate6">
+				<div class="plate6_1">提示</div>
+				<div class="plate6_5">是否删除会议记录？</div>
+				<div class="plate6_4">
+					<div class="palte6_4_1" @click="showDel = false">取消</div>
+					<div class="palte6_4_2" @click="itemDel2">确定</div>
+				</div>
+			</div>
+		</van-overlay>
 		<!-- 选择机构组件 -->
 		<org-list ref="orgList" :type="2" @activeOrg="activeOrg" />
 		<!-- 新增记录 -->
@@ -106,7 +111,8 @@
 		deleteMemSoundRec
 	} from "@/request/index.js";
 	import {
-		Toast
+		Toast,
+		Dialog
 	} from 'vant';
 	import PlayAudio from "@/components/common/PlayAudio.vue"
 	import AddNewRecord from "@/views/index/addNewRecord.vue"
@@ -130,7 +136,7 @@
 				showBatchSend: false,
 				defaultDate: moment(),
 				showTime: moment(),
-				minDate: moment().subtract(12, 'month'),
+				minDate: new Date(2022, 5, 1), //功能上线月份
 				maxDate: moment(),
 				textarea: '测试内容',
 				minuDisabled: true,
@@ -144,11 +150,16 @@
 				addBtn: false,
 				// showPlayTime: 0, // 录音总时长(毫秒)
 				// totalDuration: 0
+				showDel: false,
+				waitDelItem: {},
+				showEmpty: false,
 			};
 		},
 		created() {
 			this.clickQuery()
-			this.addBtn = this.$store.state.userMsg.roleId == '00000003' || this.$store.state.userMsg.roleId == '00000008'
+			this.addBtn = this.$store.state.userMsg.roleId == '00000003' || this.$store.state.userMsg.roleId ==
+				'00000004' || this.$store.state.userMsg.roleId == '00000008' || this.$store.state.userMsg.roleId ==
+				'00000009'
 		},
 		methods: {
 			moment,
@@ -179,12 +190,17 @@
 				}
 			},
 			/* 会议记录删除 */
-			itemDel(item) {
+			itemDel1(item) {
+				this.waitDelItem = item;
+				this.showDel = true;
+			},
+			itemDel2() {
 				let body = {
-					id: item.id
+					id: this.waitDelItem.id
 				}
 				deleteMemSoundRec(body, res => {
-					this.clickQuery()
+					this.showDel = false;
+					this.clickQuery();
 				})
 			},
 			/* 新增记录 */
@@ -209,6 +225,7 @@
 			},
 			/* 查询列表 */
 			queryLsit(orgNo) {
+				this.showEmpty = false;
 				if (window.recordsAudio) {
 					window.recordsAudio.pause();
 				}
@@ -246,6 +263,9 @@
 							}
 						})
 						if (this.dataList.length >= res.data.total) this.finished = true;
+						this.$nextTick(() => {
+							this.showEmpty = this.dataList.length <= 0;
+						})
 					} else {
 						this.finished = true
 					}
@@ -254,9 +274,10 @@
 			},
 			/* 选择机构 */
 			activeOrg(value) {
-				this.orgName = value.text || '选择机构'
-				this.pageIndex = 1
-				this.queryLsit(value.value)
+				this.orgName = value.text || '选择机构';
+				this.pageIndex = 1;
+				this.dataList = [];
+				this.queryLsit(value.value);
 			},
 			/* 选择录音 */
 			selectSound(item) {
@@ -413,9 +434,33 @@
 					justify-content: flex-start;
 
 					.list_item {
-						width: calc(100% / 3);
-						padding: 0.175rem 0.25rem;
+						width: 0.88rem;
+						height: 1.02rem;
+						display: flex;
+						flex-wrap: wrap;
+						align-items: center;
+						justify-content: center;
 						font-size: 0.15rem;
+						color: #131313;
+						padding: 0.12rem 0;
+
+						.list_item_title {
+							width: 0.88rem;
+							font-size: 0.15rem;
+							font-family: PingFangSC-Regular, PingFang SC;
+							font-weight: 400;
+						}
+					}
+
+					.list_item:nth-child(2) {
+						margin: 0 calc(calc(100% - 2.64rem) / 2);
+					}
+
+					.list_item_a {
+						border-radius: 0.04rem;
+						border: 0.01rem solid #026DFF;
+						border-radius: ;
+						color: #026DFF;
 					}
 				}
 
@@ -430,31 +475,14 @@
 
 				.creatMsg {
 					display: flex;
-					text-align: left;
 
-					&>div {
-						flex: 1;
-						display: flex;
-						align-items: center;
-
-						.label {
-							font-size: 0.15rem;
-							font-family: PingFangSC-Regular, PingFang SC;
-							font-weight: 400;
-							color: #595959;
-						}
-
-						.text {
-							width: 1.25rem;
-							padding-left: 0.05rem;
-							font-size: 0.14rem;
-							font-family: PingFangSC-Regular, PingFang SC;
-							font-weight: 400;
-							color: #595959;
-							overflow: hidden;
-							text-overflow: ellipsis;
-							white-space: nowrap;
-						}
+					.creatMsgItem {
+						width: 50%;
+						font-size: 0.15rem;
+						font-family: PingFangSC-Regular, PingFang SC;
+						font-weight: 400;
+						text-align: left;
+						color: #595959;
 					}
 				}
 			}
@@ -532,5 +560,89 @@
 				color: #BFBFBF;
 			}
 		}
+	}
+
+	.plate6 {
+		width: 74.7%;
+		background: #FFFFFF;
+		border-radius: 0.08rem;
+		position: absolute;
+		top: calc(50% - 1rem);
+		left: 12.65%;
+		padding: 0.2rem 0.12rem;
+	}
+
+	.plate6_1 {
+		width: 100%;
+		height: 0.22rem;
+		font-family: PingFangSC-Medium;
+		font-size: 0.14rem;
+		color: #262626;
+		text-align: center;
+		line-height: 0.22rem;
+		font-weight: 500;
+		margin-bottom: 0.24rem;
+	}
+
+	.plate6_4 {
+		width: 100%;
+		height: 0.3rem;
+		margin-top: 0.24rem;
+		display: flex;
+		flex-wrap: nowrap;
+		justify-content: space-around;
+		align-items: center;
+	}
+
+	.palte6_4_1 {
+		width: 1.08rem;
+		height: 0.3rem;
+		border: 0.01rem solid #026DFF;
+		border-radius: 0.15rem;
+		font-family: PingFangSC-Medium;
+		font-size: 0.13rem;
+		color: #026DFF;
+		text-align: center;
+		line-height: 0.3rem;
+		font-weight: 500;
+	}
+
+	.palte6_4_2 {
+		width: 1.08rem;
+		height: 0.3rem;
+		background: #026DFF;
+		border-radius: 0.15rem;
+		font-family: PingFangSC-Medium;
+		font-size: 0.13rem;
+		color: #FFFFFF;
+		text-align: center;
+		line-height: 0.3rem;
+		font-weight: 500;
+	}
+
+	.plate6_5 {
+		width: 100%;
+		font-family: PingFangSC-Medium;
+		font-size: 0.14rem;
+		color: #262626;
+		text-align: center;
+		line-height: 0.22rem;
+		font-weight: 400;
+		margin-bottom: 0.28rem;
+		margin-top: 0.15rem;
+	}
+
+	.soundRecCaption {
+		width: 100%;
+		text-align: left;
+		min-height: 1rem;
+		padding: 0.05rem 0.12rem;
+		border-radius: 0.06rem;
+		border: 0.01rem solid #E5E5E5;
+		font-size: 0.13rem;
+		font-family: PingFangSC-Regular, PingFang SC;
+		font-weight: 400;
+		color: #595959;
+		line-height: 0.25rem;
 	}
 </style>

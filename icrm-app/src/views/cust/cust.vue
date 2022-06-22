@@ -637,19 +637,19 @@
 					Toast.fail("系统跑批日期数据为空")
 				}
 			})
-			// saveSmAppVisitInfo({
-			// 	busiType: "3"
-			// }, (res) => {
+			saveSmAppVisitInfo({
+				busiType: "3"
+			}, (res) => {
 
-			// });
-			// querySmAppVisitSum({
-			// 	busiType: "3"
-			// }, (res) => {
-			// 	if (res.data) {
-			// 		this.visitNum = res.data.visitNum;
-			// 		this.useNum = res.data.useNum;
-			// 	}
-			// });
+			});
+			querySmAppVisitSum({
+				busiType: "3"
+			}, (res) => {
+				if (res.data) {
+					this.visitNum = res.data.visitNum;
+					this.useNum = res.data.useNum;
+				}
+			});
 		},
 	}
 </script>

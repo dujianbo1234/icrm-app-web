@@ -150,6 +150,14 @@
 				this.getCustList();
 			},
 			gaveCall(phone) {
+				if (isNaN(phone)) {
+					Toast.fail("电话号码格式有误");
+					return;
+				}
+				if (!phone) {
+					Toast.fail("电话号码为空");
+					return;
+				}
 				AlipayJSBridge.call('callHandler', {
 					phone
 				});

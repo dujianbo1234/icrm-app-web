@@ -69,6 +69,10 @@
 				type: Boolean,
 				default: true
 			},
+			resetIt: {
+				type: Boolean,
+				default: false
+			},
 		},
 		data() {
 			return {
@@ -83,6 +87,7 @@
 		},
 		methods: {
 			showPopup() {
+				if (this.resetIt) this.searchValue = "";
 				if (this.searchValue) {
 					this.show = true;
 				} else {
