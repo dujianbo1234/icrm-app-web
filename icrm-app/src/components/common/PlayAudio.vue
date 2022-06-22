@@ -103,23 +103,24 @@
 			/* 快进/快退 */
 			forwardBack(type) {
 				if (this.audioItem) {
-					let num = 15 // 这里修改每次前进后退的时间
-					this.totalDuration = window.recordsAudio.duration
-					switch (type) {
-						case "R":
-							if (window.recordsAudio.currentTime > num) {
-								window.recordsAudio.currentTime -= num;
-								this.currentDuration = window.recordsAudio.currentTime
-							} else {
-								window.recordsAudio.currentTime = 0;
-								this.currentDuration = window.recordsAudio.currentTime
-							}
-							break;
-						case "A":
-							window.recordsAudio.currentTime += num;
-							this.currentDuration = window.recordsAudio.currentTime
-							break;
-					}
+					this.$emit("selectOtherSound", type);
+					// let num = 15 // 这里修改每次前进后退的时间
+					// this.totalDuration = window.recordsAudio.duration
+					// switch (type) {
+					// 	case "R":
+					// 		if (window.recordsAudio.currentTime > num) {
+					// 			window.recordsAudio.currentTime -= num;
+					// 			this.currentDuration = window.recordsAudio.currentTime
+					// 		} else {
+					// 			window.recordsAudio.currentTime = 0;
+					// 			this.currentDuration = window.recordsAudio.currentTime
+					// 		}
+					// 		break;
+					// 	case "A":
+					// 		window.recordsAudio.currentTime += num;
+					// 		this.currentDuration = window.recordsAudio.currentTime
+					// 		break;
+					// }
 					// switch(type){
 					//   case true:
 					//     if(this.currentDuration < num){

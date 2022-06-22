@@ -23,7 +23,7 @@
 			image-size="120" description="暂无数据" />
 		<!-- 播放组件 -->
 		<div class="playAudio" v-if="dataList.length">
-			<play-audio ref="PlayAudio" :audioItem="audioItem"></play-audio>
+			<play-audio ref="PlayAudio" :audioItem="audioItem" @selectOtherSound="selectOtherSound" />
 		</div>
 		<!-- 会议列表 -->
 		<van-list class="vanListStyle" v-model:loading="loading" :finished="finished" finished-text=""
@@ -286,8 +286,38 @@
 				}
 				this.audioItem = item.url
 				this.$nextTick(() => {
-					this.$refs['PlayAudio'].init()
+					this.$refs['PlayAudio'].init();
 				})
+			},
+			/* 切换录音 */
+			selectOtherSound(type) {
+				var index1 = "",
+					index2 = "";
+				for (var i = 0; i < this.dataList.length; i++) {
+					index2 = this.dataList[i].soundList.findIndex(item => item.url === this.audioItem);
+					if (index2 >= 0) {
+						index1 = i;
+						break;
+					}
+				}
+				switch (type) {
+					case "R":
+						if (index2 <= 0) {
+							Toast('已是第一条录音!');
+							return;
+						} else {
+							this.selectSound(this.dataList[index1].soundList[index2 - 1]);
+						}
+						break;
+					case "A":
+						if (index2 >= this.dataList[index1].soundList.length - 1) {
+							Toast('已是最后一条录音!');
+							return;
+						} else {
+							this.selectSound(this.dataList[index1].soundList[index2 + 1]);
+						}
+						break;
+				}
 			},
 			/* 返回路由时触发 */
 			goback() {
