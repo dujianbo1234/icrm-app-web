@@ -1779,7 +1779,7 @@
 			},
 			/* 分享 */
 			fenxiang() {
-				Toast.fail("尽请期待")
+				Toast.fail("敬请期待")
 			},
 			/* 交易行为分析查询 */
 			queryFlowInfo() {

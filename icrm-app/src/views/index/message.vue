@@ -389,26 +389,26 @@
 					Toast.fail("电话号码为空");
 					return;
 				}
-				AlipayJSBridge.call('callHandler', {
-					phone: this.checkItem.phoneNo
-				}, (res1) => {
-					if (res1.status == "000000") {
-						custServiceAdd({
-							custName: this.checkItem.cstName,
-							custNo: this.checkItem.custNum,
-							mobileNum: this.checkItem.phoneNo,
-							communictionChannel: "02",
-							custType: '1',
-							serviceChn: "6"
-						}, (res2) => {
-							
-						})
-					} else {
-						if (res1.msg) {
-							Toast.fail(res1.msg)
-						}
-					}
+				Toast.loading({
+					message: "正在唤起",
+					forbidClick: true,
+					duration: 0
 				});
+				custServiceAdd({
+					custName: this.checkItem.cstName,
+					custNo: this.checkItem.custNum,
+					mobileNum: this.checkItem.phoneNo,
+					communictionChannel: "02",
+					custType: '1',
+					serviceChn: "6"
+				}, (res2) => {
+					Toast.clear();
+					AlipayJSBridge.call('callHandler', {
+						phone: this.checkItem.phoneNo
+					}, (res1) => {
+						
+					});
+				})
 			},
 			openMbox(list, type) {
 				var params = {

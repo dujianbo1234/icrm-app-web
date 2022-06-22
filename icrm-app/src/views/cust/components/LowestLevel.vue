@@ -121,26 +121,25 @@
 					return;
 				}
 				if (type) {
-					AlipayJSBridge.call("callHandler", {
-						phone: this.custBase.ctcTel
-					}, (res) => {
-						if (res.status == "000000") {
-							let body = {
-								custName: this.custBase.cstName,
-								custNo: this.custBase.custNum,
-								mobileNum: this.custBase.ctcTel,
-								communictionChannel: "02",
-								custType: '1',
-								serviceChn: "9"
-							};
-							custServiceAdd(body, (ress) => {
-								this.showCall = false;
-							});
-						} else {
-							if(res.msg){
-								Toast.fail(res.msg);
-							}
-						}
+					Toast.loading({
+						message: "正在唤起",
+						forbidClick: true,
+						duration: 0
+					});
+					custServiceAdd({
+						custName: this.custBase.cstName,
+						custNo: this.custBase.custNum,
+						mobileNum: this.custBase.ctcTel,
+						communictionChannel: "02",
+						custType: '1',
+						serviceChn: "9"
+					}, (ress) => {
+						Toast.clear();
+						AlipayJSBridge.call("callHandler", {
+							phone: this.custBase.ctcTel
+						}, (res) => {
+							
+						});
 					});
 				} else {
 					this.$refs.sendMessage.openMbox({

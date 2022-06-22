@@ -58,8 +58,8 @@
 				<div class="cameraBox" v-for="(photo,i) in photoList" :key="'photo'+i">
 					<van-icon class="delBtn" :name="require('../../assets/image/common_delete.png')" color="#8C8C8C"
 						size="20" @click="delPhoto(i)" />
-					<div class="imgBox" @click="openPhoto('data:image/jpeg;base64,' + photo.url)">
-						<img :src="'data:image/jpeg;base64,' + photo.url">
+					<div class="imgBox" @click="openPhoto(photo.url)">
+						<img :src="photo.url">
 					</div>
 				</div>
 				<div class="cameraBox" v-if="photoList.length<6" @click="openCamera">
@@ -124,7 +124,13 @@
 				// audioFile: 'file:///private/var/mobile/Containers/Data/Application/C9BBC1D5-B1B2-40CD-A53D-E1BB821ADE94/tmp/com.JJbank.pactera-Inbox/%E9%87%91%E8%9E%8D%E6%B8%AF%E8%B7%AF.m4a'
 			};
 		},
+		watch: {
+			photoList() {
+				console.log(this.photoList);
+			}
+		},
 		mounted() {
+			console.log("addNewRecord--mounted")
 			if (this.type) {
 				this.soundList = []
 				this.photoList = []
@@ -168,7 +174,7 @@
 						}, (res2) => {
 							Toast.success("上传成功");
 							this.photoList.push({
-								url: res1.result,
+								url: 'data:image/jpeg;base64,' + res1.result,
 								fileId: res2.data[0].tableKey
 							})
 						})

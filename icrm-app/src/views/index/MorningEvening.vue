@@ -20,7 +20,7 @@
 			<!-- 分割线 -->
 		</div>
 		<van-empty v-if="showEmpty" style="margin-top: 0.5rem;" :image="require('../../assets/image/common_empty.png')"
-			image-size="120" description="暂无数据" />
+			image-size="120" description="暂无记录" />
 		<!-- 播放组件 -->
 		<div class="playAudio" v-if="dataList.length">
 			<play-audio ref="PlayAudio" :audioItem="audioItem" @selectOtherSound="selectOtherSound" />
@@ -94,7 +94,7 @@
 			v-if="addBtn" />
 		<!-- 底部弹出 -->
 		<van-popup v-model:show="show" round position="bottom" :style="{ background: '#F8F8F8' }">
-			<AddNewRecord :type="recordType" :record="record" @clearBtn="clearBtn" />
+			<AddNewRecord v-if="show" :type="recordType" :record="record" @clearBtn="clearBtn" />
 		</van-popup>
 		<!-- 这是底线 -->
 		<div class="bottomLine">

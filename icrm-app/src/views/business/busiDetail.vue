@@ -452,33 +452,34 @@
 				if (isNaN(this.baseMsg.ctcTel)) {
 					Toast.fail("电话号码格式有误");
 					return;
-				}
+				};
 				if (!this.baseMsg.ctcTel) {
 					Toast.fail("电话号码为空");
 					return;
-				}
-				AlipayJSBridge.call('callHandler', {
-					phone: this.baseMsg.ctcTel
-				}, (res1) => {
-					if (res1.status == "000000") {
-						saveOpportCustServInfo({
-							sysId: this.baseMsg.sysId,
-							custNum: this.baseMsg.custNo,
-							cstNam: this.baseMsg.custNm,
-							serviceType: "02",
-							custOrg: this.baseMsg.belongOrg,
-							custMgrNum: this.baseMsg.followUpPrsn,
-							custMgrName: this.baseMsg.followUpPrsnNm,
-							mobileNum: this.baseMsg.ctcTel,
-						}, (res2) => {
-							this.getFollowMsg();
-						})
-					} else {
-						if (res1.msg) {
-							Toast.fail(res1.msg)
-						}
-					}
+				};
+				Toast.loading({
+					message: "正在唤起",
+					forbidClick: true,
+					duration: 0
 				});
+				saveOpportCustServInfo({
+					sysId: this.baseMsg.sysId,
+					custNum: this.baseMsg.custNo,
+					cstNam: this.baseMsg.custNm,
+					serviceType: "02",
+					custOrg: this.baseMsg.belongOrg,
+					custMgrNum: this.baseMsg.followUpPrsn,
+					custMgrName: this.baseMsg.followUpPrsnNm,
+					mobileNum: this.baseMsg.ctcTel,
+				}, (res2) => {
+					Toast.clear();
+					this.getFollowMsg();
+					AlipayJSBridge.call('callHandler', {
+						phone: this.baseMsg.ctcTel
+					}, (res1) => {
+						
+					});
+				})
 			},
 			openMbox() {
 				this.$refs.sendMessage.openMbox({
