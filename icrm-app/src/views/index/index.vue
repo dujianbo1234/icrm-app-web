@@ -285,11 +285,11 @@
 	import echartsPie from "../../components/common/echarts-pie.vue";
 	import echartsLine from "../../components/common/echarts-line.vue";
 	import echartsFunnel from "../../components/common/echarts-funnel.vue";
-	import selectors from "./components/selectors.vue"
-	import echartHistogram from "./components/echart-Histogram.vue"
-	import TitleCard from "@/views/index/components/TitleCard.vue"
-	import Table from "@/views/index/components/Table.vue"
-	import moment from "moment"
+	import selectors from "./components/selectors.vue";
+	import echartHistogram from "./components/echart-Histogram.vue";
+	import TitleCard from "@/views/index/components/TitleCard.vue";
+	import Table from "@/views/index/components/Table.vue";
+	import moment from "moment";
 	export default {
 		components: {
 			echartsPie,
@@ -1406,8 +1406,6 @@
 			},
 			/* 晨夕会 */
 			morningEvening() {
-				// Toast.fail("尽请期待")
-				// return;
 				this.$router.push('/MorningEvening')
 			}
 		},
@@ -1636,7 +1634,7 @@
 
 	.bottomLine {
 		width: 60%;
-		margin: 0.2rem auto;
+		margin: 0 auto;
 		padding-bottom: 0.2rem;
 		display: flex;
 		justify-content: space-between;
@@ -2036,7 +2034,7 @@
 		right: 5.5%;
 		z-index: 8;
 	}
-	
+
 	.vuNum {
 		font-size: 0.11rem;
 		font-family: PingFangSC-Regular, PingFang SC;

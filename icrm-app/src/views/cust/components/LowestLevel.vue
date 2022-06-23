@@ -202,6 +202,8 @@
 					custNo: this.custBase.custNum,
 					mobileNum: this.custBase.ctcTel,
 					communictionChannel: "01",
+					locationAddress: this.dingwei,
+					visitAddress: this.dingwei,
 					custType: '1',
 					uploadIds: this.photoList.map(item => item.tableKey),
 					serviceChn: "9"

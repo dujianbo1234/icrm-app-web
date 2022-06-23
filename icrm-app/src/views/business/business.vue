@@ -46,7 +46,7 @@
 			</div>
 		</div>
 		<div style="height: 1.87rem;"></div>
-		<van-list v-model:loading="loading" :finished="finished" finished-text="已加载全部数据" @load="onLoad">
+		<van-list v-model:loading="loading" :finished="finished" finished-text="—— 到底啦,我是有底线的 ——" @load="onLoad">
 			<div class="businessItem" v-for="(item,i) in msgList" :key="'item'+i" @click="openDetail(item)">
 				<div class="itemPlate1">{{item.cmrcOpptSubclassNm}}</div>
 				<div class="itemPlate2">
@@ -78,11 +78,11 @@
 					{{item.cmrcOpptBclassNm}}
 				</div>
 			</div>
+			<div class="vuNum">
+				<span>使用人数：{{useNum?Number(useNum).toLocaleString():"-"}}</span>
+				<span>浏览人数：{{visitNum?Number(visitNum).toLocaleString():"-"}}</span>
+			</div>
 		</van-list>
-		<div class="vuNum">
-			<span>使用人数：{{useNum?Number(useNum).toLocaleString():"-"}}</span>
-			<span>浏览人数：{{visitNum?Number(visitNum).toLocaleString():"-"}}</span>
-		</div>
 		<div class="bottomZW"></div>
 	</div>
 </template>
@@ -502,12 +502,20 @@
 		font-family: PingFangSC-Regular, PingFang SC;
 		font-weight: 400;
 		color: #8C8C8C;
-		height: 0.44rem;
+		/* height: 0.44rem; */
 		width: 100%;
 		display: flex;
 		flex-wrap: nowrap;
 		align-items: center;
 		justify-content: space-between;
 		padding: 0 3.2%;
+	}
+	
+	:deep(.van-list__finished-text) {
+		font-size: 0.12rem;
+		font-family: PingFangSC-Regular, PingFang SC;
+		font-weight: 400;
+		color: #BFBFBF;
+		letter-spacing: 1px;
 	}
 </style>

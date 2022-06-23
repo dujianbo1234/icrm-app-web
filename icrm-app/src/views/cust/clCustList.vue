@@ -45,7 +45,7 @@
 			</div>
 		</div>
 		<van-list class="vanListStyle" v-model:loading="loading" :finished="finished" finished-text="没有更多了"
-			@load="getCustList">
+			@load="getCustList" :immediate-check="false">
 			<van-checkbox-group v-model="chooseItems" ref="checkboxGroup">
 				<div class="custItem" v-for="(item,i) in custList" :key="'item'+i"
 					:style="{'margin-left':showBatchSend?'10%':'0%'}" @click="openDetails(item)">
@@ -177,9 +177,8 @@
 						value: '贷款'
 					},
 				],
-				svcLvlList: [],
 				searchValue: "",
-				loading: true,
+				loading: false,
 				finished: false,
 				pageIndex: 0,
 				custList: [],
@@ -251,14 +250,33 @@
 				orgName: '选择机构'
 			};
 		},
-		/* 判断是从哪个路由过来的，若是判断是否需要开启缓存 */
-		beforeRouteEnter(to, from, next) {
-			if (from.name === 'clCustomerView') {
-				to.meta.keepAlive = true;
-			} else {
-				to.meta.keepAlive = false;
+		mounted() {
+			this.queryList();
+		},
+		activated() {
+			if(this.$route.params.newPage&&this.pageIndex>0){
+				this.checkAll = false;
+				this.searchValue = "";
+				this.loading = false;
+				this.finished = false;
+				this.pageIndex = 0;
+				this.custList = [];
+				this.total = 0;
+				this.showBatchSend = false;
+				this.chooseItems = [];
+				this.params = {
+					pageSize: "10",
+					pageNum: "",
+					belgCustMgr: '',
+					cstName: "",
+					svcLvl: '',
+					cstLvl: "",
+					belongOrg: ''
+				};
+				this.tageListActive = 0;
+				this.orgName = '选择机构';
+				this.queryList();
 			}
-			next();
 		},
 		methods: {
 			formatNumW,
@@ -273,6 +291,8 @@
 					forbidClick: true,
 					duration: 0,
 				});
+				this.pageIndex++;
+				this.params.pageNum = this.pageIndex.toString();
 				queryCustSearchList(this.params, (res) => {
 					if (res.data && res.data.records) {
 						this.total = res.data.total;

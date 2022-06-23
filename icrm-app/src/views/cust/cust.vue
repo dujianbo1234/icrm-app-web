@@ -378,7 +378,12 @@
 						this.$router.push('./impQZCust');
 						break;
 					case "存量客户":
-						this.$router.push('clCustList');
+						this.$router.push({
+							name: 'clCustList',
+							params: {
+								newPage: true
+							}
+						});
 						break;
 					case "短信审批":
 						this.$router.push('messageSend');
@@ -841,7 +846,7 @@
 	.bottomLine {
 		height: 0.2rem;
 		width: 60%;
-		margin: 0.05rem auto;
+		margin: -0.1rem auto 0.05rem;
 		border-bottom: solid 0.01rem #F4F4F4;
 		position: relative;
 		display: flex;

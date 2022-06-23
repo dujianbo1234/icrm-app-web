@@ -12,7 +12,7 @@
 					<div class="followItem1">
 						<div>{{followItem.communictionChannel=='01'?'登门拜访':followItem.communictionChannel=='02'?'电话跟进':followItem.communictionChannel=='03'?'行内到访':followItem.communictionChannel=='04'?'微信跟进':'短信跟进'}}</div>
 						<div v-if="followItem.communictionChannel=='02' && $store.state.userMsg.empid==followItem.createPerson && followItem.serviceContent==''"  @click="saveTelInfo(followItem)">保存</div>
-						<div v-else @click="saveTelInfo(followItem)" class="fromText">来源：{{followItem.serviceChn}}</div>
+						<div v-else class="fromText">来源：{{followItem.serviceChn}}</div>
 					</div>
 					<div class="followItem2" :style="{'-webkit-line-clamp':followItem.showDesc?'100':'15'}"
 						@click="followItem.showDesc=!followItem.showDesc">{{followItem.serviceContent}}</div>

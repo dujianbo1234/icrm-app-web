@@ -124,13 +124,7 @@
 				// audioFile: 'file:///private/var/mobile/Containers/Data/Application/C9BBC1D5-B1B2-40CD-A53D-E1BB821ADE94/tmp/com.JJbank.pactera-Inbox/%E9%87%91%E8%9E%8D%E6%B8%AF%E8%B7%AF.m4a'
 			};
 		},
-		watch: {
-			photoList() {
-				console.log(this.photoList);
-			}
-		},
 		mounted() {
-			console.log("addNewRecord--mounted")
 			if (this.type) {
 				this.soundList = []
 				this.photoList = []
@@ -204,12 +198,18 @@
 					type: "0",
 					url: this.$store.state.baseUrl + "/jjbank/api/memsound/memSoundRecUpload"
 				}, (res) => {
-					if (res.status = "000000" && res.result) {
+					if (res.result) {
 						var result = JSON.parse(res.result);
-						this.soundList.push({
-							url: `${this.$store.state.baseUrl}${result.data[0].fileServerPath}${result.data[0].fileName}`,
-							fileId: result.data[0].tableKey,
-						});
+						if (result.code == "0") {
+							this.soundList.push({
+								url: `${this.$store.state.baseUrl}${result.data[0].fileServerPath}${result.data[0].fileName}`,
+								fileId: result.data[0].tableKey,
+							});
+						} else {
+							if (res.msg) {
+								Toast(res.msg);
+							}
+						}
 					} else {
 						if (res.msg) {
 							Toast(res.msg);

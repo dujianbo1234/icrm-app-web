@@ -71,20 +71,28 @@
 			},
 		},
 		beforeCreate() {
-			AlipayJSBridge.call(
-				"getAPDataStorage", {
-					type: "common",
-					business: "business_userInfo",
-					key: "kUserInfo",
-				},
-				(res) => {
-					if (res.success && res.data) {
-						this.$store.commit("setUserMsg", JSON.parse(res.data));
-						this.showSecret =
-							AES.decrypt(JSON.parse(res.data).firstSignFlag) == "0";
+			var Base64 = require('js-base64').Base64
+			AlipayJSBridge.call("getAPDataStorage", {
+				type: "common",
+				business: "business_userInfo",
+				key: "kUserInfo",
+			}, (res) => {
+				if (res.success && res.data) {
+					// 判断手机机型
+					var u = navigator.userAgent;
+					if (u.indexOf('Android') > -1 || u.indexOf('Linux') > -1) {
+						//安卓手机
+						res.data = Base64.decode(res.data);
+					} else if (u.indexOf('iPhone') > -1) {
+						//苹果手机
+					} else if (u.indexOf('Windows Phone') > -1) {
+						//winphone手机
 					}
+					this.$store.commit("setUserMsg", JSON.parse(res.data));
+					this.showSecret =
+						AES.decrypt(JSON.parse(res.data).firstSignFlag) == "0";
 				}
-			);
+			});
 
 			getIcrmConfigInfo({}, (res) => {
 				this.$store.commit("setBaseUrl", res.data.icrmUrl);

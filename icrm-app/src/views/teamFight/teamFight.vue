@@ -178,13 +178,11 @@
 	.bottomLine {
 		height: 0.2rem;
 		width: 60%;
-		margin: 0.05rem auto;
+		margin: -0.1rem auto 0.05rem;
 		border-bottom: solid 0.01rem #F4F4F4;
-		position: absolute;
+		position: relative;
 		display: flex;
 		justify-content: center;
-		bottom: 0.2rem;
-		left: 20%;
 	}
 
 	.bottomText {
