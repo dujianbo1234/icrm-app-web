@@ -24,7 +24,11 @@ export const request = (url, params, fun) => {
 			return;
 		} else if (res.code == 2) {
 			Toast.clear()
-			alert("登录失效，请重新登录")
+			if(res.msg=="LOGIN-REPEAT-INVALID"){
+				alert(res.data)
+			}else{
+				alert("登录失效，请重新登录")
+			}
 			AlipayJSBridge.call('popWindow');
 			return;
 		}else{

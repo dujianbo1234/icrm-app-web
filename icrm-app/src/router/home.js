@@ -10,7 +10,7 @@ const routes = [{
 	children: [{
 			path: '/',
 			redirect: '/index'
-		},{
+		}, {
 			path: '/index',
 			name: 'index',
 			component: () => import('@/views/index/index.vue')
@@ -31,6 +31,9 @@ const routes = [{
 		{
 			path: '/business',
 			name: 'business',
+			meta: {
+				keepAlive: true
+			},
 			component: () => import('@/views/business/business.vue')
 		},
 		...businessChildren,

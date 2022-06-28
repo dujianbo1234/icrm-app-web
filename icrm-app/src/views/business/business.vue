@@ -46,7 +46,8 @@
 			</div>
 		</div>
 		<div style="height: 1.87rem;"></div>
-		<van-list v-model:loading="loading" :finished="finished" finished-text="—— 到底啦,我是有底线的 ——" @load="onLoad">
+		<van-list v-model:loading="loading" :finished="finished" finished-text="—— 到底啦,我是有底线的 ——" @load="onLoad"
+			:immediate-check="false">
 			<div class="businessItem" v-for="(item,i) in msgList" :key="'item'+i" @click="openDetail(item)">
 				<div class="itemPlate1">{{item.cmrcOpptSubclassNm}}</div>
 				<div class="itemPlate2">
@@ -146,14 +147,12 @@
 					this.orderType = true;
 				}
 				this.pageIndex = 0;
-				this.loading = true;
 				this.msgList = [];
 				this.onLoad();
 			},
 			changeKequn(i) {
 				this.kequnIndex = i;
 				this.pageIndex = 0;
-				this.loading = true;
 				this.msgList = [];
 				this.onLoad();
 			},
@@ -166,7 +165,14 @@
 					}
 				})
 			},
-			getList() {
+			onLoad() {
+				this.loading = true;
+				this.finished = false;
+				Toast.loading({
+					message: "正在加载",
+					forbidClick: true,
+					duration: 0
+				});
 				this.pageIndex++;
 				queryCmrcOpportunitySumList({
 					pageSize: "10",
@@ -185,65 +191,67 @@
 					this.loading = false;
 				})
 			},
-			onLoad() {
-				this.loading = true;
-				this.finished = false;
-				Toast.loading({
-					message: "正在加载",
-					forbidClick: true,
-					duration: 0
+			mounted_m() {
+				this.kequnIndex = Number(this.$route.params.pageType) || 0;
+				queryCmrcOpportunitySum({}, (res) => {
+					if (res.data) {
+						this.sumMsg = res.data;
+					} else {
+						Toast.fail("商机汇总数据为空");
+					}
+				})
+				getSysCodeByType({
+					codeType: "CMRC_OPPT_BCLASS"
+				}, (res) => {
+					if (res.data) {
+						var arr = res.data.map((item) => {
+							return {
+								text: item.codeName,
+								value: item.codeValue
+							}
+						})
+						this.kequnList = this.kequnList.concat(arr);
+						this.onLoad();
+					} else {
+						Toast.fail("商机大类数据为空")
+					}
+				})
+				saveSmAppVisitInfo({
+					busiType: "4"
+				}, (res) => {
+
 				});
-				if (this.kequnList[this.kequnIndex]) {
-					this.getList()
-				} else {
-					var timer = setInterval(() => {
-						if (this.kequnList[this.kequnIndex]) {
-							clearInterval(timer);
-							timer = "";
-							this.getList();
-						}
-					}, 100)
-				}
+				querySmAppVisitSum({
+					busiType: "4"
+				}, (res) => {
+					if (res.data) {
+						this.visitNum = res.data.visitNum;
+						this.useNum = res.data.useNum;
+					}
+				});
 			},
 		},
 		mounted() {
-			this.kequnIndex = Number(this.$route.params.pageType) || 0;
-			queryCmrcOpportunitySum({}, (res) => {
-				if (res.data) {
-					this.sumMsg = res.data;
-				} else {
-					Toast.fail("商机汇总数据为空");
-				}
-			})
-			getSysCodeByType({
-				codeType: "CMRC_OPPT_BCLASS"
-			}, (res) => {
-				if (res.data) {
-					var arr = res.data.map((item) => {
-						return {
-							text: item.codeName,
-							value: item.codeValue
-						}
-					})
-					this.kequnList = this.kequnList.concat(arr);
-				} else {
-					Toast.fail("商机大类数据为空")
-				}
-			})
-			saveSmAppVisitInfo({
-				busiType: "4"
-			}, (res) => {
-
-			});
-			querySmAppVisitSum({
-				busiType: "4"
-			}, (res) => {
-				if (res.data) {
-					this.visitNum = res.data.visitNum;
-					this.useNum = res.data.useNum;
-				}
-			});
-		}
+			localStorage.setItem("newBusiness", "0")
+			this.mounted_m();
+		},
+		activated() {
+			if (localStorage.getItem("newBusiness") == "0") {
+				localStorage.setItem("newBusiness", "1")
+			} else {
+				this.sumMsg = {};
+				this.orderIndex = -1;
+				this.orderType = true;
+				this.kequnIndex = 0;
+				this.msgList = [];
+				this.loading = false;
+				this.finished = false;
+				this.pageIndex = 0;
+				this.visitNum = "";
+				this.useNum = "";
+				this.mounted_m();
+			}
+		},
 	}
 </script>
 
@@ -510,7 +518,7 @@
 		justify-content: space-between;
 		padding: 0 3.2%;
 	}
-	
+
 	:deep(.van-list__finished-text) {
 		font-size: 0.12rem;
 		font-family: PingFangSC-Regular, PingFang SC;

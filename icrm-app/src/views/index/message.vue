@@ -85,7 +85,8 @@
 			</div>
 		</div>
 		<div :style="{height: fixedHeight}"></div>
-		<van-list v-model:loading="loading" :finished="finished" finished-text="没有更多了" @load="onLoad">
+		<van-list v-model:loading="loading" :finished="finished" finished-text="没有更多了" @load="onLoad"
+			:immediate-check="false">
 			<van-checkbox-group v-model="checked" ref="checkboxGroup">
 				<div v-for="(msgItem,i) in msgList" :key="'msgItem'+i" class="msgCardBox"
 					:style="{'margin-left':openPLFS?'15%':'0%'}">
@@ -406,7 +407,7 @@
 					AlipayJSBridge.call('callHandler', {
 						phone: this.checkItem.phoneNo
 					}, (res1) => {
-						
+
 					});
 				})
 			},
@@ -470,7 +471,6 @@
 				};
 				this.openOrgList = false;
 				this.pageIndex = 0;
-				this.loading = true;
 				this.msgList = [];
 				this.onLoad();
 			},
@@ -485,7 +485,6 @@
 				};
 				this.openCustList = false;
 				this.pageIndex = 0;
-				this.loading = true;
 				this.msgList = [];
 				this.onLoad();
 			},
@@ -539,6 +538,7 @@
 		},
 		mounted() {
 			this.resetTop();
+			this.onLoad();
 			getSysCodeByType({
 				codeType: "evtype"
 			}, (res) => {
@@ -601,7 +601,45 @@
 					Toast.fail("服务等级数据为空")
 				}
 			});
-		}
+		},
+		activated() {
+			if (this.$route.params.newPage && !this.loading) {
+				this.openOrgList = false;
+				this.chooseOrg = {
+					text: "全部机构",
+					value: ""
+				};
+				this.openCustList = false;
+				this.chooseCust = {
+					empName: "客户经理",
+					empId: ""
+				};
+				this.fixedHeight = "2.5rem";
+				this.loading = false;
+				this.finished = false;
+				this.pageIndex = 0;
+				this.msgList = [];
+				this.tab1Index = 0;
+				this.tab2Index = 0;
+				this.tab4Index = 0;
+				this.tab5Index = 0;
+				this.openTop = false;
+				this.beginDate = "";
+				this.endDate = "";
+				this.dateShow1 = false;
+				this.dateShow2 = false;
+				this.minDate = new Date(moment().subtract(1, 'year').format('YYYY/MM/DD'));
+				this.maxDate = new Date();
+				this.total = 0;
+				this.openPLFS = false;
+				this.checked = [];
+				this.checkAll = false;
+				this.showCall = false;
+				this.checkItem = {};
+				this.resetTop();
+				this.onLoad();
+			}
+		},
 	}
 </script>
 

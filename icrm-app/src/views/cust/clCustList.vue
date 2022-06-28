@@ -45,7 +45,7 @@
 			</div>
 		</div>
 		<van-list class="vanListStyle" v-model:loading="loading" :finished="finished" finished-text="没有更多了"
-			@load="getCustList" :immediate-check="false">
+			@load="queryList" :immediate-check="false">
 			<van-checkbox-group v-model="chooseItems" ref="checkboxGroup">
 				<div class="custItem" v-for="(item,i) in custList" :key="'item'+i"
 					:style="{'margin-left':showBatchSend?'10%':'0%'}" @click="openDetails(item)">
@@ -113,6 +113,16 @@
 		<org-list ref="orgList" :type="2" @close="closeOrg" @activeOrg="activeOrg" />
 		<!-- 发送短信组件 -->
 		<send-message ref="sendMessage" @commitSuccess="sendSuccess" />
+		<van-overlay :show="showCall" z-index="100000">
+			<div class="plate6">
+				<div class="plate6_1">提示</div>
+				<div class="plate6_5">是否拨打电话：{{callItem.ctcTel}}</div>
+				<div class="plate6_4">
+					<div class="palte6_4_1" @click="showCall=false">取消</div>
+					<div class="palte6_4_2" @click="callCust">确定</div>
+				</div>
+			</div>
+		</van-overlay>
 	</div>
 </template>
 <script>
@@ -247,14 +257,16 @@
 					}
 				],
 				tageListActive: 0,
-				orgName: '选择机构'
+				orgName: '选择机构',
+				showCall: false,
+				callItem: {},
 			};
 		},
 		mounted() {
 			this.queryList();
 		},
 		activated() {
-			if(this.$route.params.newPage&&this.pageIndex>0){
+			if(this.$route.params.newPage&&!this.loading){
 				this.checkAll = false;
 				this.searchValue = "";
 				this.loading = false;
@@ -275,7 +287,23 @@
 				};
 				this.tageListActive = 0;
 				this.orgName = '选择机构';
+				this.showCall = false;
+				this.callNum = "";
 				this.queryList();
+			}
+		},
+		watch: {
+			searchValue() {
+				if (this.searchValue) {
+					if (this.searchValue.length == 6) {
+						this.params.belgCustMgr = this.searchValue;
+					} else {
+						this.params.cstName = this.searchValue;
+					}
+				} else {
+					this.params.belgCustMgr = '';
+					this.params.cstName = '';
+				}
 			}
 		},
 		methods: {
@@ -297,7 +325,7 @@
 					if (res.data && res.data.records) {
 						this.total = res.data.total;
 						this.custList = this.custList.concat(res.data.records);
-						if (this.custList.length >= this.total) this.finished = true;
+						if (this.custList.length >= this.total||res.data.records.length<=0) this.finished = true;
 					} else {
 						this.finished = true;
 					}
@@ -311,9 +339,9 @@
 			/* 初始化查询条件 */
 			initParams() {
 				this.pageIndex = 0;
-				this.tageListActive = 0
-				this.params.pageSize = '10'
-				this.params.pageNum = '1'
+				this.tageListActive = 0;
+				this.params.pageSize = '10';
+				this.params.pageNum = '';
 				this.custList = [];
 				this.showBatchSend = false;
 			},
@@ -324,32 +352,14 @@
 				} else {
 					this.orgName = "选择机构";
 				};
-				this.initParams()
-				this.params.belongOrg = orgValue.value || ''
-				this.getCustList();
+				this.initParams();
+				this.params.belongOrg = orgValue.value || '';
+				this.queryList();
 			},
 			/* 点击搜索 */
 			reload() {
-				this.initParams()
-				if (this.searchValue) {
-					if (this.searchValue.length == 6) {
-						this.params.belgCustMgr = this.searchValue
-					} else {
-						this.params.cstName = this.searchValue;
-					}
-				} else {
-					this.params.belgCustMgr = ''
-					this.params.cstName = ''
-				}
-				this.getCustList();
-			},
-			/* 通过reload事件调用 */
-			getCustList() {
-				this.pageIndex++;
-				this.params.pageNum = this.pageIndex.toString()
-				// this.params.cstName = ''
-				// this.params.belgCustMgr = ''
-				this.queryList()
+				this.initParams();
+				this.queryList();
 			},
 			gaveCall(item, type) {
 				if (isNaN(item.ctcTel)) {
@@ -361,26 +371,8 @@
 					return;
 				}
 				if (type) {
-					Toast.loading({
-						message: "正在唤起",
-						forbidClick: true,
-						duration: 0
-					});
-					custServiceAdd({
-						custName: item.cstName,
-						custNo: item.custNum,
-						mobileNum: item.ctcTel,
-						communictionChannel: "02",
-						custType: '1',
-						serviceChn: "1"
-					}, (ress) => {
-						Toast.clear();
-						AlipayJSBridge.call("callHandler", {
-							phone: item.ctcTel
-						}, (res) => {
-							
-						})
-					});
+					this.callItem = item;
+					this.showCall = true;
 				} else {
 					this.$refs.sendMessage.openMbox({
 						type: "",
@@ -393,6 +385,29 @@
 						shrtmsgCnl: "1"
 					})
 				}
+			},
+			callCust(){
+				this.showCall = false;
+				Toast.loading({
+					message: "正在唤起",
+					forbidClick: true,
+					duration: 0
+				});
+				custServiceAdd({
+					custName: this.callItem.cstName,
+					custNo: this.callItem.custNum,
+					mobileNum: this.callItem.ctcTel,
+					communictionChannel: "02",
+					custType: '1',
+					serviceChn: "1"
+				}, (ress) => {
+					Toast.clear();
+					AlipayJSBridge.call("callHandler", {
+						phone: this.callItem.ctcTel
+					}, (res) => {
+						
+					})
+				});
 			},
 			/* 批量发送短信的按钮 */
 			msgBatchSend(sendAll) {
@@ -837,5 +852,99 @@
 		color: #fff;
 		text-align: center;
 		border-radius: 0.04rem;
+	}
+
+	.plate6 {
+		width: 74.7%;
+		background: #FFFFFF;
+		border-radius: 0.08rem;
+		position: absolute;
+		top: calc(50% - 1rem);
+		left: 12.65%;
+		padding: 0.2rem 0.12rem;
+	}
+
+	.plate6_1 {
+		width: 100%;
+		height: 0.22rem;
+		font-family: PingFangSC-Medium;
+		font-size: 0.14rem;
+		color: #262626;
+		text-align: center;
+		line-height: 0.22rem;
+		font-weight: 500;
+		margin-bottom: 0.24rem;
+	}
+
+	.plate6_2 {
+		width: 100%;
+		height: 0.24rem;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+
+	.plate6_3 {
+		width: 100%;
+		height: 0.27rem;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		margin-top: 0.08rem;
+	}
+
+	.plate6_3_1 {
+		margin-left: 0;
+	}
+
+	.plate6_3_2 {
+		margin-left: 0.125rem;
+	}
+
+	.plate6_4 {
+		width: 100%;
+		height: 0.3rem;
+		margin-top: 0.24rem;
+		display: flex;
+		flex-wrap: nowrap;
+		justify-content: space-around;
+		align-items: center;
+	}
+
+	.palte6_4_1 {
+		width: 1.08rem;
+		height: 0.3rem;
+		border: 0.01rem solid #026DFF;
+		border-radius: 0.15rem;
+		font-family: PingFangSC-Medium;
+		font-size: 0.13rem;
+		color: #026DFF;
+		text-align: center;
+		line-height: 0.3rem;
+		font-weight: 500;
+	}
+
+	.palte6_4_2 {
+		width: 1.08rem;
+		height: 0.3rem;
+		background: #026DFF;
+		border-radius: 0.15rem;
+		font-family: PingFangSC-Medium;
+		font-size: 0.13rem;
+		color: #FFFFFF;
+		text-align: center;
+		line-height: 0.3rem;
+		font-weight: 500;
+	}
+
+	.plate6_5 {
+		width: 100%;
+		font-family: PingFangSC-Medium;
+		font-size: 0.14rem;
+		color: #262626;
+		text-align: center;
+		line-height: 0.22rem;
+		font-weight: 400;
+		margin-bottom: 0.24rem;
 	}
 </style>

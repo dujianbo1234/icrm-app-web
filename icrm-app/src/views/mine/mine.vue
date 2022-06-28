@@ -179,12 +179,29 @@
 												.fingerprint_enable_flag : res2.data
 												.face_enable_flag
 										});
-										AlipayJSBridge.call('setAPDataStorage', {
-											type: "common",
-											business: "business_userInfo",
-											key: "kLoginToken",
-											value: res2.data.login_token
-										});
+										// 判断手机机型
+										var u = navigator.userAgent;
+										if (u.indexOf('Android') > -1 || u.indexOf('Linux') > -1) {
+											//安卓手机
+											var Base64 = require('js-base64').Base64;
+											AlipayJSBridge.call('setAPDataStorage', {
+												type: "common",
+												business: "business_userInfo",
+												key: "kLoginToken",
+												value: Base64.encode(res2.data.login_token)
+											});
+										} else if (u.indexOf('iPhone') > -1) {
+											//苹果手机
+											AlipayJSBridge.call('setAPDataStorage', {
+												type: "common",
+												business: "business_userInfo",
+												key: "kLoginToken",
+												value: res2.data.login_token
+											});
+										} else if (u.indexOf('Windows Phone') > -1) {
+											//winphone手机
+										}
+										
 									}
 								});
 								break;

@@ -91,7 +91,7 @@
 		<org-list ref="orgList" :type="2" @activeOrg="activeOrg" />
 		<!-- 新增记录 -->
 		<van-icon class="addRecord" name="add" size="0.58rem" color="#026DFF" @click.stop="addNewRecord"
-			v-if="addBtn" />
+			v-if="addBtn&&sameDay" />
 		<!-- 底部弹出 -->
 		<van-popup v-model:show="show" round position="bottom" :style="{ background: '#F8F8F8' }">
 			<AddNewRecord v-if="show" :type="recordType" :record="record" @clearBtn="clearBtn" />
@@ -154,6 +154,11 @@
 				waitDelItem: {},
 				showEmpty: false,
 			};
+		},
+		computed: {
+			sameDay() {
+				return this.showTime.format('YYYYMMDD') === this.maxDate.format('YYYYMMDD')
+			}
 		},
 		created() {
 			this.clickQuery()
@@ -674,5 +679,8 @@
 		font-weight: 400;
 		color: #595959;
 		line-height: 0.25rem;
+		word-break: break-all; // 只对英文起作用，以字母作为换行依据。
+		word-wrap: break-word; // 只对英文起作用，以单词作为换行依据。
+		white-space: pre-wrap; // 只对中文起作用，强制换行。
 	}
 </style>

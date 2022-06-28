@@ -21,7 +21,7 @@
 							:class="mustDoNum > 9 ? 'msgCount2' : 'msgCount1'">{{showMustDoNum}}</span>
 					</div>
 					<i class="msg-line"></i>
-					<div class="msgBarItem" @click="$router.push('/message')">
+					<div class="msgBarItem" @click="toMessage">
 						<i class="msg-icon icon-message"></i>提醒<span v-if="messageNum > 0"
 							:class="messageNum > 9 ? 'msgCount2' : 'msgCount1'">{{ showMessageNum }}</span>
 					</div>
@@ -442,42 +442,42 @@
 					},
 				],
 				listData: [{
-						name: '活期存款余额',
+						name: '活期存款',
 						a: '',
 						b: '',
 						c: '',
 						d: ''
 					},
 					{
-						name: '定期存款余额',
+						name: '定期存款',
 						a: '',
 						b: '',
 						c: '',
 						d: ''
 					},
 					{
-						name: '理财余额',
+						name: '理财',
 						a: '',
 						b: '',
 						c: '',
 						d: ''
 					},
 					{
-						name: '基金余额',
+						name: '基金',
 						a: '',
 						b: '',
 						c: '',
 						d: ''
 					},
 					{
-						name: '保险余额',
+						name: '保险',
 						a: '',
 						b: '',
 						c: '',
 						d: ''
 					},
 					{
-						name: '信托余额',
+						name: '信托',
 						a: '',
 						b: '',
 						c: '',
@@ -492,37 +492,37 @@
 					},
 				],
 				listDatas: [{
-						name: '活期存款余额',
+						name: '活期存款',
 						a: '',
 						b: '',
 						c: ''
 					},
 					{
-						name: '定期存款余额',
+						name: '定期存款',
 						a: '',
 						b: '',
 						c: ''
 					},
 					{
-						name: '理财余额',
+						name: '理财',
 						a: '',
 						b: '',
 						c: ''
 					},
 					{
-						name: '基金余额',
+						name: '基金',
 						a: '',
 						b: '',
 						c: ''
 					},
 					{
-						name: '保险余额',
+						name: '保险',
 						a: '',
 						b: '',
 						c: ''
 					},
 					{
-						name: '信托余额',
+						name: '信托',
 						a: '',
 						b: '',
 						c: ''
@@ -571,6 +571,14 @@
 			},
 		},
 		methods: {
+			toMessage() {
+				this.$router.push({
+					name: 'message',
+					params: {
+						newPage: true
+					}
+				});
+			},
 			// 获取必办数量
 			getMustDoList() {
 				let params = {
@@ -686,42 +694,42 @@
 							]
 						]
 						this.listData = [{
-								name: '活期存款余额',
+								name: '活期存款',
 								a: dataObj.currDpsitBal,
 								b: dataObj.currDpsitBalToYstd,
 								c: dataObj.currDpsitBalToLastMonth,
 								d: dataObj.currDpsitBalToBegng
 							},
 							{
-								name: '定期存款余额',
+								name: '定期存款',
 								a: dataObj.timeDpsitBal,
 								b: dataObj.timeDpsitBalToYstd,
 								c: dataObj.timeDpsitBalToLastMonth,
 								d: dataObj.timeDpsitBalToBegng
 							},
 							{
-								name: '理财余额',
+								name: '理财',
 								a: dataObj.cftBal,
 								b: dataObj.cftBalToYstd,
 								c: dataObj.cftBalToLastMonth,
 								d: dataObj.cftBalToBegng
 							},
 							{
-								name: '基金余额',
+								name: '基金',
 								a: dataObj.fndBal,
 								b: dataObj.fndBalToYstd,
 								c: dataObj.fndBalToLastMonth,
 								d: dataObj.fndBalToBegng
 							},
 							{
-								name: '保险余额',
+								name: '保险',
 								a: dataObj.insBal,
 								b: dataObj.insBalToYstd,
 								c: dataObj.insBalToLastMonth,
 								d: dataObj.insBalToBegng
 							},
 							{
-								name: '信托余额',
+								name: '信托',
 								a: dataObj.entrstBal,
 								b: dataObj.entrstBalToYstd,
 								c: dataObj.entrstBalToLastMonth,
@@ -736,32 +744,32 @@
 							},
 						]
 						this.listDatas = [{
-								name: '活期存款余额',
+								name: '活期存款',
 								a: dataObj.currDpsitMonthAvg,
 								b: dataObj.currDpsitMonthAvgToLm,
 								c: dataObj.currDpsitMonthAvgToLy
 							},
 							{
-								name: '定期存款余额',
+								name: '定期存款',
 								a: dataObj.timeDpsitMonthAvg,
 								b: dataObj.timeDpsitMonthAvgToLm,
 								c: dataObj.timeDpsitMonthAvgToLy
 							},
 							{
-								name: '理财余额',
+								name: '理财',
 								a: dataObj.cftYearAvg,
 								b: dataObj.cftYearAvgToLm,
 								c: dataObj.cftYearAvgToLy
 							},
 							{
-								name: '基金余额',
+								name: '基金',
 								a: dataObj.fndYearAvgToLm,
 								b: dataObj.fndYearAvgToLm,
 								c: dataObj.fndYearAvgToLy
 							},
 							// { name: '保险余额', a: dataObj.insYearAvg, b: dataObj.insYearAvgToLm, c: dataObj.insYearAvgToLy },
 							{
-								name: '信托余额',
+								name: '信托',
 								a: dataObj.entrstYearAvg,
 								b: dataObj.entrstYearAvgToLm,
 								c: dataObj.entrstYearAvgToLy
@@ -870,37 +878,37 @@
 						}
 						// 余额
 						this.aumYe = [{
-								name: "活期存款余额",
+								name: "活期存款",
 								value: Number((dataObj.currDpsitBal / 10000).toFixed(2)),
 								percentage: percentage(dataObj.currDpsitBalPct),
 								itemStyle: itemStyle(0)
 							},
 							{
-								name: "定期存款余额",
+								name: "定期存款",
 								value: Number((dataObj.timeDpsitBal / 10000).toFixed(2)),
 								percentage: percentage(dataObj.timeDpsitBalPct),
 								itemStyle: itemStyle(1)
 							},
 							{
-								name: "理财余额",
+								name: "理财",
 								value: Number((dataObj.cftBal / 10000).toFixed(2)),
 								percentage: percentage(dataObj.cftBalPct),
 								itemStyle: itemStyle(2)
 							},
 							{
-								name: "基金余额",
+								name: "基金",
 								value: Number((dataObj.fndBal / 10000).toFixed(2)),
 								percentage: percentage(dataObj.fndBalPct),
 								itemStyle: itemStyle(3)
 							},
 							{
-								name: "保险余额",
+								name: "保险",
 								value: Number((dataObj.insBal / 10000).toFixed(2)),
 								percentage: percentage(dataObj.insBalPct),
 								itemStyle: itemStyle(4)
 							},
 							{
-								name: "信托余额",
+								name: "信托",
 								value: Number((dataObj.entrstBal / 10000).toFixed(2)),
 								percentage: percentage(dataObj.entrstBalPct),
 								itemStyle: itemStyle(5)
@@ -908,31 +916,31 @@
 						];
 						// 日均
 						this.aumRj = [{
-								name: "活期存款余额",
+								name: "活期存款",
 								value: Number((dataObj.currDpsitMonthAvg / 10000).toFixed(2)),
 								percentage: percentage(dataObj.currDpsitMonthAvgPct),
 								itemStyle: itemStyle(0)
 							},
 							{
-								name: "定期存款余额",
+								name: "定期存款",
 								value: Number((dataObj.timeDpsitMonthAvg / 10000).toFixed(2)),
 								percentage: percentage(dataObj.timeDpsitMonthAvgPct),
 								itemStyle: itemStyle(1)
 							},
 							{
-								name: "理财余额",
+								name: "理财",
 								value: Number((dataObj.cftYearAvg / 10000).toFixed(2)),
 								percentage: percentage(dataObj.cftYearAvgPct),
 								itemStyle: itemStyle(2)
 							},
 							{
-								name: "基金余额",
+								name: "基金",
 								value: Number((dataObj.fndYearAvg / 10000).toFixed(2)),
 								percentage: percentage(dataObj.fndYearAvgPct),
 								itemStyle: itemStyle(3)
 							},
 							{
-								name: "信托余额",
+								name: "信托",
 								value: Number((dataObj.entrstYearAvg / 10000).toFixed(2)),
 								percentage: percentage(dataObj.entrstYearAvgPct),
 								itemStyle: itemStyle(5)

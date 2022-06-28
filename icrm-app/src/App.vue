@@ -71,7 +71,7 @@
 			},
 		},
 		beforeCreate() {
-			var Base64 = require('js-base64').Base64
+			var Base64 = require('js-base64').Base64;
 			AlipayJSBridge.call("getAPDataStorage", {
 				type: "common",
 				business: "business_userInfo",

@@ -479,6 +479,7 @@
 			}
 		},
 		activated() {
+			localStorage.setItem("newBusiness", "0");
 			if (this.$route.params.cmrcOpptId) {
 				this.baseMsg = {};
 				this.openDesc = false;

@@ -10,8 +10,11 @@
 			<van-steps direction="vertical" :active="0">
 				<van-step v-for="(followItem,i) in followMsg" :key="'followItem'+i">
 					<div class="followItem1">
-						<div>{{followItem.communictionChannel=='01'?'登门拜访':followItem.communictionChannel=='02'?'电话跟进':followItem.communictionChannel=='03'?'行内到访':followItem.communictionChannel=='04'?'微信跟进':'短信跟进'}}</div>
-						<div v-if="followItem.communictionChannel=='02' && $store.state.userMsg.empid==followItem.createPerson && followItem.serviceContent==''"  @click="saveTelInfo(followItem)">保存</div>
+						<div>
+							{{followItem.communictionChannel=='01'?'登门拜访':followItem.communictionChannel=='02'?'电话跟进':followItem.communictionChannel=='03'?'行内到访':followItem.communictionChannel=='04'?'微信跟进':'短信跟进'}}
+						</div>
+						<div v-if="followItem.communictionChannel=='02' && $store.state.userMsg.empid==followItem.createPerson && followItem.serviceContent==''"
+							@click="saveTelInfo(followItem)">保存</div>
 						<div v-else class="fromText">来源：{{followItem.serviceChn}}</div>
 					</div>
 					<div class="followItem2" :style="{'-webkit-line-clamp':followItem.showDesc?'100':'15'}"
@@ -34,11 +37,14 @@
 								style="margin-right: 0.04rem;flex-shrink: 0;padding: 0.03rem 0;" />
 							<span>{{followItem.visitAddress.split("------")[1]?followItem.visitAddress.split("------")[1]:followItem.visitAddress.split("------")[0]}}</span>
 						</div>
-						<div class="followItem6_2">{{followItem.visitAddress.split("------")[1]?followItem.visitAddress.split("------")[0]:""}}</div>
+						<div class="followItem6_2">
+							{{followItem.visitAddress.split("------")[1]?followItem.visitAddress.split("------")[0]:""}}
+						</div>
 					</div>
-					<div class="inputBox" v-if="followItem.communictionChannel=='02' && $store.state.userMsg.empid==followItem.createPerson && followItem.serviceContent==''">
-						<van-field class="telInput" v-model="followItem.serviceValue" input-align="left" border maxlength="200" autosize rows="4"
-									type="textarea">
+					<div class="inputBox"
+						v-if="followItem.communictionChannel=='02' && $store.state.userMsg.empid==followItem.createPerson && followItem.serviceContent==''">
+						<van-field class="telInput" v-model="followItem.serviceValue" input-align="left" border
+							maxlength="200" autosize rows="4" type="textarea">
 						</van-field>
 					</div>
 					<div class="followPeople">跟进人:{{followItem.createPersonName}}({{followItem.createPerson}})</div>
@@ -62,7 +68,7 @@
 				</van-step>
 			</van-steps>
 		</div>
-		
+
 	</div>
 </template>
 
@@ -72,7 +78,8 @@
 	} from "../../api/common.js";
 	import {
 		queryCustomeServicFollow,
-		custServiceUpdate
+		custServiceUpdate,
+		saveOpportCustServInfo
 	} from "../../request/market.js";
 	import {
 		Toast,
@@ -82,11 +89,10 @@
 		data() {
 			return {
 				followMsg: [],
-				serviceContent:'',//电话内容
+				serviceContent: '', //电话内容
 			}
 		},
-		components: {
-		},
+		components: {},
 		methods: {
 			getFollowMsg() {
 				queryCustomeServicFollow({
@@ -94,11 +100,10 @@
 				}, (res) => {
 					this.followMsg = res.data;
 					this.followMsg.forEach((item) => {
-						item.serviceValue=''
+						item.serviceValue = ''
 						item.showDesc = false;
 						item.showAllPhoto = false;
 					});
-					console.log(this.followMsg)
 				})
 			},
 			openPhoto(file) {
@@ -107,13 +112,22 @@
 					showIndex: false
 				});
 			},
-			saveTelInfo(value){
-				custServiceUpdate({
-					serviceId:value.serviceId,
-					serviceContent: value.serviceValue
-				}, (res) => {
-					this.getFollowMsg()
-				})
+			saveTelInfo(value) {
+				if (value.serviceChn == "商机") {
+					saveOpportCustServInfo({
+						serviceId: value.serviceId,
+						serviceContent: value.serviceValue
+					}, (res) => {
+						this.getFollowMsg()
+					})
+				} else {
+					custServiceUpdate({
+						serviceId: value.serviceId,
+						serviceContent: value.serviceValue
+					}, (res) => {
+						this.getFollowMsg()
+					})
+				}
 			}
 		},
 		mounted() {
@@ -133,7 +147,8 @@
 	.home {
 		background-color: #F8F8F8;
 	}
-    .plate3 {
+
+	.plate3 {
 		width: 100%;
 		background: #FFFFFF;
 		border-radius: 0.08rem;
@@ -141,6 +156,7 @@
 		margin-top: 0.1rem;
 		padding-bottom: 0.3rem;
 	}
+
 	.plateTitle {
 		width: 100%;
 		height: 0.44rem;
@@ -167,6 +183,7 @@
 		letter-spacing: 0;
 		font-weight: 500;
 	}
+
 	.followItem1 {
 		display: flex;
 		justify-content: space-between;
@@ -232,13 +249,15 @@
 		height: 100%;
 		background-color: #BFBFBF;
 	}
-    .followPeople{
-        margin-top: 0.12rem;
-        font-size: 0.12rem;
-        font-family: PingFangSC-Regular, PingFang SC;
-        font-weight: 400;
-        color: #8C8C8C;
-    }
+
+	.followPeople {
+		margin-top: 0.12rem;
+		font-size: 0.12rem;
+		font-family: PingFangSC-Regular, PingFang SC;
+		font-weight: 400;
+		color: #8C8C8C;
+	}
+
 	.followItem4 {
 		text-align: right;
 		position: absolute;
@@ -267,7 +286,8 @@
 		line-height: 0.16rem;
 		font-weight: 400;
 	}
-    .followItem5 {
+
+	.followItem5 {
 		width: calc(100% - 0.2rem);
 		margin-top: 0.12rem;
 		display: flex;
@@ -301,11 +321,12 @@
 		justify-content: center;
 		align-items: center;
 	}
-    .followItem6 {
+
+	.followItem6 {
 		width: calc(100% - 0.12rem);
 		margin-top: 0.12rem;
 	}
-	
+
 	.followItem6_1 {
 		font-family: PingFangSC-Regular;
 		font-size: 0.12rem;
@@ -316,7 +337,7 @@
 		display: flex;
 		flex-wrap: nowrap;
 	}
-	
+
 	.followItem6_2 {
 		font-family: PingFangSC-Regular;
 		font-size: 0.12rem;
@@ -325,7 +346,7 @@
 		line-height: 0.18rem;
 		font-weight: 400;
 	}
-	
+
 	.inactive-icon {
 		width: 0.08rem;
 		height: 0.08rem;
@@ -347,7 +368,8 @@
 		border-radius: 0.04rem;
 		background-color: #026DFF;
 	}
-    	.empty {
+
+	.empty {
 		width: 100%;
 		height: 0.38rem;
 		line-height: 0.5rem;
@@ -357,18 +379,21 @@
 		letter-spacing: 0;
 		font-weight: 400;
 	}
-	.telInput{
+
+	.telInput {
 		margin-top: 0.1rem;
 	}
-	.inputBox :deep(.van-cell){
+
+	.inputBox :deep(.van-cell) {
 		width: 90%;
 	}
-	.telInput :deep(.van-cell__value){
-		border:1px solid #EBEBEB;
+
+	.telInput :deep(.van-cell__value) {
+		border: 1px solid #EBEBEB;
 		border-radius: 0.05rem;
 		padding: 0.02rem;
 	}
-	
+
 	.fromText {
 		font-size: 0.12rem;
 		font-family: PingFangSC-Regular, PingFang SC;
