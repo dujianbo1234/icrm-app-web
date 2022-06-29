@@ -6,11 +6,10 @@
 				:rightText="$store.state.userMsg.roleId != '00000004' ? orgName : ''" rightColor="rgba(2, 109, 255, 1)"
 				@touchRight="$refs.orgList.showPopup()" />
 			<!-- 搜索栏 -->
-			<van-search class="searchBox" v-model="searchValue" shape="round" show-action placeholder="请输入客户名称/归属客户经理工号"
-				@search="reload">
+			<van-search v-model="searchValue" shape="round" show-action placeholder="输入客户姓名/手机号/身份证号/客户号查询"
+				@search="reload" :left-icon="require('../../assets/image/common_search.png')">
 				<template #action>
-					<div style="color: rgba(2, 109, 255, 1); font-size: 0.14rem; padding-left: 0.1rem" @click="reload">
-						搜索</div>
+					<div style="color: #026DFF;font-size: 0.14rem;padding-left: 0.1rem;" @click="reload">搜索</div>
 				</template>
 			</van-search>
 			<!-- 排序 -->
@@ -195,22 +194,6 @@
 				total: 0,
 				showBatchSend: false,
 				chooseItems: [],
-				// custNum        客户编号
-				// cstName        客户名称
-				// certNum        证件号
-				// ctcTel         联系电话
-				// cstLvl         客户等级
-				// svcLvl         服务等级
-				// belongOrg      归属机构
-				// belongOrgNm    归属机构名称
-				// tplTp          模板类型
-				// tplNo          短信模板编号
-				// tplNm          短信模板名称
-				// shrtmsgCnl     短信渠道
-				// acsry          附件ID
-				// shrtmsgAplyId  短信申请ID
-				// shrtmsgCntnt   短信模板内容
-				// orderType      排序
 				params: {
 					pageSize: "10",
 					pageNum: "1",
@@ -218,44 +201,36 @@
 					// orderType: "",      // 排序
 					cstName: "", // 客户名称
 					svcLvl: '', // 服务等级
-					// ctcTel: "",         // 联系电话
-					// certNum: "",        // 证件号
+					ctcTel: "",         // 联系电话
+					certNum: "",        // 证件号
 					cstLvl: "", // 客户等级
 					belongOrg: '', // 归属机构
 				},
 				tageList: [{
-						key: '',
-						title: "全部"
-					},
-					{
-						key: 6,
-						title: "私行级"
-					},
-					{
-						key: 5,
-						title: "钻石级"
-					},
-					{
-						key: 4,
-						title: "白金卡级"
-					},
-					{
-						key: 3,
-						title: "金卡级"
-					},
-					{
-						key: 2,
-						title: "理财级"
-					},
-					{
-						key: 1,
-						title: "大众级"
-					},
-					{
-						key: 0,
-						title: "未达标"
-					}
-				],
+					key: '',
+					title: "全部"
+				}, {
+					key: 6,
+					title: "私行级"
+				}, {
+					key: 5,
+					title: "钻石级"
+				}, {
+					key: 4,
+					title: "白金卡级"
+				}, {
+					key: 3,
+					title: "金卡级"
+				}, {
+					key: 2,
+					title: "理财级"
+				}, {
+					key: 1,
+					title: "大众级"
+				}, {
+					key: 0,
+					title: "未达标"
+				}],
 				tageListActive: 0,
 				orgName: '选择机构',
 				showCall: false,
@@ -266,7 +241,7 @@
 			this.queryList();
 		},
 		activated() {
-			if(this.$route.params.newPage&&!this.loading){
+			if (this.$route.params.newPage && !this.loading) {
 				this.checkAll = false;
 				this.searchValue = "";
 				this.loading = false;
@@ -281,6 +256,8 @@
 					pageNum: "",
 					belgCustMgr: '',
 					cstName: "",
+					ctcTel: "",
+					certNum: "",
 					svcLvl: '',
 					cstLvl: "",
 					belongOrg: ''
@@ -295,9 +272,13 @@
 		watch: {
 			searchValue() {
 				if (this.searchValue) {
-					if (this.searchValue.length == 6) {
+					if (this.searchValue.length == 6) { //客户号
 						this.params.belgCustMgr = this.searchValue;
-					} else {
+					} else if (this.searchValue.length == 11) { //手机号
+						this.params.ctcTel = this.searchValue;
+					} else if (this.searchValue.length == 18) { //身份证号
+						this.params.certNum = this.searchValue;
+					} else { //客户姓名
 						this.params.cstName = this.searchValue;
 					}
 				} else {
@@ -325,7 +306,8 @@
 					if (res.data && res.data.records) {
 						this.total = res.data.total;
 						this.custList = this.custList.concat(res.data.records);
-						if (this.custList.length >= this.total||res.data.records.length<=0) this.finished = true;
+						if (this.custList.length >= this.total || res.data.records.length <= 0) this.finished =
+							true;
 					} else {
 						this.finished = true;
 					}
@@ -386,7 +368,7 @@
 					})
 				}
 			},
-			callCust(){
+			callCust() {
 				this.showCall = false;
 				Toast.loading({
 					message: "正在唤起",
@@ -405,7 +387,7 @@
 					AlipayJSBridge.call("callHandler", {
 						phone: this.callItem.ctcTel
 					}, (res) => {
-						
+
 					})
 				});
 			},
@@ -495,6 +477,18 @@
 	};
 </script>
 <style lang="less" scoped>
+	:deep(.van-search) {
+		padding: 0.1rem;
+	}
+
+	:deep(.van-search__field) {
+		align-items: center;
+	}
+
+	:deep(.van-search__action) {
+		padding: 0;
+	}
+
 	.clCustList {
 		font-size: 0.14rem;
 

@@ -136,7 +136,6 @@
 		margin-top: calc(calc(constant(safe-area-inset-top) + 0.5rem) * -1);
 		margin-top: calc(calc(env(safe-area-inset-top) + 0.5rem) * -1);
 		padding-bottom: 0.4rem;
-		height: calc(100vh - 0.5rem);
 		position: relative;
 	}
 

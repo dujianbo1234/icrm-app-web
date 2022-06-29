@@ -179,7 +179,7 @@
 				</div>
 			</div>
 		</van-overlay>
-		<send-message ref="sendMessage" @commitSuccess="cancleCheck" />
+		<send-message ref="sendMessage" @commitSuccess="afterSend" />
 	</div>
 </template>
 
@@ -369,6 +369,10 @@
 				this.openPLFS = false;
 				this.$refs.checkboxGroup.toggleAll(false);
 			},
+			afterSend() {
+				this.openPLFS = false;
+				this.$refs.checkboxGroup.toggleAll(false);
+			},
 			confirmCheck() {
 				if (!this.checked.length) {
 					Toast.fail("请先选择至少1条数据");
@@ -380,21 +384,22 @@
 				});
 				this.openMbox(list, false);
 			},
-			callCust() {
+			async callCust() {
 				this.showCall = false;
-				if (isNaN(this.checkItem.phoneNo)) {
-					Toast.fail("电话号码格式有误");
-					return;
-				};
-				if (!this.checkItem.phoneNo) {
-					Toast.fail("电话号码为空");
-					return;
-				}
+				// if (isNaN(this.checkItem.phoneNo)) {
+				// 	Toast.fail("电话号码格式有误");
+				// 	return;
+				// };
+				// if (!this.checkItem.phoneNo) {
+				// 	Toast.fail("电话号码为空");
+				// 	return;
+				// }
 				Toast.loading({
 					message: "正在唤起",
 					forbidClick: true,
 					duration: 0
 				});
+				var step = 0;
 				custServiceAdd({
 					custName: this.checkItem.cstName,
 					custNo: this.checkItem.custNum,
@@ -403,13 +408,26 @@
 					custType: '1',
 					serviceChn: "6"
 				}, (res2) => {
-					Toast.clear();
-					AlipayJSBridge.call('callHandler', {
-						phone: this.checkItem.phoneNo
-					}, (res1) => {
-
-					});
-				})
+					step++;
+				});
+				updateWarningRmdMgtStatus({
+					sysId: this.checkItem.sysId
+				}, (res) => {
+					this.checkItem.stat = "1";
+					step++;
+				});
+				var timer = setInterval(()=>{
+					if(step>=2){
+						clearInterval(timer);
+						timer = "";
+						Toast.clear();
+						AlipayJSBridge.call('callHandler', {
+							phone: this.checkItem.phoneNo
+						}, (res1) => {
+							
+						});
+					}
+				},100)
 			},
 			openMbox(list, type) {
 				var params = {
@@ -434,6 +452,7 @@
 					params.type = "";
 					params.searchData = {};
 				};
+				console.log(list)
 				this.$refs.sendMessage.openMbox(params);
 			},
 			changeStat(item) {

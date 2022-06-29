@@ -193,13 +193,6 @@
 			},
 			mounted_m() {
 				this.kequnIndex = Number(this.$route.params.pageType) || 0;
-				queryCmrcOpportunitySum({}, (res) => {
-					if (res.data) {
-						this.sumMsg = res.data;
-					} else {
-						Toast.fail("商机汇总数据为空");
-					}
-				})
 				getSysCodeByType({
 					codeType: "CMRC_OPPT_BCLASS"
 				}, (res) => {
@@ -210,10 +203,20 @@
 								value: item.codeValue
 							}
 						})
-						this.kequnList = this.kequnList.concat(arr);
+						this.kequnList = [{
+							text: "全部",
+							value: ""
+						}, ...arr];
 						this.onLoad();
 					} else {
 						Toast.fail("商机大类数据为空")
+					}
+				})
+				queryCmrcOpportunitySum({}, (res) => {
+					if (res.data) {
+						this.sumMsg = res.data;
+					} else {
+						Toast.fail("商机汇总数据为空");
 					}
 				})
 				saveSmAppVisitInfo({
@@ -232,7 +235,7 @@
 			},
 		},
 		mounted() {
-			localStorage.setItem("newBusiness", "0")
+			localStorage.setItem("newBusiness", "0");
 			this.mounted_m();
 		},
 		activated() {

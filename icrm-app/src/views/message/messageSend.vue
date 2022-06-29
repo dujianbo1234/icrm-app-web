@@ -1,10 +1,20 @@
 <template>
 	<div class="home">
 		<nav-bar type="2" title="短信审批列表" leftIcon />
+		<!-- <div class="totalPlace">
+			<span class="totalPlace1">筛选结果：共{{total}}条数据</span>
+			<span class="totalPlace2" v-if="openPLSP" @click="cancleCheck">取消审批</span>
+			<span class="totalPlace2" v-else @click="checked=[];openPLSP=true;">批量审批</span>
+		</div>
+		<div class="topZW"></div> -->
 		<van-list v-model:loading="loading" :finished="finished" finished-text="没有更多了" @load="onLoad" class="vanList">
-			<div v-for="(msgItem, i) in msgList" :key="'msgItem' + i" class="msgCardOutBox">
-				<div class="msgCardBox" @click="openDetail(msgItem)">
-					<div class="msgCard">
+			<van-checkbox-group v-model="checked" ref="checkboxGroup">
+				<div v-for="(msgItem,i) in msgList" :key="'msgItem'+i" class="msgCardOutBox"
+					:style="{'margin-left':openPLSP?'15%':'0%'}">
+					<div class="leftCheckBox">
+						<van-checkbox :name="msgItem.id"></van-checkbox>
+					</div>
+					<div class="msgCard" @click="openDetail(msgItem)">
 						<div class="msgValue1">
 							<div class="msgValue1Left ycsl">{{ msgItem.tplNm }}</div>
 							<div class="msgValue1Right">
@@ -37,25 +47,49 @@
 						</div>
 					</div>
 				</div>
-			</div>
+			</van-checkbox-group>
 		</van-list>
+		<div class="bottomZW2" v-if="openPLSP"></div>
 		<div class="bottomZW"></div>
-		<van-overlay :show="showApprove" :lock-scroll="false">
+		<van-popup v-model:show="openPLSP" position="bottom" :overlay="false" :lock-scroll="false"
+			safe-area-inset-bottom>
+			<div class="bottomBox">
+				<div></div>
+				<div class="btnBox">
+					<div class="bottomBtn" @click="confirmCheck">全部审批</div>
+					<div class="bottomBtn" @click="confirmCheck">审批</div>
+				</div>
+			</div>
+		</van-popup>
+		<van-overlay :show="showApprove" :lock-scroll="false" :z-index="10">
 			<div class="wrapper" @click.stop>
 				<div class="block">
 					<div class="formList">
 						<van-cell-group title="审批">
 							<div class="flexWrap">
+								<!-- <div class="msgValueTitle1 msgValueTitle2">
+									短信内容
+								</div>
+								<div class="autoBox">
+									<div class="autoCard">
+										<van-field v-model="shrtmsgCntnt" input-align="left" border maxlength="200" autosize
+											type="textarea" readonly>
+											<template #label>
+												<span class="msgValueTitle3">申请人：{{formData.aplyUsrName}}</span>
+											</template>
+										</van-field>
+									</div>
+								</div> -->
 								<van-field v-model="shrtmsgCntnt" input-align="left" border maxlength="200" autosize
 									type="textarea" readonly>
 									<template #label>
-										<span>短信内容</span>
+										<span class="msgValueTitle2">短信内容</span>
 									</template>
 								</van-field>
 							</div>
 							<van-field>
 								<template #label>
-									<span>审批结果</span>
+									<span class="msgValueTitle2">审批结果</span>
 									<span style="color: #026dff; margin-left: 0.01rem">*</span>
 								</template>
 								<template #input>
@@ -72,7 +106,7 @@
 								<van-field v-model="exapOpnn" input-align="left" border autosize maxlength="100"
 									rows="3" type="textarea">
 									<template #label>
-										<span>审批意见</span>
+										<span class="msgValueTitle2">审批意见</span>
 									</template>
 								</van-field>
 							</div>
@@ -109,23 +143,26 @@
 				approveIndex: null,
 				shrtmsgCntnt: '',
 				exapOpnn: '',
-				formData: {
-
-				},
+				formData: {},
 				approveTypeList: [{
-						codeName: "审批通过",
-						codeValue: "2",
-					},
-					{
-						codeName: "审批拒绝",
-						codeValue: "3",
-					},
-				],
+					codeName: "审批通过",
+					codeValue: "2",
+				}, {
+					codeName: "审批拒绝",
+					codeValue: "3",
+				}],
 				msgList: [],
+				total: 0,
+				openPLSP: false,
+				checked: [],
 			};
 		},
 		components: {},
 		methods: {
+			cancleCheck() {
+				this.openPLSP = false;
+				this.$refs.checkboxGroup.toggleAll(false);
+			},
 			saveApprove() {
 				let params = {
 					id: this.formData.id,
@@ -163,6 +200,8 @@
 			},
 			openDetail(elment) {
 				if (elment.exapSt == '审批中') {
+					this.approveIndex = null;
+					this.exapOpnn = '';
 					this.showApprove = true;
 				} else {
 					return false
@@ -190,9 +229,9 @@
 				queryMessageApproveList(params, (res) => {
 					if (res.data && res.data.records) {
 						Toast.clear();
-						this.allNum = res.data.total.toLocaleString();
+						this.total = res.data.total.toLocaleString();
 						this.msgList = this.msgList.concat(res.data.records);
-						if (this.msgList.length >= this.allNum) this.finished = true;
+						if (this.msgList.length >= this.total) this.finished = true;
 					} else {
 						Toast.fail("短信审批列表为空");
 						this.finished = true;
@@ -237,11 +276,12 @@
 	}
 
 	.msgCard {
+		width: 93.6%;
+		margin: 0 3.2% 0.1rem;
+		background: #FFFFFF;
 		width: 100%;
-		background-color: #ffffff;
 		box-shadow: 0 0 0.08rem -0.02rem #e0e0e0;
 		border-radius: 0.1rem;
-		font-size: 0.16rem;
 		padding: 0.1rem 0.15rem;
 	}
 
@@ -301,9 +341,11 @@
 		flex-shrink: 1;
 		font-weight: 400;
 	}
-	.msgContent{
+
+	.msgContent {
 		font-weight: 400;
 	}
+
 	.msgValue3 {
 		border-bottom: solid 0.01rem #f5f5f5;
 		padding-bottom: 0.08rem;
@@ -359,7 +401,54 @@
 		font-size: 0.12rem;
 		color: #8C8C8C;
 	}
+	
+	.msgValueTitle1 {
+		height: 0.19rem;
+		line-height: 0.19rem;
+		text-align: left;
+		padding: 0 0.15rem;
+	}
+	
+	.msgValueTitle2 {
+		font-size: 0.16rem;
+		font-family: PingFangSC-Regular, PingFang SC;
+		font-weight: 400;
+		color: #262626;
+	}
+	
+	.msgValueTitle3 {
+		font-size: 0.12rem;
+		font-family: PingFangSC-Regular, PingFang SC;
+		font-weight: 400;
+		color: #595959;
+	}
+	
+	.autoBox {
+		width: calc(100% - 0.15rem);
+		display: flex;
+		flex-wrap: nowrap;
+		overflow-x: auto;
+		padding: 0 0.15rem;
+	}
+	
+	.autoCard {
+		flex-shrink: 0;
+		width: 90%;
+		margin-right: 0.12rem;
+	}
 
+	.autoCard :deep(.van-cell) {
+		flex-wrap: wrap;
+		width: 100%;
+		padding-left: 0;
+		padding-right: 0;
+		padding-top: 0.1rem;
+	}
+
+	.autoCard :deep(.van-cell__value) {
+		margin-top: 0.03rem;
+	}
+	
 	.busiBox {
 		width: 100%;
 		display: flex;
@@ -412,14 +501,14 @@
 		width: 100%;
 	}
 
-	.block :deep(.van-hairline--top-bottom:after,.van-hairline-unset--top-bottom:after) {
+	.block :deep(.van-hairline--top-bottom:after, .van-hairline-unset--top-bottom:after) {
 		border-width: 0px;
 	}
-	
+
 	.block :deep(.van-cell) {
 		background-color: transparent;
 	}
-	
+
 	.block :deep(.van-cell-group) {
 		background-color: transparent;
 	}
@@ -444,5 +533,88 @@
 
 	.btnStyle :deep(.van-button--plain.van-button--primary) {
 		border: 0.01rem solid #026aff;
+	}
+
+	.totalPlace {
+		width: 100%;
+		padding: 0.08rem 3.2% 0;
+		height: 0.42rem;
+		display: flex;
+		flex-wrap: nowrap;
+		align-items: center;
+		justify-content: space-between;
+		background-color: #F5F5F5;
+		position: fixed;
+		top: calc(constant(safe-area-inset-top) + 0.46rem);
+		top: calc(env(safe-area-inset-top) + 0.46rem);
+		left: 0;
+		z-index: 9;
+	}
+
+	.totalPlace1 {
+		font-size: 0.1rem;
+		font-family: PingFangSC-Regular, PingFang SC;
+		font-weight: 400;
+		color: #262626;
+	}
+
+	.totalPlace2 {
+		font-size: 0.14rem;
+		font-family: PingFangSC-Regular, PingFang SC;
+		font-weight: 400;
+		color: #026DFF;
+	}
+
+	.leftCheckBox {
+		width: 12%;
+		height: 0.2rem;
+		flex-shrink: 0;
+		position: absolute;
+		left: -15%;
+		display: flex;
+		justify-content: flex-end;
+	}
+	
+	.topZW {
+		width: 100%;		height: 0.45rem;
+	}
+	
+	.bottomZW2 {
+		width: 100%;
+		height: 0.64rem;
+	}
+
+	.bottomBox {
+		display: flex;
+		flex-wrap: nowrap;
+		justify-content: space-between;
+		align-items: center;
+		height: 0.64rem;
+		font-size: 0.12rem;
+		padding-left: 6.5%;
+		padding-right: 3%;
+		border-top: solid 1px #F5F5F5;
+	}
+
+	.bottomBox :deep(.van-checkbox__label) {
+		color: #888888;
+	}
+
+	.btnBox {
+		display: flex;
+		flex-wrap: nowrap;
+	}
+
+	.bottomBtn {
+		width: 0.88rem;
+		height: 0.4rem;
+		background: #026DFF;
+		border-radius: 0.08rem;
+		font-size: 0.14rem;
+		font-family: PingFangSC-Regular, PingFang SC;
+		font-weight: 400;
+		color: #FFFFFF;
+		line-height: 0.4rem;
+		margin-right: 0.1rem;
 	}
 </style>

@@ -565,10 +565,6 @@
 		transition: right 0.3s;
 	}
 
-	:deep(.van-search) {
-		padding: 0.1rem 0.1rem 0 0.1rem;
-	}
-
 	.listOutBox {
 		width: 100%;
 		position: relative;

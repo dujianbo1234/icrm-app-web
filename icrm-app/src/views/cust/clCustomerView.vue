@@ -1,6 +1,6 @@
 <template>
 	<!-- 客户视图 -->
-	<div class="clCustomerView">
+	<div class="clCustomerView" :class="showPage?'':'newPage'">
 		<!-- 顶部title -->
 		<nav-bar title="客户视图" @touchRight="onClickRight" type="2" leftIcon rightText="客户拜访"
 			rightColor="rgba(2, 109, 255, 1)" />
@@ -424,6 +424,7 @@
 		},
 		data() {
 			return {
+				showPage: false,
 				assetFlag: true,
 				liaFlag: true,
 				active: 0,
@@ -618,6 +619,11 @@
 			this.querySignInfo()
 			this.queryCustInfo(this.$route.query.custNum)
 			this.queryTagList(this.$route.query.custNum)
+		},
+		mounted() {
+			this.$nextTick(()=>{
+				this.showPage = true;
+			})
 		},
 		methods: {
 			moment,
@@ -1841,6 +1847,11 @@
 	};
 </script>
 <style lang="less" scoped>
+	.newPage {
+		height: 0rem;
+		overflow: hidden;
+	}
+	
 	.clCustomerView {
 		box-sizing: border-box;
 		padding: 0.11rem 0.12rem;

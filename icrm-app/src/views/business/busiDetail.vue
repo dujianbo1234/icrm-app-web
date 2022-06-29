@@ -126,7 +126,7 @@
 				</div>
 				<div class="titleR" @click="toMoreCYCP">更多</div>
 			</div>
-			<TabsList ref="tabList" :setList="prdList" :showAll="false" style="margin-top: 0.1rem" />
+			<TabsList v-if="prdList.length" ref="tabList" :setList="prdList" :showAll="false" style="margin-top: 0.1rem" />
 		</div>
 		<div class="plate3">
 			<div class="plateTitle" style="margin-bottom: 0.2rem;">
