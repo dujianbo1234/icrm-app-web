@@ -6,6 +6,7 @@
 			<van-icon size="0.24rem" name="arrow-left" :color="type=='1'?'#FFFFFF':type=='2'?'#262626':''" />
 		</div>
 		<div class="rightBtn ycsl" v-if="rightText" :style="{color: rightColor}" @click="touchRight">{{rightText}}</div>
+		<div class="rightIcon" v-else-if="rightIcon" :style="{'background-image': 'url('+rightIcon+')'}" @click="touchRight">{{rightText}}</div>
 	</div>
 </template>
 
@@ -28,7 +29,8 @@
 			rightColor: {
 				type: String,
 				default: "#000000"
-			}
+			},
+			rightIcon: String,
 		},
 		methods: {
 			back() {
@@ -105,5 +107,21 @@
 		top: env(safe-area-inset-top);
 		right: 0;
 		max-width: 35%;
+	}
+	
+	.rightIcon {
+		background-repeat: no-repeat;
+		background-position: center;
+		background-size: cover;
+		position: absolute;
+		top: calc(constant(safe-area-inset-top) + 0.13rem);
+		top: calc(env(safe-area-inset-top) + 0.13rem);
+		right: 0.18rem;
+		display: flex;
+		flex-wrap: nowrap;
+		align-items: center;
+		justify-content: center;
+		height: 0.2rem;
+		width: 0.2rem;
 	}
 </style>

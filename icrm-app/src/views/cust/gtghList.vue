@@ -1,7 +1,6 @@
 <template>
 	<div class="home">
-		<nav-bar title="重要潜客列表" type="2" :rightIcon="gtgh?require('../../assets/image/cust_zyqk_ghlb.png'):''" leftIcon
-			@touchRight="openGtgh" />
+		<nav-bar title="共同管户列表" type="2" leftIcon />
 		<div class="fixedPlace">
 			<van-search v-if="$store.state.userMsg.roleId=='00000004'" v-model="searchValue" shape="round" show-action
 				placeholder="请输入客户名称" @search="onSearch" :left-icon="require('../../assets/image/common_search.png')">
@@ -94,8 +93,6 @@
 			<div class="totalBox">
 				<div class="total">
 					<div>筛选结果：共{{total}}条数据</div>
-					<div class="fpBtn" v-if="$store.state.userMsg.roleId!='00000004'&&!openPLFP"
-						@click="checked=[];checkAll=false;openPLFP=true;">分配</div>
 				</div>
 				<div class="total">
 					<div>预估获客数：{{Number(estCstSum).toLocaleString()}}人</div>
@@ -107,14 +104,14 @@
 			<div class="top1" :style="{height: fixedHeight}"></div>
 			<div class="top2" :style="{height: moreBoxOpen?'0.87rem':'0rem'}"></div>
 		</div>
-		<van-list v-model:loading="loading" :finished="finished" finished-text="没有更多了" @load="onLoad">
+		<van-list v-model:loading="loading" :finished="finished" finished-text="没有更多了" @load="onLoad"
+			:immediate-check="false">
 			<van-checkbox-group v-model="checked" ref="checkboxGroup">
-				<div v-for="(msgItem,i) in msgList" :key="'msgItem'+i" class="msgCardOutBox"
-					:style="{'margin-left':openPLFP?'15%':'0%'}">
+				<div v-for="(msgItem,i) in msgList" :key="'msgItem'+i" class="msgCardOutBox">
 					<div class="leftCheckBox">
 						<van-checkbox :name="msgItem.custNo" @click="checkAll=false"></van-checkbox>
 					</div>
-					<van-swipe-cell :disabled="openPLFP||!gtgh">
+					<van-swipe-cell>
 						<template #default>
 							<div class="msgCardBox">
 								<div class="msgCard" @click="openDetail(msgItem)">
@@ -171,21 +168,7 @@
 				</div>
 			</van-checkbox-group>
 		</van-list>
-		<div v-if="openPLFP" style="height: 0.55rem;"></div>
 		<div class="bottomZW"></div>
-		<div class="impQZCustAdd" :style="{'right':openPLFP?'-0.6rem':'0.2rem'}" @click="$router.push('impQZCustAdd')">
-			<van-icon name="plus" color="#FFFFFF" />
-		</div>
-		<van-popup v-model:show="openPLFP" position="bottom" :overlay="false" :lock-scroll="false"
-			safe-area-inset-bottom z-index="99998">
-			<div class="bottomBox">
-				<van-checkbox v-model="checkAll" ref="checkAll" @click="chooseAll">全选</van-checkbox>
-				<div class="btnBox">
-					<div class="bottomBtn bottomBtn1" @click="cancleCheck">取消</div>
-					<div class="bottomBtn bottomBtn2" @click="confirmCheck">分配</div>
-				</div>
-			</div>
-		</van-popup>
 		<cust-list-cs ref="custList" @activeCust="activeCust" />
 		<org-list ref="orgList" type="2" @activeOrg="activeOrg" />
 		<van-overlay :show="showDelGh" z-index="11">
@@ -248,7 +231,6 @@
 					text: "选择机构",
 					value: ""
 				},
-				openPLFP: false,
 				checked: [],
 				checkAll: false,
 				show44: false,
@@ -264,12 +246,14 @@
 					estCstEnd: "",
 					estAmtStart: "",
 					estAmtEnd: "",
-					orgId: ""
+					orgId: "",
+					manageCstId: "",
 				},
 				fixedHeight: "0px",
 				showDelGh: false,
 				delCustItem: {},
 				gtgh: false,
+				delNum: 0,
 			}
 		},
 		components: {
@@ -367,37 +351,6 @@
 				this.msgList = [];
 				this.onLoad();
 			},
-			activeCust(item) {
-				updatePoteCustomersInfo({
-					custNos: this.checked,
-					cstMagName: item.empName,
-					cstMagNo: item.empId,
-					orgId: item.orgCode,
-					orgName: item.orgName
-				}, (res) => {
-					Toast.success("分配成功");
-					this.openPLFP = false;
-					setTimeout(() => {
-						this.pageIndex = 0;
-						this.msgList = [];
-						this.onLoad();
-					}, 800)
-				})
-			},
-			chooseAll() {
-				this.$refs.checkboxGroup.toggleAll(this.checkAll);
-			},
-			cancleCheck() {
-				this.openPLFP = false;
-				this.$refs.checkboxGroup.toggleAll(false);
-			},
-			confirmCheck() {
-				if (!this.checked.length) {
-					Toast.fail("请先选择至少1条数据");
-					return;
-				}
-				this.$refs.custList.showPopup()
-			},
 			activeOrg(orgValue) {
 				if (orgValue.value) {
 					this.chooseOrg = orgValue
@@ -411,22 +364,6 @@
 				this.msgList = [];
 				this.onLoad();
 			},
-			delCust(custNo) {
-				Dialog.confirm({
-					message: '确认删除该客户？',
-				}).then(() => {
-					deleteCustomersMarketing({
-						custNo
-					}, (res) => {
-						Toast.success("删除成功");
-						this.pageIndex = 0;
-						this.msgList = [];
-						this.onLoad();
-					})
-				}).catch(() => {
-
-				});;
-			},
 			delGh() {
 				this.showDelGh = false;
 				Toast.loading({
@@ -439,6 +376,9 @@
 				}, (res) => {
 					this.delCustItem.isManageJudej = "0";
 					Toast.success("操作成功");
+					this.delNum++;
+					this.msgList.splice(this.msgList.findIndex(item => item.custNo == this.delCustItem.custNo), 1);
+					this.total--;
 				})
 			},
 			addGh(item) {
@@ -452,11 +392,6 @@
 				}, (res) => {
 					item.isManageJudej = "1";
 					Toast.success("操作成功");
-				})
-			},
-			openGtgh() {
-				this.$router.push({
-					name: 'gtghList',
 				})
 			},
 			formatter1(val) {
@@ -492,6 +427,7 @@
 				})
 			},
 			onLoad() {
+				this.loading = true;
 				this.finished = false;
 				Toast.loading({
 					message: "正在加载",
@@ -500,7 +436,6 @@
 				});
 				this.params.pageNum = (++this.pageIndex).toString();
 				this.params.orgId = this.chooseOrg.value;
-				this.loading = true;
 				if (this.pageIndex == "1") {
 					if (this.$store.state.userMsg.roleId == '00000004') {
 						this.params.cstName = this.searchValue;
@@ -528,7 +463,7 @@
 						this.total = res.data.total;
 						this.msgList = this.msgList.concat(res.data.records);
 						this.checkAll = false;
-						if (this.msgList.length >= res.data.total) this.finished = true;
+						if ((this.msgList.length + this.delNum) >= res.data.total) this.finished = true;
 					} else {
 						this.finished = true;
 					}
@@ -543,9 +478,9 @@
 		mounted() {
 			var fixedPlace = document.defaultView.getComputedStyle(document.getElementsByClassName("fixedPlace")[0], null);
 			this.gtgh = this.$store.state.userMsg.roleId == '00000001' || this.$store.state.userMsg.roleId == '00000002' ||
-				this.$store.state.userMsg.roleId == '00000003' || this.$store.state.userMsg.roleId == '00000006' || this
-				.$store.state.userMsg.roleId == '00000007' || this.$store.state.userMsg.roleId == '00000008';
+				this.$store.state.userMsg.roleId == '00000003' || this.$store.state.userMsg.roleId == '00000008';
 			this.fixedHeight = fixedPlace.height;
+			this.params.manageCstId = this.$store.state.userMsg.empid;
 			getSysCodeByType({
 				codeType: "cur_tage"
 			}, (res) => {
@@ -601,21 +536,6 @@
 
 	.fixedPlace :deep(.van-search) {
 		padding: 0.15rem 0.1rem 0.04rem 0.15rem;
-	}
-
-	.impQZCustAdd {
-		position: fixed;
-		bottom: calc(0.2rem + constant(safe-area-inset-bottom));
-		bottom: calc(0.2rem + env(safe-area-inset-bottom));
-		width: 0.56rem;
-		height: 0.56rem;
-		background-color: #026DFF;
-		border-radius: 0.5rem;
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		font-size: 0.4rem;
-		transition: right 0.3s;
 	}
 
 	.listOutBox {

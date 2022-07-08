@@ -94,3 +94,11 @@ export const addMessageSendInfo = (params,fun) => {request("custinfo.addMessageS
 export const addCustSearchMessageSend = (params,fun) => {request("custinfo.addCustSearchMessageSend", params, fun)}
 // 预估获客数和预估成交额汇总
 export const queryCustBaseSummary = (params,fun) => {request("custinfo.queryCustBaseSummary", params, fun)}
+// 潜客新增管护人
+export const saveCaretakerAPP = (params,fun) => {request("custinfo.saveCaretakerAPP", params, fun)}
+// 潜客移除管护人
+export const deleteCaretakerApp = (params,fun) => {request("custinfo.deleteCaretakerApp", params, fun)}
+// 潜客查询管护人
+export const queryCaretakerApp = (params,fun) => {request("custinfo.queryCaretakerApp", params, fun)}
+// 查询客户经理范围
+export const queryManagerSearchRange = (params,fun) => {request("custinfo.queryManagerSearchRange", params, fun)}

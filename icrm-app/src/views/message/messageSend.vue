@@ -1,20 +1,20 @@
 <template>
 	<div class="home">
 		<nav-bar type="2" title="短信审批列表" leftIcon />
-		<!-- <div class="totalPlace">
+		<div class="totalPlace">
 			<span class="totalPlace1">筛选结果：共{{total}}条数据</span>
 			<span class="totalPlace2" v-if="openPLSP" @click="cancleCheck">取消审批</span>
 			<span class="totalPlace2" v-else @click="checked=[];openPLSP=true;">批量审批</span>
 		</div>
-		<div class="topZW"></div> -->
+		<div class="topZW"></div>
 		<van-list v-model:loading="loading" :finished="finished" finished-text="没有更多了" @load="onLoad" class="vanList">
 			<van-checkbox-group v-model="checked" ref="checkboxGroup">
 				<div v-for="(msgItem,i) in msgList" :key="'msgItem'+i" class="msgCardOutBox"
 					:style="{'margin-left':openPLSP?'15%':'0%'}">
 					<div class="leftCheckBox">
-						<van-checkbox :name="msgItem.id"></van-checkbox>
+						<van-checkbox :name="msgItem.id" :disabled="msgItem.exapSt!='审批中'"></van-checkbox>
 					</div>
-					<div class="msgCard" @click="openDetail(msgItem)">
+					<div class="msgCard" @click="openPLSP?'':openDetail(msgItem)">
 						<div class="msgValue1">
 							<div class="msgValue1Left ycsl">{{ msgItem.tplNm }}</div>
 							<div class="msgValue1Right">
@@ -34,7 +34,7 @@
 							</div>
 							<div class="msgValue3Right">{{ msgItem.aplyTm }}</div>
 						</div>
-						<div class="msgValue3"></div>
+						<div class="msgValue3">{{msgItem.shrtmsgCntnt}}</div>
 						<div class="msgValue4">
 							<div class="msgValue4Left ycsl">
 								<span class="msgTitleColor">机构名称：</span>
@@ -56,8 +56,8 @@
 			<div class="bottomBox">
 				<div></div>
 				<div class="btnBox">
-					<div class="bottomBtn" @click="confirmCheck">全部审批</div>
-					<div class="bottomBtn" @click="confirmCheck">审批</div>
+					<div class="bottomBtn" @click="checkSpAll">全部审批</div>
+					<div class="bottomBtn" @click="openDetail(false)">审批</div>
 				</div>
 			</div>
 		</van-popup>
@@ -66,27 +66,14 @@
 				<div class="block">
 					<div class="formList">
 						<van-cell-group title="审批">
-							<div class="flexWrap">
-								<!-- <div class="msgValueTitle1 msgValueTitle2">
-									短信内容
-								</div>
-								<div class="autoBox">
-									<div class="autoCard">
-										<van-field v-model="shrtmsgCntnt" input-align="left" border maxlength="200" autosize
-											type="textarea" readonly>
-											<template #label>
-												<span class="msgValueTitle3">申请人：{{formData.aplyUsrName}}</span>
-											</template>
-										</van-field>
-									</div>
-								</div> -->
+							<!-- <div class="flexWrap">
 								<van-field v-model="shrtmsgCntnt" input-align="left" border maxlength="200" autosize
 									type="textarea" readonly>
 									<template #label>
 										<span class="msgValueTitle2">短信内容</span>
 									</template>
 								</van-field>
-							</div>
+							</div> -->
 							<van-field>
 								<template #label>
 									<span class="msgValueTitle2">审批结果</span>
@@ -132,7 +119,8 @@
 	} from "vant";
 	import {
 		queryMessageApproveList,
-		approveMessageSendApply
+		approveMessageSendApply,
+		approveAllMessageSendApply
 	} from "../../request/market.js";
 	export default {
 		data() {
@@ -141,9 +129,7 @@
 				finished: false,
 				pageIndex: 0,
 				approveIndex: null,
-				shrtmsgCntnt: '',
 				exapOpnn: '',
-				formData: {},
 				approveTypeList: [{
 					codeName: "审批通过",
 					codeValue: "2",
@@ -155,6 +141,7 @@
 				total: 0,
 				openPLSP: false,
 				checked: [],
+				spAll: false,
 			};
 		},
 		components: {},
@@ -164,9 +151,13 @@
 				this.$refs.checkboxGroup.toggleAll(false);
 			},
 			saveApprove() {
+				Toast.loading({
+					message: "正在操作",
+					forbidClick: true,
+					duration: 0,
+				});
 				let params = {
-					id: this.formData.id,
-					aplyRl: this.formData.aplyRl,
+					ids: this.checked,
 					exapSt: this.approveIndex + 2,
 					exapOpnn: this.exapOpnn,
 				};
@@ -179,35 +170,61 @@
 					return false;
 				}
 				this.params = JSON.stringify(params);
-				approveMessageSendApply(params, (res) => {
-					if (res.data) {
-						this.showApprove = false;
-						Toast.success("审批成功");
-						this.approveIndex = null;
-						this.exapOpnn = ''
-						// this.$router.go(0)
-						this.pageIndex = 0
-						this.msgList = []
-						// this.finished=false
-						// this.loading=true
-						this.onLoad()
-					} else {
-						Toast.fail("审批失败");
-
-					}
-					this.loading = false;
-				});
+				if (this.spAll) {
+					approveAllMessageSendApply(params, (res) => {
+						if (res.data) {
+							this.showApprove = false;
+							Toast.success("审批成功");
+							this.approveIndex = null;
+							this.exapOpnn = '';
+							setTimeout(() => {
+								this.pageIndex = 0;
+								this.msgList = [];
+								this.onLoad();
+							}, 600)
+						} else {
+							Toast.fail("审批失败");
+						}
+						this.loading = false;
+						this.openPLSP = false;
+					});
+				} else {
+					approveMessageSendApply(params, (res) => {
+						if (res.data) {
+							this.showApprove = false;
+							Toast.success("审批成功");
+							this.approveIndex = null;
+							this.exapOpnn = '';
+							setTimeout(() => {
+								this.pageIndex = 0;
+								this.msgList = [];
+								this.onLoad();
+							}, 600)
+						} else {
+							Toast.fail("审批失败");
+						}
+						this.loading = false;
+						this.openPLSP = false;
+					});
+				}
 			},
 			openDetail(elment) {
-				if (elment.exapSt == '审批中') {
+				if (elment) {
+					this.checked = [elment.id]
+				}
+				if (this.checked.length) {
 					this.approveIndex = null;
 					this.exapOpnn = '';
 					this.showApprove = true;
 				} else {
-					return false
+					Toast("请先选择至少一条数据！")
 				}
-				this.formData = elment
-				this.shrtmsgCntnt = elment.shrtmsgCntnt
+			},
+			checkSpAll() {
+				this.approveIndex = null;
+				this.exapOpnn = '';
+				this.spAll = true;
+				this.showApprove = true;
 			},
 			onLoad() {
 				this.finished = false;
@@ -349,6 +366,12 @@
 	.msgValue3 {
 		border-bottom: solid 0.01rem #f5f5f5;
 		padding-bottom: 0.08rem;
+		font-size: 0.12rem;
+		font-family: PingFangSC-Regular, PingFang SC;
+		font-weight: 400;
+		color: #8C8C8C;
+		line-height: 0.17rem;
+		text-align: left;
 	}
 
 	.msgValue4 {
@@ -401,28 +424,28 @@
 		font-size: 0.12rem;
 		color: #8C8C8C;
 	}
-	
+
 	.msgValueTitle1 {
 		height: 0.19rem;
 		line-height: 0.19rem;
 		text-align: left;
 		padding: 0 0.15rem;
 	}
-	
+
 	.msgValueTitle2 {
 		font-size: 0.16rem;
 		font-family: PingFangSC-Regular, PingFang SC;
 		font-weight: 400;
 		color: #262626;
 	}
-	
+
 	.msgValueTitle3 {
 		font-size: 0.12rem;
 		font-family: PingFangSC-Regular, PingFang SC;
 		font-weight: 400;
 		color: #595959;
 	}
-	
+
 	.autoBox {
 		width: calc(100% - 0.15rem);
 		display: flex;
@@ -430,7 +453,7 @@
 		overflow-x: auto;
 		padding: 0 0.15rem;
 	}
-	
+
 	.autoCard {
 		flex-shrink: 0;
 		width: 90%;
@@ -448,7 +471,7 @@
 	.autoCard :deep(.van-cell__value) {
 		margin-top: 0.03rem;
 	}
-	
+
 	.busiBox {
 		width: 100%;
 		display: flex;
@@ -574,11 +597,12 @@
 		display: flex;
 		justify-content: flex-end;
 	}
-	
+
 	.topZW {
-		width: 100%;		height: 0.45rem;
+		width: 100%;
+		height: 0.45rem;
 	}
-	
+
 	.bottomZW2 {
 		width: 100%;
 		height: 0.64rem;

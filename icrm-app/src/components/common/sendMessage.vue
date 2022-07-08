@@ -152,6 +152,9 @@
 					case "messageListSendAll":
 						this.GMParams.searchData = msg.searchData;
 						break;
+					case "groupSendAll":
+						this.GMParams.searchData = msg.searchData;
+						break;
 					default:
 						this.GMParams.custList = msg.list.map((item) => {
 							return {
@@ -294,6 +297,9 @@
 						break;
 					case "messageListSendAll":
 						this.sendMessage(addWarningMgtMessageSend);
+						break;
+					case "groupSendAll":
+						// this.sendMessage(addWarningMgtMessageSend);
 						break;
 					default:
 						this.sendMessage(addMessageSendInfo);

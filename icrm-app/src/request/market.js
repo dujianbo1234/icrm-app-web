@@ -66,3 +66,5 @@ export const queryCustTrustAcctInfo = (params,fun) => {request("market.queryCust
 export const saveSmAppVisitInfo = (params,fun) => {request("market.saveSmAppVisitInfo", params, fun)}
 //查询应用浏览记录汇总
 export const querySmAppVisitSum = (params,fun) => {request("market.querySmAppVisitSum", params, fun)}
+//全部短信发送申请审批
+export const approveAllMessageSendApply = (params,fun) => {request("market.approveAllMessageSendApply", params, fun)}

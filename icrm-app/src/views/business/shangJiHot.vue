@@ -8,7 +8,7 @@
 			<van-tab title="好评榜" />
 		</van-tabs>
 		<div id="listHeight">
-			<div v-for="(shangJiItem, i) in shangJiList.slice(0,3)" :key="'shangJiItem' + i" class="shangJiCardOutBox">
+			<div v-for="(shangJiItem, i) in shangJiList.slice(0,3)" :key="'shangJiItem' + i" class="shangJiCardOutBox" @click="toChooseCust(shangJiItem)">
 				<div style="display:flex;justify-content: space-between;align-items: center;">
 					<div class="shangJiHeader">
 						<van-icon style="margin-left:0.04rem"
@@ -41,7 +41,7 @@
 					创建人：{{shangJiItem.crtUsrName}}
 				</div>
 			</div>
-			<div v-for="(shangJiItem, i) in shangJiList.slice(3)" :key="'shangJiItem' + i" class="shangJiCardOutBox">
+			<div v-for="(shangJiItem, i) in shangJiList.slice(3)" :key="'shangJiItem' + i" class="shangJiCardOutBox" @click="toChooseCust(shangJiItem)">
 				<div style="display:flex;justify-content: space-between;align-items: center;">
 					<div class="shangJiHeader">
 						<div class="sjIcon">{{i+4}}</div>
@@ -83,6 +83,7 @@
 		Button
 	} from "vant";
 	import {
+		queryCmrcOpportunitySumInfo,
 		queryCmrcOpportRankList
 	} from "../../request/market.js";
 	export default {
@@ -105,6 +106,24 @@
 				var listHeight = document.getElementById('listHeight');
 				var toTop = listHeight.offsetTop;
 				this.listHeight = mainHeight - toTop
+			},
+			toChooseCust(bdItem) {
+				var cmrcOpptId = "IC" + bdItem.etlDt + bdItem.modelId;
+				queryCmrcOpportunitySumInfo({
+					cmrcOpptId
+				}, (res) => {
+					if(res.data&&res.data.cmrcOpptId){
+						localStorage.setItem("cmrcOpptId", cmrcOpptId);
+						this.$router.push({
+							name: 'chooseCust',
+							params: {
+								cmrcOpptId: cmrcOpptId
+							}
+						})
+					}else{
+						Toast("无法查看该商机！")
+					}
+				})
 			},
 			onClickTab(el) {
 				this.pageIndex = 0

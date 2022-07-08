@@ -131,7 +131,7 @@
 							</div>
 						</div>
 						<div class="msgCard3" v-if="$store.state.userMsg.roleId=='00000004'&&msgItem.stat=='0'"
-							@click="changeStat(msgItem)">标记已读
+							@click="changeStat([msgItem.sysId])">标记已读
 						</div>
 					</div>
 				</div>
@@ -271,6 +271,7 @@
 				checkAll: false,
 				showCall: false,
 				checkItem: {},
+				sendAll: false,
 			}
 		},
 		components: {
@@ -371,7 +372,16 @@
 			},
 			afterSend() {
 				this.openPLFS = false;
-				this.$refs.checkboxGroup.toggleAll(false);
+				if(this.sendAll){
+					this.sendAll = false;
+					this.$refs.checkboxGroup.toggleAll(false);
+					this.pageIndex = 0;
+					this.msgList = [];
+					this.onLoad();
+				}else{
+					this.changeStat(this.checked);
+					this.$refs.checkboxGroup.toggleAll(false);
+				}
 			},
 			confirmCheck() {
 				if (!this.checked.length) {
@@ -384,7 +394,7 @@
 				});
 				this.openMbox(list, false);
 			},
-			async callCust() {
+			callCust() {
 				this.showCall = false;
 				// if (isNaN(this.checkItem.phoneNo)) {
 				// 	Toast.fail("电话号码格式有误");
@@ -451,20 +461,22 @@
 				} else {
 					params.type = "";
 					params.searchData = {};
+					this.sendAll = true;
 				};
-				console.log(list)
 				this.$refs.sendMessage.openMbox(params);
 			},
-			changeStat(item) {
+			changeStat(sysIds) {
 				Toast.loading({
 					message: "正在执行",
 					forbidClick: true,
 					duration: 0
 				});
 				updateWarningRmdMgtStatus({
-					sysId: item.sysId
+					sysIds
 				}, (res) => {
-					item.stat = "1";
+					sysIds.forEach((sysId)=>{
+						this.msgList.find(item=>item.sysId==sysId).stat = "1";
+					})
 					Toast.success("操作成功");
 				})
 			},

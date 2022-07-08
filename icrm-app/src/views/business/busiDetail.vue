@@ -6,7 +6,7 @@
 			<div class="plate1_2">
 				<div class="plate1_2_child">
 					<div class="plate1_2_childName">客户</div>
-					<div class="plate1_2_childValue" style="display: flex;">
+					<div class="plate1_2_childValue" style="display: flex;align-items: center;">
 						<div class="plate1_2_childValue1">{{baseMsg.custNm}}</div>
 						<div class="plate1_2_childValue2" v-if="baseMsg.svcLvl=='0'"
 							:style="{'background-image': 'url('+require('../../assets/image/business_chooseCust_type0.png')+')'}">
@@ -29,6 +29,7 @@
 						<div class="plate1_2_childValue2" v-if="baseMsg.svcLvl=='6'"
 							:style="{'background-image': 'url('+require('../../assets/image/business_chooseCust_type6.png')+')'}">
 						</div>
+						<div class="plate1_2_childValue3" v-if="showCustView" :style="baseMsg.svcLvl?'':{'margin-left': '0.05rem'}" @click="toCustView">详情</div>
 					</div>
 				</div>
 				<div class="plate1_2_child">
@@ -126,7 +127,8 @@
 				</div>
 				<div class="titleR" @click="toMoreCYCP">更多</div>
 			</div>
-			<TabsList v-if="prdList.length" ref="tabList" :setList="prdList" :showAll="false" style="margin-top: 0.1rem" />
+			<TabsList v-if="prdList.length" ref="tabList" :setList="prdList" :showAll="false"
+				style="margin-top: 0.1rem" />
 		</div>
 		<div class="plate3">
 			<div class="plateTitle" style="margin-bottom: 0.2rem;">
@@ -196,8 +198,8 @@
 			</div>
 		</div>
 		<div class="bottomZW"></div>
-		<div style="height: 0.66rem;" v-if="$store.state.userMsg.roleId=='00000004'"></div>
-		<div class="plate5" v-if="$store.state.userMsg.roleId=='00000004'">
+		<div style="height: 0.66rem;" v-if="$store.state.userMsg.roleId == '00000001'||$store.state.userMsg.orgClass != '90000001'"></div>
+		<div class="plate5" v-if="$store.state.userMsg.roleId == '00000001'||$store.state.userMsg.orgClass != '90000001'">
 			<div class="plate5_item" @click="openMbox">
 				<div class="plate5_item_icon"
 					:style="{'background-image': 'url('+require('../../assets/image/business_detail_message.png')+')'}">
@@ -315,6 +317,9 @@
 		queryCustTrustAcctInfo
 	} from "../../request/market.js";
 	import {
+		queryManagerSearchRange
+	} from "../../request/custinfo.js";
+	import {
 		Toast,
 		ImagePreview
 	} from "vant";
@@ -350,6 +355,7 @@
 				openLocation: true,
 				prdList: [],
 				passMount: false,
+				showCustView: false,
 			}
 		},
 		components: {
@@ -477,7 +483,7 @@
 					AlipayJSBridge.call('callHandler', {
 						phone: this.baseMsg.ctcTel
 					}, (res1) => {
-						
+
 					});
 				})
 			},
@@ -1020,6 +1026,23 @@
 					}
 				})
 			},
+			getShowCustView() {
+				queryManagerSearchRange({
+					custNum: this.$route.params.custNo
+				}, (res) => {
+					if (res.data) {
+						this.showCustView = res.data.isCust == "1";
+					}
+				})
+			},
+			toCustView() {
+				this.$router.push({
+					name: 'clCustomerView',
+					query: {
+						custNum: this.baseMsg.custNo
+					}
+				})
+			}
 		},
 		activated() {
 			if (this.$route.params.sysId && !this.passMount) {
@@ -1050,6 +1073,7 @@
 				this.getScore();
 				this.getFollowMsg();
 				this.getOtherBusi();
+				this.getShowCustView();
 			} else {
 				this.passMount = false;
 			}
@@ -1060,6 +1084,7 @@
 			this.getScore();
 			this.getFollowMsg();
 			this.getOtherBusi();
+			this.getShowCustView();
 		}
 	}
 </script>
@@ -1138,12 +1163,21 @@
 	}
 
 	.plate1_2_childValue2 {
-		width: 0.6rem;
+		width: 0.45rem;
 		height: 0.16rem;
 		margin-left: 0.08rem;
 		background-repeat: no-repeat;
 		background-position: left center;
 		background-size: contain;
+	}
+
+	.plate1_2_childValue3 {
+		height: 0.18rem;
+		font-size: 0.1rem;
+		font-family: PingFangSC-Regular, PingFang SC;
+		font-weight: 400;
+		color: #026DFF;
+		line-height: 0.18rem;
 	}
 
 	.plate1_3 {

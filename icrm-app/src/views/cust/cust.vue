@@ -45,7 +45,7 @@
 						<van-icon name="arrow" color="#48616B" />
 					</div>
 				</div>
-				<div v-for="(shangJiItem, i) in busiBdValue" :key="'shangJiItem' + i" class="shangJiCardOutBox">
+				<div v-for="(shangJiItem, i) in busiBdValue" :key="'shangJiItem' + i" class="shangJiCardOutBox" @click="toChooseCust(shangJiItem)">
 					<div style="display:flex;justify-content: space-between;align-items: center;">
 						<div class="shangJiHeader">
 							<van-icon style="margin-left:0.04rem"
@@ -115,7 +115,7 @@
 			</div>
 		</div>
 		<div class="vuNum">
-			<span>使用人数：{{useNum?Number(useNum).toLocaleString():"-"}}</span>
+			<span>累计人数：{{useNum?Number(useNum).toLocaleString():"-"}}</span>
 			<span>浏览人数：{{visitNum?Number(visitNum).toLocaleString():"-"}}</span>
 		</div>
 		<div class="bottomLine">
@@ -157,6 +157,7 @@
 		queryCmrcOpportRankList,
 		queryCustMaintainInfo,
 		saveSmAppVisitInfo,
+		queryCmrcOpportunitySumInfo,
 		querySmAppVisitSum
 		// custServiceDetail
 	} from "../../request/market.js";
@@ -258,7 +259,7 @@
 				],
 				busiBdIndex: 0,
 				busiBdList: ["热榜", "成交榜", "好评榜"],
-				busiBdValue: ["商户有效率提升", "金卡客户数提升", "VIP客户提升-代发客群"],
+				busiBdValue: [],
 				active: 0,
 				dataDate: "",
 				dataDateS: '',
@@ -334,11 +335,30 @@
 				queryCmrcOpportRankList(params, (res) => {
 					if (res.data) {
 						this.busiBdValue = res.data.records
+						console.log(this.busiBdValue)
 					} else {
 						Toast.fail("审批失败");
 					}
 					this.loading = false;
 				});
+			},
+			toChooseCust(bdItem) {
+				var cmrcOpptId = "IC" + bdItem.etlDt + bdItem.modelId;
+				queryCmrcOpportunitySumInfo({
+					cmrcOpptId
+				}, (res) => {
+					if(res.data&&res.data.cmrcOpptId){
+						localStorage.setItem("cmrcOpptId", cmrcOpptId);
+						this.$router.push({
+							name: 'chooseCust',
+							params: {
+								cmrcOpptId: cmrcOpptId
+							}
+						})
+					}else{
+						Toast("无法查看该商机！")
+					}
+				})
 			},
 			changeBusiBdTab(i) {
 				if (this.busiBdIndex == i) return;
@@ -377,6 +397,16 @@
 					case "重要潜客":
 						this.$router.push('./impQZCust');
 						break;
+					case "我的群组":
+						this.$router.push({
+							name: 'myGroup',
+						});
+						break;
+					case "条件群组":
+						this.$router.push({
+							name: 'filterGroup',
+						});
+						break;
 					case "存量客户":
 						this.$router.push({
 							name: 'clCustList',
@@ -389,7 +419,12 @@
 						this.$router.push('messageSend');
 						break;
 					case "提醒":
-						this.$router.push('./message');
+						this.$router.push({
+							name: 'message',
+							params: {
+								newPage: true
+							}
+						});
 						break;
 					case "全部客群":
 						this.$router.push('./business');
@@ -588,7 +623,7 @@
 					menu = ["重要潜客", "我的群组", "条件群组", "动态分析", "鱼骨图", "提醒", "存量客户", "客户公共池", "更多"];
 					break;
 				case "00000005": // 系统管理员（科技）
-					menu = ["重要潜客", "我的群组", "条件群组", "动态分析", "鱼骨图", "提醒", "存量客户", "更多"];
+					menu = ["重要潜客", "我的群组", "条件群组", "动态分析", "鱼骨图", "提醒", "存量客户", "短信审批", "更多"];
 					break;
 				case "00000006": // 总行领导
 					menu = ["重要潜客", "我的群组", "条件群组", "动态分析", "鱼骨图", "提醒", "存量客户", "更多"];

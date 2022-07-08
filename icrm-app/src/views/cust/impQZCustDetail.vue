@@ -1,6 +1,7 @@
 <template>
 	<div class="home">
-		<nav-bar :title="pageChange?'重要潜客登记':'重要潜客详情'" type="2" leftIcon />
+		<nav-bar :title="pageChange?'重要潜客登记':'重要潜客详情'" type="2" @touchRight="$refs.custList.showPopup()"
+			:rightText="$store.state.userMsg.roleId!='00000004'&&!pageChange?'分配':''" rightColor="#026DFF" leftIcon />
 		<div class="progressBox">
 			<div class="progressItem_a" style="z-index: 3;">意向阶段</div>
 			<div :class="baseMsg.curTage=='1'?'progressItem':'progressItem_a'" style="z-index: 2;">促成阶段</div>
@@ -12,8 +13,7 @@
 			<template #title v-if="true">
 				<div style="position: relative;">
 					<div>基本信息</div>
-					<div class="fpBtn" v-if="$store.state.userMsg.roleId!='00000004'&&!pageChange"
-						@click="$refs.custList.showPopup()">分配</div>
+					<div class="fpBtn" v-if="gtgh" @click="changeGh">{{baseMsg.isManageJudej=='1'?'取消':'添加'}}管户</div>
 				</div>
 			</template>
 			<van-field label="客户名称" v-model="baseMsg.cstName" readonly :disabled="pageChange" input-align="right" />
@@ -35,9 +35,17 @@
 			</div>
 			<div class="bottomLine"></div>
 			<van-field label="创建时间" v-model="baseMsg.createDate" readonly :disabled="pageChange" input-align="right" />
+			<van-field label="机构名称" v-model="baseMsg.orgName" readonly input-align="right" />
+			<van-cell class="khjlCell" title="客户经理" :value="baseMsg.createName+'（'+baseMsg.createId+'）'" />
+			<div class="ghList" v-show="ghList.length">
+				<div class="ghTitle">共同管户人</div>
+				<div class="ghItem" v-for="(ghItem,i) in ghList" :key="'ghItem'+i">
+					{{ghItem.roleName}}：{{ghItem.manageCst}}（{{ghItem.manageCstId}}）
+				</div>
+			</div>
 		</van-cell-group>
 		<van-cell-group title="营销信息" v-if="!pageChange">
-			<van-field label="机构名称" v-model="baseMsg.orgName" readonly input-align="right" />
+			<!-- <van-field label="机构名称" v-model="baseMsg.orgName" readonly input-align="right" /> -->
 		</van-cell-group>
 		<div v-if="!pageChange" class="allTime">总用时：{{allTime}}</div>
 		<van-steps v-if="!pageChange" direction="vertical" :active="active" active-icon="success"
@@ -45,8 +53,10 @@
 			<van-step v-if="curTage1List.length">
 				<div class="YXTitle">意向阶段</div>
 				<div class="YXItem" v-for="(item,i) in curTage1List" :key="'curTage1Item'+i">
-					<div class="YXDesc" :style="{'-webkit-line-clamp':item.showDesc?'100':'5'}" @click="item.showDesc=!item.showDesc">
-						{{item.tageDesc}}</div>
+					<div class="YXDesc" :style="{'-webkit-line-clamp':item.showDesc?'100':'5'}"
+						@click="item.showDesc=!item.showDesc">
+						{{item.tageDesc}}
+					</div>
 					<div class="YXTime">跟进人：{{item.cstMagName}}（{{item.cstMagNo}}）</div>
 					<div class="YXTime">跟进时间：{{item.markTime}}</div>
 				</div>
@@ -69,8 +79,10 @@
 			<van-step v-if="curTage2List.length">
 				<div class="YXTitle">促成阶段</div>
 				<div class="YXItem" v-for="(item,i) in curTage2List" :key="'curTage2Item'+i">
-					<div class="YXDesc" :style="{'-webkit-line-clamp':item.showDesc?'100':'5'}" @click="item.showDesc=!item.showDesc">
-						{{item.tageDesc}}</div>
+					<div class="YXDesc" :style="{'-webkit-line-clamp':item.showDesc?'100':'5'}"
+						@click="item.showDesc=!item.showDesc">
+						{{item.tageDesc}}
+					</div>
 					<div class="YXTime">跟进人：{{item.cstMagName}}（{{item.cstMagNo}}）</div>
 					<div class="YXTime">跟进时间：{{item.markTime}}</div>
 				</div>
@@ -93,8 +105,10 @@
 			<van-step v-if="curTage3List.length">
 				<div class="YXTitle">已完成</div>
 				<div class="YXItem" v-for="(item,i) in curTage3List" :key="'curTage3Item'+i">
-					<div class="YXDesc" :style="{'-webkit-line-clamp':item.showDesc?'100':'5'}" @click="item.showDesc=!item.showDesc">
-						{{item.tageDesc}}</div>
+					<div class="YXDesc" :style="{'-webkit-line-clamp':item.showDesc?'100':'5'}"
+						@click="item.showDesc=!item.showDesc">
+						{{item.tageDesc}}
+					</div>
 					<div class="YXTime">跟进人：{{item.cstMagName}}（{{item.cstMagNo}}）</div>
 					<div class="YXTime">跟进时间：{{item.markTime}}</div>
 				</div>
@@ -118,8 +132,10 @@
 			<van-step v-if="curTage4List.length">
 				<div class="YXTitle">已流失</div>
 				<div class="YXItem" v-for="(item,i) in curTage4List" :key="'curTage4Item'+i">
-					<div class="YXDesc" :style="{'-webkit-line-clamp':item.showDesc?'100':'5'}" @click="item.showDesc=!item.showDesc">
-						{{item.tageDesc}}</div>
+					<div class="YXDesc" :style="{'-webkit-line-clamp':item.showDesc?'100':'5'}"
+						@click="item.showDesc=!item.showDesc">
+						{{item.tageDesc}}
+					</div>
 					<div class="YXTime">跟进人：{{item.cstMagName}}（{{item.cstMagNo}}）</div>
 					<div class="YXTime">跟进时间：{{item.markTime}}</div>
 				</div>
@@ -158,7 +174,7 @@
 					type="textarea" />
 			</div>
 		</van-cell-group>
-		<div class="bottomBox" v-if="$store.state.userMsg.roleId=='00000004'">
+		<div class="bottomBox" v-if="$store.state.userMsg.roleId=='00000004'||baseMsg.isManageJudej=='1'">
 			<div class="subBtn" v-if="pageChange" @click="updateMsg">保存</div>
 			<div class="subBtn" v-else @click="pageChange=true">修改</div>
 			<div class="bottomZW"></div>
@@ -192,7 +208,10 @@
 		saveCustomersInfo,
 		queryPoteCustomersMarketing,
 		saveCustomersMarketing,
-		updatePoteCustomersInfo
+		updatePoteCustomersInfo,
+		queryCaretakerApp,
+		saveCaretakerAPP,
+		deleteCaretakerApp
 	} from "../../request/custinfo.js";
 	import {
 		Toast
@@ -217,6 +236,8 @@
 				curTage4List: [],
 				allTime: "",
 				active: 0,
+				ghList: [],
+				gtgh: false,
 			}
 		},
 		components: {
@@ -382,10 +403,43 @@
 					Toast.success("分配成功");
 				})
 			},
+			changeGh(){
+				Toast.loading({
+					message: "正在操作",
+					forbidClick: true,
+					duration: 0
+				});
+				if(this.baseMsg.isManageJudej=="1"){
+					deleteCaretakerApp({
+						custNo: this.baseMsg.custNo
+					}, (res) => {
+						this.baseMsg.isManageJudej = "0";
+						Toast.success("操作成功");
+					})
+				}else{
+					saveCaretakerAPP({
+						custNo: this.baseMsg.custNo
+					}, (res) => {
+						this.baseMsg.isManageJudej = "1";
+						Toast.success("操作成功");
+					})
+				}
+			},
 		},
 		mounted() {
 			this.baseMsg = this.$route.params;
+			console.log(this.baseMsg);
+			this.gtgh = this.$store.state.userMsg.roleId == '00000001' || this.$store.state.userMsg.roleId == '00000002' ||
+				this.$store.state.userMsg.roleId == '00000003' || this.$store.state.userMsg.roleId == '00000006' || this
+				.$store.state.userMsg.roleId == '00000007' || this.$store.state.userMsg.roleId == '00000008';
 			this.getYXMsg();
+			queryCaretakerApp({
+				custNo: this.baseMsg.custNo
+			}, (res) => {
+				if (res.data && res.data.length) {
+					this.ghList = res.data
+				}
+			})
 			getSysCodeByType({
 				codeType: "cur_tage"
 			}, (res) => {
@@ -773,5 +827,36 @@
 		color: #026DFF;
 		font-size: 0.14rem;
 		font-weight: 400;
+	}
+
+	.ghList {
+		width: 100%;
+		padding: 0.06rem 0.12rem;
+		font-size: 0.16rem;
+		font-family: PingFangSC-Regular, PingFang SC;
+		font-weight: 400;
+		color: #262626;
+		text-align: left;
+	}
+
+	.ghTitle {
+		line-height: 0.23rem;
+		margin-bottom: 0.03rem;
+	}
+
+	.ghItem {
+		line-height: 0.23rem;
+		margin: 0.04rem 0;
+	}
+	
+	.khjlCell :deep(.van-cell__title) {
+		text-align: left;
+	}
+	
+	.khjlCell :deep(.van-cell__value) {
+		font-size: 0.16rem;
+		font-family: PingFangSC-Regular, PingFang SC;
+		font-weight: 400;
+		color: #20243A;
 	}
 </style>

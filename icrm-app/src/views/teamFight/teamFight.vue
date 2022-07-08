@@ -15,7 +15,7 @@
 		<van-empty style="margin-top: 0.5rem;" :image="require('../../assets/image/common_waiting.png')"
 			image-size="120" description="页面开发中" />
 		<div class="vuNum">
-			<span>使用人数：{{useNum?Number(useNum).toLocaleString():"-"}}</span>
+			<span>累计人数：{{useNum?Number(useNum).toLocaleString():"-"}}</span>
 			<span>浏览人数：{{visitNum?Number(visitNum).toLocaleString():"-"}}</span>
 		</div>
 		<div class="bottomLine">

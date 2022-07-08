@@ -80,7 +80,7 @@
 				</div>
 			</div>
 			<div class="vuNum">
-				<span>使用人数：{{useNum?Number(useNum).toLocaleString():"-"}}</span>
+				<span>累计人数：{{useNum?Number(useNum).toLocaleString():"-"}}</span>
 				<span>浏览人数：{{visitNum?Number(visitNum).toLocaleString():"-"}}</span>
 			</div>
 		</van-list>

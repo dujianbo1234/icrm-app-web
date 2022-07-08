@@ -27,6 +27,11 @@ export default [{
 		component: () => import('@/views/cust/impQZCust.vue')
 	},
 	{
+		path: '/gtghList',
+		name: 'gtghList',
+		component: () => import('@/views/cust/gtghList.vue')
+	},
+	{
 		path: '/impQZCustAdd',
 		name: 'impQZCustAdd',
 		component: () => import('@/views/cust/impQZCustAdd.vue')

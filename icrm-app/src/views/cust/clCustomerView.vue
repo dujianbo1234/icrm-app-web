@@ -19,7 +19,8 @@
 						<template
 							v-for="(text, j) in ['vipCstFlg','agentPayCstFlg', 'newCstFlg', 'merntCstFlg', 'ioinHoldLoan', 'crdtCrdCstFlg']">
 							<div :class="`iconText ${text}`" v-if="custBase[text] == 1" :key="j">
-								{{['财','代','新','商','贷','信'][j]}}</div>
+								{{['财','代','新','商','贷','信'][j]}}
+							</div>
 						</template>
 						<template v-for="(text, s) in ['ioinSgnMobbank','ioinSgnAlpy','ioinSgnWchtPymt', 'ioinSgnYsf']"
 							:key="s">
@@ -136,8 +137,8 @@
 						</div>
 						<!-- 列表 -->
 						<div style="margin-top: 0.07rem;" v-if="assetFlag">
-							<Table :unit="1" :color="false" :listLabel="listLabel" :listData="listData" :listType="listType"
-								:lableArr="['a','b','c','d']"></Table>
+							<Table :unit="1" :color="false" :listLabel="listLabel" :listData="listData"
+								:listType="listType" :lableArr="['a','b','c','d']"></Table>
 						</div>
 						<echarts-pie ref="aumDisDiaChart" :unit="'元'" :data="pieData" v-else />
 					</div>
@@ -339,7 +340,8 @@
 						<van-button class="btnL" size="small" round plain type="primary" @click="onClear">取消
 						</van-button>
 						<van-button class="btnR" size="small" round type="primary" @click="addOk">
-							{{dialogTitles == 0 || dialogTitles == 3 ? '新增' : '确定'}}</van-button>
+							{{dialogTitles == 0 || dialogTitles == 3 ? '新增' : '确定'}}
+						</van-button>
 					</div>
 				</template>
 			</van-dialog>
@@ -356,7 +358,8 @@
 			<span></span>
 		</div>
 		<!-- 发短信 - 打电话 - 登门拜访 -->
-		<LowestLevel :custBase="custBase" />
+		<LowestLevel :custBase="custBase"
+			v-if="$store.state.userMsg.roleId == '00000001'||$store.state.userMsg.orgClass != '90000001'" />
 	</div>
 </template>
 
@@ -621,7 +624,7 @@
 			this.queryTagList(this.$route.query.custNum)
 		},
 		mounted() {
-			this.$nextTick(()=>{
+			this.$nextTick(() => {
 				this.showPage = true;
 			})
 		},
@@ -1192,7 +1195,7 @@
 									let obj = {
 										value: item[
 											`${name}${['ToYstd', name == 'aumBal' ? 'ToLastMonth' : 'ToLm'][this.timeUnit]}`
-											] || 0,
+										] || 0,
 										time: itemX.time,
 										totalBalance: item[name] || 0
 									}
@@ -1851,7 +1854,7 @@
 		height: 0rem;
 		overflow: hidden;
 	}
-	
+
 	.clCustomerView {
 		box-sizing: border-box;
 		padding: 0.11rem 0.12rem;

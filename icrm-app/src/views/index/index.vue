@@ -1,6 +1,5 @@
 <template>
 	<div class="home">
-		<!-- <nav-bar style=""/> -->
 		<div class="fixedPlace">
 			<div class="topBox"></div>
 			<div class="topMsg">
@@ -227,7 +226,7 @@
 					<span class="title">增长趋势</span>
 					<selectors :title="['日', '月']" :typeP="1" @change="changeLoan" v-if="loanType == 0"></selectors>
 				</div>
-				<echartHistogram :type="1" ref="Histogram3" :dataArr="['全部','按揭贷款','消费贷款','经营贷款']" :numType="'余额总计'"
+				<echartHistogram :type="1" ref="Histogram3" :dataArr="['全部','按揭贷款','消费贷款','经营贷款','两增两控贷款']" :numType="'余额总计'"
 					:selectTime="selectTime" :barData="loanData" @change="loanChange" @change2="loanChange2"
 					:timeUnit="timeUnit3" :dataDate="dataDate"></echartHistogram>
 			</div>
@@ -240,7 +239,7 @@
 				</div>
 			</van-dialog>
 			<div class="vuNum">
-				<span>使用人数：{{useNum?Number(useNum).toLocaleString():"-"}}</span>
+				<span>累计人数：{{useNum?Number(useNum).toLocaleString():"-"}}</span>
 				<span>浏览人数：{{visitNum?Number(visitNum).toLocaleString():"-"}}</span>
 			</div>
 			<div class="bottomLine">
@@ -586,6 +585,7 @@
 					belgCustMgr: '',
 					mastDoBclass: '',
 					mastDoNm: '',
+					mastDoSt: '02',
 					pageNum: '1',
 					pageSize: "10",
 					expDayStart: '',
@@ -1265,12 +1265,13 @@
 				//贷款余额月日均-趋势图
 				queryLoanGrowthTrend(body, (res) => {
 					let data = res.data.records
-					// 全部, 按揭贷款, 消费贷款, 经营贷款
+					// 全部, 按揭贷款, 消费贷款, 经营贷款, 两增两控贷款
 					let arr = [
-						['loanBal', 'mrtgLoanBal', 'cnsmLoanBal', 'corprtnLoanBal'],
-						['loanMonthAvg', 'mrtgLoanMonthAvg', 'cnsmLoanMonthAvg', 'corprtnLoanMonthAvg']
+						['loanBal', 'mrtgLoanBal', 'cnsmLoanBal', 'corprtnLoanBal', 'lzlkKoanBal'],
+						['loanMonthAvg', 'mrtgLoanMonthAvg', 'cnsmLoanMonthAvg', 'corprtnLoanMonthAvg', 'lzlkLoanMonthAvg']
 					][this.loanType]
 					let xData = [
+						[],
 						[],
 						[],
 						[],

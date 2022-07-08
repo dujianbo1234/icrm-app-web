@@ -2,9 +2,8 @@
 	<div class="clCustList">
 		<div class="top">
 			<!-- 顶部title -->
-			<nav-bar title="存量客户列表" type="2" leftIcon
-				:rightText="$store.state.userMsg.roleId != '00000004' ? orgName : ''" rightColor="rgba(2, 109, 255, 1)"
-				@touchRight="$refs.orgList.showPopup()" />
+			<nav-bar title="选择客户" type="2" :rightText="$store.state.userMsg.roleId != '00000004' ? orgName : ''"
+				rightColor="rgba(2, 109, 255, 1)" @touchRight="$refs.orgList.showPopup()" leftIcon />
 			<!-- 搜索栏 -->
 			<van-search v-model="searchValue" shape="round" show-action placeholder="输入客户姓名/手机号/身份证号/客户号查询"
 				@search="reload" :left-icon="require('../../assets/image/common_search.png')">
@@ -36,11 +35,9 @@
 				<div class="total">
 					<span>筛选结果：共{{formatNums(total)}}条数据 </span>
 				</div>
-				<div class="sendAll"
-					v-if="$store.state.userMsg.roleId == '00000001'||$store.state.userMsg.orgClass != '90000001'"
-					@click="sendFrom">
-					<span v-if="showBatchSend">取消批量发送</span>
-					<span v-else>批量发送</span>
+				<div class="sendAll" v-if="$store.state.userMsg.orgClass != '90000001'" @click="sendFrom">
+					<span v-if="showBatchSend">取消添加</span>
+					<span v-else>批量添加</span>
 				</div>
 				<div v-else></div>
 			</div>
@@ -49,9 +46,9 @@
 			@load="queryList" :immediate-check="false">
 			<van-checkbox-group v-model="chooseItems" ref="checkboxGroup">
 				<div class="custItem" v-for="(item,i) in custList" :key="'item'+i"
-					:style="{'margin-left':showBatchSend?'10%':'0%'}" @click="openDetails(item)">
+					:style="{'margin-left':showBatchSend?'15%':'0%'}">
 					<div class="leftCheckBox">
-						<van-checkbox :name="item" @click="checkAll=false" :disabled="!item.ctcTel"></van-checkbox>
+						<van-checkbox :name="item" @click="checkAll=false" :disabled="item.belongGroup"></van-checkbox>
 					</div>
 					<div class="custItem1">
 						<div class="custItem1_2">
@@ -74,22 +71,11 @@
 								</template>
 							</div>
 						</div>
-						<div class="playFrom"
-							v-if="$store.state.userMsg.roleId == '00000001'||$store.state.userMsg.orgClass != '90000001'">
-							<van-icon
-								:name="item.ctcTel?require(`@/assets/image/callPhone.png`):require(`@/assets/image/callPhone_gray.png`)"
-								size="0.22rem" style="margin-right: 0.2rem;"
-								@click.stop="item.ctcTel?gaveCall(item, true):''" />
-							<van-icon
-								:name="item.ctcTel?require(`@/assets/image/sendMessage.png`):require(`@/assets/image/sendMessage_gray.png`)"
-								size="0.22rem" style="margin-right: 0.15rem;"
-								@click.stop="item.ctcTel?gaveCall(item, false):''" />
-						</div>
-						<div class="playFrom" @click.stop v-else>
-							<van-icon :name="require(`@/assets/image/callPhone_gray.png`)" size="0.22rem"
-								style="margin-right: 0.2rem;" />
-							<van-icon :name="require(`@/assets/image/sendMessage_gray.png`)" size="0.22rem"
-								style="margin-right: 0.15rem;" />
+						<div class="playFrom">
+							<van-icon :name="require('@/assets/image/group_delete.png')" size="0.18rem"
+								style="margin-right: 0.24rem;" v-if="item.belongGroup" @click="delCust(item)" />
+							<van-icon :name="require('@/assets/image/group_add.png')" size="0.18rem"
+								style="margin-right: 0.24rem;" v-else @click="addCust(item)" />
 						</div>
 					</div>
 					<div class="custItem2">
@@ -100,34 +86,29 @@
 							</div>
 						</template>
 					</div>
-					<div class="custItem3"></div>
-					<div class="bottomText">
-						<div>客户经理：{{ item.belgCustMgrNm }}</div>
-						<div>机构名称：{{ item.belongOrgNm }}</div>
-					</div>
 				</div>
 			</van-checkbox-group>
 		</van-list>
-		<div style="height: calc(constant(safe-area-inset-bottom) + 0.6rem); height: calc(env(safe-area-inset-bottom) + 0.6rem);"
-			v-show="showBatchSend"></div>
-		<div class="sendMsgBtnBox" v-if="showBatchSend">
-			<div></div>
-			<div class="sendBox">
-				<div class="sendMsgBtn" style="margin-right: 0.1rem;" @click="msgBatchSend(false)">批量发送</div>
-				<div class="sendMsgBtn" @click="msgBatchSend(true)">全部发送</div>
+		<div class="bottomZW"></div>
+		<div style="height: 0.6rem;" v-show="showBatchSend"></div>
+		<van-popup v-model:show="showBatchSend" position="bottom" :overlay="false" :lock-scroll="false"
+			safe-area-inset-bottom>
+			<div class="sendMsgBtnBox">
+				<div></div>
+				<div class="sendBox">
+					<div class="sendMsgBtn" style="margin-right: 0.1rem;" @click="msgBatchSend(true)">全部添加</div>
+					<div class="sendMsgBtn" @click="msgBatchSend(false)">添加</div>
+				</div>
 			</div>
-		</div>
+		</van-popup>
 		<!-- 选择机构组件 -->
 		<org-list ref="orgList" :type="2" @close="closeOrg" @activeOrg="activeOrg" />
-		<!-- 发送短信组件 -->
-		<send-message ref="sendMessage" @commitSuccess="sendSuccess" />
-		<van-overlay :show="showCall" z-index="100000">
+		<van-overlay :show="showDelete" z-index="11">
 			<div class="plate6">
-				<div class="plate6_1">提示</div>
-				<div class="plate6_5">是否拨打电话：{{callItem.ctcTel}}</div>
+				<div class="plate6_5">确定将该客户从群组移除？</div>
 				<div class="plate6_4">
-					<div class="palte6_4_1" @click="showCall=false">取消</div>
-					<div class="palte6_4_2" @click="callCust">确定</div>
+					<div class="palte6_4_1" @click="showDelete=false">取消</div>
+					<div class="palte6_4_2" @click="checkDelete">确定</div>
 				</div>
 			</div>
 		</van-overlay>
@@ -145,12 +126,8 @@
 	import {
 		Toast
 	} from "vant";
-	import sendMessage from "@/components/common/sendMessage.vue";
 	export default {
 		name: 'clCustList',
-		components: {
-			sendMessage
-		},
 		data() {
 			return {
 				checkAll: false,
@@ -242,47 +219,18 @@
 				}],
 				tageListActive: 0,
 				orgName: '选择机构',
-				showCall: false,
-				callItem: {},
+				deleteItem: {},
+				showDelete: false,
 			};
 		},
 		mounted() {
 			this.queryList();
 		},
-		activated() {
-			if (this.$route.params.newPage && !this.loading) {
-				this.checkAll = false;
-				this.searchValue = "";
-				this.loading = false;
-				this.finished = false;
-				this.pageIndex = 0;
-				this.custList = [];
-				this.total = 0;
-				this.showBatchSend = false;
-				this.chooseItems = [];
-				this.params = {
-					pageSize: "10",
-					pageNum: "",
-					custNum: '',
-					cstName: "",
-					ctcTel: "",
-					certNum: "",
-					svcLvl: '',
-					cstLvl: "",
-					belongOrg: ''
-				};
-				this.tageListActive = 0;
-				this.orgName = '选择机构';
-				this.showCall = false;
-				this.callNum = "";
-				this.queryList();
-			}
-		},
 		watch: {
 			searchValue() {
 				if (this.searchValue) {
-					if (this.searchValue.length == 16) { //客户号
-						this.params.custNum = this.searchValue;
+					if (this.searchValue.length == 6) { //客户号
+						this.params.belgCustMgr = this.searchValue;
 					} else if (this.searchValue.length == 11) { //手机号
 						this.params.ctcTel = this.searchValue;
 					} else if (this.searchValue.length == 18) { //身份证号
@@ -330,7 +278,7 @@
 			/* 初始化查询条件 */
 			initParams() {
 				this.pageIndex = 0;
-				this.tageListActive = 0;
+				// this.tageListActive = 0;
 				this.params.pageSize = '10';
 				this.params.pageNum = '';
 				this.custList = [];
@@ -352,88 +300,41 @@
 				this.initParams();
 				this.queryList();
 			},
-			gaveCall(item, type) {
-				if (isNaN(item.ctcTel)) {
-					Toast.fail("电话号码格式有误");
-					return;
-				}
-				if (!item.ctcTel) {
-					Toast.fail("电话号码为空");
-					return;
-				}
-				if (type) {
-					this.callItem = item;
-					this.showCall = true;
-				} else {
-					this.$refs.sendMessage.openMbox({
-						type: "",
-						searchData: {},
-						list: [{
-							cstName: item.cstName,
-							custNum: item.custNum,
-							ctcTel: item.ctcTel
-						}],
-						shrtmsgCnl: "1"
-					})
-				}
+			delCust(item) {
+				this.deleteItem = item;
+				this.showDelete = true;
 			},
-			callCust() {
-				this.showCall = false;
-				Toast.loading({
-					message: "正在唤起",
-					forbidClick: true,
-					duration: 0
-				});
-				custServiceAdd({
-					custName: this.callItem.cstName,
-					custNo: this.callItem.custNum,
-					mobileNum: this.callItem.ctcTel,
-					communictionChannel: "02",
-					custType: '1',
-					serviceChn: "1"
-				}, (ress) => {
-					Toast.clear();
-					AlipayJSBridge.call("callHandler", {
-						phone: this.callItem.ctcTel
-					}, (res) => {
-
-					})
-				});
+			checkDelete() {
+				alert("将客户 " + this.deleteItem.cstName + "从该群组移除");
+				this.deleteItem.belongGroup = false;
+				this.showDelete = false;
 			},
-			/* 批量发送短信的按钮 */
+			addCust(item) {
+				item.belongGroup = true;
+			},
+			/* 批量添加的按钮 */
 			msgBatchSend(sendAll) {
-				let obj = {}
 				if (sendAll) {
-					obj = {
-						type: "CLCustListSendAll",
-						searchData: this.params,
-						list: [{}],
-						shrtmsgCnl: "1"
-					}
+					alert("全部添加");
+					this.$refs.checkboxGroup.toggleAll(false);
+					this.reload();
 				} else {
 					if (this.chooseItems && this.chooseItems.length < 1) {
 						Toast.fail('请选择客户!')
 						return
-					}
+					};
 					let list = this.chooseItems.map(item => {
 						return {
 							cstName: item.cstName,
 							custNum: item.custNum,
 							ctcTel: item.ctcTel
 						}
-					})
-					obj = {
-						type: "",
-						searchData: {},
-						list: list,
-						shrtmsgCnl: "1"
-					}
+					});
+					alert("添加" + list.length + "条数据");
+					this.chooseItems.forEach(item => item.belongGroup = true);
+					this.$refs.checkboxGroup.toggleAll(false);
+					this.showBatchSend = false;
 				}
-				this.$refs.sendMessage.openMbox(obj)
-			},
-			/* 短信发送成功的反馈 */
-			sendSuccess(v) {
-				this.showBatchSend = false
 			},
 			closeOrg() {
 				// this.$refs.orgDrop.toggle(false);
@@ -500,6 +401,7 @@
 
 	.clCustList {
 		font-size: 0.14rem;
+		background-color: #F5F5F5;
 
 		.top {
 			position: fixed;
@@ -567,7 +469,6 @@
 			}
 
 			.listNum {
-				background: pink;
 				font-size: 0.1rem;
 				color: #262626;
 				line-height: 0.4rem;
@@ -577,7 +478,7 @@
 				display: flex;
 				flex-wrap: nowrap;
 				justify-content: space-between;
-				background-color: #f5f6fa;
+				background-color: #f5f5f5;
 
 				.sendAll {
 					color: rgba(2, 109, 255, 1);
@@ -593,7 +494,7 @@
 
 			.custItem {
 				width: 100%;
-				margin: 0.12rem auto;
+				margin: 0.12rem auto 0;
 				background: #FFFFFF;
 				box-shadow: 0 0.02rem 0.2rem 0 rgba(217, 229, 242, 0.6);
 				border-radius: 0.08rem;
@@ -607,7 +508,7 @@
 					flex-shrink: 0;
 					position: absolute;
 					top: 50%;
-					left: -10%;
+					left: -12.5%;
 					transform: translateY(-50%);
 					display: flex;
 					justify-content: flex-end;
@@ -709,7 +610,6 @@
 					display: flex;
 					flex-wrap: wrap;
 					margin-top: 0.12rem;
-					margin-bottom: 0.04rem;
 
 					.custItem2_child {
 						width: 50%;
@@ -721,7 +621,7 @@
 						text-align: left;
 						letter-spacing: 0;
 						font-weight: 400;
-						margin-bottom: 0.04rem;
+						margin-top: 0.04rem;
 					}
 
 					.custItem2_childName {
@@ -828,20 +728,13 @@
 
 	.sendMsgBtnBox {
 		width: 100%;
-		border-top: solid 1px #dfefff;
-		height: calc(constant(safe-area-inset-bottom) + 0.6rem);
-		height: calc(env(safe-area-inset-bottom) + 0.6rem);
-		padding-bottom: constant(safe-area-inset-bottom);
-		padding-bottom: env(safe-area-inset-bottom);
-		padding-left: 3.5%;
-		padding-right: 3.5%;
-		position: fixed;
-		bottom: 0;
-		left: 0;
+		height: 0.6rem;
+		padding: 0 3.5%;
 		background-color: #ffffff;
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
+		border-top: solid 0.01rem #F5F5F5;
 	}
 
 	.sendBox {
@@ -849,12 +742,18 @@
 	}
 
 	.sendMsgBtn {
+		width: 0.88rem;
+		height: 0.4rem;
+		background: #026DFF;
+		border-radius: 0.08rem;
+		display: flex;
+		flex-wrap: nowrap;
+		align-items: center;
+		justify-content: center;
 		font-size: 0.14rem;
-		padding: 0.1rem 0.15rem;
-		background-color: #026DFF;
-		color: #fff;
-		text-align: center;
-		border-radius: 0.04rem;
+		font-family: PingFangSC-Regular, PingFang SC;
+		font-weight: 400;
+		color: #FFFFFF;
 	}
 
 	.plate6 {
@@ -949,5 +848,63 @@
 		line-height: 0.22rem;
 		font-weight: 400;
 		margin-bottom: 0.24rem;
+	}
+
+	.plate6 {
+		width: 74.7%;
+		background: #FFFFFF;
+		border-radius: 0.08rem;
+		position: absolute;
+		top: calc(50% - 1rem);
+		left: 12.65%;
+		padding: 0.2rem 0.12rem;
+	}
+
+	.plate6_4 {
+		width: 100%;
+		height: 0.3rem;
+		margin-top: 0.24rem;
+		display: flex;
+		flex-wrap: nowrap;
+		justify-content: space-around;
+		align-items: center;
+	}
+
+	.palte6_4_1 {
+		width: 1.08rem;
+		height: 0.3rem;
+		border: 0.01rem solid #026DFF;
+		border-radius: 0.15rem;
+		font-family: PingFangSC-Medium;
+		font-size: 0.13rem;
+		color: #026DFF;
+		text-align: center;
+		line-height: 0.3rem;
+		font-weight: 500;
+	}
+
+	.palte6_4_2 {
+		width: 1.08rem;
+		height: 0.3rem;
+		background: #026DFF;
+		border-radius: 0.15rem;
+		font-family: PingFangSC-Medium;
+		font-size: 0.13rem;
+		color: #FFFFFF;
+		text-align: center;
+		line-height: 0.3rem;
+		font-weight: 500;
+	}
+
+	.plate6_5 {
+		width: 100%;
+		font-family: PingFangSC-Medium;
+		font-size: 0.14rem;
+		color: #262626;
+		text-align: center;
+		line-height: 0.22rem;
+		font-weight: 400;
+		margin-bottom: 0.28rem;
+		margin-top: 0.15rem;
 	}
 </style>

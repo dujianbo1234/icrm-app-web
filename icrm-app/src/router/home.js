@@ -3,6 +3,7 @@ import teamFightChildren from './teamFightChildren';
 import custChildren from './custChildren';
 import businessChildren from './businessChildren';
 import mineChildren from './mineChildren';
+import groupChildren from './groupChildren';
 
 const routes = [{
 	path: '/',
@@ -48,6 +49,7 @@ const routes = [{
 			component: () => import('@/views/mustDo/mustDoList.vue')
 		},
 		...mineChildren,
+		...groupChildren
 	]
 }];
 
