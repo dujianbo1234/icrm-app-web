@@ -9,8 +9,8 @@
 						—— 暂无可筛选指标 ——
 					</div>
 					<div class="filterItem" v-for="(filterItemChild,j) in filterItem.list" :key="'filterItemChild'+j"
-						:class="activeChild.code==filterItemChild.code?'filterItem_a':''"
-						@click="checkChild(filterItemChild)">
+						:class="activeChild1.code==filterItemChild.code?'filterItem_a':''"
+						@click="checkChild1(filterItemChild)">
 						{{filterItemChild.title}}
 					</div>
 				</div>
@@ -22,32 +22,51 @@
 		</van-tabs>
 		<div class="bottomCard">
 			<div class="bottomCard1">
-				已选<span style="color: #026DFF;">{{5}}</span>项
+				已选<span style="color: #026DFF;">{{filterArr.length}}</span>项
 			</div>
 			<div class="bottomCard2">
 				<div class="bottomCard1_1">
-					已筛选<span style="color: #026DFF;">{{5}}</span>位客户
+					已筛选<span style="color: #026DFF;">{{custNumber}}</span>位客户
 				</div>
 				<div class="bottomCard1_2">确定</div>
 			</div>
 		</div>
 		<van-popup v-model:show="defaultShow" position="bottom" :style="{ height: '60%' }" round :lock-scroll="false"
 			:close-on-click-overlay="true" close-on-popstate>
-			<div class="popupTitle">{{activeChild.title}}</div>
+			<div class="popupTitle">{{activeChild1.title}}</div>
 			<div class="childListOutBox">
 				<div class="childListBox">
-					<div class="childRemark">{{activeChild.remark}}</div>
-					<div class="childListItem" v-for="(childListItem,i) in activeChild.list"
-						:key="'childListItem'+i">
+					<div class="childRemark">{{activeChild1.remark}}</div>
+					<div class="childListItem" v-for="(childListItem,i) in activeChild1.list" :key="'childListItem'+i"
+						:class="childListItem.code==activeChild2.code||(!activeChild2.code&&filterArr.find(item=>item.code==childListItem.code))?'childListItem_a':''"
+						@click="checkChild2(childListItem,i)">
 						{{childListItem.title}}
 					</div>
 				</div>
 			</div>
 			<div class="btnBox">
 				<div class="btnItem btnItem1" @click="defaultShow=false">取消</div>
-				<div class="btnItem btnItem2" @click="defaultConfirm">确定</div>
+				<div class="btnItem btnItem2" v-if="activeChild2.list&&!activeChild2.list.length||activeChild3.code"
+					@click="defaultConfirm">确定</div>
+				<div class="btnItem btnItem3" v-else>确定</div>
 			</div>
 		</van-popup>
+		<div class="child3Box" ref="child3Box" v-show="child3Show">
+			<div class="child3BoxDirection" ref="child3BoxDirection">
+				<div class="child3BoxDirectionChild"></div>
+			</div>
+			<div class="child3InBox">
+				<div class="child3Box_1">{{activeChild2.code?activeChild2.remark:''}}</div>
+				<div class="child3Box_2">
+					<div class="child3BoxItem" v-for="(child3BoxItem,i) in activeChild2.list" :key="'child3BoxItem'+i"
+						:class="child3BoxItem.code==activeChild3.code||(!activeChild3.code&&filterArr.find(item=>item.code==child3BoxItem.code))?'child3BoxItem_a':''"
+						@click="checkChild3(child3BoxItem)">
+						{{child3BoxItem.title}}
+					</div>
+				</div>
+				<div class="child3Box_3" v-if="activeChild3.remark">{{activeChild3.remark}}</div>
+			</div>
+		</div>
 	</div>
 </template>
 
@@ -55,26 +74,37 @@
 	import {
 		filterList
 	} from "./filterGroup.js";
+	import {
+		Toast
+	} from "vant";
 	export default {
 		data() {
 			return {
 				filterList: filterList,
 				active: 0,
-				activeChild: {},
+				activeChild1: {},
+				activeChild2: {},
+				activeChild3: {},
 				defaultShow: false,
+				filterArr: [],
+				custNumber: 0,
+				child3Show: false,
 			}
 		},
 		watch: {
 			defaultShow() {
-				if(!this.defaultShow) {
-					this.activeChild = {}
+				if (!this.defaultShow) {
+					this.activeChild1 = {};
+					this.activeChild2 = {};
+					this.activeChild3 = {};
+					this.child3Show = false;
 				}
 			}
 		},
 		methods: {
-			checkChild(child) {
-				this.activeChild = child;
-				switch (child.code) {
+			checkChild1(item) {
+				this.activeChild1 = item;
+				switch (item.code) {
 					// case "01010000":
 					// 	break;
 					default:
@@ -82,8 +112,41 @@
 						break;
 				}
 			},
+			checkChild2(item, i) {
+				if (item.code == this.activeChild2.code) {
+					this.child3Show = false;
+					this.activeChild2 = {};
+					this.activeChild3 = {};
+				} else {
+					this.activeChild2 = item;
+					this.activeChild3 = {};
+					if (this.activeChild2.list.length) {
+						var box = document.getElementsByClassName("childListItem")[i];
+						var top = box.getBoundingClientRect().top,
+							left = box.getBoundingClientRect().left,
+							width = box.offsetWidth;
+						this.$refs.child3Box.style.top = "calc(" + (top + 10) + "px + 0.35rem)";
+						this.$refs.child3BoxDirection.style.top = "calc(" + (top + 10) + "px + 0.25rem)";
+						this.$refs.child3BoxDirection.style.left = "calc(" + (left + width / 2) + "px - 0.1rem)";
+						this.child3Show = true;
+					}
+				}
+			},
+			checkChild3(item) {
+				if (item.code == this.activeChild3.code) {
+					this.activeChild3 = {};
+				} else {
+					this.activeChild3 = item;
+				}
+			},
 			defaultConfirm() {
-				alert("选定条件");
+				var addChild = this.activeChild3.code ? this.activeChild3 : this.activeChild2;
+				var itemIndex = this.filterArr.findIndex(item => item.code.slice(0, 4) == addChild.code.slice(0, 4));
+				if (itemIndex < 0) {
+					this.filterArr.push(addChild);
+				} else {
+					this.filterArr.splice(itemIndex, 1, addChild);
+				}
 				this.defaultShow = false;
 			},
 		},
@@ -288,7 +351,7 @@
 		line-height: 0.19rem;
 		text-align: left;
 	}
-	
+
 	.childListOutBox {
 		width: 100%;
 		padding: 0.07rem 0.14rem 0 0.2rem;
@@ -320,7 +383,12 @@
 		margin: 0 0.08rem 0.12rem 0;
 		padding: 0 0.1rem;
 	}
-	
+
+	.childListItem_a {
+		background: #F2F8FF;
+		color: #026DFF;
+	}
+
 	.btnBox {
 		width: 100;
 		height: 0.76rem;
@@ -329,7 +397,7 @@
 		align-items: center;
 		justify-content: center;
 	}
-	
+
 	.btnItem {
 		width: 0.88rem;
 		height: 0.4rem;
@@ -340,18 +408,22 @@
 		line-height: 0.4rem;
 		margin: 0 0.12rem;
 	}
-	
+
 	.btnItem1 {
 		border: 0.01rem solid #026DFF;
 		color: #026DFF;
 	}
-	
+
 	.btnItem2 {
 		background: #026DFF;
 		color: #FFFFFF;
-		
 	}
-	
+
+	.btnItem3 {
+		background: #C8C8C8;
+		color: #FFFFFF;
+	}
+
 	.filterEmpty {
 		width: 100%;
 		height: 0.4rem;
@@ -361,5 +433,96 @@
 		color: #D8D8D8;
 		line-height: 0.4rem;
 		text-align: center;
+	}
+
+	.child3Box {
+		position: fixed;
+		top: 30%;
+		left: 0.18rem;
+		z-index: 9999;
+		width: calc(100% - 0.36rem);
+		background-color: #F2F8FF;
+		border: solid 0.01rem #CEE5FF;
+		border-radius: 0.08rem;
+	}
+
+	.child3BoxDirection {
+		box-sizing: border-box;
+		position: fixed;
+		left: 50%;
+		width: 0.2rem;
+		height: 0.2rem;
+		display: flex;
+		flex-wrap: nowrap;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.child3BoxDirectionChild {
+		width: 0.1rem;
+		height: 0.1rem;
+		background-color: #F2F8FF;
+		transform: rotateZ(45deg);
+		border-top: solid 0.01rem #CEE5FF;
+		border-left: solid 0.01rem #CEE5FF;
+	}
+
+	.child3InBox {
+		width: 100%;
+		height: 100%;
+		padding: 0.15rem 0.1rem 0.1rem;
+	}
+
+	.child3Box_1 {
+		font-size: 0.12rem;
+		font-family: PingFangSC-Regular, PingFang SC;
+		font-weight: 400;
+		color: #595959;
+		line-height: 0.19rem;
+		text-align: left;
+		margin-bottom: 0.12rem;
+	}
+	
+	.child3Box_2 {
+		width: 100%;
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: flex-start;
+		
+	}
+	
+	.child3BoxItem {
+		line-height: 0.18rem;
+		min-width: calc(25% - 0.08rem);
+		height: 0.35rem;
+		background: #FFFFFF;
+		border-radius: 0.2rem;
+		font-size: 0.12rem;
+		font-family: PingFangSC-Regular, PingFang SC;
+		font-weight: 400;
+		color: #262626;
+		line-height: 0.16rem;
+		display: flex;
+		flex-wrap: nowrap;
+		align-items: center;
+		justify-content: center;
+		margin: 0 0.08rem 0.1rem 0;
+		padding: 0 0.1rem;
+	}
+	
+	.child3BoxItem_a {
+		color: #026DFF;
+	}
+
+	.child3Box_3 {
+		font-size: 0.1rem;
+		font-family: PingFangSC-Regular, PingFang SC;
+		font-weight: 400;
+		color: #595959;
+		line-height: 0.15rem;
+		text-align: left;
+		padding-top: 0.08rem;
+		margin-top: 0.02rem;
+		border-top: 0.01rem solid #DAECFF;
 	}
 </style>
