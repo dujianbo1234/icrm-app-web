@@ -12,7 +12,7 @@
 				<div v-for="(msgItem,i) in msgList" :key="'msgItem'+i" class="msgCardOutBox"
 					:style="{'margin-left':openPLSP?'15%':'0%'}">
 					<div class="leftCheckBox">
-						<van-checkbox :name="msgItem.id" :disabled="msgItem.exapSt!='审批中'"></van-checkbox>
+						<van-checkbox :name="msgItem.id" :disabled="msgItem.exapSt!='待审批'"></van-checkbox>
 					</div>
 					<div class="msgCard" @click="openPLSP?'':openDetail(msgItem)">
 						<div class="msgValue1">
@@ -22,7 +22,7 @@
 									{{ msgItem.tplTp }}
 								</div>
 								<div class="msgValue1RightItem"
-									:style="{'background-color':msgItem.exapSt == '审批通过'? '#52C41A': msgItem.exapSt == '审批中'? '#026DFF': '#FF3A3A',}">
+									:style="{'background-color':msgItem.exapSt == '审批通过'? '#52C41A': msgItem.exapSt == '待审批'? '#026DFF': '#FF3A3A',}">
 									{{ msgItem.exapSt }}
 								</div>
 							</div>
@@ -77,7 +77,7 @@
 							<van-field>
 								<template #label>
 									<span class="msgValueTitle2">审批结果</span>
-									<span style="color: #026dff; margin-left: 0.01rem">*</span>
+									<!-- <span style="color: #026dff; margin-left: 0.01rem">*</span> -->
 								</template>
 								<template #input>
 									<div class="busiBox">
@@ -91,7 +91,7 @@
 							</van-field>
 							<div class="flexWrap">
 								<van-field v-model="exapOpnn" input-align="left" border autosize maxlength="100"
-									rows="3" type="textarea">
+									rows="3" type="textarea" placeholder="请输入审批意见" show-word-limit>
 									<template #label>
 										<span class="msgValueTitle2">审批意见</span>
 									</template>
@@ -372,6 +372,8 @@
 		color: #8C8C8C;
 		line-height: 0.17rem;
 		text-align: left;
+		max-height: 0.86rem;
+		overflow-y: auto;
 	}
 
 	.msgValue4 {

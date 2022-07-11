@@ -763,7 +763,7 @@
 							},
 							{
 								name: '基金',
-								a: dataObj.fndYearAvgToLm,
+								a: dataObj.fndYearAvg,
 								b: dataObj.fndYearAvgToLm,
 								c: dataObj.fndYearAvgToLy
 							},

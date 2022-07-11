@@ -428,7 +428,6 @@
 		},
 		mounted() {
 			this.baseMsg = this.$route.params;
-			console.log(this.baseMsg);
 			this.gtgh = this.$store.state.userMsg.roleId == '00000001' || this.$store.state.userMsg.roleId == '00000002' ||
 				this.$store.state.userMsg.roleId == '00000003' || this.$store.state.userMsg.roleId == '00000006' || this
 				.$store.state.userMsg.roleId == '00000007' || this.$store.state.userMsg.roleId == '00000008';

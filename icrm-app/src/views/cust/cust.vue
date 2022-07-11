@@ -335,7 +335,6 @@
 				queryCmrcOpportRankList(params, (res) => {
 					if (res.data) {
 						this.busiBdValue = res.data.records
-						console.log(this.busiBdValue)
 					} else {
 						Toast.fail("审批失败");
 					}

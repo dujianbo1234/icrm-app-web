@@ -7,7 +7,7 @@
 				<div class="plate1_2_child">
 					<div class="plate1_2_childName">客户</div>
 					<div class="plate1_2_childValue" style="display: flex;align-items: center;">
-						<div class="plate1_2_childValue1">{{baseMsg.custNm}}</div>
+						<div class="">{{baseMsg.custNm}}</div>
 						<div class="plate1_2_childValue2" v-if="baseMsg.svcLvl=='0'"
 							:style="{'background-image': 'url('+require('../../assets/image/business_chooseCust_type0.png')+')'}">
 						</div>
@@ -38,7 +38,7 @@
 				</div>
 				<div class="plate1_2_child">
 					<div class="plate1_2_childName">跟进人</div>
-					<div class="plate1_2_childValue plate1_2_childValue1">
+					<div class="plate1_2_childValue">
 						{{baseMsg.followUpPrsnNm}}（{{baseMsg.followUpPrsn}}）
 					</div>
 				</div>
@@ -125,7 +125,8 @@
 					<van-icon :name="require('@/assets/image/cust_cycp.png')" size="0.2rem" />
 					<h3>持有产品</h3>
 				</div>
-				<div class="titleR" @click="toMoreCYCP">更多</div>
+				<div class="titleR" v-if="showCustView" @click="toMoreCYCP">更多</div>
+				<div class="titleR_no" v-else>无查看权限</div>
 			</div>
 			<TabsList v-if="prdList.length" ref="tabList" :setList="prdList" :showAll="false"
 				style="margin-top: 0.1rem" />
@@ -394,7 +395,6 @@
 					sysId: this.$route.params.sysId
 				}, (res) => {
 					this.baseMsg = res.data;
-					this.queryCustHoldPrd();
 				});
 			},
 			getScore() {
@@ -601,7 +601,7 @@
 			/* 客户持有产品查询 */
 			queryCustHoldPrd() {
 				queryOpportCustHoldPrd({
-					custNum: this.baseMsg.custNo
+					custNum: this.$route.params.custNo
 				}, res => {
 					if (res && res.data && res.data.prdList) {
 						let arr = [{
@@ -1032,6 +1032,9 @@
 				}, (res) => {
 					if (res.data) {
 						this.showCustView = res.data.isCust == "1";
+						if(res.data.isCust == "1"){
+							this.queryCustHoldPrd();
+						}
 					}
 				})
 			},
@@ -1156,10 +1159,6 @@
 		line-height: 0.18rem;
 		font-weight: 400;
 		margin-bottom: 0.08rem;
-	}
-
-	.plate1_2_childValue1 {
-		color: #026DFF;
 	}
 
 	.plate1_2_childValue2 {
@@ -1920,12 +1919,21 @@
 	}
 
 	.titleR {
-		width: 0.56rem;
+		/* width: 0.56rem; */
 		height: 0.2rem;
 		font-size: 0.14rem;
 		font-family: PingFangSC-Medium, PingFang SC;
 		font-weight: 500;
 		color: #026DFF;
+		line-height: 0.2rem;
+	}
+
+	.titleR_no {
+		height: 0.2rem;
+		font-size: 0.12rem;
+		font-family: PingFangSC-Medium, PingFang SC;
+		font-weight: 400;
+		color: #DDDDDD;
 		line-height: 0.2rem;
 	}
 
