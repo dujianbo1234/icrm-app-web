@@ -67,6 +67,19 @@
 				<div class="child3Box_3" v-if="activeChild3.remark">{{activeChild3.remark}}</div>
 			</div>
 		</div>
+		<div class="child3Box" ref="child3Box_c" v-show="child3Show_c">
+			<div class="child3BoxDirection" ref="child3BoxDirection_c">
+				<div class="child3BoxDirectionChild"></div>
+			</div>
+			<div class="child3InBox">
+				<div class="child3Box_4">
+					<van-field v-model="activeChild3.minValue" input-align="center" center placeholder="请输入最小值" />
+					<div class="centerLine"></div>
+					<van-field v-model="activeChild3.maxValue" input-align="center" center placeholder="请输入最大值" />
+				</div>
+				<div class="child3Box_3" v-if="activeChild2.remark">{{activeChild2.remark}}</div>
+			</div>
+		</div>
 	</div>
 </template>
 
@@ -89,6 +102,7 @@
 				filterArr: [],
 				custNumber: 0,
 				child3Show: false,
+				child3Show_c: false,
 			}
 		},
 		watch: {
@@ -98,6 +112,7 @@
 					this.activeChild2 = {};
 					this.activeChild3 = {};
 					this.child3Show = false;
+					this.child3Show_c = false;
 				}
 			}
 		},
@@ -113,18 +128,25 @@
 				}
 			},
 			checkChild2(item, i) {
+				this.child3Show = false;
+				this.child3Show_c = false;
 				if (item.code == this.activeChild2.code) {
-					this.child3Show = false;
 					this.activeChild2 = {};
 					this.activeChild3 = {};
 				} else {
 					this.activeChild2 = item;
 					this.activeChild3 = {};
+					var box = document.getElementsByClassName("childListItem")[i];
+					var top = box.getBoundingClientRect().top,
+						left = box.getBoundingClientRect().left,
+						width = box.offsetWidth;
+					if (this.activeChild2.title == "自定义") {
+						this.$refs.child3Box_c.style.top = "calc(" + (top + 10) + "px + 0.35rem)";
+						this.$refs.child3BoxDirection_c.style.top = "calc(" + (top + 10) + "px + 0.25rem)";
+						this.$refs.child3BoxDirection_c.style.left = "calc(" + (left + width / 2) + "px - 0.1rem)";
+						this.child3Show_c = true;
+					}
 					if (this.activeChild2.list.length) {
-						var box = document.getElementsByClassName("childListItem")[i];
-						var top = box.getBoundingClientRect().top,
-							left = box.getBoundingClientRect().left,
-							width = box.offsetWidth;
 						this.$refs.child3Box.style.top = "calc(" + (top + 10) + "px + 0.35rem)";
 						this.$refs.child3BoxDirection.style.top = "calc(" + (top + 10) + "px + 0.25rem)";
 						this.$refs.child3BoxDirection.style.left = "calc(" + (left + width / 2) + "px - 0.1rem)";
@@ -482,15 +504,15 @@
 		text-align: left;
 		margin-bottom: 0.12rem;
 	}
-	
+
 	.child3Box_2 {
 		width: 100%;
 		display: flex;
 		flex-wrap: wrap;
 		justify-content: flex-start;
-		
+
 	}
-	
+
 	.child3BoxItem {
 		line-height: 0.18rem;
 		min-width: calc(25% - 0.08rem);
@@ -509,7 +531,7 @@
 		margin: 0 0.08rem 0.1rem 0;
 		padding: 0 0.1rem;
 	}
-	
+
 	.child3BoxItem_a {
 		color: #026DFF;
 	}
@@ -524,5 +546,28 @@
 		padding-top: 0.08rem;
 		margin-top: 0.02rem;
 		border-top: 0.01rem solid #DAECFF;
+	}
+
+	.child3Box_4 {
+		width: 100%;
+		padding: 0.1rem 0.08rem 0.15rem;
+		display: flex;
+		flex-wrap: nowrap;
+		align-items: center;
+		justify-content: space-between;
+	}
+
+	.child3Box_4:deep(.van-cell) {
+		border-radius: 0.05rem;
+		height: 0.5rem;
+		margin: 0 !important;
+	}
+
+	.centerLine {
+		width: 0.33rem;
+		height: 0.01rem;
+		margin: 0 0.08rem;
+		background-color: #FFFFFF;
+		flex-shrink: 0;
 	}
 </style>
