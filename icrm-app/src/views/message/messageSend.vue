@@ -144,6 +144,13 @@
 				spAll: false,
 			};
 		},
+		watch: {
+			showApprove() {
+				if(!this.showApprove){
+					this.spAll = false;
+				}
+			}
+		},
 		components: {},
 		methods: {
 			cancleCheck() {

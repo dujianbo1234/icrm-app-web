@@ -264,6 +264,7 @@
 		queryHomeDayReportList,
 		queryHomeOrgDayReportList,
 		queryHomPeCstAum,
+		queryLoanBalance,
 		queryHomPeCstBalDgrm,
 		queryAst,
 		queryCustomertrends,
@@ -664,6 +665,26 @@
 					etlDt: this.dataDate,
 					dataEncode: this.dataEncode
 				}
+				queryLoanBalance(body, (res) => {
+					if (res.data && res.data.records && res.data.records.length) {
+						var dataObj = res.data.records[0];
+						this.peCstLoan = [
+							[
+								dataObj.loanBal, // 贷款余额
+								dataObj.loanBalToYstd, // 贷款余额较上日
+								dataObj.loanBalToLastMonth, // 贷款余额较上月(暂无)
+								dataObj.loanBalToBegng // 贷款余额较年初(暂无)
+							],
+							[
+								dataObj.loanMonthAvg, // 贷款月日均
+								dataObj.loanMonthAvgToLm, // 贷款月日均较上月
+								dataObj.loanMonthAvgToLy // 贷款月日均较年初
+							]
+						]
+					} else {
+						Toast.fail("客户概貌信息数据为空");
+					}
+				});
 				queryHomPeCstAum(body, (res) => {
 					if (res.data && res.data.records && res.data.records.length) {
 						var dataObj = res.data.records[0];
@@ -678,19 +699,6 @@
 								dataObj.aumYearAvgKh, // AUM日均(考核)
 								dataObj.aumYearAvgKhToLm, // AUM日均(考核)较上月
 								dataObj.aumYearAvgKhToLy, // AUM日均(考核)较年初
-							]
-						]
-						this.peCstLoan = [
-							[
-								dataObj.loanBal, // 贷款余额
-								dataObj.loanBalToYstd, // 贷款余额较上日
-								dataObj.loanBalToLastMonth, // 贷款余额较上月(暂无)
-								dataObj.loanBalToBegng // 贷款余额较年初(暂无)
-							],
-							[
-								dataObj.loanMonthAvg, // 贷款月日均
-								dataObj.loanMonthAvgToLm, // 贷款月日均较上月
-								dataObj.loanMonthAvgToLy // 贷款月日均较年初
 							]
 						]
 						this.listData = [{

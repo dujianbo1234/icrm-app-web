@@ -9,7 +9,7 @@
 			<div :class="baseMsg.curTage=='3'?'progressItem_a':'progressItem'" v-else style="z-index: 1;">已完成</div>
 		</div>
 		<div style="width: 100%;height: 0.48rem;"></div>
-		<van-cell-group title="基本信息">
+		<van-cell-group title="基本信息" v-if="pageShow">
 			<template #title v-if="true">
 				<div style="position: relative;">
 					<div>基本信息</div>
@@ -238,6 +238,7 @@
 				active: 0,
 				ghList: [],
 				gtgh: false,
+				pageShow: false,
 			}
 		},
 		components: {
@@ -464,6 +465,9 @@
 					Toast.fail("阶段列表数据为空")
 				}
 			});
+			setTimeout(()=>{
+				this.pageShow = true;
+			},10)
 		}
 	}
 </script>

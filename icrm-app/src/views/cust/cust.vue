@@ -342,16 +342,16 @@
 				});
 			},
 			toChooseCust(bdItem) {
-				var cmrcOpptId = "IC" + bdItem.etlDt + bdItem.modelId;
+				console.log(bdItem)
 				queryCmrcOpportunitySumInfo({
-					cmrcOpptId
+					cmrcOpptId: bdItem.cmrcOpptId
 				}, (res) => {
 					if(res.data&&res.data.cmrcOpptId){
-						localStorage.setItem("cmrcOpptId", cmrcOpptId);
+						localStorage.setItem("cmrcOpptId", bdItem.cmrcOpptId);
 						this.$router.push({
 							name: 'chooseCust',
 							params: {
-								cmrcOpptId: cmrcOpptId
+								cmrcOpptId: bdItem.cmrcOpptId
 							}
 						})
 					}else{

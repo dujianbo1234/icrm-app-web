@@ -280,6 +280,10 @@
 		},
 		watch: {
 			searchValue() {
+				this.params.custNum = "";
+				this.params.ctcTel = "";
+				this.params.certNum = "";
+				this.params.cstName = "";
 				if (this.searchValue) {
 					if (this.searchValue.length == 16) { //客户号
 						this.params.custNum = this.searchValue;
@@ -290,9 +294,6 @@
 					} else { //客户姓名
 						this.params.cstName = this.searchValue;
 					}
-				} else {
-					this.params.belgCustMgr = '';
-					this.params.cstName = '';
 				}
 			}
 		},

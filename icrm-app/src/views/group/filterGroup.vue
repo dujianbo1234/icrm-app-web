@@ -51,6 +51,26 @@
 				<div class="btnItem btnItem3" v-else>确定</div>
 			</div>
 		</van-popup>
+		<van-popup v-model:show="dfdwShow" position="bottom" :style="{ height: '70%' }" round :lock-scroll="false"
+			:close-on-click-overlay="true" close-on-popstate>
+			<div class="popupTitle_dfdw">代发单位</div>
+			<div class="childListOutBox">
+				<div class="childListBox">
+					<div class="childRemark">{{activeChild1.remark}}</div>
+					<div class="childListItem" v-for="(childListItem,i) in activeChild1.list" :key="'childListItem'+i"
+						:class="childListItem.code==activeChild2.code||(!activeChild2.code&&filterArr.find(item=>item.code==childListItem.code))?'childListItem_a':''"
+						@click="checkChild2(childListItem,i)">
+						{{childListItem.title}}
+					</div>
+				</div>
+			</div>
+			<div class="btnBox">
+				<div class="btnItem btnItem1" @click="defaultShow=false">取消</div>
+				<div class="btnItem btnItem2" v-if="activeChild2.list&&!activeChild2.list.length||activeChild3.code"
+					@click="defaultConfirm">确定</div>
+				<div class="btnItem btnItem3" v-else>确定</div>
+			</div>
+		</van-popup>
 		<div class="child3Box" ref="child3Box" v-show="child3Show">
 			<div class="child3BoxDirection" ref="child3BoxDirection">
 				<div class="child3BoxDirectionChild"></div>
@@ -64,6 +84,11 @@
 						{{child3BoxItem.title}}
 					</div>
 				</div>
+				<div class="child3Box_4" style="padding: 0 0.08rem;" v-show="activeChild3.title=='自定义'">
+					<van-field v-model="activeChild3.minValue" type="number" input-align="center" center placeholder="请输入最小值" />
+					<div class="centerLine"></div>
+					<van-field v-model="activeChild3.maxValue" type="number" input-align="center" center placeholder="请输入最大值" />
+				</div>
 				<div class="child3Box_3" v-if="activeChild3.remark">{{activeChild3.remark}}</div>
 			</div>
 		</div>
@@ -73,9 +98,9 @@
 			</div>
 			<div class="child3InBox">
 				<div class="child3Box_4">
-					<van-field v-model="activeChild3.minValue" input-align="center" center placeholder="请输入最小值" />
+					<van-field v-model="activeChild2.minValue" type="number" input-align="center" center placeholder="请输入最小值" />
 					<div class="centerLine"></div>
-					<van-field v-model="activeChild3.maxValue" input-align="center" center placeholder="请输入最大值" />
+					<van-field v-model="activeChild2.maxValue" type="number" input-align="center" center placeholder="请输入最大值" />
 				</div>
 				<div class="child3Box_3" v-if="activeChild2.remark">{{activeChild2.remark}}</div>
 			</div>
@@ -103,6 +128,7 @@
 				custNumber: 0,
 				child3Show: false,
 				child3Show_c: false,
+				dfdwShow: true,
 			}
 		},
 		watch: {
@@ -118,11 +144,24 @@
 		},
 		methods: {
 			checkChild1(item) {
+				item.minValue = "";
+				item.maxValue = "";
 				this.activeChild1 = item;
 				switch (item.code) {
-					// case "01010000":
-					// 	break;
+					case "04010000":
+						this.dfdwShow = true;
+						break;
 					default:
+						var zdy = this.activeChild1.list.find(item => item.title == "自定义");
+						if(zdy){
+							var zdyItem = this.filterArr.find(item=>item.code==zdy.code);
+							if(zdyItem){
+								this.activeChild2 = zdyItem;
+								setTimeout(()=>{
+									this.child3Show_c = true;
+								}, 220);
+							}
+						}
 						this.defaultShow = true;
 						break;
 				}
@@ -134,6 +173,8 @@
 					this.activeChild2 = {};
 					this.activeChild3 = {};
 				} else {
+					item.minValue = "";
+					item.maxValue = "";
 					this.activeChild2 = item;
 					this.activeChild3 = {};
 					var box = document.getElementsByClassName("childListItem")[i];
@@ -150,6 +191,11 @@
 						this.$refs.child3Box.style.top = "calc(" + (top + 10) + "px + 0.35rem)";
 						this.$refs.child3BoxDirection.style.top = "calc(" + (top + 10) + "px + 0.25rem)";
 						this.$refs.child3BoxDirection.style.left = "calc(" + (left + width / 2) + "px - 0.1rem)";
+						var zdy = this.activeChild2.list.find(item => item.title == "自定义");
+						if(zdy){
+							var zdyItem = this.filterArr.find(item=>item.code==zdy.code);
+							this.activeChild3 = zdyItem||{};
+						}
 						this.child3Show = true;
 					}
 				}
@@ -158,11 +204,14 @@
 				if (item.code == this.activeChild3.code) {
 					this.activeChild3 = {};
 				} else {
+					item.minValue = "";
+					item.maxValue = "";
 					this.activeChild3 = item;
 				}
 			},
 			defaultConfirm() {
 				var addChild = this.activeChild3.code ? this.activeChild3 : this.activeChild2;
+				addChild = JSON.parse(JSON.stringify(addChild));
 				var itemIndex = this.filterArr.findIndex(item => item.code.slice(0, 4) == addChild.code.slice(0, 4));
 				if (itemIndex < 0) {
 					this.filterArr.push(addChild);
@@ -360,7 +409,19 @@
 		font-family: PingFangSC-Regular, PingFang SC;
 		font-weight: 400;
 		color: #262626;
-		/* margin-bottom: 0.1rem; */
+	}
+	
+	.popupTitle_dfdw {
+		width: 100%;
+		height: 0.52rem;
+		background: #FFFFFF;
+		border-radius: 0.1rem 0.1rem 0rem 0rem;
+		border-bottom: solid 0.01rem #D8D8D8;
+		font-size: 0.16rem;
+		font-family: PingFangSC-Regular, PingFang SC;
+		font-weight: 400;
+		color: #262626;
+		line-height: 0.52rem;
 	}
 
 	.childRemark {
@@ -557,7 +618,7 @@
 		justify-content: space-between;
 	}
 
-	.child3Box_4:deep(.van-cell) {
+	.child3Box_4 :deep(.van-cell) {
 		border-radius: 0.05rem;
 		height: 0.5rem;
 		margin: 0 !important;

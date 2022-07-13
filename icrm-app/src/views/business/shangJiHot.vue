@@ -8,7 +8,8 @@
 			<van-tab title="好评榜" />
 		</van-tabs>
 		<div id="listHeight">
-			<div v-for="(shangJiItem, i) in shangJiList.slice(0,3)" :key="'shangJiItem' + i" class="shangJiCardOutBox" @click="toChooseCust(shangJiItem)">
+			<div v-for="(shangJiItem, i) in shangJiList.slice(0,3)" :key="'shangJiItem' + i" class="shangJiCardOutBox"
+				@click="toChooseCust(shangJiItem)">
 				<div style="display:flex;justify-content: space-between;align-items: center;">
 					<div class="shangJiHeader">
 						<van-icon style="margin-left:0.04rem"
@@ -41,7 +42,8 @@
 					创建人：{{shangJiItem.crtUsrName}}
 				</div>
 			</div>
-			<div v-for="(shangJiItem, i) in shangJiList.slice(3)" :key="'shangJiItem' + i" class="shangJiCardOutBox" @click="toChooseCust(shangJiItem)">
+			<div v-for="(shangJiItem, i) in shangJiList.slice(3)" :key="'shangJiItem' + i" class="shangJiCardOutBox"
+				@click="toChooseCust(shangJiItem)">
 				<div style="display:flex;justify-content: space-between;align-items: center;">
 					<div class="shangJiHeader">
 						<div class="sjIcon">{{i+4}}</div>
@@ -108,19 +110,18 @@
 				this.listHeight = mainHeight - toTop
 			},
 			toChooseCust(bdItem) {
-				var cmrcOpptId = "IC" + bdItem.etlDt + bdItem.modelId;
 				queryCmrcOpportunitySumInfo({
-					cmrcOpptId
+					cmrcOpptId: bdItem.cmrcOpptId
 				}, (res) => {
-					if(res.data&&res.data.cmrcOpptId){
-						localStorage.setItem("cmrcOpptId", cmrcOpptId);
+					if (res.data && res.data.cmrcOpptId) {
+						localStorage.setItem("cmrcOpptId", bdItem.cmrcOpptId);
 						this.$router.push({
 							name: 'chooseCust',
 							params: {
-								cmrcOpptId: cmrcOpptId
+								cmrcOpptId: bdItem.cmrcOpptId
 							}
 						})
-					}else{
+					} else {
 						Toast("无法查看该商机！")
 					}
 				})

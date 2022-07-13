@@ -57,3 +57,5 @@ export const memSoundRecUpload = (params,fun) => {request("index.memSoundRecUplo
 export const uploadImg = (params,fun) => {request("theme.uploadImg", params, fun)}
 /* 晨夕会-删除记录 */
 export const deleteMemSoundRec = (params,fun) => {request("index.deleteMemSoundRec", params, fun)}
+/* 查询贷款余额 */
+export const queryLoanBalance = (params,fun) => {request("index.queryLoanBalance", params, fun)}
