@@ -312,6 +312,7 @@
 				});
 				this.pageIndex++;
 				this.params.pageNum = this.pageIndex.toString();
+				console.log(this.params)
 				queryCustSearchList(this.params, (res) => {
 					if (res.data && res.data.records) {
 						this.total = res.data.total;
@@ -331,7 +332,6 @@
 			/* 初始化查询条件 */
 			initParams() {
 				this.pageIndex = 0;
-				this.tageListActive = 0;
 				this.params.pageSize = '10';
 				this.params.pageNum = '';
 				this.custList = [];

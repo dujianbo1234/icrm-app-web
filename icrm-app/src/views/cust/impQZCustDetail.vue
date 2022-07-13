@@ -36,7 +36,7 @@
 			<div class="bottomLine"></div>
 			<van-field label="创建时间" v-model="baseMsg.createDate" readonly :disabled="pageChange" input-align="right" />
 			<van-field label="机构名称" v-model="baseMsg.orgName" readonly input-align="right" />
-			<van-cell class="khjlCell" title="客户经理" :value="baseMsg.createName+'（'+baseMsg.createId+'）'" />
+			<van-cell class="khjlCell" title="客户经理" :value="baseMsg.cstMagName+'（'+baseMsg.cstMagNo+'）'" />
 			<div class="ghList" v-show="ghList.length">
 				<div class="ghTitle">共同管户人</div>
 				<div class="ghItem" v-for="(ghItem,i) in ghList" :key="'ghItem'+i">
@@ -179,7 +179,7 @@
 			<div class="subBtn" v-else @click="pageChange=true">修改</div>
 			<div class="bottomZW"></div>
 		</div>
-		<div style="width: 100%;height: 1rem;" v-if="$store.state.userMsg.roleId=='00000004'"></div>
+		<div style="width: 100%;height: 1rem;" v-if="$store.state.userMsg.roleId=='00000004'||baseMsg.isManageJudej=='1'"></div>
 		<div class="bottomZW"></div>
 		<van-popup v-model:show="showTage" position="bottom" round z-index="10000">
 			<div class="tageTop">
@@ -414,6 +414,7 @@
 					deleteCaretakerApp({
 						custNo: this.baseMsg.custNo
 					}, (res) => {
+						this.getGhMsg();
 						this.baseMsg.isManageJudej = "0";
 						Toast.success("操作成功");
 					})
@@ -421,10 +422,20 @@
 					saveCaretakerAPP({
 						custNo: this.baseMsg.custNo
 					}, (res) => {
+						this.getGhMsg();
 						this.baseMsg.isManageJudej = "1";
 						Toast.success("操作成功");
 					})
 				}
+			},
+			getGhMsg() {
+				queryCaretakerApp({
+					custNo: this.baseMsg.custNo
+				}, (res) => {
+					if (res.data) {
+						this.ghList = res.data
+					}
+				})
 			},
 		},
 		mounted() {
@@ -433,13 +444,7 @@
 				this.$store.state.userMsg.roleId == '00000003' || this.$store.state.userMsg.roleId == '00000006' || this
 				.$store.state.userMsg.roleId == '00000007' || this.$store.state.userMsg.roleId == '00000008';
 			this.getYXMsg();
-			queryCaretakerApp({
-				custNo: this.baseMsg.custNo
-			}, (res) => {
-				if (res.data && res.data.length) {
-					this.ghList = res.data
-				}
-			})
+			this.getGhMsg();
 			getSysCodeByType({
 				codeType: "cur_tage"
 			}, (res) => {

@@ -125,8 +125,7 @@
 					<van-icon :name="require('@/assets/image/cust_cycp.png')" size="0.2rem" />
 					<h3>持有产品</h3>
 				</div>
-				<div class="titleR" v-if="showCustView" @click="toMoreCYCP">更多</div>
-				<div class="titleR_no" v-else>无查看权限</div>
+				<div class="titleR" @click="toMoreCYCP">更多</div>
 			</div>
 			<TabsList v-if="prdList.length" ref="tabList" :setList="prdList" :showAll="false"
 				style="margin-top: 0.1rem" />
@@ -690,7 +689,7 @@
 			},
 			getCYCP() {
 				let body = {
-					custNum: this.baseMsg.custNo,
+					custNum: this.$route.params.custNo,
 					pageSize: "9999"
 				}
 				// 持有产品
@@ -1032,9 +1031,6 @@
 				}, (res) => {
 					if (res.data) {
 						this.showCustView = res.data.isCust == "1";
-						if(res.data.isCust == "1"){
-							this.queryCustHoldPrd();
-						}
 					}
 				})
 			},
@@ -1072,11 +1068,13 @@
 				this.dingwei = "";
 				this.openLocation = true;
 				this.prdList = [];
+				this.showCustView = false;
 				this.getBaseMsg();
 				this.getScore();
 				this.getFollowMsg();
 				this.getOtherBusi();
 				this.getShowCustView();
+				this.queryCustHoldPrd();
 			} else {
 				this.passMount = false;
 			}
@@ -1088,6 +1086,7 @@
 			this.getFollowMsg();
 			this.getOtherBusi();
 			this.getShowCustView();
+			this.queryCustHoldPrd();
 		}
 	}
 </script>

@@ -6,7 +6,8 @@
 				<div class="plateTitle1"></div>
 				<div class="plateTitle2">跟进记录</div>
 			</div>
-			<div class="empty" v-if="!followMsg.length">-暂无跟进记录-</div>
+			<div class="empty" v-if="!followMsg.length&&!pageLoading">-暂无跟进记录-</div>
+			<div class="empty" v-if="pageLoading">正在加载</div>
 			<van-steps direction="vertical" :active="0">
 				<van-step v-for="(followItem,i) in followMsg" :key="'followItem'+i">
 					<div class="followItem1">
@@ -90,6 +91,7 @@
 			return {
 				followMsg: [],
 				serviceContent: '', //电话内容
+				pageLoading: true,
 			}
 		},
 		components: {},
@@ -98,6 +100,7 @@
 				queryCustomeServicFollow({
 					custNo: this.$route.query.custNo
 				}, (res) => {
+					this.pageLoading = false;
 					this.followMsg = res.data;
 					this.followMsg.forEach((item) => {
 						item.serviceValue = ''

@@ -372,13 +372,13 @@
 			},
 			afterSend() {
 				this.openPLFS = false;
-				if(this.sendAll){
+				if (this.sendAll) {
 					this.sendAll = false;
 					this.$refs.checkboxGroup.toggleAll(false);
 					this.pageIndex = 0;
 					this.msgList = [];
 					this.onLoad();
-				}else{
+				} else {
 					this.changeStat(this.checked);
 					this.$refs.checkboxGroup.toggleAll(false);
 				}
@@ -421,25 +421,26 @@
 					step++;
 				});
 				updateWarningRmdMgtStatus({
-					sysId: this.checkItem.sysId
+					sysIds: [this.checkItem.sysId]
 				}, (res) => {
 					this.checkItem.stat = "1";
 					step++;
 				});
-				var timer = setInterval(()=>{
-					if(step>=2){
+				var timer = setInterval(() => {
+					if (step >= 2) {
 						clearInterval(timer);
 						timer = "";
 						Toast.clear();
 						AlipayJSBridge.call('callHandler', {
 							phone: this.checkItem.phoneNo
 						}, (res1) => {
-							
+
 						});
 					}
-				},100)
+				}, 100)
 			},
 			openMbox(list, type) {
+				if (this.checked.length <= 0) this.checked = list.map(item => item.sysId);
 				var params = {
 					shrtmsgCnl: "6",
 					list
@@ -458,10 +459,10 @@
 						rmdDtStart: this.beginDate.split("-").join(""),
 						rmdDtEnd: this.endDate.split("-").join("")
 					};
+					this.sendAll = true;
 				} else {
 					params.type = "";
 					params.searchData = {};
-					this.sendAll = true;
 				};
 				this.$refs.sendMessage.openMbox(params);
 			},
@@ -474,8 +475,8 @@
 				updateWarningRmdMgtStatus({
 					sysIds
 				}, (res) => {
-					sysIds.forEach((sysId)=>{
-						this.msgList.find(item=>item.sysId==sysId).stat = "1";
+					sysIds.forEach((sysId) => {
+						this.msgList.find(item => item.sysId == sysId).stat = "1";
 					})
 					Toast.success("操作成功");
 				})
