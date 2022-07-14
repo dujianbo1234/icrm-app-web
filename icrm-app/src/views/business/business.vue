@@ -131,6 +131,7 @@
 				pageIndex: 0,
 				visitNum: "",
 				useNum: "",
+				pageReady: false,
 			}
 		},
 		methods: {
@@ -166,6 +167,7 @@
 				})
 			},
 			onLoad() {
+				if (!this.pageReady) return;
 				this.loading = true;
 				this.finished = false;
 				Toast.loading({
@@ -207,6 +209,7 @@
 							text: "全部",
 							value: ""
 						}, ...arr];
+						this.pageReady = true;
 						this.onLoad();
 					} else {
 						Toast.fail("商机大类数据为空")

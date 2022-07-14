@@ -683,10 +683,11 @@
 							]
 						]
 					} else {
-						Toast.fail("客户概貌信息数据为空");
+						Toast.fail("客户概貌贷款信息数据为空");
 					}
 				});
 				queryHomPeCstAum(body, (res) => {
+					console.log("其他：",res)
 					if (res.data && res.data.records && res.data.records.length) {
 						var dataObj = res.data.records[0];
 						this.peCstAum = [

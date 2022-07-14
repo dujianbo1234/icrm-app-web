@@ -354,15 +354,15 @@
 				this.onLoad();
 			},
 			allCst() {
-				this.value1 = "";
-				this.value2 = "";
+				this.params.estCstStart = this.value1 = "";
+				this.params.estCstEnd = this.value2 = "";
 				this.pageIndex = 0;
 				this.msgList = [];
 				this.onLoad();
 			},
 			allAmt() {
-				this.value3 = "";
-				this.value4 = "";
+				this.params.estAmtStart = this.value3 = "";
+				this.params.estAmtEnd = this.value4 = "";
 				this.pageIndex = 0;
 				this.msgList = [];
 				this.onLoad();
