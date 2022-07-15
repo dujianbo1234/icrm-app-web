@@ -9,6 +9,8 @@ export const filterList = [{
 	minValue: "",
 	maxValue: "",
 	remark: "",
+	disabled: false,
+	disabled: false,
 	list: [{
 		code: "01010000",
 		title: "年龄",
@@ -19,6 +21,7 @@ export const filterList = [{
 		minValue: "",
 		maxValue: "",
 		remark: "客户年龄",
+		disabled: false,
 		list: [{
 			code: "01010100",
 			title: "<22",
@@ -29,6 +32,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
+			disabled: false,
 			list: []
 		}, {
 			code: "01010200",
@@ -40,6 +44,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
+			disabled: false,
 			list: []
 		}, {
 			code: "01010300",
@@ -51,6 +56,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
+			disabled: false,
 			list: []
 		}, {
 			code: "01010400",
@@ -62,6 +68,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
+			disabled: false,
 			list: []
 		}, {
 			code: "01010500",
@@ -73,6 +80,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
+			disabled: false,
 			list: []
 		}]
 	}, {
@@ -85,6 +93,7 @@ export const filterList = [{
 		minValue: "",
 		maxValue: "",
 		remark: "客户性别",
+		disabled: false,
 		list: [{
 			code: "01020100",
 			title: "男",
@@ -95,6 +104,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
+			disabled: false,
 			list: []
 		}, {
 			code: "01020200",
@@ -106,6 +116,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
+			disabled: false,
 			list: []
 		}]
 	}, {
@@ -118,6 +129,7 @@ export const filterList = [{
 		minValue: "",
 		maxValue: "",
 		remark: "根据客户在我行办理业务情况进行的客户分群",
+		disabled: false,
 		list: [{
 			code: "01030100",
 			title: "代发",
@@ -128,6 +140,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "根据客户在我行是否有代发记录、是否符合有效代发口径判断",
+			disabled: false,
 			list: [{
 				code: "01030101",
 				title: "有效",
@@ -138,6 +151,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "符合有效代发口径的客户",
+				disabled: false,
 				list: []
 			}, {
 				code: "01030102",
@@ -149,6 +163,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "在我行有代发记录，但不符合有效代发口径",
+				disabled: false,
 				list: []
 			}, {
 				code: "01030103",
@@ -160,6 +175,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "在我行从未有过代发记录的客户",
+				disabled: false,
 				list: []
 			}]
 		}, {
@@ -172,6 +188,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "根据客户在我行当前或历史是否有授信记录判断",
+			disabled: false,
 			list: [{
 				code: "01030201",
 				title: "历史",
@@ -182,6 +199,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "在我行曾有授信记录，但当前授信额度为0",
+				disabled: false,
 				list: []
 			}, {
 				code: "01030202",
@@ -193,6 +211,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "在我行当前授信额度大于0",
+				disabled: false,
 				list: []
 			}, {
 				code: "01030203",
@@ -204,6 +223,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "在我行从未有过授信额度",
+				disabled: false,
 				list: []
 			}]
 		}, {
@@ -216,6 +236,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "根据客户在我行当前或历史资产月日均是否大于5万元判断",
+			disabled: false,
 			list: [{
 				code: "01030301",
 				title: "历史",
@@ -226,6 +247,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "客户历史月日均达到5万元及以上，但上月月日均小于5万元",
+				disabled: false,
 				list: []
 			}, {
 				code: "01030302",
@@ -237,6 +259,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "客户上月月日均大于等于5万元",
+				disabled: false,
 				list: []
 			}, {
 				code: "01030303",
@@ -248,6 +271,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "客户历史与上月月日均均小于5万元",
+				disabled: false,
 				list: []
 			}]
 		}, {
@@ -260,6 +284,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "根据客户在我行具体收单情况判断",
+			disabled: false,
 			list: [{
 				code: "01030401",
 				title: "小微",
@@ -270,6 +295,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "我行收单商户，名下收单均为小微商户，即未录入营业执照号",
+				disabled: false,
 				list: []
 			}, {
 				code: "01030402",
@@ -281,6 +307,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "我行收单商户，名下收单存在普通商户，即系统中有营业执照号",
+				disabled: false,
 				list: []
 			}, {
 				code: "01030403",
@@ -292,6 +319,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "我行收单商户，名下收单客户号以C开头",
+				disabled: false,
 				list: []
 			}, {
 				code: "01030404",
@@ -303,6 +331,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "非我行收单商户",
+				disabled: false,
 				list: []
 			}]
 		}, {
@@ -315,6 +344,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "根据客户在我行具体收单情况判断",
+			disabled: false,
 			list: [{
 				code: "01030501",
 				title: "是",
@@ -325,6 +355,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "取系统中有个体工商户标志的客户",
+				disabled: false,
 				list: []
 			}, {
 				code: "01030502",
@@ -336,6 +367,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "取系统中无个体工商户标志的客户",
+				disabled: false,
 				list: []
 			}]
 		}]
@@ -349,6 +381,7 @@ export const filterList = [{
 		minValue: "",
 		maxValue: "",
 		remark: "上月广义AUM月日均对应等级（私行：600万以上，钻石：200万-600万，白金：100万-200万，金卡：30万-100万，理财：5万-30万，大众：1万-5万，未达标：1万以下）",
+		disabled: false,
 		list: [{
 			code: "01040100",
 			title: "私行",
@@ -359,6 +392,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "客户上月广义AUM月日均600万以上",
+			disabled: false,
 			list: []
 		}, {
 			code: "01040200",
@@ -370,6 +404,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "客户上月广义AUM月日均处于[200万,600万)区间",
+			disabled: false,
 			list: []
 		}, {
 			code: "01040300",
@@ -381,6 +416,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "客户上月广义AUM月日均处于[100万,200万)区间",
+			disabled: false,
 			list: []
 		}, {
 			code: "01040400",
@@ -392,6 +428,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "客户上月广义AUM月日均处于[30万,100万)区间",
+			disabled: false,
 			list: []
 		}, {
 			code: "01040500",
@@ -403,6 +440,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "客户上月广义AUM月日均处于[5万,30万)区间",
+			disabled: false,
 			list: []
 		}, {
 			code: "01040600",
@@ -414,6 +452,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "客户上月广义AUM月日均处于[1万,5万)区间",
+			disabled: false,
 			list: []
 		}, {
 			code: "01040700",
@@ -425,6 +464,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "客户上月广义AUM月日均处于1万元以下",
+			disabled: false,
 			list: []
 		}]
 	}, {
@@ -437,6 +477,7 @@ export const filterList = [{
 		minValue: "",
 		maxValue: "",
 		remark: "客户在我行最新风险评级（暂时取理财）",
+		disabled: false,
 		list: [{
 			code: "01050100",
 			title: "R1",
@@ -447,6 +488,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
+			disabled: false,
 			list: []
 		}, {
 			code: "01050200",
@@ -458,6 +500,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
+			disabled: false,
 			list: []
 		}, {
 			code: "01050300",
@@ -469,6 +512,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
+			disabled: false,
 			list: []
 		}, {
 			code: "01050400",
@@ -480,6 +524,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
+			disabled: false,
 			list: []
 		}, {
 			code: "01050500",
@@ -491,6 +536,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
+			disabled: false,
 			list: []
 		}]
 	}, {
@@ -503,6 +549,7 @@ export const filterList = [{
 		minValue: "",
 		maxValue: "",
 		remark: "客户在我行开立首个个人账户距今时间差",
+		disabled: true,
 		list: []
 	}]
 }, {
@@ -515,6 +562,7 @@ export const filterList = [{
 	minValue: "",
 	maxValue: "",
 	remark: "",
+	disabled: false,
 	list: [{
 		code: "02010000",
 		title: "授信额度",
@@ -525,6 +573,7 @@ export const filterList = [{
 		minValue: "",
 		maxValue: "",
 		remark: "客户在我行当前的有效授信额度",
+		disabled: false,
 		list: [{
 			code: "02010100",
 			title: "全部",
@@ -535,6 +584,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "选中贷款类别下，客户在我行当前的有效授信额度",
+			disabled: false,
 			list: [{
 				code: "02010101",
 				title: "≤10万",
@@ -545,6 +595,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
+				disabled: false,
 				list: []
 			}, {
 				code: "02010102",
@@ -556,6 +607,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
+				disabled: false,
 				list: []
 			}, {
 				code: "02010103",
@@ -567,6 +619,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
+				disabled: false,
 				list: []
 			}, {
 				code: "02010104",
@@ -578,6 +631,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
+				disabled: false,
 				list: []
 			}, {
 				code: "02010105",
@@ -589,6 +643,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
+				disabled: false,
 				list: []
 			}, {
 				code: "02010106",
@@ -600,6 +655,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
+				disabled: false,
 				list: []
 			}]
 		}, {
@@ -612,6 +668,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "选中贷款类别下，客户在我行当前的有效授信额度",
+			disabled: false,
 			list: [{
 				code: "02010201",
 				title: "≤10万",
@@ -622,6 +679,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
+				disabled: false,
 				list: []
 			}, {
 				code: "02010202",
@@ -633,6 +691,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
+				disabled: false,
 				list: []
 			}, {
 				code: "02010203",
@@ -644,6 +703,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
+				disabled: false,
 				list: []
 			}, {
 				code: "02010204",
@@ -655,6 +715,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
+				disabled: false,
 				list: []
 			}, {
 				code: "02010205",
@@ -666,6 +727,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
+				disabled: false,
 				list: []
 			}, {
 				code: "02010206",
@@ -677,6 +739,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
+				disabled: false,
 				list: []
 			}]
 		}, {
@@ -689,6 +752,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "选中贷款类别下，客户在我行当前的有效授信额度",
+			disabled: false,
 			list: [{
 				code: "02010301",
 				title: "≤10万",
@@ -699,6 +763,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
+				disabled: false,
 				list: []
 			}, {
 				code: "02010302",
@@ -710,6 +775,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
+				disabled: false,
 				list: []
 			}, {
 				code: "02010303",
@@ -721,6 +787,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
+				disabled: false,
 				list: []
 			}, {
 				code: "02010304",
@@ -732,6 +799,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
+				disabled: false,
 				list: []
 			}, {
 				code: "02010305",
@@ -743,6 +811,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
+				disabled: false,
 				list: []
 			}, {
 				code: "02010306",
@@ -754,6 +823,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
+				disabled: false,
 				list: []
 			}]
 		}, {
@@ -766,6 +836,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "选中贷款类别下，客户在我行当前的有效授信额度",
+			disabled: false,
 			list: [{
 				code: "02010401",
 				title: "≤10万",
@@ -776,6 +847,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
+				disabled: false,
 				list: []
 			}, {
 				code: "02010402",
@@ -787,6 +859,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
+				disabled: false,
 				list: []
 			}, {
 				code: "02010403",
@@ -798,6 +871,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
+				disabled: false,
 				list: []
 			}, {
 				code: "02010404",
@@ -809,6 +883,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
+				disabled: false,
 				list: []
 			}, {
 				code: "02010405",
@@ -820,6 +895,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
+				disabled: false,
 				list: []
 			}, {
 				code: "02010406",
@@ -831,6 +907,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
+				disabled: false,
 				list: []
 			}]
 		}, {
@@ -843,6 +920,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "选中贷款类别下，客户在我行当前的有效授信额度",
+			disabled: false,
 			list: [{
 				code: "02010501",
 				title: "≤10万",
@@ -853,6 +931,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
+				disabled: false,
 				list: []
 			}, {
 				code: "02010502",
@@ -864,6 +943,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
+				disabled: false,
 				list: []
 			}, {
 				code: "02010503",
@@ -875,6 +955,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
+				disabled: false,
 				list: []
 			}, {
 				code: "02010504",
@@ -886,6 +967,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
+				disabled: false,
 				list: []
 			}, {
 				code: "02010505",
@@ -897,6 +979,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
+				disabled: false,
 				list: []
 			}, {
 				code: "02010506",
@@ -908,6 +991,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
+				disabled: false,
 				list: []
 			}]
 		}]
@@ -921,6 +1005,7 @@ export const filterList = [{
 		minValue: "",
 		maxValue: "",
 		remark: "客户当前是否有用信（我行贷款）",
+		disabled: false,
 		list: [{
 			code: "02020100",
 			title: "全部",
@@ -931,6 +1016,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "选中贷款类别下，客户当前是否有用信（我行贷款）",
+			disabled: false,
 			list: [{
 				code: "02020101",
 				title: "是",
@@ -941,6 +1027,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
+				disabled: false,
 				list: []
 			}, {
 				code: "02020102",
@@ -952,6 +1039,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
+				disabled: false,
 				list: []
 			}]
 		}, {
@@ -964,6 +1052,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "选中贷款类别下，客户当前是否有用信（我行贷款）",
+			disabled: false,
 			list: [{
 				code: "02020201",
 				title: "是",
@@ -974,6 +1063,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
+				disabled: false,
 				list: []
 			}, {
 				code: "02020202",
@@ -985,6 +1075,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
+				disabled: false,
 				list: []
 			}]
 		}, {
@@ -997,6 +1088,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "选中贷款类别下，客户当前是否有用信（我行贷款）",
+			disabled: false,
 			list: [{
 				code: "02020301",
 				title: "是",
@@ -1007,6 +1099,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
+				disabled: false,
 				list: []
 			}, {
 				code: "02020302",
@@ -1018,6 +1111,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
+				disabled: false,
 				list: []
 			}]
 		}, {
@@ -1030,6 +1124,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "选中贷款类别下，客户当前是否有用信（我行贷款）",
+			disabled: false,
 			list: [{
 				code: "02020401",
 				title: "是",
@@ -1040,6 +1135,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
+				disabled: false,
 				list: []
 			}, {
 				code: "02020402",
@@ -1051,6 +1147,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
+				disabled: false,
 				list: []
 			}]
 		}, {
@@ -1063,6 +1160,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "选中贷款类别下，客户当前是否有用信（我行贷款）",
+			disabled: false,
 			list: [{
 				code: "02020501",
 				title: "是",
@@ -1073,6 +1171,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
+				disabled: false,
 				list: []
 			}, {
 				code: "02020502",
@@ -1084,6 +1183,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
+				disabled: false,
 				list: []
 			}]
 		}]
@@ -1097,6 +1197,7 @@ export const filterList = [{
 		minValue: "",
 		maxValue: "",
 		remark: "上月每日的贷款余额累计值与上月天数之比",
+		disabled: false,
 		list: [{
 			code: "02030100",
 			title: "全部",
@@ -1107,6 +1208,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "选中贷款类别下，客户上月贷款月日均",
+			disabled: false,
 			list: []
 		}, {
 			code: "02030200",
@@ -1118,6 +1220,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "选中贷款类别下，客户上月贷款月日均",
+			disabled: false,
 			list: []
 		}, {
 			code: "02030300",
@@ -1129,6 +1232,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "选中贷款类别下，客户上月贷款月日均",
+			disabled: false,
 			list: []
 		}, {
 			code: "02030400",
@@ -1140,6 +1244,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "选中贷款类别下，客户上月贷款月日均",
+			disabled: false,
 			list: []
 		}, {
 			code: "02030500",
@@ -1151,6 +1256,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "选中贷款类别下，客户上月贷款月日均",
+			disabled: false,
 			list: []
 		}]
 	}, {
@@ -1163,6 +1269,7 @@ export const filterList = [{
 		minValue: "",
 		maxValue: "",
 		remark: "选中贷款类别下，取剩余多少日授信失效",
+		disabled: false,
 		list: [{
 			code: "02040100",
 			title: "全部",
@@ -1173,6 +1280,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "选中贷款类别下，取剩余多少日授信失效",
+			disabled: false,
 			list: [{
 				code: "02040101",
 				title: "≤10天",
@@ -1183,6 +1291,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
+				disabled: false,
 				list: []
 			}, {
 				code: "02040102",
@@ -1194,6 +1303,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
+				disabled: false,
 				list: []
 			}, {
 				code: "02040103",
@@ -1205,6 +1315,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
+				disabled: false,
 				list: []
 			}, {
 				code: "02040104",
@@ -1216,6 +1327,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
+				disabled: false,
 				list: []
 			}, {
 				code: "02040105",
@@ -1227,6 +1339,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
+				disabled: false,
 				list: []
 			}]
 		}, {
@@ -1239,6 +1352,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "选中贷款类别下，取剩余多少日授信失效",
+			disabled: false,
 			list: [{
 				code: "02040201",
 				title: "≤10天",
@@ -1249,6 +1363,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
+				disabled: false,
 				list: []
 			}, {
 				code: "02040202",
@@ -1260,6 +1375,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
+				disabled: false,
 				list: []
 			}, {
 				code: "02040203",
@@ -1271,6 +1387,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
+				disabled: false,
 				list: []
 			}, {
 				code: "02040204",
@@ -1282,6 +1399,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
+				disabled: false,
 				list: []
 			}, {
 				code: "02040205",
@@ -1293,6 +1411,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
+				disabled: false,
 				list: []
 			}]
 		}, {
@@ -1305,6 +1424,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "选中贷款类别下，取剩余多少日授信失效",
+			disabled: false,
 			list: [{
 				code: "02040301",
 				title: "≤10天",
@@ -1315,6 +1435,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
+				disabled: false,
 				list: []
 			}, {
 				code: "02040302",
@@ -1326,6 +1447,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
+				disabled: false,
 				list: []
 			}, {
 				code: "02040303",
@@ -1337,6 +1459,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
+				disabled: false,
 				list: []
 			}, {
 				code: "02040304",
@@ -1348,6 +1471,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
+				disabled: false,
 				list: []
 			}, {
 				code: "02040305",
@@ -1359,6 +1483,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
+				disabled: false,
 				list: []
 			}]
 		}, {
@@ -1371,6 +1496,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "选中贷款类别下，取剩余多少日授信失效",
+			disabled: false,
 			list: [{
 				code: "02040401",
 				title: "≤10天",
@@ -1381,6 +1507,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
+				disabled: false,
 				list: []
 			}, {
 				code: "02040402",
@@ -1392,6 +1519,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
+				disabled: false,
 				list: []
 			}, {
 				code: "02040403",
@@ -1403,6 +1531,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
+				disabled: false,
 				list: []
 			}, {
 				code: "02040404",
@@ -1414,6 +1543,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
+				disabled: false,
 				list: []
 			}, {
 				code: "02040405",
@@ -1425,6 +1555,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
+				disabled: false,
 				list: []
 			}]
 		}, {
@@ -1437,6 +1568,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "选中贷款类别下，取剩余多少日授信失效",
+			disabled: false,
 			list: [{
 				code: "02040501",
 				title: "≤10天",
@@ -1447,6 +1579,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
+				disabled: false,
 				list: []
 			}, {
 				code: "02040502",
@@ -1458,6 +1591,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
+				disabled: false,
 				list: []
 			}, {
 				code: "02040503",
@@ -1469,6 +1603,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
+				disabled: false,
 				list: []
 			}, {
 				code: "02040504",
@@ -1480,6 +1615,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
+				disabled: false,
 				list: []
 			}, {
 				code: "02040505",
@@ -1491,6 +1627,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
+				disabled: false,
 				list: []
 			}]
 		}]
@@ -1504,6 +1641,7 @@ export const filterList = [{
 		minValue: "",
 		maxValue: "",
 		remark: "贷款余额与授信额度之比",
+		disabled: false,
 		list: [{
 			code: "02050100",
 			title: "全部",
@@ -1514,6 +1652,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "选中贷款类别下，贷款余额与授信额度之比",
+			disabled: false,
 			list: [{
 				code: "02050101",
 				title: "0",
@@ -1524,6 +1663,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
+				disabled: false,
 				list: []
 			}, {
 				code: "02050102",
@@ -1535,6 +1675,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
+				disabled: false,
 				list: []
 			}, {
 				code: "02050103",
@@ -1546,6 +1687,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
+				disabled: false,
 				list: []
 			}, {
 				code: "02050104",
@@ -1557,6 +1699,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
+				disabled: false,
 				list: []
 			}, {
 				code: "02050105",
@@ -1568,6 +1711,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
+				disabled: false,
 				list: []
 			}, {
 				code: "02050106",
@@ -1579,6 +1723,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
+				disabled: false,
 				list: []
 			}]
 		}, {
@@ -1591,6 +1736,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "选中贷款类别下，贷款余额与授信额度之比",
+			disabled: false,
 			list: [{
 				code: "02050201",
 				title: "0",
@@ -1601,6 +1747,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
+				disabled: false,
 				list: []
 			}, {
 				code: "02050202",
@@ -1612,6 +1759,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
+				disabled: false,
 				list: []
 			}, {
 				code: "02050203",
@@ -1623,6 +1771,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
+				disabled: false,
 				list: []
 			}, {
 				code: "02050204",
@@ -1634,6 +1783,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
+				disabled: false,
 				list: []
 			}, {
 				code: "02050205",
@@ -1645,6 +1795,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
+				disabled: false,
 				list: []
 			}, {
 				code: "02050206",
@@ -1656,6 +1807,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
+				disabled: false,
 				list: []
 			}]
 		}, {
@@ -1668,6 +1820,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "选中贷款类别下，贷款余额与授信额度之比",
+			disabled: false,
 			list: [{
 				code: "02050301",
 				title: "0",
@@ -1678,6 +1831,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
+				disabled: false,
 				list: []
 			}, {
 				code: "02050302",
@@ -1689,6 +1843,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
+				disabled: false,
 				list: []
 			}, {
 				code: "02050303",
@@ -1700,6 +1855,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
+				disabled: false,
 				list: []
 			}, {
 				code: "02050304",
@@ -1711,6 +1867,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
+				disabled: false,
 				list: []
 			}, {
 				code: "02050305",
@@ -1722,6 +1879,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
+				disabled: false,
 				list: []
 			}, {
 				code: "02050306",
@@ -1733,6 +1891,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
+				disabled: false,
 				list: []
 			}]
 		}, {
@@ -1745,6 +1904,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "选中贷款类别下，贷款余额与授信额度之比",
+			disabled: false,
 			list: [{
 				code: "02050401",
 				title: "0",
@@ -1755,6 +1915,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
+				disabled: false,
 				list: []
 			}, {
 				code: "02050402",
@@ -1766,6 +1927,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
+				disabled: false,
 				list: []
 			}, {
 				code: "02050403",
@@ -1777,6 +1939,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
+				disabled: false,
 				list: []
 			}, {
 				code: "02050404",
@@ -1788,6 +1951,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
+				disabled: false,
 				list: []
 			}, {
 				code: "02050405",
@@ -1799,6 +1963,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
+				disabled: false,
 				list: []
 			}, {
 				code: "02050406",
@@ -1810,6 +1975,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
+				disabled: false,
 				list: []
 			}]
 		}, {
@@ -1822,6 +1988,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "选中贷款类别下，贷款余额与授信额度之比",
+			disabled: false,
 			list: [{
 				code: "02050501",
 				title: "0",
@@ -1832,6 +1999,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
+				disabled: false,
 				list: []
 			}, {
 				code: "02050502",
@@ -1843,6 +2011,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
+				disabled: false,
 				list: []
 			}, {
 				code: "02050503",
@@ -1854,6 +2023,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
+				disabled: false,
 				list: []
 			}, {
 				code: "02050504",
@@ -1865,6 +2035,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
+				disabled: false,
 				list: []
 			}, {
 				code: "02050505",
@@ -1876,6 +2047,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
+				disabled: false,
 				list: []
 			}, {
 				code: "02050506",
@@ -1887,6 +2059,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
+				disabled: false,
 				list: []
 			}]
 		}]
@@ -1900,6 +2073,7 @@ export const filterList = [{
 		minValue: "",
 		maxValue: "",
 		remark: "广义活期上月月日均与贷款上月月日均之比",
+		disabled: false,
 		list: [{
 			code: "02060100",
 			title: "≤0.5%",
@@ -1910,6 +2084,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
+			disabled: false,
 			list: []
 		}, {
 			code: "02060200",
@@ -1921,6 +2096,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
+			disabled: false,
 			list: []
 		}, {
 			code: "02060300",
@@ -1932,6 +2108,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
+			disabled: false,
 			list: []
 		}, {
 			code: "02060400",
@@ -1943,6 +2120,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
+			disabled: false,
 			list: []
 		}, {
 			code: "02060500",
@@ -1954,6 +2132,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
+			disabled: false,
 			list: []
 		}]
 	}, {
@@ -1966,6 +2145,7 @@ export const filterList = [{
 		minValue: "",
 		maxValue: "",
 		remark: "广义AUM上月月日均与贷款上月月日均之比",
+		disabled: false,
 		list: [{
 			code: "02070100",
 			title: "≤0.5%",
@@ -1976,6 +2156,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
+			disabled: false,
 			list: []
 		}, {
 			code: "02070200",
@@ -1987,6 +2168,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
+			disabled: false,
 			list: []
 		}, {
 			code: "02070300",
@@ -1998,6 +2180,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
+			disabled: false,
 			list: []
 		}, {
 			code: "02070400",
@@ -2009,6 +2192,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
+			disabled: false,
 			list: []
 		}, {
 			code: "02070500",
@@ -2020,6 +2204,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
+			disabled: false,
 			list: []
 		}]
 	}, {
@@ -2032,6 +2217,7 @@ export const filterList = [{
 		minValue: "",
 		maxValue: "",
 		remark: "从定价（40%)、AUM月日均占贷款余额比率（40%）、客户合作产品类型（10%）、客户人行征信位置排名（10%）四个维度反映客户对我行的贡献水平。总得分等于四个维度分数加总，分值越高，对我行贡献度越高。",
+		disabled: false,
 		list: [{
 			code: "02080100",
 			title: "≤20",
@@ -2042,6 +2228,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
+			disabled: false,
 			list: []
 		}, {
 			code: "02080200",
@@ -2053,6 +2240,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
+			disabled: false,
 			list: []
 		}, {
 			code: "02080300",
@@ -2064,6 +2252,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
+			disabled: false,
 			list: []
 		}, {
 			code: "02080400",
@@ -2075,6 +2264,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
+			disabled: false,
 			list: []
 		}, {
 			code: "02080500",
@@ -2086,6 +2276,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
+			disabled: false,
 			list: []
 		}, {
 			code: "02080600",
@@ -2097,6 +2288,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
+			disabled: false,
 			list: []
 		}]
 	}, {
@@ -2109,6 +2301,7 @@ export const filterList = [{
 		minValue: "",
 		maxValue: "",
 		remark: "从定价（40%)、AUM月日均占贷款余额比率（40%）、客户合作产品类型（10%）、客户人行征信位置排名（10%）四个维度反映客户对客户贡献水平并进行分值排序得到",
+		disabled: false,
 		list: [{
 			code: "02090100",
 			title: "卓越客户",
@@ -2119,6 +2312,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "贷款贡献度全行排名前20％（含）的客户",
+			disabled: false,
 			list: []
 		}, {
 			code: "02090200",
@@ -2130,6 +2324,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "贷款贡献度全行排名20%-90%（含）的客户",
+			disabled: false,
 			list: []
 		}, {
 			code: "02090300",
@@ -2141,6 +2336,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "贷款贡献度全行排名后5%-10%的客户",
+			disabled: false,
 			list: []
 		}, {
 			code: "02090400",
@@ -2152,6 +2348,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "贷款贡献度全行排名后5%的客户",
+			disabled: false,
 			list: []
 		}]
 	}, {
@@ -2164,6 +2361,7 @@ export const filterList = [{
 		minValue: "",
 		maxValue: "",
 		remark: "取最近一次我行线上查询的客户征信报告上他行授信未到期的进行汇总，若无线上查询记录，则此项为空",
+		disabled: false,
 		list: [{
 			code: "02100100",
 			title: "全部",
@@ -2174,6 +2372,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "取最近一次线上征信报告上授信到期日晚于当前日期的所有贷款汇总",
+			disabled: false,
 			list: [{
 				code: "02100101",
 				title: "0",
@@ -2184,6 +2383,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
+				disabled: false,
 				list: []
 			}, {
 				code: "02100102",
@@ -2195,6 +2395,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
+				disabled: false,
 				list: []
 			}, {
 				code: "02100103",
@@ -2206,6 +2407,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
+				disabled: false,
 				list: []
 			}, {
 				code: "02100104",
@@ -2217,6 +2419,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
+				disabled: false,
 				list: []
 			}, {
 				code: "02100105",
@@ -2228,6 +2431,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
+				disabled: false,
 				list: []
 			}, {
 				code: "02100106",
@@ -2239,6 +2443,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
+				disabled: false,
 				list: []
 			}, {
 				code: "02100107",
@@ -2250,6 +2455,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
+				disabled: false,
 				list: []
 			}]
 		}, {
@@ -2262,6 +2468,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "取最近一次线上征信报告上授信到期日晚于当前日期的所有贷款汇总",
+			disabled: false,
 			list: [{
 				code: "02100201",
 				title: "0",
@@ -2272,6 +2479,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
+				disabled: false,
 				list: []
 			}, {
 				code: "02100202",
@@ -2283,6 +2491,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
+				disabled: false,
 				list: []
 			}, {
 				code: "02100203",
@@ -2294,6 +2503,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
+				disabled: false,
 				list: []
 			}, {
 				code: "02100204",
@@ -2305,6 +2515,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
+				disabled: false,
 				list: []
 			}, {
 				code: "02100205",
@@ -2316,6 +2527,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
+				disabled: false,
 				list: []
 			}, {
 				code: "02100206",
@@ -2327,6 +2539,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
+				disabled: false,
 				list: []
 			}, {
 				code: "02100207",
@@ -2338,6 +2551,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
+				disabled: false,
 				list: []
 			}]
 		}, {
@@ -2350,6 +2564,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "取最近一次线上征信报告上授信到期日晚于当前日期的所有贷款汇总",
+			disabled: false,
 			list: [{
 				code: "02100301",
 				title: "0",
@@ -2360,6 +2575,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
+				disabled: false,
 				list: []
 			}, {
 				code: "02100302",
@@ -2371,6 +2587,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
+				disabled: false,
 				list: []
 			}, {
 				code: "02100303",
@@ -2382,6 +2599,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
+				disabled: false,
 				list: []
 			}, {
 				code: "02100304",
@@ -2393,6 +2611,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
+				disabled: false,
 				list: []
 			}, {
 				code: "02100305",
@@ -2404,6 +2623,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
+				disabled: false,
 				list: []
 			}, {
 				code: "02100306",
@@ -2415,6 +2635,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
+				disabled: false,
 				list: []
 			}, {
 				code: "02100307",
@@ -2426,6 +2647,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
+				disabled: false,
 				list: []
 			}]
 		}, {
@@ -2438,6 +2660,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "取最近一次线上征信报告上授信到期日晚于当前日期的所有贷款汇总",
+			disabled: false,
 			list: [{
 				code: "02100401",
 				title: "0",
@@ -2448,6 +2671,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
+				disabled: false,
 				list: []
 			}, {
 				code: "02100402",
@@ -2459,6 +2683,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
+				disabled: false,
 				list: []
 			}, {
 				code: "02100403",
@@ -2470,6 +2695,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
+				disabled: false,
 				list: []
 			}, {
 				code: "02100404",
@@ -2481,6 +2707,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
+				disabled: false,
 				list: []
 			}, {
 				code: "02100405",
@@ -2492,6 +2719,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
+				disabled: false,
 				list: []
 			}, {
 				code: "02100406",
@@ -2503,6 +2731,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
+				disabled: false,
 				list: []
 			}, {
 				code: "02100407",
@@ -2514,6 +2743,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
+				disabled: false,
 				list: []
 			}]
 		}, {
@@ -2526,6 +2756,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "取最近一次线上征信报告上授信到期日晚于当前日期的所有贷款汇总",
+			disabled: false,
 			list: [{
 				code: "02100501",
 				title: "0",
@@ -2536,6 +2767,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
+				disabled: false,
 				list: []
 			}, {
 				code: "02100502",
@@ -2547,6 +2779,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
+				disabled: false,
 				list: []
 			}, {
 				code: "02100503",
@@ -2558,6 +2791,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
+				disabled: false,
 				list: []
 			}, {
 				code: "02100504",
@@ -2569,6 +2803,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
+				disabled: false,
 				list: []
 			}, {
 				code: "02100505",
@@ -2580,6 +2815,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
+				disabled: false,
 				list: []
 			}, {
 				code: "02100506",
@@ -2591,6 +2827,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
+				disabled: false,
 				list: []
 			}, {
 				code: "02100507",
@@ -2602,6 +2839,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
+				disabled: false,
 				list: []
 			}]
 		}, {
@@ -2614,6 +2852,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "无线上查询记录",
+			disabled: false,
 			list: []
 		}]
 	}, {
@@ -2626,6 +2865,7 @@ export const filterList = [{
 		minValue: "",
 		maxValue: "",
 		remark: "取最近一次线上贷款征信报告的他行授信到期日数据",
+		disabled: false,
 		list: [{
 			code: "02110100",
 			title: "≤30天",
@@ -2636,6 +2876,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
+			disabled: false,
 			list: []
 		}, {
 			code: "02110200",
@@ -2647,6 +2888,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
+			disabled: false,
 			list: []
 		}, {
 			code: "02110300",
@@ -2658,6 +2900,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
+			disabled: false,
 			list: []
 		}, {
 			code: "02110400",
@@ -2669,6 +2912,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
+			disabled: false,
 			list: []
 		}, {
 			code: "02110500",
@@ -2680,6 +2924,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
+			disabled: false,
 			list: []
 		}]
 	}, {
@@ -2692,6 +2937,7 @@ export const filterList = [{
 		minValue: "",
 		maxValue: "",
 		remark: "取最近一次贷前或贷后线上查询获取的人行征信分，若无线上查询记录，则此项为空",
+		disabled: false,
 		list: [{
 			code: "02120100",
 			title: "白户或-1",
@@ -2702,6 +2948,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "客户征信无贷款记录或征信分显示为-1",
+			disabled: false,
 			list: []
 		}, {
 			code: "02120200",
@@ -2713,6 +2960,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
+			disabled: false,
 			list: []
 		}, {
 			code: "02120300",
@@ -2724,6 +2972,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
+			disabled: false,
 			list: []
 		}, {
 			code: "02120400",
@@ -2735,6 +2984,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
+			disabled: false,
 			list: []
 		}, {
 			code: "02120500",
@@ -2746,6 +2996,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
+			disabled: false,
 			list: []
 		}, {
 			code: "02120600",
@@ -2757,6 +3008,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
+			disabled: false,
 			list: []
 		}, {
 			code: "02120700",
@@ -2768,6 +3020,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "范围[-1,1000]",
+			disabled: false,
 			list: []
 		}, {
 			code: "02120800",
@@ -2779,6 +3032,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
+			disabled: false,
 			list: []
 		}]
 	}]
@@ -2792,6 +3046,7 @@ export const filterList = [{
 	minValue: "",
 	maxValue: "",
 	remark: "",
+	disabled: false,
 	list: [{
 		code: "03010000",
 		title: "店员人数",
@@ -2802,6 +3057,7 @@ export const filterList = [{
 		minValue: "",
 		maxValue: "",
 		remark: "取九银店老板中商户绑定的店员人数",
+		disabled: false,
 		list: []
 	}, {
 		code: "03020000",
@@ -2813,6 +3069,7 @@ export const filterList = [{
 		minValue: "",
 		maxValue: "",
 		remark: "商户MCC码",
+		disabled: false,
 		list: []
 	}, {
 		code: "03030000",
@@ -2824,6 +3081,7 @@ export const filterList = [{
 		minValue: "",
 		maxValue: "",
 		remark: "符合当年有效商户考核口径的商户",
+		disabled: false,
 		list: [{
 			code: "03030100",
 			title: "是",
@@ -2834,6 +3092,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
+			disabled: false,
 			list: []
 		}, {
 			code: "03030200",
@@ -2845,6 +3104,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
+			disabled: false,
 			list: []
 		}]
 	}, {
@@ -2857,6 +3117,7 @@ export const filterList = [{
 		minValue: "",
 		maxValue: "",
 		remark: "当年度单个商户号对应的累计交易金额，单位为元",
+		disabled: false,
 		list: [{
 			code: "03040100",
 			title: "＜1000",
@@ -2867,6 +3128,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
+			disabled: false,
 			list: []
 		}, {
 			code: "03040200",
@@ -2878,6 +3140,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
+			disabled: false,
 			list: []
 		}, {
 			code: "03040300",
@@ -2889,6 +3152,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
+			disabled: false,
 			list: []
 		}, {
 			code: "03040400",
@@ -2900,6 +3164,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
+			disabled: false,
 			list: []
 		}, {
 			code: "03040500",
@@ -2911,6 +3176,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
+			disabled: false,
 			list: []
 		}]
 	}, {
@@ -2923,6 +3189,7 @@ export const filterList = [{
 		minValue: "",
 		maxValue: "",
 		remark: "当年度单个商户号对应的累计交易天数",
+		disabled: false,
 		list: [{
 			code: "03050100",
 			title: "＜8",
@@ -2933,6 +3200,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
+			disabled: false,
 			list: []
 		}, {
 			code: "03050200",
@@ -2944,6 +3212,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
+			disabled: false,
 			list: []
 		}, {
 			code: "03050300",
@@ -2955,6 +3224,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
+			disabled: false,
 			list: []
 		}, {
 			code: "03050400",
@@ -2966,6 +3236,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
+			disabled: false,
 			list: []
 		}, {
 			code: "03050500",
@@ -2977,6 +3248,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
+			disabled: false,
 			list: []
 		}]
 	}, {
@@ -2989,6 +3261,7 @@ export const filterList = [{
 		minValue: "",
 		maxValue: "",
 		remark: "上月单个商户号对应的累计交易金额",
+		disabled: false,
 		list: [{
 			code: "03060100",
 			title: "＜1000",
@@ -2999,6 +3272,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
+			disabled: false,
 			list: []
 		}, {
 			code: "03060200",
@@ -3010,6 +3284,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
+			disabled: false,
 			list: []
 		}, {
 			code: "03060300",
@@ -3021,6 +3296,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
+			disabled: false,
 			list: []
 		}, {
 			code: "03060400",
@@ -3032,6 +3308,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
+			disabled: false,
 			list: []
 		}]
 	}, {
@@ -3044,6 +3321,7 @@ export const filterList = [{
 		minValue: "",
 		maxValue: "",
 		remark: "上月单个商户号对应的累计交易天数",
+		disabled: false,
 		list: [{
 			code: "03070100",
 			title: "≥12",
@@ -3054,6 +3332,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
+			disabled: false,
 			list: []
 		}, {
 			code: "03070200",
@@ -3065,6 +3344,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
+			disabled: false,
 			list: []
 		}, {
 			code: "03070300",
@@ -3076,6 +3356,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
+			disabled: false,
 			list: []
 		}]
 	}, {
@@ -3088,6 +3369,7 @@ export const filterList = [{
 		minValue: "",
 		maxValue: "",
 		remark: "广义活期上月月日均与近12个月月均交易金额之比（若办理收单月份数不足12个月，取实际月份数）",
+		disabled: false,
 		list: [{
 			code: "03080100",
 			title: "＜1%",
@@ -3098,6 +3380,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
+			disabled: false,
 			list: []
 		}, {
 			code: "03080200",
@@ -3109,6 +3392,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
+			disabled: false,
 			list: []
 		}, {
 			code: "03080300",
@@ -3120,6 +3404,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
+			disabled: false,
 			list: []
 		}, {
 			code: "03080400",
@@ -3131,6 +3416,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
+			disabled: false,
 			list: []
 		}, {
 			code: "03080500",
@@ -3142,6 +3428,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
+			disabled: false,
 			list: []
 		}, {
 			code: "03080600",
@@ -3153,6 +3440,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
+			disabled: false,
 			list: []
 		}]
 	}, {
@@ -3165,6 +3453,7 @@ export const filterList = [{
 		minValue: "",
 		maxValue: "",
 		remark: "广义AUM上月月日均与近12个月月均交易金额之比（若办理收单月份数不足12个月，取实际月份数）",
+		disabled: false,
 		list: [{
 			code: "03090100",
 			title: "＜1%",
@@ -3175,6 +3464,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
+			disabled: false,
 			list: []
 		}, {
 			code: "03090200",
@@ -3186,6 +3476,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
+			disabled: false,
 			list: []
 		}, {
 			code: "03090300",
@@ -3197,6 +3488,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
+			disabled: false,
 			list: []
 		}, {
 			code: "03090400",
@@ -3208,6 +3500,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
+			disabled: false,
 			list: []
 		}, {
 			code: "03090500",
@@ -3219,6 +3512,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
+			disabled: false,
 			list: []
 		}, {
 			code: "03090600",
@@ -3230,6 +3524,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
+			disabled: false,
 			list: []
 		}]
 	}, {
@@ -3242,6 +3537,7 @@ export const filterList = [{
 		minValue: "",
 		maxValue: "",
 		remark: "从交易笔数（10笔/分,共20）、交易金额（300元/分,共20）、商户存款（5000元/分,共40）贷款（15000元/分）四个维度共100分来描述一个商户在我行的贡献",
+		disabled: false,
 		list: [{
 			code: "03100100",
 			title: "[0,40]",
@@ -3252,6 +3548,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
+			disabled: false,
 			list: []
 		}, {
 			code: "03100200",
@@ -3263,6 +3560,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
+			disabled: false,
 			list: []
 		}, {
 			code: "03100300",
@@ -3274,6 +3572,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
+			disabled: false,
 			list: []
 		}, {
 			code: "03100400",
@@ -3285,6 +3584,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
+			disabled: false,
 			list: []
 		}]
 	}]
@@ -3298,6 +3598,7 @@ export const filterList = [{
 	minValue: "",
 	maxValue: "",
 	remark: "",
+	disabled: false,
 	list: [{
 		code: "04010000",
 		title: "代发单位",
@@ -3308,6 +3609,7 @@ export const filterList = [{
 		minValue: "",
 		maxValue: "",
 		remark: "取核心代发单位字段",
+		disabled: false,
 		list: []
 	}, {
 		code: "04020000",
@@ -3319,6 +3621,7 @@ export const filterList = [{
 		minValue: "",
 		maxValue: "",
 		remark: "当年代发次数",
+		disabled: false,
 		list: [{
 			code: "04020100",
 			title: "＜5",
@@ -3329,6 +3632,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
+			disabled: false,
 			list: []
 		}, {
 			code: "04020200",
@@ -3340,6 +3644,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
+			disabled: false,
 			list: []
 		}, {
 			code: "04020300",
@@ -3351,6 +3656,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
+			disabled: false,
 			list: []
 		}, {
 			code: "04020400",
@@ -3362,6 +3668,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
+			disabled: false,
 			list: []
 		}, {
 			code: "04020500",
@@ -3373,6 +3680,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
+			disabled: false,
 			list: []
 		}]
 	}, {
@@ -3385,6 +3693,7 @@ export const filterList = [{
 		minValue: "",
 		maxValue: "",
 		remark: "当年代发累计金额",
+		disabled: false,
 		list: [{
 			code: "04030100",
 			title: "＜15000",
@@ -3395,6 +3704,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
+			disabled: false,
 			list: []
 		}, {
 			code: "04030200",
@@ -3406,6 +3716,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
+			disabled: false,
 			list: []
 		}, {
 			code: "04030300",
@@ -3417,6 +3728,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
+			disabled: false,
 			list: []
 		}, {
 			code: "04030400",
@@ -3428,6 +3740,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
+			disabled: false,
 			list: []
 		}, {
 			code: "04030500",
@@ -3439,6 +3752,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
+			disabled: false,
 			list: []
 		}, {
 			code: "04030600",
@@ -3450,6 +3764,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
+			disabled: false,
 			list: []
 		}]
 	}, {
@@ -3462,6 +3777,7 @@ export const filterList = [{
 		minValue: "",
 		maxValue: "",
 		remark: "当年月均代发金额（当年代发总金额/代发月份总数）",
+		disabled: false,
 		list: []
 	}, {
 		code: "04050000",
@@ -3473,6 +3789,7 @@ export const filterList = [{
 		minValue: "",
 		maxValue: "",
 		remark: "广义活期上月月日均与近12个月月均代发金额之比（若近12个月代发月份数不足12个月，取实际代发月数）",
+		disabled: false,
 		list: [{
 			code: "04050100",
 			title: "＜1.5%",
@@ -3483,6 +3800,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
+			disabled: false,
 			list: []
 		}, {
 			code: "04050200",
@@ -3494,6 +3812,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
+			disabled: false,
 			list: []
 		}, {
 			code: "04050300",
@@ -3505,6 +3824,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
+			disabled: false,
 			list: []
 		}, {
 			code: "04050400",
@@ -3516,6 +3836,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
+			disabled: false,
 			list: []
 		}, {
 			code: "04050500",
@@ -3527,6 +3848,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
+			disabled: false,
 			list: []
 		}, {
 			code: "04050600",
@@ -3538,6 +3860,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
+			disabled: false,
 			list: []
 		}, {
 			code: "04050700",
@@ -3549,6 +3872,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
+			disabled: false,
 			list: []
 		}]
 	}, {
@@ -3561,6 +3885,7 @@ export const filterList = [{
 		minValue: "",
 		maxValue: "",
 		remark: "广义AUM上月月日均与近12个月月均代发金额之比（若近12个月代发月份数不足12个月，取实际代发月数）",
+		disabled: false,
 		list: [{
 			code: "04060100",
 			title: "＜1.5%",
@@ -3571,6 +3896,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
+			disabled: false,
 			list: []
 		}, {
 			code: "04060200",
@@ -3582,6 +3908,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
+			disabled: false,
 			list: []
 		}, {
 			code: "04060300",
@@ -3593,6 +3920,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
+			disabled: false,
 			list: []
 		}, {
 			code: "04060400",
@@ -3604,6 +3932,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
+			disabled: false,
 			list: []
 		}, {
 			code: "04060500",
@@ -3615,6 +3944,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
+			disabled: false,
 			list: []
 		}, {
 			code: "04060600",
@@ -3626,6 +3956,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
+			disabled: false,
 			list: []
 		}]
 	}, {
@@ -3638,6 +3969,7 @@ export const filterList = [{
 		minValue: "",
 		maxValue: "",
 		remark: "最近一次代发工资后7天内同名划转至他行的总金额与本次代发金额比值",
+		disabled: false,
 		list: []
 	}]
 }, {
@@ -3650,6 +3982,7 @@ export const filterList = [{
 	minValue: "",
 	maxValue: "",
 	remark: "",
+	disabled: false,
 	list: [{
 		code: "05010000",
 		title: "AUM年日均",
@@ -3660,6 +3993,7 @@ export const filterList = [{
 		minValue: "",
 		maxValue: "",
 		remark: "当年度1月1日至上月底的广义AUM资产累计值与统计时间段内总天数之比",
+		disabled: false,
 		list: [{
 			code: "05010100",
 			title: "全部",
@@ -3670,6 +4004,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
+			disabled: false,
 			list: []
 		}, {
 			code: "05010200",
@@ -3681,6 +4016,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
+			disabled: false,
 			list: []
 		}, {
 			code: "05010300",
@@ -3692,6 +4028,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
+			disabled: false,
 			list: []
 		}, {
 			code: "05010400",
@@ -3703,6 +4040,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
+			disabled: false,
 			list: []
 		}, {
 			code: "05010500",
@@ -3714,6 +4052,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
+			disabled: false,
 			list: []
 		}, {
 			code: "05010600",
@@ -3725,6 +4064,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
+			disabled: false,
 			list: []
 		}, {
 			code: "05010700",
@@ -3736,6 +4076,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
+			disabled: false,
 			list: []
 		}]
 	}, {
@@ -3748,6 +4089,7 @@ export const filterList = [{
 		minValue: "",
 		maxValue: "",
 		remark: "上月每日的广义AUM资产累计值与上月天数之比",
+		disabled: false,
 		list: [{
 			code: "05020100",
 			title: "全部",
@@ -3758,6 +4100,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
+			disabled: false,
 			list: []
 		}, {
 			code: "05020200",
@@ -3769,6 +4112,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
+			disabled: false,
 			list: []
 		}, {
 			code: "05020300",
@@ -3780,6 +4124,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
+			disabled: false,
 			list: []
 		}, {
 			code: "05020400",
@@ -3791,6 +4136,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
+			disabled: false,
 			list: []
 		}, {
 			code: "05020500",
@@ -3802,6 +4148,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
+			disabled: false,
 			list: []
 		}, {
 			code: "05020600",
@@ -3813,6 +4160,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
+			disabled: false,
 			list: []
 		}, {
 			code: "05020700",
@@ -3824,6 +4172,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
+			disabled: false,
 			list: []
 		}]
 	}, {
@@ -3836,6 +4185,7 @@ export const filterList = [{
 		minValue: "",
 		maxValue: "",
 		remark: "当前广义AUM余额数据",
+		disabled: false,
 		list: [{
 			code: "05030100",
 			title: "全部",
@@ -3846,6 +4196,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
+			disabled: false,
 			list: []
 		}, {
 			code: "05030200",
@@ -3857,6 +4208,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
+			disabled: false,
 			list: []
 		}, {
 			code: "05030300",
@@ -3868,6 +4220,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
+			disabled: false,
 			list: []
 		}, {
 			code: "05030400",
@@ -3879,6 +4232,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
+			disabled: false,
 			list: []
 		}, {
 			code: "05030500",
@@ -3890,6 +4244,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
+			disabled: false,
 			list: []
 		}, {
 			code: "05030600",
@@ -3901,6 +4256,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
+			disabled: false,
 			list: []
 		}, {
 			code: "05030700",
@@ -3912,6 +4268,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
+			disabled: false,
 			list: []
 		}]
 	}, {
@@ -3924,6 +4281,7 @@ export const filterList = [{
 		minValue: "",
 		maxValue: "",
 		remark: "近3月客户用我行卡购买的三方理财总金额（三方理财定义为金融交易流水中对方客户名称包含“理财”、“基金**有限”字样）",
+		disabled: false,
 		list: []
 	}, {
 		code: "05050000",
@@ -3935,6 +4293,7 @@ export const filterList = [{
 		minValue: "",
 		maxValue: "",
 		remark: "近一年广义AUM余额最高值与当前余额差值",
+		disabled: false,
 		list: []
 	}]
 }, {
@@ -3947,6 +4306,7 @@ export const filterList = [{
 	minValue: "",
 	maxValue: "",
 	remark: "",
+	disabled: false,
 	list: [{
 		code: "06010000",
 		title: "产品签约",
@@ -3957,6 +4317,7 @@ export const filterList = [{
 		minValue: "",
 		maxValue: "",
 		remark: "取客户在我行产品签约信息",
+		disabled: false,
 		list: [{
 			code: "06010100",
 			title: "理财",
@@ -3967,6 +4328,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
+			disabled: false,
 			list: []
 		}, {
 			code: "06010200",
@@ -3978,6 +4340,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
+			disabled: false,
 			list: []
 		}]
 	}, {
@@ -3990,6 +4353,7 @@ export const filterList = [{
 		minValue: "",
 		maxValue: "",
 		remark: "取我行卡渠道签约信息",
+		disabled: false,
 		list: [{
 			code: "06020100",
 			title: "手机银行",
@@ -4000,6 +4364,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
+			disabled: false,
 			list: []
 		}, {
 			code: "06020200",
@@ -4011,6 +4376,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
+			disabled: false,
 			list: []
 		}, {
 			code: "06020300",
@@ -4022,6 +4388,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
+			disabled: false,
 			list: []
 		}, {
 			code: "06020400",
@@ -4033,6 +4400,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
+			disabled: false,
 			list: []
 		}, {
 			code: "06020500",
@@ -4044,6 +4412,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
+			disabled: false,
 			list: []
 		}, {
 			code: "06020600",
@@ -4055,6 +4424,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
+			disabled: false,
 			list: []
 		}, {
 			code: "06020700",
@@ -4066,6 +4436,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
+			disabled: false,
 			list: []
 		}]
 	}, {
@@ -4078,6 +4449,7 @@ export const filterList = [{
 		minValue: "",
 		maxValue: "",
 		remark: "是否持有我行信用卡",
+		disabled: false,
 		list: [{
 			code: "06030100",
 			title: "否",
@@ -4088,6 +4460,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
+			disabled: false,
 			list: []
 		}, {
 			code: "06030200",
@@ -4098,7 +4471,8 @@ export const filterList = [{
 			name: "",
 			minValue: "",
 			maxValue: "",
-			remark: "根据持有我行信用卡客户是否绑定我行借记卡还款数据判断",
+			remark: "是否绑定我行借记卡还款",
+			disabled: false,
 			list: [{
 				code: "06030201",
 				title: "全部",
@@ -4108,7 +4482,8 @@ export const filterList = [{
 				name: "信用卡持有标志#是#全部",
 				minValue: "",
 				maxValue: "",
-				remark: "",
+				remark: "不区分是否绑定我行借记卡",
+				disabled: false,
 				list: []
 			}, {
 				code: "06030202",
@@ -4119,7 +4494,8 @@ export const filterList = [{
 				name: "信用卡持有标志#是#是",
 				minValue: "",
 				maxValue: "",
-				remark: "",
+				remark: "已绑定我行借记卡还款",
+				disabled: false,
 				list: []
 			}, {
 				code: "06030203",
@@ -4130,7 +4506,8 @@ export const filterList = [{
 				name: "信用卡持有标志#是#否",
 				minValue: "",
 				maxValue: "",
-				remark: "",
+				remark: "未绑定我行借记卡还款",
+				disabled: false,
 				list: []
 			}]
 		}]
@@ -4144,6 +4521,7 @@ export const filterList = [{
 		minValue: "",
 		maxValue: "",
 		remark: "取客户在我行缴费签约信息",
+		disabled: false,
 		list: [{
 			code: "06040100",
 			title: "电费",
@@ -4154,6 +4532,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
+			disabled: false,
 			list: []
 		}, {
 			code: "06040100",
@@ -4165,6 +4544,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
+			disabled: false,
 			list: []
 		}, {
 			code: "06040100",
@@ -4176,6 +4556,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
+			disabled: false,
 			list: []
 		}]
 	}]
@@ -4189,6 +4570,7 @@ export const filterList = [{
 	minValue: "",
 	maxValue: "",
 	remark: "",
+	disabled: false,
 	list: [{
 		code: "07010000",
 		title: "月动账次数",
@@ -4199,6 +4581,7 @@ export const filterList = [{
 		minValue: "",
 		maxValue: "",
 		remark: "近1个月客户名下我行个人账户（含信用卡）动账次数汇总数",
+		disabled: false,
 		list: []
 	}, {
 		code: "07020000",
@@ -4210,6 +4593,7 @@ export const filterList = [{
 		minValue: "",
 		maxValue: "",
 		remark: "近1年客户名下我行信用卡动账次数汇总数",
+		disabled: false,
 		list: []
 	}]
 }, {
@@ -4222,6 +4606,7 @@ export const filterList = [{
 	minValue: "",
 	maxValue: "",
 	remark: "",
+	disabled: false,
 	list: [{
 		code: "08010000",
 		title: "近1月理财专区浏览次数",
@@ -4232,6 +4617,7 @@ export const filterList = [{
 		minValue: "",
 		maxValue: "",
 		remark: "取近1个月理财专区（含基金）浏览次数（单次停留超30s计为1次有效次数）",
+		disabled: false,
 		list: []
 	}, {
 		code: "08020000",
@@ -4243,6 +4629,7 @@ export const filterList = [{
 		minValue: "",
 		maxValue: "",
 		remark: "取近1个月贷款专区浏览次数（单次停留超30s计为1次有效次数）",
+		disabled: false,
 		list: []
 	}, {
 		code: "08030000",
@@ -4254,6 +4641,7 @@ export const filterList = [{
 		minValue: "",
 		maxValue: "",
 		remark: "取近60天登录手机银行次数（按天去重）与60天比值",
+		disabled: false,
 		list: []
 	}, {
 		code: "08040000",
@@ -4265,6 +4653,7 @@ export const filterList = [{
 		minValue: "",
 		maxValue: "",
 		remark: "取客户近60天手机银行活动参与次数",
+		disabled: false,
 		list: []
 	}, {
 		code: "08050000",
@@ -4276,6 +4665,7 @@ export const filterList = [{
 		minValue: "",
 		maxValue: "",
 		remark: "取客户当月权益是否领取数据",
+		disabled: false,
 		list: []
 	}]
 }]

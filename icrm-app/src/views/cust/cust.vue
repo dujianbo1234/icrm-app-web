@@ -396,16 +396,16 @@
 					case "重要潜客":
 						this.$router.push('./impQZCust');
 						break;
-					case "我的群组":
-						this.$router.push({
-							name: 'myGroup',
-						});
-						break;
-					case "条件群组":
-						this.$router.push({
-							name: 'filterGroup',
-						});
-						break;
+					// case "我的群组":
+					// 	this.$router.push({
+					// 		name: 'myGroup',
+					// 	});
+					// 	break;
+					// case "条件群组":
+					// 	this.$router.push({
+					// 		name: 'filterGroup',
+					// 	});
+					// 	break;
 					case "存量客户":
 						this.$router.push({
 							name: 'clCustList',

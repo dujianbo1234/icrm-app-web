@@ -226,10 +226,10 @@
 							<div class="titleTop">
 								<div class="titleL">
 									<van-icon :name="require('@/assets/image/AUM_img.png')" size="0.2rem" />
-									<h3>流入总金额(万元)</h3>
+									<h3>流入总金额(元)</h3>
 								</div>
 							</div>
-							<div class="titleNum">{{numFliter(inData.txnAmtCount || 0, false)}}</div>
+							<div class="titleNum">{{numFliter(inData.txnAmtCount || 0, true)}}</div>
 							<div class="titleBot">
 								<div>
 									<p class="textF">累计笔数</p>
@@ -248,10 +248,10 @@
 							<div class="titleTop">
 								<div class="titleL">
 									<van-icon :name="require('@/assets/image/cust_fzzl.png')" size="0.2rem" />
-									<h3>流出总金额(万元)</h3>
+									<h3>流出总金额(元)</h3>
 								</div>
 							</div>
-							<div class="titleNum">{{numFliter(outData.txnAmtCount || 0, false)}}</div>
+							<div class="titleNum">{{numFliter(outData.txnAmtCount || 0, true)}}</div>
 							<div class="titleBot">
 								<div>
 									<p class="textF">累计笔数</p>

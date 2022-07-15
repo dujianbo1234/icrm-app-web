@@ -52,7 +52,7 @@
 		<div class="bottomZW2" v-if="openPLSP"></div>
 		<div class="bottomZW"></div>
 		<van-popup v-model:show="openPLSP" position="bottom" :overlay="false" :lock-scroll="false"
-			safe-area-inset-bottom>
+			safe-area-inset-bottom z-index="9">
 			<div class="bottomBox">
 				<div></div>
 				<div class="btnBox">
@@ -61,7 +61,7 @@
 				</div>
 			</div>
 		</van-popup>
-		<van-overlay :show="showApprove" :lock-scroll="false" :z-index="10">
+		<van-overlay :show="showApprove" :lock-scroll="false" z-index="10">
 			<div class="wrapper" @click.stop>
 				<div class="block">
 					<div class="formList">

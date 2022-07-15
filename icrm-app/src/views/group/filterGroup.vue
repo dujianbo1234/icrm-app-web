@@ -2,7 +2,7 @@
 	<div class="home">
 		<nav-bar title="条件群组" type="2" leftIcon />
 		<van-tabs v-model:active="active" scrollspy sticky>
-			<van-tab v-for="(filterItem,i) in filterList" :key="'filterItem'+i" :title="filterItem.value">
+			<van-tab v-for="(filterItem,i) in filterList" :key="'filterItem'+i" v-show="!filterItem.disabled" :title="filterItem.value">
 				<div class="plateTitle">{{filterItem.title}}</div>
 				<div class="filterItemBox">
 					<div class="filterEmpty" v-if="!filterItem.list.length">
@@ -10,7 +10,7 @@
 					</div>
 					<div class="filterItem" v-for="(filterItemChild,j) in filterItem.list" :key="'filterItemChild'+j"
 						:class="activeChild1.code==filterItemChild.code?'filterItem_a':''"
-						@click="checkChild1(filterItemChild)">
+						v-show="!filterItemChild.disabled" @click="checkChild1(filterItemChild)">
 						{{filterItemChild.title}}
 					</div>
 				</div>
@@ -37,7 +37,8 @@
 			<div class="childListOutBox">
 				<div class="childListBox">
 					<div class="childRemark">{{activeChild1.remark}}</div>
-					<div class="childListItem" v-for="(childListItem,i) in activeChild1.list" :key="'childListItem'+i"
+					<div class="childListItem" v-for="(childListItem,i) in activeChild1.list"
+						v-show="!childListItem.disabled" :key="'childListItem'+i"
 						:class="childListItem.code==activeChild2.code||(!activeChild2.code&&filterArr.find(item=>item.code==childListItem.code))?'childListItem_a':''"
 						@click="checkChild2(childListItem,i)">
 						{{childListItem.title}}
@@ -59,7 +60,8 @@
 					<div class="checkedBox1">{{activeChild1.remark}}</div>
 					<div class="checkedBox2">已选（{{dfdwChecked.length}}）</div>
 					<div class="checkedBox3" v-for="(dfdwNameItem,i) in dfdwChecked" :key="'dfdwNameItem'+i">
-						{{dfdwNameItem}}</div>
+						{{dfdwNameItem}}
+					</div>
 				</div>
 				<div class="searchBox">
 					<van-search v-model="searchValue" shape="round" show-action placeholder="请输入代发单位名称"
@@ -88,7 +90,8 @@
 			<div class="child3InBox">
 				<div class="child3Box_1">{{activeChild2.code?activeChild2.remark:''}}</div>
 				<div class="child3Box_2">
-					<div class="child3BoxItem" v-for="(child3BoxItem,i) in activeChild2.list" :key="'child3BoxItem'+i"
+					<div class="child3BoxItem" v-for="(child3BoxItem,i) in activeChild2.list"
+						v-show="!child3BoxItem.disabled" :key="'child3BoxItem'+i"
 						:class="child3BoxItem.code==activeChild3.code||(!activeChild3.code&&filterArr.find(item=>item.code==child3BoxItem.code))?'child3BoxItem_a':''"
 						@click="checkChild3(child3BoxItem)">
 						{{child3BoxItem.title}}
@@ -179,9 +182,9 @@
 				switch (item.code) {
 					case "04010000":
 						var dfdw = this.filterArr.find(item => item.code == "04010000");
-						if (dfdw){
+						if (dfdw) {
 							this.dfdwChecked = dfdw.values.split(",");
-						}else{
+						} else {
 							this.dfdwChecked = [];
 						}
 						this.dfdwShow = true;

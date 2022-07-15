@@ -598,7 +598,7 @@
 						this.mustDoNum = res.data.total;
 						this.showMustDoNum = res.data.total > 99 ? "99+" : res.data.total;
 					} else {
-						Toast.fail("必办列表为空");
+						// Toast.fail("必办列表为空");
 					}
 				});
 			},
@@ -642,7 +642,8 @@
 						this.currentMonth = moment(time).format('M')
 						Toast.clear();
 					} else {
-						Toast.fail("日报数据为空");
+						Toast.clear();
+						// Toast.fail("日报数据为空");
 					}
 				};
 				let body = {
@@ -666,7 +667,6 @@
 					dataEncode: this.dataEncode
 				}
 				queryLoanBalance(body, (res) => {
-					console.log("贷款：",res)
 					if (res.data && res.data.records && res.data.records.length) {
 						var dataObj = res.data.records[0];
 						this.peCstLoan = [
@@ -683,11 +683,10 @@
 							]
 						]
 					} else {
-						Toast.fail("客户概貌贷款信息数据为空");
+						// Toast.fail("客户概貌贷款信息数据为空");
 					}
 				});
 				queryHomPeCstAum(body, (res) => {
-					console.log("其他：",res)
 					if (res.data && res.data.records && res.data.records.length) {
 						var dataObj = res.data.records[0];
 						this.peCstAum = [
@@ -862,7 +861,7 @@
 							}
 						}
 					} else {
-						Toast.fail("客户概貌信息数据为空");
+						// Toast.fail("客户概貌信息数据为空");
 					}
 				});
 			},
@@ -961,7 +960,7 @@
 							this.$refs.aumDisDiaChart.drawEcharts();
 						});
 					} else {
-						Toast.fail("AUM分布图数据为空");
+						// Toast.fail("AUM分布图数据为空");
 					}
 				});
 			},
@@ -1007,7 +1006,7 @@
 							this.$refs.custLvDisDiaChart.drawEcharts();
 						});
 					} else {
-						Toast.fail("客户等级分布图数据为空");
+						// Toast.fail("客户等级分布图数据为空");
 					}
 				});
 			},
@@ -1185,13 +1184,14 @@
 					}
 				}
 				queryAUMGrowthTrend(body, (res) => {
+					console.log(res)
 					let data = res.data.records
 					// 全部, 活期存款, 定期存款, 理财, 基金, 保险, 信托
 					let arr = [
 						['aumBal', 'currDpsitBal', 'timeDpsitBal', 'cftBal', 'fndBal', 'insBal',
 							'entrstBal'
 						], // 余额
-						['aumYearAvgKh', 'currDpsitYearAvg', 'timeDpsitMonthAvg', 'cftYearAvg', 'fndYearAvg',
+						['aumYearAvgKh', 'currDpsitMonthAvg', 'timeDpsitMonthAvg', 'cftYearAvg', 'fndYearAvg',
 							'insYearAvg', 'entrstYearAvg'
 						] // 日均
 					][this.listType]
@@ -1447,7 +1447,7 @@
 							this.messageNum = res3.data[0].allSum;
 							this.showMessageNum = res3.data[0].allSum > 99 ? "99+" : res3.data[0].allSum;
 						} else {
-							Toast.fail("消息数据为空");
+							// Toast.fail("消息数据为空");
 						}
 					});
 					this.homPeCstAum();
@@ -1459,7 +1459,7 @@
 					this.loanGrowthTrend(this.dataDate) // 贷款增长趋势
 					this.getMustDoList()
 				} else {
-					Toast.fail("数据日期数据为空");
+					// Toast.fail("数据日期数据为空");
 				}
 			});
 			saveSmAppVisitInfo({
