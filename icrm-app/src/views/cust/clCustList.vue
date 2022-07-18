@@ -312,7 +312,6 @@
 				});
 				this.pageIndex++;
 				this.params.pageNum = this.pageIndex.toString();
-				console.log(this.params)
 				queryCustSearchList(this.params, (res) => {
 					if (res.data && res.data.records) {
 						this.total = res.data.total;

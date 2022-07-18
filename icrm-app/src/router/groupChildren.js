@@ -14,4 +14,8 @@ export default [{
 	path: '/filterGroup',
 	name: 'filterGroup',
 	component: () => import('@/views/group/filterGroup.vue')
+}, {
+	path: '/groupSearchResult',
+	name: 'groupSearchResult',
+	component: () => import('@/views/group/groupSearchResult.vue')
 }];

@@ -2,7 +2,8 @@
 	<div class="home">
 		<nav-bar title="条件群组" type="2" leftIcon />
 		<van-tabs v-model:active="active" scrollspy sticky>
-			<van-tab v-for="(filterItem,i) in filterList" :key="'filterItem'+i" v-show="!filterItem.disabled" :title="filterItem.value">
+			<van-tab v-for="(filterItem,i) in filterList" :key="'filterItem'+i" v-show="!filterItem.disabled"
+				:title="filterItem.value">
 				<div class="plateTitle">{{filterItem.title}}</div>
 				<div class="filterItemBox">
 					<div class="filterEmpty" v-if="!filterItem.list.length">
@@ -270,7 +271,16 @@
 				this.dfdwShow = false;
 			},
 			toSearchRes() {
-				console.log(this.filterArr)
+				if (this.filterArr.length) {
+					this.$router.push({
+						name: 'groupSearchResult',
+						params: {
+							filterArr: JSON.stringify(this.filterArr)
+						}
+					})
+				} else {
+					Toast("请至少选择1项")
+				}
 			}
 		},
 		mounted() {
