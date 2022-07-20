@@ -136,7 +136,7 @@
 				// let arrImg = []
 				// this.record.photoList.forEach(item => {
 				//   let obj = item
-				//   obj.url = `${this.$store.state.baseUrl}${item.fileId}` // 必须有个url组件才能回显
+				//   obj.url = `${this.$store.state.configInfo.icrmUrl}${item.fileId}` // 必须有个url组件才能回显
 				//   arr.push(obj)
 				// })
 				// this.photoList = arrImg
@@ -196,13 +196,13 @@
 			uploadAudio() {
 				AlipayJSBridge.call("openRecord", {
 					type: "0",
-					url: this.$store.state.baseUrl + "/jjbank/api/memsound/memSoundRecUpload"
+					url: this.$store.state.configInfo.icrmUrl + "/jjbank/api/memsound/memSoundRecUpload"
 				}, (res) => {
 					if (res.result) {
 						var result = JSON.parse(res.result);
 						if (result.code == "0") {
 							this.soundList.push({
-								url: `${this.$store.state.baseUrl}${result.data[0].fileServerPath}${result.data[0].fileName}`,
+								url: `${this.$store.state.configInfo.icrmUrl}${result.data[0].fileServerPath}${result.data[0].fileName}`,
 								fileId: result.data[0].tableKey,
 							});
 						} else {
@@ -316,7 +316,7 @@
 			//     headers: {'Content-Type': 'multipart/form-data'},
 			//     method: 'POST'
 			//   }
-			//   serivce.post(`${this.store.state.baseUrl}/jjbank/api/memsound/memSoundRecUpload`, formdata, config).then(res => {
+			//   serivce.post(`${this.store.state.configInfo.icrmUrl}/jjbank/api/memsound/memSoundRecUpload`, formdata, config).then(res => {
 			//     console.log(res)
 			//   }).catch(error => {
 			//     console.log(error)
@@ -335,7 +335,7 @@
 				if (res.code == 0) {
 					let obj = {
 						// url: `./assets/image/play-mp3.png`,
-						url: `${this.$store.state.baseUrl}${res.data[0].fileServerPath}${res.data[0].fileName}`,
+						url: `${this.$store.state.configInfo.icrmUrl}${res.data[0].fileServerPath}${res.data[0].fileName}`,
 						fileId: res.data[0].tableKey,
 						// isImage: false
 					}
@@ -350,7 +350,7 @@
 				//   // Toast.success("上传成功");
 				//   // let obj = {
 				//   //   // url: `./assets/image/play-mp3.png`,
-				//   //   url: `${this.$store.state.baseUrl}${res.data[0].fileServerPath}${res.data[0].fileName}`,
+				//   //   url: `${this.$store.state.configInfo.icrmUrl}${res.data[0].fileServerPath}${res.data[0].fileName}`,
 				//   //   tableKey: res.data[0].tableKey,
 				//   //   isImage: true
 				//   // }
@@ -371,14 +371,14 @@
 					// console.log('上传图片',res)
 					Toast.success("上传成功");
 					let obj = {
-						url: `${this.$store.state.baseUrl}${res.data[0].fileServerPath}${res.data[0].fileName}`,
+						url: `${this.$store.state.configInfo.icrmUrl}${res.data[0].fileServerPath}${res.data[0].fileName}`,
 						fileId: res.data[0].tableKey
 					}
 					this.photoList[this.photoList.length - 1] = obj
-					// this.photoList[this.photoList.length - 1].url = `${this.$store.state.baseUrl}${res.data[0].fileServerPath}${res.data[0].fileName}`
+					// this.photoList[this.photoList.length - 1].url = `${this.$store.state.configInfo.icrmUrl}${res.data[0].fileServerPath}${res.data[0].fileName}`
 					// this.photoList[this.photoList.length - 1].tableKey = res.data[0].tableKey
 					// this.photoList.push({
-					// 	url: `${this.$store.state.baseUrl}${res.data[0].fileServerPath}${res.data[0].fileName}`,
+					// 	url: `${this.$store.state.configInfo.icrmUrl}${res.data[0].fileServerPath}${res.data[0].fileName}`,
 					// 	tableKey: res.data[0].tableKey
 					// })
 					// console.log(this.photoList[this.photoList.length - 1].url)

@@ -55,5 +55,10 @@ export default [{
 		path: '/baiFangList',
 		name: 'baiFangList',
 		component: () => import('@/views/cust/baiFangList.vue')
+	},
+	{
+		path: '/jiushuWebview',
+		name: 'jiushuWebview',
+		component: () => import('@/views/cust/jiushuWebview.vue')
 	}
 ];

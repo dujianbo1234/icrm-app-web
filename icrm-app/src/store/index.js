@@ -6,7 +6,7 @@ export default createStore({
 	state() {
 		return {
 			userMsg: {},
-			baseUrl: "",
+			configInfo: {},
 		}
 	},
 	getters: {},
@@ -14,8 +14,8 @@ export default createStore({
 		setUserMsg(state,userMsg) {
 			state.userMsg = userMsg;
 		},
-		setBaseUrl(state,baseUrl) {
-			state.baseUrl = baseUrl;
+		setConfigInfo(state,configInfo) {
+			state.configInfo = configInfo;
 		},
 		changeUserMsgRole(state,value) {
 			state.userMsg.roleId = value.roleId;

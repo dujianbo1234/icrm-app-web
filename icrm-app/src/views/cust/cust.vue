@@ -45,7 +45,8 @@
 						<van-icon name="arrow" color="#48616B" />
 					</div>
 				</div>
-				<div v-for="(shangJiItem, i) in busiBdValue" :key="'shangJiItem' + i" class="shangJiCardOutBox" @click="toChooseCust(shangJiItem)">
+				<div v-for="(shangJiItem, i) in busiBdValue" :key="'shangJiItem' + i" class="shangJiCardOutBox"
+					@click="toChooseCust(shangJiItem)">
 					<div style="display:flex;justify-content: space-between;align-items: center;">
 						<div class="shangJiHeader">
 							<van-icon style="margin-left:0.04rem"
@@ -197,16 +198,11 @@
 						icon: require('../../assets/image/tabbar_cust_main_menu03.png'),
 						show: false
 					},
-					{
-						title: "动态分析",
-						icon: require('../../assets/image/tabbar_cust_main_menu04.png'),
-						show: false
-					},
-					{
-						title: "鱼骨图",
-						icon: require('../../assets/image/tabbar_cust_main_menu05.png'),
-						show: false
-					},
+					// {
+					// 	title: "鱼骨图",
+					// 	icon: require('../../assets/image/tabbar_cust_main_menu05.png'),
+					// 	show: false
+					// },
 					{
 						title: "提醒",
 						icon: require('../../assets/image/tabbar_cust_main_menu06.png'),
@@ -217,12 +213,29 @@
 						icon: require('../../assets/image/tabbar_cust_main_menu07.png'),
 						show: false
 					},
+					// {
+					// 	title: "客户公共池",
+					// 	icon: require('../../assets/image/tabbar_cust_main_menu08.png'),
+					// 	show: false
+					// },
 					{
-						title: "客户公共池",
-						icon: require('../../assets/image/tabbar_cust_main_menu08.png'),
+						title: "动态分析",
+						icon: require('../../assets/image/tabbar_cust_main_menu04.png'),
 						show: false
 					},
 					{
+						title: "财富看板",
+						icon: require('../../assets/image/tabbar_cust_main_menu17.png'),
+						show: false
+					}, {
+						title: "贷款看板",
+						icon: require('../../assets/image/tabbar_cust_main_menu18.png'),
+						show: false
+					}, {
+						title: "收单看板",
+						icon: require('../../assets/image/tabbar_cust_main_menu19.png'),
+						show: false
+					}, {
 						title: "短信审批",
 						icon: require('../../assets/image/tabbar_cust_main_menu09.png'),
 						show: false
@@ -345,7 +358,7 @@
 				queryCmrcOpportunitySumInfo({
 					cmrcOpptId: bdItem.cmrcOpptId
 				}, (res) => {
-					if(res.data&&res.data.cmrcOpptId){
+					if (res.data && res.data.cmrcOpptId) {
 						localStorage.setItem("cmrcOpptId", bdItem.cmrcOpptId);
 						this.$router.push({
 							name: 'chooseCust',
@@ -353,7 +366,7 @@
 								cmrcOpptId: bdItem.cmrcOpptId
 							}
 						})
-					}else{
+					} else {
 						Toast("无法查看该商机！")
 					}
 				})
@@ -423,6 +436,15 @@
 								newPage: true
 							}
 						});
+						break;
+					case "财富看板":
+						this.toJiushu("财富看板");
+						break;
+					case "贷款看板":
+						this.toJiushu("贷款看板");
+						break;
+					case "收单看板":
+						this.toJiushu("收单看板");
 						break;
 					case "全部客群":
 						this.$router.push('./business');
@@ -604,40 +626,71 @@
 					}
 				});
 			},
+			toJiushu(url) {
+				Toast.loading({
+					message: "正在登录九数",
+					forbidClick: true,
+					duration: 0
+				});
+				AlipayJSBridge.call("loginNgiam", {
+					url: this.$store.state.configInfo.icrmUrl + "/jjbank/api/sso/ngiam-rst",
+					clientApiKey: this.$store.state.configInfo.jsClientApiKey,
+					userApiKey: this.$store.state.userMsg.userApiKey
+				}, (res) => {
+					if(res.status=="000000"){
+						Toast.clear();
+						var result = JSON.parse(res.result)
+						this.$router.push({
+							name: 'jiushuWebview',
+							params: {
+								title: url,
+								url: this.$store.state.configInfo.jsRetailUrl+"&ticket=" + result.token + "&_t="+new Date().getTime()
+							}
+						});
+					}else{
+						Toast.fail(res.msg)
+					}
+				});
+			},
 		},
 		mounted() {
 			var menu = [];
-			switch (this.$store.state.userMsg.roleId) {
-				case "00000001": // 总行管理员（业务）
-					menu = ["重要潜客", "我的群组", "条件群组", "动态分析", "鱼骨图", "提醒", "存量客户", "短信审批", "更多"];
-					break;
-				case "00000002": // 分行管理员
-					menu = ["重要潜客", "我的群组", "条件群组", "动态分析", "鱼骨图", "提醒", "存量客户", "短信审批", "更多"];
-					break;
-				case "00000003": // 支行管理员
-					menu = ["重要潜客", "我的群组", "条件群组", "动态分析", "鱼骨图", "提醒", "存量客户", "客户公共池", "短信审批", "更多"];
-					break;
-				case "00000004": // 客户经理
-					menu = ["重要潜客", "我的群组", "条件群组", "动态分析", "鱼骨图", "提醒", "存量客户", "客户公共池", "更多"];
-					break;
-				case "00000005": // 系统管理员（科技）
-					menu = ["重要潜客", "我的群组", "条件群组", "动态分析", "鱼骨图", "提醒", "存量客户", "短信审批", "更多"];
-					break;
-				case "00000006": // 总行领导
-					menu = ["重要潜客", "我的群组", "条件群组", "动态分析", "鱼骨图", "提醒", "存量客户", "更多"];
-					break;
-				case "00000007": // 分行领导
-					menu = ["重要潜客", "我的群组", "条件群组", "动态分析", "鱼骨图", "提醒", "存量客户", "更多"];
-					break;
-				case "00000008": // 二级支行管理员
-					menu = ["重要潜客", "我的群组", "条件群组", "动态分析", "鱼骨图", "提醒", "存量客户", "客户公共池", "短信审批", "更多"];
-					break;
-				case "00000009": // 理财经理
-					menu = ["重要潜客", "我的群组", "条件群组", "动态分析", "鱼骨图", "提醒", "存量客户", "客户公共池", "更多"];
-					break;
-				case "00000010": // 总行员工
-					menu = ["重要潜客", "我的群组", "条件群组", "动态分析", "鱼骨图", "提醒", "存量客户", "更多"];
-					break;
+			// switch (this.$store.state.userMsg.roleId) {
+			// 	case "00000001": // 总行管理员（业务）
+			// 		menu = ["重要潜客", "我的群组", "条件群组", "动态分析", "鱼骨图", "提醒", "存量客户", "短信审批", "更多"];
+			// 		break;
+			// 	case "00000002": // 分行管理员
+			// 		menu = ["重要潜客", "我的群组", "条件群组", "动态分析", "鱼骨图", "提醒", "存量客户", "短信审批", "更多"];
+			// 		break;
+			// 	case "00000003": // 支行管理员
+			// 		menu = ["重要潜客", "我的群组", "条件群组", "动态分析", "鱼骨图", "提醒", "存量客户", "客户公共池", "短信审批", "更多"];
+			// 		break;
+			// 	case "00000004": // 客户经理
+			// 		menu = ["重要潜客", "我的群组", "条件群组", "动态分析", "鱼骨图", "提醒", "存量客户", "客户公共池", "更多"];
+			// 		break;
+			// 	case "00000005": // 系统管理员（科技）
+			// 		menu = ["重要潜客", "我的群组", "条件群组", "动态分析", "鱼骨图", "提醒", "存量客户", "短信审批", "更多"];
+			// 		break;
+			// 	case "00000006": // 总行领导
+			// 		menu = ["重要潜客", "我的群组", "条件群组", "动态分析", "鱼骨图", "提醒", "存量客户", "更多"];
+			// 		break;
+			// 	case "00000007": // 分行领导
+			// 		menu = ["重要潜客", "我的群组", "条件群组", "动态分析", "鱼骨图", "提醒", "存量客户", "更多"];
+			// 		break;
+			// 	case "00000008": // 二级支行管理员
+			// 		menu = ["重要潜客", "我的群组", "条件群组", "动态分析", "鱼骨图", "提醒", "存量客户", "客户公共池", "短信审批", "更多"];
+			// 		break;
+			// 	case "00000009": // 理财经理
+			// 		menu = ["重要潜客", "我的群组", "条件群组", "动态分析", "鱼骨图", "提醒", "存量客户", "客户公共池", "更多"];
+			// 		break;
+			// 	case "00000010": // 总行员工
+			// 		menu = ["重要潜客", "我的群组", "条件群组", "动态分析", "鱼骨图", "提醒", "存量客户", "更多"];
+			// 		break;
+			// }
+			if (this.$store.state.userMsg.roleId == "00000004") {
+				menu = ["重要潜客", "我的群组", "条件群组", "提醒", "存量客户", "动态分析", "财富看板", "贷款看板", "收单看板", "更多"];
+			} else {
+				menu = ["重要潜客", "我的群组", "条件群组", "提醒", "存量客户", "财富看板", "贷款看板", "收单看板", "短信审批", "更多"];
 			}
 			menu.forEach((mItem) => {
 				this.menuList1.find(item => item.title == mItem).show = true

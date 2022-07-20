@@ -147,8 +147,8 @@
 					<div class="followItem5" v-if="followItem.serviceType=='01'&&followItem.fileList.length">
 						<div class="followItem5_1"
 							v-for="(file,j) in followItem.fileList.length>4&&!followItem.showAllPhoto?followItem.fileList.slice(0,3):followItem.fileList"
-							:key="'file'+j" @click="openPhoto(this.$store.state.baseUrl + file.fileServerPath)">
-							<img :src="this.$store.state.baseUrl + file.fileServerPath">
+							:key="'file'+j" @click="openPhoto(this.$store.state.configInfo.icrmUrl + file.fileServerPath)">
+							<img :src="this.$store.state.configInfo.icrmUrl + file.fileServerPath">
 						</div>
 						<div class="followItem5_2" v-if="followItem.fileList.length>4&&!followItem.showAllPhoto"
 							@click="followItem.showAllPhoto=true">

@@ -1376,7 +1376,8 @@
 			/* 根据拥有的权限查询列表信息 */
 			tableListGet() {
 				let body = {
-					custNum: this.$route.query.custNum
+					custNum: this.$route.query.custNum,
+					pageSize: "9999"
 				}
 				// 持有产品
 				this.prdList.forEach(item => {

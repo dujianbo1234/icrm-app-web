@@ -5,7 +5,7 @@ import {
 import store from '../store/index.js';
 
 let config = {
-	baseURL: store.state.baseUrl,
+	baseURL: store.state.configInfo.icrmUrl,
 	timeout: 90000 //设置最大请求时间
 }
 const _axios = axios.create(config)

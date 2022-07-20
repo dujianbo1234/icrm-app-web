@@ -162,8 +162,8 @@
 			<div class="popPlate2">
 				<div class="followItem5_1"
 					v-for="(file,j) in followItem.fileList"
-					:key="'file'+j" @click="openPhoto(this.$store.state.baseUrl + file.fileServerPath)">
-					<img :src="this.$store.state.baseUrl + file.fileServerPath">
+					:key="'file'+j" @click="openPhoto(this.$store.state.configInfo.icrmUrl + file.fileServerPath)">
+					<img :src="this.$store.state.configInfo.icrmUrl + file.fileServerPath">
 				</div>
 			</div>
 			<div class="popPlate3">

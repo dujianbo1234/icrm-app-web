@@ -95,7 +95,7 @@
 			});
 
 			getIcrmConfigInfo({}, (res) => {
-				this.$store.commit("setBaseUrl", res.data.icrmUrl);
+				this.$store.commit("setConfigInfo", res.data);
 			});
 
 			document.addEventListener(

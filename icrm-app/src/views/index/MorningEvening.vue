@@ -254,14 +254,14 @@
 						this.dataList.forEach(item => {
 							if (item.soundList instanceof Array) {
 								item.soundList.forEach(i => {
-									i.url = `${this.$store.state.baseUrl}${i.fileServerPath}`
+									i.url = `${this.$store.state.configInfo.icrmUrl}${i.fileServerPath}`
 								})
 							} else {
 								item.soundList = []
 							}
 							if (item.photoList instanceof Array) {
 								item.photoList.forEach(i => {
-									i.url = `${this.$store.state.baseUrl}${i.fileServerPath}`
+									i.url = `${this.$store.state.configInfo.icrmUrl}${i.fileServerPath}`
 								})
 							} else {
 								item.photoList = []
