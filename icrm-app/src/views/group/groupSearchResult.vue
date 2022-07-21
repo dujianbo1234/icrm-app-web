@@ -8,9 +8,11 @@
 					<div class="plate1_2_item" v-for="(filterItem,i) in filterArr" :key="'filterItem'+i">
 						<div class="plate1_2_item_text">#{{filterItem.name.split("#")[0]}}#</div>
 						<div class="plate1_2_item_text" v-if="filterItem.value">{{filterItem.value}}</div>
-						<div class="plate1_2_item_text" v-else-if="filterItem.minValue&&filterItem.maxValue">({{filterItem.minValue}},{{filterItem.maxValue}}]</div>
+						<div class="plate1_2_item_text" v-else-if="filterItem.minValue&&filterItem.maxValue">
+							({{filterItem.minValue}},{{filterItem.maxValue}}]</div>
 						<div class="plate1_2_item_text" v-else-if="filterItem.minValue">≥{{filterItem.minValue}}</div>
 						<div class="plate1_2_item_text" v-else-if="filterItem.maxValue">＜{{filterItem.maxValue}}</div>
+						<div class="plate1_2_item_text" v-else-if="filterItem.values">＜{{filterItem.values}}</div>
 					</div>
 				</div>
 			</div>
@@ -70,12 +72,13 @@
 				<div class="bottomBtnIcon bottomBtnIcon1"></div>
 				<div class="bottomBtnName">分享</div>
 			</div>
-			<div class="bottomBtn" @click="checkShare">
+			<div class="bottomBtn" @click="createType='dt';showCreate=true;">
 				<div class="bottomBtnIcon bottomBtnIcon2"></div>
 				<div class="bottomBtnName">动态群组</div>
 			</div>
 			<div class="bottomBtn_popup">
-				<van-popover v-model:show="showPopover" :actions="actions" @select="onSelect" placement="top" :show-arrow="false" :offset="[-15,11]">
+				<van-popover v-model:show="showPopover" :actions="actions" @select="onSelect" placement="top"
+					:show-arrow="false" :offset="[-15,11]">
 					<template #reference>
 						<div class="bottomBtnIcon bottomBtnIcon3"></div>
 						<div class="bottomBtnName">固定群组</div>
@@ -84,6 +87,52 @@
 			</div>
 			<div class="bottomZW" style="width: 100%;"></div>
 		</div>
+		<!-- <div class="bottomBtns">
+			<div class="bottomBtn" @click="checkShare">
+				<div class="bottomBtnIcon bottomBtnIcon1"></div>
+				<div class="bottomBtnName">分享</div>
+			</div>
+			<div class="bottomBtn" @click="createType='dt';showCreate=true;">
+				<div class="bottomBtnIcon bottomBtnIcon2"></div>
+				<div class="bottomBtnName">动态群组</div>
+			</div>
+			<div class="bottomBtn_popup">
+				<van-popover v-model:show="showPopover" :actions="actions" @select="onSelect" placement="top"
+					:show-arrow="false" :offset="[-15,11]">
+					<template #reference>
+						<div class="bottomBtnIcon bottomBtnIcon3"></div>
+						<div class="bottomBtnName">固定群组</div>
+					</template>
+				</van-popover>
+			</div>
+			<div class="bottomZW" style="width: 100%;"></div>
+		</div> -->
+		<van-popup v-model:show="showCreate" :close-on-click-overlay="false">
+			<div class="createBox">
+				<div class="createTitle">{{createType=="dt"?"创建动态群组":"创建固定群组"}}</div>
+				<div class="titleLine"></div>
+				<div class="filterBox" v-if="createType=='dt'">
+					<template v-for="(filterItem,i) in filterArr" :key="'filterItem'+i">
+						<span>#</span>
+						<span>{{filterItem.name.split("#")[0]}}&nbsp;</span>
+						<span v-if="filterItem.value">{{filterItem.value}}</span>
+						<span v-else-if="filterItem.minValue&&filterItem.maxValue">
+							({{filterItem.minValue}},{{filterItem.maxValue}}]</span>
+						<span v-else-if="filterItem.minValue">≥{{filterItem.minValue}}</span>
+						<span v-else-if="filterItem.maxValue">＜{{filterItem.maxValue}}</span>
+						<span v-else-if="filterItem.values">＜{{filterItem.values}}</span>
+						<span># </span>
+					</template>
+				</div>
+				<van-field v-model="groupName" type="text" label="群组名称" maxlength="10" required placeholder="请输入名称" />
+				<van-field v-model="groupRemark" type="textarea" label="选客描述" placeholder="请输入说明" rows="1" autosize
+					maxlength="30" show-word-limit />
+				<div class="createBtns">
+					<div class="createBtn createBtn1" @click="showCreate=false">取消</div>
+					<div class="createBtn createBtn2" @click="createGroup">创建</div>
+				</div>
+			</div>
+		</van-popup>
 	</div>
 </template>
 
@@ -143,7 +192,19 @@
 				}, {
 					text: "创建固定群组",
 					color: "#026DFF"
-				}]
+				}],
+				showCreate: false,
+				createType: "dt",
+				groupName: "",
+				groupRemark: "",
+			}
+		},
+		watch: {
+			showCreate() {
+				if (this.showCreate) {
+					this.groupName = "";
+					this.groupRemark = "";
+				}
 			}
 		},
 		methods: {
@@ -187,7 +248,18 @@
 				Toast("功能开发中");
 			},
 			onSelect(action) {
-				Toast(action.text);
+				switch (action.text) {
+					case "加入已有群组":
+						this.showChecked = true;
+						break;
+					case "创建固定群组":
+						this.createType = "gd";
+						this.showCreate = true;
+						break;
+				}
+			},
+			createGroup() {
+
 			},
 		},
 		mounted() {
@@ -312,7 +384,7 @@
 		height: 0.6rem;
 		padding: 0.11rem 0;
 	}
-	
+
 	.bottomBtn_popup {
 		width: calc(100% / 3);
 		height: 0.6rem;
@@ -352,6 +424,118 @@
 		font-weight: 500;
 		color: #026DFF;
 		line-height: 0.14rem;
+	}
+
+	.home>:deep(.van-popup) {
+		width: 91.47%;
+		background-color: transparent;
+	}
+
+	.createBox {
+		width: 100%;
+		background: #FFFFFF;
+		border-radius: 0.08rem;
+		padding-bottom: 0.22rem;
+	}
+
+	.createTitle {
+		width: 100%;
+		height: 0.45rem;
+		font-size: 0.16rem;
+		font-family: PingFangSC-Regular, PingFang SC;
+		font-weight: 400;
+		color: #262626;
+		line-height: 0.45rem;
+		text-align: center;
+	}
+
+	.titleLine {
+		width: 100%;
+		height: 0.07rem;
+		box-shadow: inset 0rem 0.01rem 0rem 0rem #E7E9EC;
+		margin-bottom: 0.04rem;
+	}
+
+	.filterBox {
+		width: 89.5%;
+		background: #F2F8FF;
+		padding: 0.08rem 0.05rem;
+		border-radius: 0.05rem;
+		margin: 0.12rem auto 0;
+		font-size: 0.13rem;
+		font-family: PingFangSC-Regular, PingFang SC;
+		font-weight: 400;
+		color: #026DFF;
+		line-height: 0.18rem;
+		text-align: left;
+	}
+
+	.createBox :deep(.van-cell) {
+		width: calc(100% - 0.72rem);
+		margin: 0.19rem auto 0.29rem;
+	}
+
+	.createBox :deep(.van-cell:after) {
+		border-bottom: 0;
+	}
+
+	.createBox :deep(.van-cell__title) {
+		text-align: right;
+		font-size: 0.14rem;
+		font-family: PingFangSC-Regular, PingFang SC;
+		font-weight: 400;
+		color: #262626;
+		width: 0.68rem;
+		line-height: 0.4rem;
+		white-space: nowrap;
+	}
+
+	.createBox :deep(.van-cell__value) {
+		width: 100%;
+		background-color: #F5F5F5;
+		border-radius: 0.05rem;
+	}
+
+	.createBox :deep(.van-field__body) {
+		min-height: 0.4rem;
+		padding: 0 0.12rem;
+	}
+
+	.createBox :deep(.van-field__word-limit) {
+		padding-right: 0.06rem;
+	}
+
+	.createBox :deep(.van-field__label--required:before) {
+		color: #026DFF;
+	}
+
+	.createBtns {
+		height: 0.3rem;
+		display: flex;
+		flex-wrap: nowrap;
+		justify-content: center;
+	}
+
+	.createBtn {
+		width: 1.08rem;
+		height: 0.3rem;
+		border-radius: 0.15rem;
+		font-size: 0.13rem;
+		font-family: PingFangSC-Medium, PingFang SC;
+		font-weight: 500;
+		line-height: 0.3rem;
+		text-align: center;
+		margin: 0 0.1rem;
+	}
+
+	.createBtn1 {
+		border: solid 0.01rem #026DFF;
+		color: #026DFF;
+	}
+
+	.createBtn2 {
+		background: #026DFF;
+		color: #FFFFFF;
 	}
 </style>
 

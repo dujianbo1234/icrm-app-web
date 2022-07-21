@@ -72,6 +72,7 @@ export const approveAllMessageSendApply = (params,fun) => {request("market.appro
 export const queryOpportunityScoringProgress = (params,fun) => {request("market.queryOpportunityScoringProgress", params, fun)}
 // 商机评分人数
 export const queryOpportPractialCount = (params,fun) => {request("market.queryOpportPractialCount", params, fun)}
-
-
-
+// 查询代发单位列表
+export const queryCustAgentCompanyList = (params,fun) => {request("market.queryCustAgentCompanyList", params, fun)}
+// 查询筛选结果列表
+export const queryFilterResultList = (params,fun) => {request("market.queryFilterResultList", params, fun)}

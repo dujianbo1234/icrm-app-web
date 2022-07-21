@@ -198,8 +198,8 @@
 			</div>
 		</div>
 		<div class="bottomZW"></div>
-		<div style="height: 0.66rem;" v-if="$store.state.userMsg.roleId == '00000001'||$store.state.userMsg.orgClass != '90000001'"></div>
-		<div class="plate5" v-if="$store.state.userMsg.roleId == '00000001'||$store.state.userMsg.orgClass != '90000001'">
+		<div style="height: 0.66rem;" v-if="$store.state.userMsg.roleId == '00000001'||$store.state.userMsg.roleId == '00000004'||$store.state.userMsg.roleId == '00000006'"></div>
+		<div class="plate5" v-if="$store.state.userMsg.roleId == '00000001'||$store.state.userMsg.roleId == '00000004'||$store.state.userMsg.roleId == '00000006'">
 			<div class="plate5_item" @click="openMbox">
 				<div class="plate5_item_icon"
 					:style="{'background-image': 'url('+require('../../assets/image/business_detail_message.png')+')'}">

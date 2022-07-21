@@ -133,6 +133,10 @@
 	import {
 		Toast
 	} from "vant";
+	import {
+		queryCustAgentCompanyList,
+		queryFilterResultList
+	} from "../../request/market.js";
 	export default {
 		data() {
 			return {
@@ -258,6 +262,7 @@
 					this.filterArr.splice(itemIndex, 1, addChild);
 				}
 				this.defaultShow = false;
+				this.afterConfirm();
 			},
 			dfdwConfirm() {
 				this.activeChild1.values = this.dfdwChecked.join(",");
@@ -269,6 +274,14 @@
 					this.filterArr.splice(itemIndex, 1, addChild);
 				}
 				this.dfdwShow = false;
+				this.afterConfirm();
+			},
+			afterConfirm() {
+				queryFilterResultList({
+					listCustFilter: this.filterArr
+				}, (res) => {
+					console.log(res)
+				})
 			},
 			toSearchRes() {
 				if (this.filterArr.length) {
@@ -284,7 +297,12 @@
 			}
 		},
 		mounted() {
-
+			queryCustAgentCompanyList({
+				pageNum: '1',
+				pageSize: '9999'
+			}, (res) => {
+				console.log(res)
+			})
 		}
 	}
 </script>

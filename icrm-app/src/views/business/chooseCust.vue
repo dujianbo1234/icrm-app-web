@@ -9,7 +9,7 @@
 						<div class="scoreNum">{{scoreNum?Number(scoreNum).toFixed(1):0}}</div>
 						<div class="scoreStar">
 							<van-rate v-model="scoreNum" :size="16" color="#FFBA00" void-icon="star" readonly
-							void-color="#E0E0E0" gutter="2" />
+								void-color="#E0E0E0" gutter="2" />
 						</div>
 						<div class="scoreBottom">
 							<div class="scorePeople">{{visitNum || 0}}人浏览</div>
@@ -17,19 +17,42 @@
 						</div>
 					</div>
 					<div class="rightPane">
-						<div class="rowStyle"><div>5.0</div><van-progress track-color="#F4F5F9" color="#FFBA00" :percentage="progressList.five" stroke-width="5"/></div>
-						<div class="rowStyle"><div>4.0</div><van-progress track-color="#F4F5F9" color="#FFBA00" :percentage="progressList.four" stroke-width="5"/></div>
-						<div class="rowStyle"><div>3.0</div><van-progress track-color="#F4F5F9" color="#FFBA00" :percentage="progressList.three" stroke-width="5"/></div>
-						<div class="rowStyle"><div>2.0</div><van-progress track-color="#F4F5F9" color="#FFBA00" :percentage="progressList.two" stroke-width="5"/></div>
-						<div class="rowStyle"><div>1.0</div><van-progress track-color="#F4F5F9" color="#FFBA00" :percentage="progressList.one" stroke-width="5"/></div>
-						<div class="wantScore" v-if="changeScore"  @click="showScore=true"><p>我也想评分？</p></div>
+						<div class="rowStyle">
+							<div>5.0</div>
+							<van-progress track-color="#F4F5F9" color="#FFBA00" :percentage="progressList.five"
+								stroke-width="5" />
+						</div>
+						<div class="rowStyle">
+							<div>4.0</div>
+							<van-progress track-color="#F4F5F9" color="#FFBA00" :percentage="progressList.four"
+								stroke-width="5" />
+						</div>
+						<div class="rowStyle">
+							<div>3.0</div>
+							<van-progress track-color="#F4F5F9" color="#FFBA00" :percentage="progressList.three"
+								stroke-width="5" />
+						</div>
+						<div class="rowStyle">
+							<div>2.0</div>
+							<van-progress track-color="#F4F5F9" color="#FFBA00" :percentage="progressList.two"
+								stroke-width="5" />
+						</div>
+						<div class="rowStyle">
+							<div>1.0</div>
+							<van-progress track-color="#F4F5F9" color="#FFBA00" :percentage="progressList.one"
+								stroke-width="5" />
+						</div>
+						<div class="wantScore" v-if="changeScore" @click="showScore=true">
+							<p>我也想评分？</p>
+						</div>
 						<div class="myScore" v-else>
 							<p style="margin-right:0.03rem">我的评分</p>
 							<p>
 								<van-rate v-model="myScore" :size="12" color="#FFBA00" void-icon="star" readonly
-							void-color="#E0E0E0" gutter="2" />
+									void-color="#E0E0E0" gutter="2" />
 							</p>
-							<p class="scoreEdit" @click="editScore"><img src="../../assets/image/scoreEdit.png" alt=""></p>
+							<p class="scoreEdit" @click="editScore"><img src="../../assets/image/scoreEdit.png" alt="">
+							</p>
 						</div>
 					</div>
 				</div>
@@ -52,9 +75,8 @@
 			<div class="plate3">
 				<van-search v-model="searchValue" shape="round" show-action placeholder="请输入关键词进行搜索" @search="onSearch"
 					@blur="onSearch" :left-icon="require('../../assets/image/common_search.png')">
-					<!-- <template #action>
-						<div @click="onCancel" style="color: #8C8C8C;margin-left: 0.05rem;">取消</div>
-					</template> -->
+					<template #action>
+					</template>
 				</van-search>
 			</div>
 			<!-- <div class="plate4" v-if="!openSearch">
@@ -139,6 +161,14 @@
 												style="background-color: rgba(68,107,161,0.08);color: #446BA1;">商</div>
 											<div class="custItem1_2_3_item" v-if="item.ioinHoldLoan=='1'"
 												style="background-color: rgba(55,205,55,0.08);color: #13AD13;">贷</div>
+											<div class="custItem1_2_3_item" v-if="item.crdtCrdCstFlg=='1'"
+												style="background-color: rgba(55,205,55,0.08);color: #13AD13;">信</div>
+											<van-icon v-if="item.ioinSgnMobbank=='1'"
+												:name="require('../../assets/image/business_chooseCust_jjyh_a.png')"
+												size="16" style="margin-right: 0.04rem;" />
+											<van-icon v-else
+												:name="require('../../assets/image/business_chooseCust_jjyh.png')"
+												size="16" style="margin-right: 0.04rem;" />
 											<van-icon v-if="item.ioinSgnAlpy=='1'"
 												:name="require('../../assets/image/business_chooseCust_zfb_a.png')"
 												size="16" style="margin-right: 0.04rem;" />
@@ -251,8 +281,8 @@
 			<div class="plate6">
 				<div class="plate6_1">评分</div>
 				<div class="plate6_5">
-					<van-rate v-model="score_c" :size="25" color="#FFBA00" void-icon="star"
-				void-color="#E0E0E0" gutter="3" />
+					<van-rate v-model="score_c" :size="25" color="#FFBA00" void-icon="star" void-color="#E0E0E0"
+						gutter="3" />
 				</div>
 				<div class="plate6_3">
 					<span class="plate6_3_1" v-show="score_c>0">{{score_c.toFixed(1)}}</span>
@@ -297,8 +327,8 @@
 	export default {
 		data() {
 			return {
-				score_c:0,
-				showScore:false,
+				score_c: 0,
+				showScore: false,
 				baseMsg: {},
 				openDesc: false,
 				openSearch: false,
@@ -314,7 +344,7 @@
 				},
 				searchValue: "",
 				levelIndex: 0,
-				statusIndex:0,
+				statusIndex: 0,
 				levelList: [{
 					text: "全部",
 					value: ""
@@ -340,45 +370,45 @@
 				},
 				showFP: false,
 				FPType: "",
-				myScore:'',
-				progressList:{},
-				scoreNum:'',
-				changeScore:true,
-				scorePeople:'',
-				visitNum:'',
-				isEditScore:false,
-				scoreId:''
+				myScore: '',
+				progressList: {},
+				scoreNum: '',
+				changeScore: true,
+				scorePeople: '',
+				visitNum: '',
+				isEditScore: false,
+				scoreId: ''
 			}
 		},
 		components: {
 			customerList
 		},
 		methods: {
-			editScore(){
-				this.showScore=true
-				this.isEditScore=true
+			editScore() {
+				this.showScore = true
+				this.isEditScore = true
 			},
-			sureScore(){
+			sureScore() {
 				if (!this.score_c) return;
-				let params={}
-				if(this.isEditScore){
-					params={
-						scoreId:this.scoreId,
+				let params = {}
+				if (this.isEditScore) {
+					params = {
+						scoreId: this.scoreId,
 						score: this.score_c
 					}
-				}else{
-					params={
+				} else {
+					params = {
 						sysId: this.$route.params.sysId,
 						cmrcOpptId: this.baseMsg.cmrcOpptId,
 						cmrcOpptSubclass: this.baseMsg.cmrcOpptSubclass,
 						score: this.score_c
 					}
 				}
-				console.log('params',params)
+				console.log('params', params)
 				saveOpportPractialInfo(params, (res) => {
-					console.log('saveOpportPractialInfo',res)
+					console.log('saveOpportPractialInfo', res)
 					if (res.data == "操作成功") {
-						this.showScore=false
+						this.showScore = false
 						Toast("发布成功~感谢您的评价");
 						this.changeScore = false;
 						this.queryOpportPractialInfo();
@@ -546,7 +576,7 @@
 					pageNum: this.pageIndex,
 					cmrcOpptId: this.baseMsg.cmrcOpptId,
 					svcLvl: this.levelList[this.levelIndex].value,
-					cmrcOpptSt:this.statusList[this.statusIndex].value,
+					cmrcOpptSt: this.statusList[this.statusIndex].value,
 					custNm: this.searchValue,
 					belgCustMgr: this.chooseCust.empId,
 					belongOrg: this.chooseOrg.value
@@ -566,8 +596,9 @@
 				})
 			},
 			mounted_m() {
-				this.canFP = this.$store.state.userMsg.roleId == "00000003" || this.$store.state.userMsg.roleId ==
-					"00000008" || this.$store.state.userMsg.roleId == "00000009";
+				this.canFP = this.$store.state.userMsg.roleId == "00000002" || this.$store.state.userMsg.roleId ==
+					"00000003" || this.$store.state.userMsg.roleId == "00000008" || this.$store.state.userMsg.roleId ==
+					"00000009";
 				this.baseMsg.cmrcOpptId = this.$route.params.cmrcOpptId || localStorage.getItem("cmrcOpptId");
 				this.onLoad();
 				queryCmrcOpportunitySumInfo({
@@ -622,36 +653,36 @@
 				});
 			},
 			// 查询本人商机评分
-			queryOpportPractialInfo(){
+			queryOpportPractialInfo() {
 				queryOpportPractialInfo({
-					createPerson:this.$store.state.userMsg.empno,
-					sysId:this.$route.params.sysId
+					createPerson: this.$store.state.userMsg.empno,
+					sysId: this.$route.params.sysId
 				}, (res) => {
 					this.myScore = res.data.score
 					this.scoreId = res.data.scoreId;
-					if(this.myScore){
-						this.changeScore=false
-					}else{
-						this.changeScore=true
+					if (this.myScore) {
+						this.changeScore = false
+					} else {
+						this.changeScore = true
 					}
-					console.log('this.myScore',this.myScore)
+					console.log('this.myScore', this.myScore)
 				})
 			},
 			// 查询商机进度条
-			queryOpportunityScoringProgress(){
+			queryOpportunityScoringProgress() {
 				queryOpportunityScoringProgress({
-					sysId:this.$route.params.sysId
+					sysId: this.$route.params.sysId
 				}, (res) => {
 					this.progressList = res.data;
 				})
 			},
 			// 查询商机评分数量
-			queryOpportPractialCount(){
+			queryOpportPractialCount() {
 				queryOpportPractialCount({
-					sysId:this.$route.params.sysId
+					sysId: this.$route.params.sysId
 				}, (res) => {
 					this.scoreNum = res.data.score;
-					this.scorePeople=res.data.countNb
+					this.scorePeople = res.data.countNb
 				})
 			},
 
@@ -952,6 +983,7 @@
 	.plate5::-webkit-scrollbar {
 		display: none;
 	}
+
 	.plate6_1 {
 		width: 100%;
 		height: 0.22rem;
@@ -963,6 +995,7 @@
 		font-weight: 500;
 		margin-bottom: 0.16rem;
 	}
+
 	.custItem {
 		width: 93.6%;
 		margin: 0.06rem auto;
@@ -1191,6 +1224,7 @@
 		left: 12.65%;
 		padding: 0.2rem 0.12rem;
 	}
+
 	.plate6_3 {
 		width: 100%;
 		height: 0.27rem;
@@ -1213,6 +1247,7 @@
 		font-size: 0.18rem;
 
 	}
+
 	.plate6_4 {
 		width: 100%;
 		height: 0.3rem;
@@ -1260,28 +1295,32 @@
 		margin-bottom: 0.11rem;
 		margin-top: 0.11rem;
 	}
-	.scorePane{
+
+	.scorePane {
 		display: flex;
 		justify-content: space-between;
 		height: 0.9rem;
 		border-radius: 0.08rem;
 		border: 1px solid #EBEBEB;
 	}
-	.scoreNum{
+
+	.scoreNum {
 		height: 0.21rem;
 		font-size: 0.3rem;
 		font-family: PingFangSC-Medium, PingFang SC;
 		font-weight: 500;
 		color: #FFBA00;
 	}
-	.scorePeople{
+
+	.scorePeople {
 		font-size: 0.08rem;
 		font-family: PingFangSC-Regular, PingFang SC;
 		font-weight: 400;
 		color: #BFBFBF;
 		margin-left: 0.08rem;
 	}
-	.wantScore p{
+
+	.wantScore p {
 		font-size: 0.1rem;
 		font-family: PingFangSC-Regular, PingFang SC;
 		font-weight: 400;
@@ -1291,7 +1330,7 @@
 		width: 0.58rem;
 	}
 
-	.myScore{
+	.myScore {
 		font-size: 0.1rem;
 		font-family: PingFangSC-Regular, PingFang SC;
 		font-weight: 400;
@@ -1301,52 +1340,62 @@
 		justify-content: right;
 		align-items: center;
 	}
-	.wantScore{
+
+	.wantScore {
 		height: 0.12rem;
 		display: flex;
 		justify-content: right;
 	}
-	.scoreStar{
+
+	.scoreStar {
 		margin-top: 0.18rem;
 		font-size: 0.16rem;
 	}
-	.scoreStar :deep(.van-rate){
+
+	.scoreStar :deep(.van-rate) {
 		height: 0.18rem;
 	}
-	
-	.scoreBottom{
+
+	.scoreBottom {
 		display: flex;
 		height: 0.11rem;
 	}
-	.leftPane{
+
+	.leftPane {
 		margin-left: 0.08rem;
 		margin-top: 0.07rem;
 		text-align: center;
 	}
-	:deep(.van-progress){
+
+	:deep(.van-progress) {
 		height: 0.08rem;
 		width: 1.43rem;
 	}
-	:deep(.van-progress__pivot){
+
+	:deep(.van-progress__pivot) {
 		display: none;
 	}
-	.rightPane{
-		margin-top:0.12rem;
+
+	.rightPane {
+		margin-top: 0.12rem;
 		margin-right: 0.16rem;
 	}
-	.rowStyle{
+
+	.rowStyle {
 		height: 0.12rem;
 		display: flex;
 		align-items: center;
 	}
-	.rowStyle div{
+
+	.rowStyle div {
 		margin-right: 0.03rem;
 		font-size: 0.07rem;
 		font-family: PingFangSC-Regular, PingFang SC;
 		font-weight: 400;
 		color: #FFBA00;
 	}
-	.scoreEdit img{
+
+	.scoreEdit img {
 		width: 0.12rem;
 		height: 0.12rem;
 		margin-left: 0.03rem;

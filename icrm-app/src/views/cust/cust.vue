@@ -438,13 +438,22 @@
 						});
 						break;
 					case "财富看板":
-						this.toJiushu("财富看板");
+						this.toJiushu({
+							title: "财富看板",
+							router: "retailBoard"
+						});
 						break;
 					case "贷款看板":
-						this.toJiushu("贷款看板");
+						this.toJiushu({
+							title: "贷款看板",
+							router: "retailBoard"
+						});
 						break;
 					case "收单看板":
-						this.toJiushu("收单看板");
+						this.toJiushu({
+							title: "收单看板",
+							router: "retailBoard"
+						});
 						break;
 					case "全部客群":
 						this.$router.push('./business');
@@ -626,7 +635,9 @@
 					}
 				});
 			},
-			toJiushu(url) {
+			toJiushu(params) {
+				console.log(this.$store.state.userMsg);
+				return;
 				Toast.loading({
 					message: "正在登录九数",
 					forbidClick: true,
@@ -637,17 +648,27 @@
 					clientApiKey: this.$store.state.configInfo.jsClientApiKey,
 					userApiKey: this.$store.state.userMsg.userApiKey
 				}, (res) => {
-					if(res.status=="000000"){
+					if (res.status == "000000") {
 						Toast.clear();
 						var result = JSON.parse(res.result)
+						console.log(this.$store.state.configInfo.jsRetailUrl + "&ticket=" + result.token +
+							"&router=" + params.router)
+						console.log("http://uatmap.eqianjin.com.cn/uatdasmap/pcsSso/pcsLogin?ticket=" + result
+							.token +
+							"&service=http://dasdev.com/a/cas&_t=" + new Date().getTime() + "&premap=premap")
 						this.$router.push({
 							name: 'jiushuWebview',
 							params: {
-								title: url,
-								url: this.$store.state.configInfo.jsRetailUrl+"&ticket=" + result.token + "&_t="+new Date().getTime()
+								title: params.title,
+								// url: this.$store.state.configInfo.jsRetailUrl + "&ticket=" + result.token +
+								// 	"&router=" + params.router
+								url: "http://uatmap.eqianjin.com.cn/uatdasmap/pcsSso/pcsLogin?ticket=" +
+									result.token +
+									"&service=http://dasdev.com/a/cas&_t=" + new Date().getTime() +
+									"&premap=premap"
 							}
 						});
-					}else{
+					} else {
 						Toast.fail(res.msg)
 					}
 				});
