@@ -96,7 +96,7 @@
 			<div class="plate1_6" v-if="baseMsg.cmrcOpptSt=='4'" style="background-color: #FFBA00;">已跟进</div>
 			<div class="plate1_6" v-if="baseMsg.cmrcOpptSt=='5'" style="background-color: #52C41A;">已成交</div>
 		</div>
-		<div class="plate2" v-if="!haveScore&&showScore&&$store.state.userMsg.roleId=='00000004'">
+		<!-- <div class="plate2" v-if="!haveScore&&showScore&&$store.state.userMsg.roleId=='00000004'">
 			<div class="plateTitle">
 				<div class="plateTitle1"></div>
 				<div class="plateTitle2">请您对该商机实用度进行评价</div>
@@ -118,7 +118,7 @@
 				<span style="margin-right: 0.02rem;">看看大家都怎么评</span>
 				<van-icon name="arrow" color="#026DFF" />
 			</div>
-		</div>
+		</div> -->
 		<div class="card">
 			<div class="titleTop">
 				<div class="titleL">
@@ -147,8 +147,8 @@
 					<div class="followItem5" v-if="followItem.serviceType=='01'&&followItem.fileList.length">
 						<div class="followItem5_1"
 							v-for="(file,j) in followItem.fileList.length>4&&!followItem.showAllPhoto?followItem.fileList.slice(0,3):followItem.fileList"
-							:key="'file'+j" @click="openPhoto(this.$store.state.configInfo.icrmUrl + file.fileServerPath)">
-							<img :src="this.$store.state.configInfo.icrmUrl + file.fileServerPath">
+							:key="'file'+j" @click="openPhoto(this.$store.state.baseUrl + file.fileServerPath)">
+							<img :src="this.$store.state.baseUrl + file.fileServerPath">
 						</div>
 						<div class="followItem5_2" v-if="followItem.fileList.length>4&&!followItem.showAllPhoto"
 							@click="followItem.showAllPhoto=true">

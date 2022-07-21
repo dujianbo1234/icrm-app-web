@@ -4,12 +4,41 @@
 		<div class="fixedPlace">
 			<div class="plate1">
 				<div class="plate1_1">{{baseMsg.cmrcOpptSubclassNm}}</div>
+				<div class="scorePane">
+					<div class="leftPane">
+						<div class="scoreNum">{{scoreNum?Number(scoreNum).toFixed(1):0}}</div>
+						<div class="scoreStar">
+							<van-rate v-model="scoreNum" :size="16" color="#FFBA00" void-icon="star" readonly
+							void-color="#E0E0E0" gutter="2" />
+						</div>
+						<div class="scoreBottom">
+							<div class="scorePeople">{{visitNum || 0}}人浏览</div>
+							<div class="scorePeople">{{scorePeople || 0}}人评论</div>
+						</div>
+					</div>
+					<div class="rightPane">
+						<div class="rowStyle"><div>5.0</div><van-progress track-color="#F4F5F9" color="#FFBA00" :percentage="progressList.five" stroke-width="5"/></div>
+						<div class="rowStyle"><div>4.0</div><van-progress track-color="#F4F5F9" color="#FFBA00" :percentage="progressList.four" stroke-width="5"/></div>
+						<div class="rowStyle"><div>3.0</div><van-progress track-color="#F4F5F9" color="#FFBA00" :percentage="progressList.three" stroke-width="5"/></div>
+						<div class="rowStyle"><div>2.0</div><van-progress track-color="#F4F5F9" color="#FFBA00" :percentage="progressList.two" stroke-width="5"/></div>
+						<div class="rowStyle"><div>1.0</div><van-progress track-color="#F4F5F9" color="#FFBA00" :percentage="progressList.one" stroke-width="5"/></div>
+						<div class="wantScore" v-if="changeScore"  @click="showScore=true"><p>我也想评分？</p></div>
+						<div class="myScore" v-else>
+							<p style="margin-right:0.03rem">我的评分</p>
+							<p>
+								<van-rate v-model="myScore" :size="12" color="#FFBA00" void-icon="star" readonly
+							void-color="#E0E0E0" gutter="2" />
+							</p>
+							<p class="scoreEdit" @click="editScore"><img src="../../assets/image/scoreEdit.png" alt=""></p>
+						</div>
+					</div>
+				</div>
 				<div class="plate1_2">
-					<div class="plate1_2_1">
+					<!-- <div class="plate1_2_1">
 						<van-rate v-model="baseMsg.practialScore" :size="16" color="#FFBA00" void-icon="star" readonly
 							void-color="#E0E0E0" allow-half gutter="2" />
 						<div class="plate1_2_1_value">{{baseMsg.practialScore}}</div>
-					</div>
+					</div> -->
 					<div class="plate1_2_2">到期日期：{{baseMsg.cmrcOpptExpDay}}</div>
 				</div>
 				<div class="plate1_3">{{baseMsg.keyWords}}</div>
@@ -19,32 +48,30 @@
 				<van-icon v-if="openDesc" name="arrow-up" size="20" color="#8C8C8C" />
 				<van-icon v-else name="arrow-down" size="20" color="#8C8C8C" />
 			</div>
-			<div class="plate3" v-if="openSearch">
+			<!-- <div class="plate3" v-if="openSearch"> -->
+			<div class="plate3">
 				<van-search v-model="searchValue" shape="round" show-action placeholder="请输入关键词进行搜索" @search="onSearch"
 					@blur="onSearch" :left-icon="require('../../assets/image/common_search.png')">
-					<template #action>
+					<!-- <template #action>
 						<div @click="onCancel" style="color: #8C8C8C;margin-left: 0.05rem;">取消</div>
-					</template>
+					</template> -->
 				</van-search>
 			</div>
-			<div class="plate4" v-if="!($store.state.userMsg.roleId=='00000004'&&openSearch)">
-				<div class="plate4_1" v-if="$store.state.userMsg.roleId!='00000004'"
-					@click="$refs.orgList.showPopup();openOrgList=true;">
-					<div class="plate4_1_value ycsl">{{chooseOrg.text}}</div>
-					<van-icon v-if="openOrgList" name="arrow-up" size="14" color="#8C8C8C" />
-					<van-icon v-else name="arrow-down" size="14" color="#8C8C8C" />
-				</div>
-				<div class="plate4_1" v-if="$store.state.userMsg.roleId!='00000004'"
-					@click="$refs.custList.showPopup();openCustList=true;">
-					<div class="plate4_1_value ycsl">{{chooseCust.empName}}</div>
-					<van-icon v-if="openCustList" name="arrow-up" size="14" color="#8C8C8C" />
-					<van-icon v-else name="arrow-down" size="14" color="#8C8C8C" />
-				</div>
+			<!-- <div class="plate4" v-if="!openSearch">
+				
 				<div class="plate4_2" v-if="!openSearch" @click="openSearch=true;resetTop();">
 					<div class="plate4_2_1"></div>
 					<van-icon :name="require('../../assets/image/common_search_black.png')" size="16" color="#262626"
 						style="margin: 0 0.08rem;" />
 					<div class="plate4_2_2">搜索</div>
+				</div>
+			</div> -->
+			<div class="plate5">
+				<div class="plate5_father" :style="{width: statusList.length*0.84+0.16+'rem'}">
+					<div :class="i==statusIndex?'plate5_child_a':'plate5_child'" v-for="(levelItem,i) in statusList"
+						:key="'levelItem'+i" @click="changeStatus(i)">
+						{{levelItem.text}}
+					</div>
 				</div>
 			</div>
 			<div class="plate5">
@@ -55,6 +82,7 @@
 					</div>
 				</div>
 			</div>
+
 			<div class="total">
 				<div>筛选结果：共{{Number(total).toLocaleString()}}条数据</div>
 				<template v-if="canFP">
@@ -196,8 +224,8 @@
 			</van-list>
 			<div class="bottomZW"></div>
 		</div>
-		<org-list ref="orgList" :type="2" @close="openOrgList=false" @activeOrg="activeOrg" />
-		<customer-list ref="custList" :orgId="chooseOrg.value" @close="openCustList=false" @activeCust="activeCust" />
+		<!-- <org-list ref="orgList" :type="2" @close="openOrgList=false" @activeOrg="activeOrg" />
+		<customer-list ref="custList" :orgId="chooseOrg.value" @close="openCustList=false" @activeCust="activeCust" /> -->
 		<customer-list ref="custList1" :allBtn="false" :resetIt="true" :selfAct="false" @close="openCustList1=false"
 			@activeCust="activeCust1" />
 		<van-popup v-model:show="openFP" position="bottom" :overlay="false" :lock-scroll="false" safe-area-inset-bottom
@@ -219,6 +247,28 @@
 				</div>
 			</div>
 		</van-overlay>
+		<van-overlay :show="showScore" :z-index="99999">
+			<div class="plate6">
+				<div class="plate6_1">评分</div>
+				<div class="plate6_5">
+					<van-rate v-model="score_c" :size="25" color="#FFBA00" void-icon="star"
+				void-color="#E0E0E0" gutter="3" />
+				</div>
+				<div class="plate6_3">
+					<span class="plate6_3_1" v-show="score_c>0">{{score_c.toFixed(1)}}</span>
+					<span class="plate6_3_2" v-if="score_c==0"></span>
+					<span class="plate6_3_2" v-else-if="score_c==1">很差</span>
+					<span class="plate6_3_2" v-else-if="score_c==2">较差</span>
+					<span class="plate6_3_2" v-else-if="score_c==3">一般</span>
+					<span class="plate6_3_2" v-else-if="score_c==4">较好</span>
+					<span class="plate6_3_2" v-else-if="score_c==5">很好</span>
+				</div>
+				<div class="plate6_4">
+					<div class="palte6_4_1" @click="showScore=false">取消</div>
+					<div class="palte6_4_2" @click="sureScore">提交</div>
+				</div>
+			</div>
+		</van-overlay>
 	</div>
 </template>
 
@@ -232,7 +282,13 @@
 	import {
 		queryCmrcOpportunityList,
 		queryCmrcOpportunitySumInfo,
-		distributeCmrcOpport
+		distributeCmrcOpport,
+		queryOpportPractialInfo,
+		queryOpportunityScoringProgress,
+		queryOpportPractialCount,
+		saveOpportPractialInfo,
+		saveSmAppVisitInfo,
+		querySmAppVisitSum
 	} from "../../request/market.js";
 	import {
 		Toast
@@ -241,6 +297,8 @@
 	export default {
 		data() {
 			return {
+				score_c:0,
+				showScore:false,
 				baseMsg: {},
 				openDesc: false,
 				openSearch: false,
@@ -256,7 +314,12 @@
 				},
 				searchValue: "",
 				levelIndex: 0,
+				statusIndex:0,
 				levelList: [{
+					text: "全部",
+					value: ""
+				}],
+				statusList: [{
 					text: "全部",
 					value: ""
 				}],
@@ -277,12 +340,53 @@
 				},
 				showFP: false,
 				FPType: "",
+				myScore:'',
+				progressList:{},
+				scoreNum:'',
+				changeScore:true,
+				scorePeople:'',
+				visitNum:'',
+				isEditScore:false,
+				scoreId:''
 			}
 		},
 		components: {
 			customerList
 		},
 		methods: {
+			editScore(){
+				this.showScore=true
+				this.isEditScore=true
+			},
+			sureScore(){
+				if (!this.score_c) return;
+				let params={}
+				if(this.isEditScore){
+					params={
+						scoreId:this.scoreId,
+						score: this.score_c
+					}
+				}else{
+					params={
+						sysId: this.$route.params.sysId,
+						cmrcOpptId: this.baseMsg.cmrcOpptId,
+						cmrcOpptSubclass: this.baseMsg.cmrcOpptSubclass,
+						score: this.score_c
+					}
+				}
+				console.log('params',params)
+				saveOpportPractialInfo(params, (res) => {
+					console.log('saveOpportPractialInfo',res)
+					if (res.data == "操作成功") {
+						this.showScore=false
+						Toast("发布成功~感谢您的评价");
+						this.changeScore = false;
+						this.queryOpportPractialInfo();
+						this.queryOpportunityScoringProgress()
+						this.queryOpportPractialCount()
+					}
+				});
+			},
 			formatNum,
 			resetTop() {
 				this.$nextTick(() => {
@@ -351,8 +455,18 @@
 				this.openFP = false;
 				this.onLoad();
 			},
+			changeStatus(i) {
+				this.statusIndex = i;
+				this.pageIndex = 0;
+				this.loading = true;
+				this.custList = [];
+				this.checked = [];
+				this.openFP = false;
+				this.onLoad();
+			},
 			openDetail(item) {
 				localStorage.setItem("autoPlaceScrollTop", String(this.$refs.autoPlace.scrollTop))
+				console.log(item)
 				this.$router.push({
 					name: 'busiDetail',
 					params: {
@@ -395,6 +509,7 @@
 				switch (this.FPType) {
 					case "all":
 						params.svcLvl = this.levelList[this.levelIndex].value;
+						params.cmrcOpptSt = this.statusList[this.statusIndex].value;
 						params.custNm = this.searchValue;
 						params.belgCustMgr = this.chooseCust.empId;
 						params.belongOrg = this.chooseOrg.value;
@@ -431,6 +546,7 @@
 					pageNum: this.pageIndex,
 					cmrcOpptId: this.baseMsg.cmrcOpptId,
 					svcLvl: this.levelList[this.levelIndex].value,
+					cmrcOpptSt:this.statusList[this.statusIndex].value,
 					custNm: this.searchValue,
 					belgCustMgr: this.chooseCust.empId,
 					belongOrg: this.chooseOrg.value
@@ -460,6 +576,18 @@
 					this.baseMsg = res.data;
 					this.resetTop();
 				})
+				saveSmAppVisitInfo({
+					busiType: "5"
+				}, (res) => {
+
+				});
+				querySmAppVisitSum({
+					busiType: "5"
+				}, (res) => {
+					if (res.data) {
+						this.visitNum = res.data.visitNum;
+					}
+				});
 				getSysCodeByType({
 					codeType: "SVC_LVL_SHOW"
 				}, (res) => {
@@ -476,7 +604,57 @@
 						Toast.fail("服务等级数据为空")
 					}
 				});
-			}
+				getSysCodeByType({
+					codeType: "CMRC_OPPT_ST"
+				}, (res) => {
+					if (res.data) {
+						var arr = res.data.map((item) => {
+							return {
+								text: item.codeName,
+								value: item.codeValue
+							}
+						})
+						this.statusList = this.statusList.concat(arr);
+						this.resetTop();
+					} else {
+						Toast.fail("服务等级数据为空")
+					}
+				});
+			},
+			// 查询本人商机评分
+			queryOpportPractialInfo(){
+				queryOpportPractialInfo({
+					createPerson:this.$store.state.userMsg.empno,
+					sysId:this.$route.params.sysId
+				}, (res) => {
+					this.myScore = res.data.score
+					this.scoreId = res.data.scoreId;
+					if(this.myScore){
+						this.changeScore=false
+					}else{
+						this.changeScore=true
+					}
+					console.log('this.myScore',this.myScore)
+				})
+			},
+			// 查询商机进度条
+			queryOpportunityScoringProgress(){
+				queryOpportunityScoringProgress({
+					sysId:this.$route.params.sysId
+				}, (res) => {
+					this.progressList = res.data;
+				})
+			},
+			// 查询商机评分数量
+			queryOpportPractialCount(){
+				queryOpportPractialCount({
+					sysId:this.$route.params.sysId
+				}, (res) => {
+					this.scoreNum = res.data.score;
+					this.scorePeople=res.data.countNb
+				})
+			},
+
 		},
 		activated() {
 			localStorage.setItem("newBusiness", "0");
@@ -496,7 +674,13 @@
 				};
 				this.searchValue = "";
 				this.levelIndex = 0;
+				this.statusIndex = 0;
+
 				this.levelList = [{
+					text: "全部",
+					value: ""
+				}];
+				this.statusList = [{
 					text: "全部",
 					value: ""
 				}];
@@ -517,6 +701,9 @@
 				this.showFP = false;
 				this.FPType = "";
 				this.mounted_m();
+				this.queryOpportPractialInfo()
+				this.queryOpportunityScoringProgress()
+				this.queryOpportPractialCount()
 			} else {
 				this.resetTop();
 				this.$refs.autoPlace.scrollTop = Number(localStorage.getItem("autoPlaceScrollTop"))
@@ -582,7 +769,9 @@
 		flex-wrap: nowrap;
 		align-items: center;
 		justify-content: space-between;
-		margin-bottom: 0.01rem;
+		margin-top: 0.08rem;
+		margin-bottom: 0.06rem;
+
 	}
 
 	.plate1_2_1 {
@@ -763,7 +952,17 @@
 	.plate5::-webkit-scrollbar {
 		display: none;
 	}
-
+	.plate6_1 {
+		width: 100%;
+		height: 0.22rem;
+		font-family: PingFangSC-Medium;
+		font-size: 0.14rem;
+		color: #262626;
+		text-align: center;
+		line-height: 0.22rem;
+		font-weight: 500;
+		margin-bottom: 0.16rem;
+	}
 	.custItem {
 		width: 93.6%;
 		margin: 0.06rem auto;
@@ -992,7 +1191,28 @@
 		left: 12.65%;
 		padding: 0.2rem 0.12rem;
 	}
+	.plate6_3 {
+		width: 100%;
+		height: 0.27rem;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		margin-top: 0.08rem;
+	}
 
+	.plate6_3_1 {
+		margin-left: 0;
+		font-size: 0.18rem;
+		font-family: PingFangSC-Medium, PingFang SC;
+		font-weight: 500;
+		color: #FFBA00;
+	}
+
+	.plate6_3_2 {
+		margin-left: 0.125rem;
+		font-size: 0.18rem;
+
+	}
 	.plate6_4 {
 		width: 100%;
 		height: 0.3rem;
@@ -1037,7 +1257,99 @@
 		text-align: center;
 		line-height: 0.22rem;
 		font-weight: 400;
-		margin-bottom: 0.28rem;
-		margin-top: 0.15rem;
+		margin-bottom: 0.11rem;
+		margin-top: 0.11rem;
+	}
+	.scorePane{
+		display: flex;
+		justify-content: space-between;
+		height: 0.9rem;
+		border-radius: 0.08rem;
+		border: 1px solid #EBEBEB;
+	}
+	.scoreNum{
+		height: 0.21rem;
+		font-size: 0.3rem;
+		font-family: PingFangSC-Medium, PingFang SC;
+		font-weight: 500;
+		color: #FFBA00;
+	}
+	.scorePeople{
+		font-size: 0.08rem;
+		font-family: PingFangSC-Regular, PingFang SC;
+		font-weight: 400;
+		color: #BFBFBF;
+		margin-left: 0.08rem;
+	}
+	.wantScore p{
+		font-size: 0.1rem;
+		font-family: PingFangSC-Regular, PingFang SC;
+		font-weight: 400;
+		color: #FFBA00;
+		height: 0.12rem;
+		border-bottom: 1px solid #FFBA00;
+		width: 0.58rem;
+	}
+
+	.myScore{
+		font-size: 0.1rem;
+		font-family: PingFangSC-Regular, PingFang SC;
+		font-weight: 400;
+		color: #BFBFBF;
+		height: 0.12rem;
+		display: flex;
+		justify-content: right;
+		align-items: center;
+	}
+	.wantScore{
+		height: 0.12rem;
+		display: flex;
+		justify-content: right;
+	}
+	.scoreStar{
+		margin-top: 0.18rem;
+		font-size: 0.16rem;
+	}
+	.scoreStar :deep(.van-rate){
+		height: 0.18rem;
+	}
+	
+	.scoreBottom{
+		display: flex;
+		height: 0.11rem;
+	}
+	.leftPane{
+		margin-left: 0.08rem;
+		margin-top: 0.07rem;
+		text-align: center;
+	}
+	:deep(.van-progress){
+		height: 0.08rem;
+		width: 1.43rem;
+	}
+	:deep(.van-progress__pivot){
+		display: none;
+	}
+	.rightPane{
+		margin-top:0.12rem;
+		margin-right: 0.16rem;
+	}
+	.rowStyle{
+		height: 0.12rem;
+		display: flex;
+		align-items: center;
+	}
+	.rowStyle div{
+		margin-right: 0.03rem;
+		font-size: 0.07rem;
+		font-family: PingFangSC-Regular, PingFang SC;
+		font-weight: 400;
+		color: #FFBA00;
+	}
+	.scoreEdit img{
+		width: 0.12rem;
+		height: 0.12rem;
+		margin-left: 0.03rem;
+		margin-top: 0.03rem;
 	}
 </style>

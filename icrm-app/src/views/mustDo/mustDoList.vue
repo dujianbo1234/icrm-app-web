@@ -13,13 +13,22 @@
 				<van-icon v-else name="arrow-down" size="14" color="#8C8C8C" />
 			</div>
 		</div>
-		<van-tabs class="tabBarStyle" v-model:active="active" line-width="0" color="#0088FF" title-active-color="#026DFF"
+		<div class="firstTab">
+			<van-tabs class="tabBarStyle" v-model:active="active" line-width="0" color="#0088FF" title-active-color="#026DFF"
 				title-inactive-color="#262626" @click-tab="onClickTab">
 				<van-tab  v-for="item in mustDoKind" :key="item.codeValue" :title="item.codeName"/>
 		</van-tabs>
+		</div>
+		
 		<div class="list">
             <van-tabs class="month" v-model:active="tageListActive" type="card" @click-tab="tageListChange">
 				<van-tab v-for="item in mustDoNameList" :key="item.codeValue" :title="item.codeName">
+				</van-tab>
+            </van-tabs>
+        </div>
+		<div class="list">
+            <van-tabs class="month" v-model:active="statusActive" type="card" @click-tab="statusListChange">
+				<van-tab v-for="item in statusList" :key="item.codeValue" :title="item.codeName">
 				</van-tab>
             </van-tabs>
         </div>
@@ -83,7 +92,9 @@
 							</div>
 							<div class="msgValue3Right" >
 								<van-icon @click="visitDetail(mustDoItem.id)" v-if="mustDoItem.mastDoSt == '01'" :name="require('@/assets/image/yiban.png')" size="24"/>
-								<van-icon  @click="openVisit(mustDoItem.id)" v-if="mustDoItem.mastDoSt == '02' && $store.state.userMsg.roleId=='00000004'" :name="require('@/assets/image/daiban.png')" size="24"/>
+								<van-icon  @click="openVisit(mustDoItem.id)" v-if="mustDoItem.mastDoNm != '0101' && mustDoItem.mastDoSt == '02' && $store.state.userMsg.roleId=='00000004'" :name="require('@/assets/image/daiban.png')" size="24"/>
+								<van-icon  @click="openTel(mustDoItem.id)" v-if="(mustDoItem.mastDoNm == '0101' && mustDoItem.mastDoSt == '02' && $store.state.userMsg.roleId=='00000004' && mustDoItem.isPhone=='1')||isPhone" :name="require('@/assets/image/daiban.png')" size="24"/>
+								<van-icon  @click="gaveCall(mustDoItem)" v-if="mustDoItem.mastDoNm == '0101' && mustDoItem.mastDoSt == '02' && $store.state.userMsg.roleId=='00000004' && mustDoItem.isPhone=='0'" :name="require('@/assets/image/callPhone.png')" size="24"/>
 								<van-icon v-if="mustDoItem.mastDoSt == '03' && $store.state.userMsg.roleId=='00000004'" :name="require('@/assets/image/daiban_gray.png')" size="24"/>
 							</div>
 						</div>
@@ -162,8 +173,8 @@
 			<div class="popPlate2">
 				<div class="followItem5_1"
 					v-for="(file,j) in followItem.fileList"
-					:key="'file'+j" @click="openPhoto(this.$store.state.configInfo.icrmUrl + file.fileServerPath)">
-					<img :src="this.$store.state.configInfo.icrmUrl + file.fileServerPath">
+					:key="'file'+j" @click="openPhoto(this.$store.state.baseUrl + file.fileServerPath)">
+					<img :src="this.$store.state.baseUrl + file.fileServerPath">
 				</div>
 			</div>
 			<div class="popPlate3">
@@ -176,6 +187,28 @@
 			</div>
 			
 		</van-popup>
+		<van-popup v-model:show="showVisit3" round position="bottom" z-index="99999" :close-on-click-overlay="false"
+			style="background-color: #F8F8F8;height: 80%;">
+			<div class="popTitle">
+				<div class="popTitle1" @click="cancle">取消</div>
+				<div class="popTitle2">电话联系记录</div>
+				<div class="popTitle3" @click="addTelInfo">添加</div>
+			</div>
+			<div class="popPlate1">
+				<van-field v-model="followDesc" type="textarea" placeholder="请输入电话联系记录" rows="5" autosize readonly
+					maxlength="150" />
+			</div>
+		</van-popup>
+		<van-overlay :show="showCall" z-index="100000">
+			<div class="plate6">
+				<div class="plate6_1">提示</div>
+				<div class="plate6_5">是否拨打电话：{{callItem.merntCtaTel}}</div>
+				<div class="plate6_4">
+					<div class="palte6_4_1" @click="showCall=false">取消</div>
+					<div class="palte6_4_2" @click="callCust">确定</div>
+				</div>
+			</div>
+		</van-overlay>
 	</div>
 </template>
 
@@ -202,6 +235,10 @@
 	export default {
 		data() {
 			return {
+				isPhone:false,
+				showCall:false,
+				callItem: {},
+
 				openOrgList: false,
 				chooseOrg: {
 					text: "全部机构",
@@ -219,6 +256,8 @@
 				endDate:'',
 				active:'',
                 tageListActive: '',
+				statusActive: '',
+				statusList:[],
 				dateShow1: false,
 				dateShow2: false,
 				isStartDate:false,
@@ -236,6 +275,7 @@
 				mustDoKind:[],
 				mustDoName:[],
 				mastDoBclass:'',
+				mastDoSt:'',
 				mastDoNm:'',
 				expDayStart:'',
 				allNum:'',
@@ -243,6 +283,7 @@
 				mustDoList: [],
 				showVisit: false,
 				showVisit2: false,
+				showVisit3:false,
 				followValue: "",
 				photoList: [],
 				dingwei: "",
@@ -252,11 +293,61 @@
 				followItem:{
 					fileList: [],
 					onsiteInspLctng:''
-				}
+				},
+				followDesc:''
 			};
 		},
 		components: {customerList},
 		methods: {
+			gaveCall(item){
+				if (isNaN(item.merntCtaTel)) {
+					Toast.fail("电话号码格式有误");
+					return;
+				}
+				if (!item.merntCtaTel) {
+					Toast.fail("电话号码为空");
+					return;
+				}
+				this.showCall = true;
+				this.callItem = item;
+
+			},
+			callCust() {
+				this.showCall = false;
+				Toast.loading({
+					message: "正在唤起",
+					forbidClick: true,
+					duration: 0
+				});
+				followEmployeeMustDo({
+					isPhone: '1',
+					id: this.callItem.id,
+
+				}, (ress) => {
+					Toast.clear();
+					this.isPhone=true
+					AlipayJSBridge.call("callHandler", {
+						phone: this.callItem.merntCtaTel
+					}, (res) => {
+
+					})
+				});
+				// custServiceAdd({
+				// 	custName: this.callItem.cstName,
+				// 	custNo: this.callItem.custNum,
+				// 	mobileNum: this.callItem.ctcTel,
+				// 	communictionChannel: "02",
+				// 	custType: '1',
+				// 	serviceChn: "1"
+				// }, (ress) => {
+				// 	Toast.clear();
+				// 	AlipayJSBridge.call("callHandler", {
+				// 		phone: this.callItem.ctcTel
+				// 	}, (res) => {
+
+				// 	})
+				// });
+			},
 			chooseDate1(date) {
 				var chooseDate = moment(date).format('YYYY-MM-DD');
 				if (this.endDate && this.endDate != chooseDate && moment(this.endDate).isBefore(chooseDate)) {
@@ -356,6 +447,21 @@
 				this.mustDoList = [];
 				this.onLoad();
 			},
+			statusListChange(el){
+				if(el.name=='0'){
+					this.mastDoSt=''
+				}else if(el.name=='1'){
+					this.mastDoSt='01'
+				}else if(el.name=='2'){
+					this.mastDoSt='02'
+				}else{
+					this.mastDoSt='03'
+				}
+				this.pageIndex = 0;
+				this.loading = true;
+				this.mustDoList = [];
+				this.onLoad();
+			},
 			openVisit(el){
 				this.newVisit=true
 				this.id=el
@@ -365,6 +471,15 @@
 				this.showVisit = true;
 				this.showVisit2 = false;
 				this.getLocation();
+			},
+			openTel(el){
+				this.id=el
+				this.followDesc = "";
+				this.photoList = [];
+				this.dingwei = "";
+				this.showVisit3 = true;
+				this.showVisit2 = false;
+				this.showVisit = false;
 			},
 			openPhoto(file) {
 				ImagePreview({
@@ -390,6 +505,7 @@
 			cancle() {
 				this.showVisit = false;
 				this.showVisit2 = false;
+				this.showVisit3 = false;
 			},
 			addVisit() {
 				if (this.photoList.length < 1) {
@@ -418,6 +534,31 @@
 					this.loading = true;
 					this.mustDoList = [];
 					this.onLoad();
+					Toast.clear();
+				})
+			},
+			addTelInfo(){
+				if(this.followDesc==''){
+					Toast.fail("请输入拜访记录");
+					return;
+				}
+				Toast.loading({
+					message: "正在提交",
+					forbidClick: true,
+					duration: 0
+				});
+				followEmployeeMustDo({
+					id: this.id,
+					onsiteInspLctng:this.dingwei,
+					onsiteInspDsc:this.followDesc,
+					uploadIds: []
+				}, (res) => {
+					Toast.success(res.msg);
+					this.showVisit3 = false;
+					this.pageIndex = 0;
+					this.loading = true;
+					// this.mustDoList = [];
+					// this.onLoad();
 					Toast.clear();
 				})
 			},
@@ -469,6 +610,7 @@
 			
 			onClickTab(el){
 				this.tageListActive='0'
+				this.statusActive='0'
 				this.mastDoNm=''
                 if(el.name=='1'){
 					this.mastDoBclass='01'
@@ -504,6 +646,7 @@
 					belgCustMgr: this.chooseCust.empId,
 					mastDoBclass:this.mastDoBclass,
 					mastDoNm:this.mastDoNm,
+					mastDoSt:this.mastDoSt,
 					pageNum: this.pageIndex.toString(),
 					pageSize: "10",
 					expDayStart:this.beginDate.split("-").join(""),
@@ -516,6 +659,7 @@
 						this.allNum = res.data.total.toLocaleString();
 						this.mustDoList = this.mustDoList.concat(res.data.records);
 						if (this.mustDoList.length >= this.allNum) this.finished = true;
+						console.log('this.mustDoList',this.mustDoList)
 					} else {
 						Toast.fail("必办列表为空");
 						this.finished = true;
@@ -553,6 +697,20 @@
 					Toast.fail("必办名称数据为空")
 				}
 			})
+			getSysCodeByType({
+				codeType: "MUST_DO_ST"
+			}, (res) => {
+				if (res.data) {
+					this.statusList = res.data;
+					this.statusList.unshift({
+						codeName: "全部",
+						codeValue: ""
+					})
+				} else {
+					Toast.fail("必办名称数据为空")
+				}
+			})
+			
 		},
 	};
 </script>
@@ -632,12 +790,23 @@
 		overflow: hidden;
 		background-color: #fff;
 	}
+	.firstTab{
+		width:93.6%;
+		margin:0 auto;
+		border-bottom: solid 1px #EFEFEF;
+	  	padding: 0.08rem 0;
+
+	}
 	.tabBarStyle{
-		padding-top: 0.2rem;
+		// padding-top: 0.16rem;
 	}
 	.list {
-      width: 100%;
-      padding: 0.1rem 0 0.15rem;
+      width: 93.6%;
+	  margin: 0 auto;
+	  padding: 0.16rem 0;
+		border-bottom: solid 1px #EFEFEF;
+	  
+    //   padding: 0.01rem 0 0.15rem;
       background: #fff;
       &:deep(.month) {
         .van-tabs__nav--card {
@@ -662,8 +831,7 @@
 	.dateRow{
 		display: flex;
 		align-items: center;
-		margin-left: 0.32rem;
-		margin-bottom: 0.16rem;
+		margin: 0.16rem 0.32rem;
 	}
 	
 	
@@ -977,6 +1145,71 @@
 	.followItem5_1>img {
 		width: 100%;
 	}
-	
+	.plate6 {
+		width: 74.7%;
+		background: #FFFFFF;
+		border-radius: 0.08rem;
+		position: absolute;
+		top: calc(50% - 1rem);
+		left: 12.65%;
+		padding: 0.2rem 0.12rem;
+	}
 
+	.plate6_1 {
+		width: 100%;
+		height: 0.22rem;
+		font-family: PingFangSC-Medium;
+		font-size: 0.14rem;
+		color: #262626;
+		text-align: center;
+		line-height: 0.22rem;
+		font-weight: 500;
+		margin-bottom: 0.24rem;
+	}
+	.plate6_4 {
+		width: 100%;
+		height: 0.3rem;
+		margin-top: 0.24rem;
+		display: flex;
+		flex-wrap: nowrap;
+		justify-content: space-around;
+		align-items: center;
+	}
+
+	.palte6_4_1 {
+		width: 1.08rem;
+		height: 0.3rem;
+		border: 0.01rem solid #026DFF;
+		border-radius: 0.15rem;
+		font-family: PingFangSC-Medium;
+		font-size: 0.13rem;
+		color: #026DFF;
+		text-align: center;
+		line-height: 0.3rem;
+		font-weight: 500;
+	}
+
+	.palte6_4_2 {
+		width: 1.08rem;
+		height: 0.3rem;
+		background: #026DFF;
+		border-radius: 0.15rem;
+		font-family: PingFangSC-Medium;
+		font-size: 0.13rem;
+		color: #FFFFFF;
+		text-align: center;
+		line-height: 0.3rem;
+		font-weight: 500;
+	}
+
+	.plate6_5 {
+		width: 100%;
+		font-family: PingFangSC-Medium;
+		font-size: 0.14rem;
+		color: #262626;
+		text-align: center;
+		line-height: 0.22rem;
+		font-weight: 400;
+		margin-bottom: 0.24rem;
+	}
 </style>

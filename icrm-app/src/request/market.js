@@ -68,3 +68,10 @@ export const saveSmAppVisitInfo = (params,fun) => {request("market.saveSmAppVisi
 export const querySmAppVisitSum = (params,fun) => {request("market.querySmAppVisitSum", params, fun)}
 //全部短信发送申请审批
 export const approveAllMessageSendApply = (params,fun) => {request("market.approveAllMessageSendApply", params, fun)}
+// 商机评分进度条
+export const queryOpportunityScoringProgress = (params,fun) => {request("market.queryOpportunityScoringProgress", params, fun)}
+// 商机评分人数
+export const queryOpportPractialCount = (params,fun) => {request("market.queryOpportPractialCount", params, fun)}
+
+
+

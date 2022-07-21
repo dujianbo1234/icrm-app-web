@@ -1,7 +1,20 @@
 <template>
 	<div class="home">
 		<div class="topZW"></div>
-		<div class="fixedPlace">
+		<div class="plate4" v-if="$store.state.userMsg.roleId!='00000004'">
+			<div class="plate4_1"  @click="$refs.orgList.showPopup();openOrgList=true;">
+					<div class="plate4_1_value ycsl">{{chooseOrg.text}}</div>
+					<van-icon v-if="openOrgList" name="arrow-up" size="14" color="#8C8C8C" />
+					<van-icon v-else name="arrow-down" size="14" color="#8C8C8C" />
+				</div>
+				<div class="plate4_1" @click="$refs.custList.showPopup();openCustList=true;">
+					<div class="plate4_1_value ycsl">{{chooseCust.empName}}</div>
+					<van-icon v-if="openCustList" name="arrow-up" size="14" color="#8C8C8C" />
+					<van-icon v-else name="arrow-down" size="14" color="#8C8C8C" />
+				</div>
+		</div>
+				
+		<div :class="$store.state.userMsg.roleId!='00000004'?'fixedPlace':'fixedPlace2'">
 			<div class="plate1">
 				<div class="palte1_1">商机进度：{{toPercent(sumMsg.thenFollowRate||0)}}</div>
 				<van-progress color="#026DFF" track-color="#EBEBEB" pivot-text=""
@@ -45,7 +58,7 @@
 				</div>
 			</div>
 		</div>
-		<div style="height: 1.87rem;"></div>
+		<div :class="$store.state.userMsg.roleId=='00000004'?'height1':'height2'"></div>
 		<van-list v-model:loading="loading" :finished="finished" finished-text="—— 到底啦,我是有底线的 ——" @load="onLoad"
 			:immediate-check="false">
 			<div class="businessItem" v-for="(item,i) in msgList" :key="'item'+i" @click="openDetail(item)">
@@ -85,6 +98,8 @@
 			</div>
 		</van-list>
 		<div class="bottomZW"></div>
+		<org-list ref="orgList" type="2" @close="openOrgList=false" @activeOrg="activeOrg" />
+		<customer-list ref="custList" :orgId="chooseOrg.value" @close="openCustList=false" @activeCust="activeCust" />
 	</div>
 </template>
 
@@ -101,9 +116,21 @@
 	import {
 		Toast
 	} from "vant";
+	import customerList from "../../components/common/customerList.vue";
+
 	export default {
 		data() {
 			return {
+				openOrgList: false,
+				chooseOrg: {
+					text: "全部机构",
+					value: ""
+				},
+				openCustList: false,
+				chooseCust: {
+					empName: "客户经理",
+					empId: ""
+				},
 				sumMsg: {},
 				orderIndex: -1,
 				orderType: true,
@@ -132,9 +159,47 @@
 				visitNum: "",
 				useNum: "",
 				pageReady: false,
+				contentHeight:''
 			}
 		},
+		components: {
+			customerList
+		},
 		methods: {
+			activeOrg(orgValue) {
+				if (orgValue.value) {
+					this.chooseOrg = orgValue
+				} else {
+					this.chooseOrg = {
+						text: "选择机构",
+						value: ""
+					}
+				};
+				this.chooseCust = {
+					empName: "客户经理",
+					empId: ""
+				};
+				this.openOrgList = false;
+				this.pageIndex = 0;
+				this.loading = true;
+				this.custList = [];
+				this.onLoad();
+			},
+			activeCust(custValue) {
+				if (custValue.empId) {
+					this.chooseCust = custValue
+				} else {
+					this.chooseCust = {
+						empName: "客户经理",
+						empId: ""
+					}
+				};
+				this.openCustList = false;
+				this.pageIndex = 0;
+				this.loading = true;
+				this.custList = [];
+				this.onLoad();
+			},
 			toPercent(point) {
 				var str = Number(point * 100).toFixed(2);
 				str += "%";
@@ -159,10 +224,12 @@
 			},
 			openDetail(item) {
 				localStorage.setItem("cmrcOpptId", item.cmrcOpptId);
+				console.log('sysIdItem',item)
 				this.$router.push({
 					name: 'chooseCust',
 					params: {
-						cmrcOpptId: item.cmrcOpptId
+						cmrcOpptId: item.cmrcOpptId,
+						sysId:item.sysId
 					}
 				})
 			},
@@ -181,10 +248,13 @@
 					pageNum: this.pageIndex,
 					cmrcOpptBclass: this.kequnList[this.kequnIndex].value,
 					orderField: this.orderIndex >= 0 ? this.orderList[this.orderIndex].value : "",
-					orderType: this.orderIndex >= 0 ? this.orderType ? "DESC" : "ASC" : ""
+					orderType: this.orderIndex >= 0 ? this.orderType ? "DESC" : "ASC" : "",
+					belgCustMgr: this.chooseCust.empId,
+					belongOrg: this.chooseOrg.value
 				}, (res) => {
 					if (res.data && res.data.records) {
 						this.msgList = this.msgList.concat(res.data.records);
+						console.log(this.msgList)
 						if (this.msgList.length >= res.data.total) this.finished = true;
 					} else {
 						this.finished = true;
@@ -238,6 +308,7 @@
 			},
 		},
 		mounted() {
+			
 			localStorage.setItem("newBusiness", "0");
 			this.mounted_m();
 		},
@@ -275,8 +346,8 @@
 		height: env(safe-area-inset-top);
 		background-color: #F8F8F8;
 		position: fixed;
-		top: 0;
-		z-index: 9;
+		top:0;
+		z-index: 9999;
 	}
 
 	.home {
@@ -287,10 +358,17 @@
 		width: 100%;
 		position: fixed;
 		background-color: #F8F8F8;
-		top: constant(safe-area-inset-top);
-		top: env(safe-area-inset-top);
+		top: 0.9rem;
 		z-index: 9;
 	}
+	.fixedPlace2 {
+		width: 100%;
+		position: fixed;
+		background-color: #F8F8F8;
+		top: 0.4rem;
+		z-index: 9;
+	}
+
 
 	.plate1 {
 		width: 93.6%;
@@ -531,5 +609,54 @@
 		font-weight: 400;
 		color: #BFBFBF;
 		letter-spacing: 1px;
+	}
+	.plate4_1 {
+		height: 0.22rem;
+		font-family: PingFangSC-Regular;
+		font-size: 0.14rem;
+		color: #262626;
+		letter-spacing: 0;
+		line-height: 0.22rem;
+		font-weight: 400;
+		max-width: 40%;
+		display: flex;
+		flex-wrap: nowrap;
+		align-items: center;
+		margin-right: 0.24rem;
+		margin-left: 0.16rem;
+	}
+
+	.plate4_1_value {
+		margin-right: 0.04rem;
+	}
+	.orgCust{
+		position: fixed;
+		background-color: #F8F8F8;
+		top: constant(safe-area-inset-top);
+		top: env(safe-area-inset-top);
+		z-index: 99;
+	}
+	.plate4{
+		width: 100%;
+		padding:0 3.2%;
+		margin: 0 auto;
+		height: 0.5rem;
+		display: flex;
+		flex-wrap: nowrap;
+		justify-content: flex-start;
+		align-items: center;
+		position: fixed;
+		background-color: #F8F8F8;
+		top: constant(safe-area-inset-top);
+		top: env(safe-area-inset-top);
+		z-index: 10;
+		border-bottom: solid 1px #EFEFEF;
+
+	}
+	.height1{
+		height:1.87rem
+	}
+	.height2{
+		height:2.3rem
 	}
 </style>
