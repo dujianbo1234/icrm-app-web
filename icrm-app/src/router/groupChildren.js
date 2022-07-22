@@ -1,6 +1,9 @@
 export default [{
 	path: '/myGroup',
 	name: 'myGroup',
+	meta: {
+		keepAlive: true
+	},
 	component: () => import('@/views/group/myGroup.vue')
 }, {
 	path: '/groupDetail',

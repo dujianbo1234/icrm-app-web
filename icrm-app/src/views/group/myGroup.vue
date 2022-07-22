@@ -1,6 +1,6 @@
 <template>
 	<div class="home">
-		<nav-bar title="我的群组" type="2" leftIcon />
+		<nav-bar title="我的群组" type="2" leftIcon backName="cust" />
 		<van-tabs v-model:active="active" color="#026DFF" title-active-color="#026DFF" title-inactive-color="#595959"
 			line-width="0.84rem" line-height="0.02rem">
 			<van-tab v-for="(tab,i) in ['动态群组','固定群组']" :key="'tab'+i" :title="tab" />
@@ -9,49 +9,52 @@
 		<van-list v-model:loading="loading" :finished="finished" finished-text="没有更多了" :immediate-check="false"
 			@load="onLoad">
 			<van-swipe-cell v-for="(groupItem,i) in groupList" :key="'groupItem'+i">
-				<div class="groupCard">
+				<div class="groupCard" @click="toGroupDetail(groupItem)">
 					<div class="groupCardLeft">
-						<div class="groupItem1 ycsl">{{groupItem.value0}}</div>
+						<div class="groupItem1 ycsl">{{groupItem.acGroupNm}}</div>
 						<div class="groupItem2">
 							<div class="groupItem2_child">
 								<span class="groupItem2_childTitle">人数:</span>
-								<span class="groupItem2_childValue">{{groupItem.value1.toLocaleString()}}人</span>
+								<span class="groupItem2_childValue">{{(groupItem.custCnt||0).toLocaleString()}}人</span>
 							</div>
-							<div class="groupItem2_child ycsl">
+							<div class="groupItem2_child">
 								<span class="groupItem2_childTitle">AUM总额:</span>
-								<span class="groupItem2_childValue">{{formatNum(groupItem.value2/10000)}}万元</span>
+								<span class="groupItem2_childValue">{{formatNumW(groupItem.aumBal||0)}}万元</span>
 							</div>
 							<div class="groupItem2_child">
 								<span class="groupItem2_childTitle">归属人:</span>
-								<span class="groupItem2_childValue">{{groupItem.value3}}</span>
+								<span class="groupItem2_childValue">{{groupItem.creatorNm}}</span>
 							</div>
 							<div class="groupItem2_child ycsl">
 								<span class="groupItem2_childTitle">机构:</span>
-								<span class="groupItem2_childValue">{{groupItem.value4}}</span>
+								<span class="groupItem2_childValue">{{groupItem.crtInstNm}}</span>
 							</div>
 						</div>
-						<div class="groupItem3" v-if="active==0">
-							<div class="groupItem3_child" style="color: #FFFFFF;" v-for="(item,j) in groupItem.value5"
-								:key="'item'+j">{{item}}</div>
+						<div class="groupItem3_g" v-if="active==0">
+							<template v-for="(filterItem,i) in groupItem.listGroupCdtnChc" :key="'filterItem'+i">
+								<span>#</span>
+								<span>{{filterItem.chcFldNm.split("#")[0]}}&nbsp;</span>
+								<span v-if="filterItem.chcValue">{{filterItem.chcValue}}</span>
+								<span v-else-if="filterItem.chcValueMin&&filterItem.maxValue">
+									({{filterItem.minValue}},{{filterItem.chcValueMax}}]</span>
+								<span v-else-if="filterItem.chcValueMin">≥{{filterItem.chcValueMin}}</span>
+								<span v-else-if="filterItem.chcValueMax">＜{{filterItem.chcValueMax}}</span>
+								<span v-else-if="filterItem.chcValues">＜{{filterItem.chcValues}}</span>
+								<span># </span>
+							</template>
 						</div>
-						<div class="groupItem4">
-							<van-icon :name="require('../../assets/image/sendMessage.png')" size="0.25rem"
-								@click="openMbox(groupItem)" />
+						<div class="groupItem4" @click.stop="openMbox(groupItem)">
+							<van-icon :name="require('../../assets/image/sendMessage.png')" size="0.25rem" />
 						</div>
 					</div>
-					<div class="groupCardRight">
+					<!-- <div class="groupCardRight">
 						<van-icon name="arrow" size="0.18rem" color="#e4e4e4" @click="toGroupDetail(groupItem)" />
-					</div>
-					<div class="groupCardBottom" v-if="active==0">
-						<div class="groupItem3_child" v-for="(item,j) in groupItem.value5" :key="'item'+j">{{item}}
-						</div>
-					</div>
+					</div> -->
 				</div>
 				<template #right>
-					<div class="delBtn">
-						<van-icon :name="require('../../assets/image/cust_zyqk_delete.png')" size="0.3rem"
-							@click="delGroupItem(groupItem)" />
-						<div class="delBtnText" @click="delGroupItem(groupItem)">删除</div>
+					<div class="delBtn" @click="beforeDelGroupItem(groupItem)">
+						<van-icon :name="require('../../assets/image/cust_zyqk_delete.png')" size="0.3rem" />
+						<div class="delBtnText">删除</div>
 					</div>
 				</template>
 			</van-swipe-cell>
@@ -76,20 +79,39 @@
 				</div>
 			</div>
 		</van-overlay>
+		<van-dialog v-model:show="showDelete">
+			<template #default>
+				<div class="dialogValue">确定删除该群组？</div>
+			</template>
+			<template #footer>
+				<div class="dialogBtns">
+					<div class="dialogBtn dialogBtn1" @click="showDelete=false">取消</div>
+					<div class="dialogBtn dialogBtn2" @click="delGroupItem">确认</div>
+				</div>
+			</template>
+		</van-dialog>
 	</div>
 </template>
 
 <script>
 	import {
-		Toast
+		Toast,
+		Dialog
 	} from "vant";
 	import {
+		formatNumW,
+		formatNums,
 		formatNum
-	} from "../../api/common.js";
+	} from "@/api/common.js";
 	import sendMessage from "../../components/common/sendMessage.vue";
+	import {
+		queryGroupActiveList,
+		deleteGroupActiveInfo
+	} from "../../request/market.js";
 	export default {
 		data() {
 			return {
+				pageReady: false,
 				active: 0,
 				loading: false,
 				finished: false,
@@ -97,38 +119,49 @@
 				groupList: [],
 				showAdd: false,
 				newGroup: {},
+				delGroup: {},
+				showDelete: false,
 			}
 		},
 		components: {
 			sendMessage
 		},
 		methods: {
+			formatNumW,
+			formatNums,
 			formatNum,
 			onLoad() {
+				if (!this.pageReady) return;
+				this.finished = false;
+				this.loading = true;
 				Toast.loading({
 					message: "正在加载",
 					forbidClick: true,
-					duration: 0
+					duration: 0,
 				});
-				setTimeout(() => {
-					for (let i = 0; i < 10; i++) {
-						this.groupList.push({
-							value0: "资产提升群组" + (i + 1),
-							value1: 1234,
-							value2: 123456789,
-							value3: "陈二狗",
-							value4: "九江银行八里湖支行",
-							value5: ["#资产10万以上#", "#极差值100万以上#"],
-							value6: "客户信誉优良",
-							value7: 123456789,
+				this.pageIndex++;
+				switch (this.active) {
+					case 0:
+						queryGroupActiveList({
+							pageSize: "10",
+							pageNum: this.pageIndex.toString()
+						}, (res) => {
+							if (res.data && res.data.records) {
+								console.log(res.data.records[0])
+								this.groupList = this.groupList.concat(res.data.records);
+								if (this.groupList.length >= res.data.total || res.data.records.length <= 0) {
+									this.finished = true;
+								}
+							} else {
+								this.finished = true;
+							}
+							Toast.clear();
+							this.loading = false;
 						});
-					}
-					Toast.clear();
-					this.loading = false;
-					if (this.groupList.length >= 40) {
-						this.finished = true;
-					}
-				}, 1000);
+						break;
+					case 1:
+						break;
+				}
 			},
 			openMbox(item) {
 				this.$refs.sendMessage.openMbox({
@@ -147,8 +180,32 @@
 					}
 				})
 			},
-			delGroupItem(item) {
-				alert("删除" + item + "?")
+			beforeDelGroupItem(item) {
+				this.delGroup = item;
+				this.showDelete = true;
+			},
+			delGroupItem() {
+				this.showDelete = false;
+				Toast.loading({
+					message: "正在操作",
+					forbidClick: true,
+					duration: 0,
+				});
+				deleteGroupActiveInfo({
+					sysId: this.delGroup.sysId
+				}, (res) => {
+					console.log(res)
+					if (res.data == "操作成功") {
+						Toast.success("删除成功");
+						setTimeout(() => {
+							this.pageIndex = 0;
+							this.groupList = [];
+							this.onLoad();
+						}, 800)
+					} else {
+						Toast.fail(res.msg)
+					}
+				})
 			},
 			addGroup() {
 				if (this.newGroup.groupTitle) {
@@ -158,10 +215,32 @@
 					Toast("请输入群组名称")
 				}
 			},
+			mounted_m() {
+				if (this.$router.params) {
+					this.active = this.$router.params.active || 0;
+				};
+				this.pageReady = true;
+				this.onLoad();
+			}
 		},
 		mounted() {
-			this.onLoad();
-		}
+			localStorage.setItem("newMyGroup", "0");
+			this.mounted_m();
+		},
+		activated() {
+			if (localStorage.getItem("newMyGroup") == "0") {
+				localStorage.setItem("newMyGroup", "1")
+			} else {
+				this.pageReady = false;
+				this.loading = false;
+				this.finished = false;
+				this.pageIndex = 0;
+				this.groupList = [];
+				this.showAdd = false;
+				this.newGroup = {};
+				this.mounted_m();
+			}
+		},
 	}
 </script>
 
@@ -214,7 +293,8 @@
 	}
 
 	.groupCardLeft {
-		width: calc(100% - 0.29rem);
+		/* width: calc(100% - 0.29rem); */
+		width: 100%;
 		position: relative;
 	}
 
@@ -279,6 +359,23 @@
 		justify-content: flex-start;
 	}
 
+	.groupItem3_g {
+		/* width: calc(100% + 0.29rem); */
+		width: 100%;
+		margin-top: 0.1rem;
+		max-height: 0.51rem;
+		overflow-y: auto;
+		background: #F4F9FF;
+		padding: 0.03rem 0.12rem;
+		border-radius: 0.05rem;
+		font-size: 0.11rem;
+		font-family: PingFangSC-Regular, PingFang SC;
+		font-weight: 400;
+		color: #026DFF;
+		line-height: 0.15rem;
+		text-align: left;
+	}
+
 	.groupItem3_child {
 		height: 0.15rem;
 		font-size: 0.11rem;
@@ -292,7 +389,7 @@
 	.groupItem4 {
 		position: absolute;
 		top: 0.04rem;
-		right: 0;
+		right: 0.1rem;
 		display: flex;
 	}
 
@@ -429,5 +526,44 @@
 
 	.plate6_5 :deep(.van-cell:after) {
 		border: 0;
+	}
+
+	.dialogValue {
+		width: 90%;
+		margin: 0.36rem auto 0.24rem;
+		font-size: 0.14rem;
+		font-family: PingFangSC-Regular, PingFang SC;
+		font-weight: 400;
+		color: #262626;
+		line-height: 0.22rem;
+	}
+
+	.dialogBtns {
+		width: 100%;
+		margin-bottom: 0.2rem;
+		display: flex;
+		flex-wrap: nowrap;
+		justify-content: center;
+	}
+
+	.dialogBtn {
+		width: 1.08rem;
+		height: 0.3rem;
+		border-radius: 0.15rem;
+		font-size: 0.13rem;
+		font-family: PingFangSC-Medium, PingFang SC;
+		font-weight: 500;
+		line-height: 0.3rem;
+		margin: 0 0.08rem;
+	}
+
+	.dialogBtn1 {
+		border: 0.01rem solid #026DFF;
+		color: #026DFF;
+	}
+
+	.dialogBtn2 {
+		background: #026DFF;
+		color: #FFFFFF;
 	}
 </style>

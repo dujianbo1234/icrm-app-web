@@ -76,3 +76,13 @@ export const queryOpportPractialCount = (params,fun) => {request("market.queryOp
 export const queryCustAgentCompanyList = (params,fun) => {request("market.queryCustAgentCompanyList", params, fun)}
 // 查询筛选结果列表
 export const queryFilterResultList = (params,fun) => {request("market.queryFilterResultList", params, fun)}
+// 保存动态群组
+export const saveGroupActiveInfo = (params,fun) => {request("market.saveGroupActiveInfo", params, fun)}
+// 查询筛选结果汇总
+export const queryFilterResultSum = (params,fun) => {request("market.queryFilterResultSum", params, fun)}
+// 查询动态群组列表
+export const queryGroupActiveList = (params,fun) => {request("market.queryGroupActiveList", params, fun)}
+// 删除动态群组
+export const deleteGroupActiveInfo = (params,fun) => {request("market.deleteGroupActiveInfo", params, fun)}
+// 查询动态群组客户
+export const queryGroupActiveCust = (params,fun) => {request("market.queryGroupActiveCust", params, fun)}

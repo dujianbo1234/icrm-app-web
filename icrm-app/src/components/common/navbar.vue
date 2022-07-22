@@ -30,12 +30,26 @@
 				type: String,
 				default: "#000000"
 			},
-			rightIcon: String,
+			rightIcon: {
+				type: String,
+				default: ""
+			},
+			backName: {
+				type: String,
+				default: ""
+			},
 		},
 		methods: {
 			back() {
-				this.$router.go(-1);
-				this.$emit('back')
+				if(this.backName){
+					this.$router.push({
+						name: this.backName
+					})
+					this.$emit('back')
+				}else{
+					this.$router.go(-1);
+					this.$emit('back')
+				}
 			},
 			touchRight() {
 				this.$emit('touchRight')

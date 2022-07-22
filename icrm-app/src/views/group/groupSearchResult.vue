@@ -19,8 +19,8 @@
 			<div class="plate2">
 				<div class="plate2_item">筛选结果：共{{formatNums(total || 0)}}位客户</div>
 				<div class="plate2_item"></div>
-				<div class="plate2_item">AUM总额：1,935,165.89万元</div>
-				<div class="plate2_item">贷款总额：1,935,165.89万元</div>
+				<div class="plate2_item">AUM总额：{{formatNumW(aumBal || 0)}}万元</div>
+				<div class="plate2_item">贷款总额：{{formatNumW(loanBal || 0)}}万元</div>
 			</div>
 		</div>
 		<div style="height: 1.98rem;"></div>
@@ -34,9 +34,9 @@
 					</div>
 					<div class="custItem1">
 						<div class="custItem1_2">
-							<div class="custItem1_2_1">{{item.cstName}}</div>
+							<div class="custItem1_2_1">{{item.cstNm}}</div>
 							<div class="custItem1_2_2"
-								:style="`background-image:url(${require(`@/assets/image/business_chooseCust_type${item.svcLvlCount || 0}.png`)})`">
+								:style="`background-image:url(${require(`@/assets/image/business_chooseCust_type${item.svcLvl || 0}.png`)})`">
 							</div>
 							<div class="custItem1_2_3">
 								<template
@@ -67,12 +67,19 @@
 		</van-list>
 		<div style="height: 0.6rem;"></div>
 		<div class="bottomZW"></div>
-		<div class="bottomBtns">
+		<div class="bottomBtns" v-if="showChecked">
+			<div class="bottomBtn_c bottomBtn_c1" @click="showChecked=false">取消</div>
+			<div class="bottomBtn_c bottomBtn_c2" @click="createType='dt';showCreate=true;">全部加入</div>
+			<div class="bottomBtn_c bottomBtn_c2" @click="createType='dt';showCreate=true;">加入</div>
+			<div style="width: 0.1rem;"></div>
+			<div class="bottomZW" style="width: 100%;"></div>
+		</div>
+		<div class="bottomBtns" v-else>
 			<div class="bottomBtn" @click="checkShare">
 				<div class="bottomBtnIcon bottomBtnIcon1"></div>
-				<div class="bottomBtnName">分享</div>
+				<div class="bottomBtnName">全选</div>
 			</div>
-			<div class="bottomBtn" @click="createType='dt';showCreate=true;">
+			<div class="bottomBtn" @click="showChecked=false;createType='dt';showCreate=true;">
 				<div class="bottomBtnIcon bottomBtnIcon2"></div>
 				<div class="bottomBtnName">动态群组</div>
 			</div>
@@ -87,26 +94,6 @@
 			</div>
 			<div class="bottomZW" style="width: 100%;"></div>
 		</div>
-		<!-- <div class="bottomBtns">
-			<div class="bottomBtn" @click="checkShare">
-				<div class="bottomBtnIcon bottomBtnIcon1"></div>
-				<div class="bottomBtnName">分享</div>
-			</div>
-			<div class="bottomBtn" @click="createType='dt';showCreate=true;">
-				<div class="bottomBtnIcon bottomBtnIcon2"></div>
-				<div class="bottomBtnName">动态群组</div>
-			</div>
-			<div class="bottomBtn_popup">
-				<van-popover v-model:show="showPopover" :actions="actions" @select="onSelect" placement="top"
-					:show-arrow="false" :offset="[-15,11]">
-					<template #reference>
-						<div class="bottomBtnIcon bottomBtnIcon3"></div>
-						<div class="bottomBtnName">固定群组</div>
-					</template>
-				</van-popover>
-			</div>
-			<div class="bottomZW" style="width: 100%;"></div>
-		</div> -->
 		<van-popup v-model:show="showCreate" :close-on-click-overlay="false">
 			<div class="createBox">
 				<div class="createTitle">{{createType=="dt"?"创建动态群组":"创建固定群组"}}</div>
@@ -148,6 +135,11 @@
 	import {
 		Toast
 	} from "vant";
+	import {
+		queryFilterResultList,
+		saveGroupActiveInfo,
+		queryFilterResultSum
+	} from "../../request/market.js";
 	export default {
 		data() {
 			return {
@@ -184,6 +176,8 @@
 					},
 				],
 				total: 0,
+				aumBal: 0,
+				loanBal: 0,
 				pageReady: false,
 				showPopover: false,
 				actions: [{
@@ -205,6 +199,11 @@
 					this.groupName = "";
 					this.groupRemark = "";
 				}
+			},
+			showChecked() {
+				if (this.showChecked) {
+					this.chooseItems = [];
+				}
 			}
 		},
 		methods: {
@@ -214,25 +213,19 @@
 				if (!this.pageReady) return;
 				this.finished = false;
 				this.loading = true;
-				// Toast.loading({
-				// 	message: "正在加载",
-				// 	forbidClick: true,
-				// 	duration: 0,
-				// });
+				Toast.loading({
+					message: "正在加载",
+					forbidClick: true,
+					duration: 0,
+				});
 				this.pageIndex++;
-				var params = {
+				queryFilterResultList({
 					pageSize: "10",
 					pageNum: this.pageIndex.toString(),
-					belgCustMgr: '',
-					cstName: "",
-					svcLvl: "",
-					ctcTel: "",
-					certNum: "",
-					cstLvl: "",
-					belongOrg: ""
-				};
-				queryCustSearchList(params, (res) => {
+					listCustFilter: this.filterArr
+				}, (res) => {
 					if (res.data && res.data.records) {
+						console.log(res);
 						this.total = res.data.total;
 						this.custList = this.custList.concat(res.data.records);
 						if (this.custList.length >= this.total || res.data.records.length <= 0) this.finished =
@@ -245,6 +238,7 @@
 				});
 			},
 			checkShare() {
+				this.showChecked = false;
 				Toast("功能开发中");
 			},
 			onSelect(action) {
@@ -254,17 +248,57 @@
 						break;
 					case "创建固定群组":
 						this.createType = "gd";
-						this.showCreate = true;
+						this.showChecked = true;
 						break;
 				}
 			},
 			createGroup() {
-
+				if(!this.groupName){
+					Toast("请输入群组名称");
+					return;
+				};
+				Toast.loading({
+					message: "正在操作",
+					forbidClick: true,
+					duration: 0,
+				});
+				switch (this.createType){
+					case "dt":
+						saveGroupActiveInfo({
+							listCustFilter: this.filterArr,
+							acGroupNm: this.groupName,
+							rmk: this.groupRemark
+						},(res)=>{
+							if(res.data == "操作成功"){
+								Toast.success("创建成功");
+								this.showCreate = false;
+								setTimeout(()=>{
+									this.$router.push({
+										name: 'myGroup',
+									})
+								},800)
+							}else{
+								Toast.fail(res.msg)
+							}
+						})
+						break;
+					case "gd":
+						Toast.clear();
+						// saveGroupActiveInfo
+						break;
+				}
 			},
 		},
 		mounted() {
 			this.filterArr = JSON.parse(this.$route.params.filterArr);
 			this.pageReady = true;
+			queryFilterResultSum({
+				listCustFilter: this.filterArr
+			}, (res) => {
+				this.custNumber = res.data.custCnt;
+				this.aumBal = res.data.aumBal;
+				this.loanBal = res.data.loanBal;
+			})
 			this.onLoad()
 		}
 	}
@@ -371,6 +405,7 @@
 		display: flex;
 		flex-wrap: wrap;
 		align-items: center;
+		justify-content: flex-end;
 		background-color: #FFFFFF;
 		border-top: solid 0.01rem #F8F8F8;
 		position: fixed;
@@ -458,6 +493,8 @@
 
 	.filterBox {
 		width: 89.5%;
+		max-height: 0.7rem;
+		overflow-y: auto;
 		background: #F2F8FF;
 		padding: 0.08rem 0.05rem;
 		border-radius: 0.05rem;
@@ -534,6 +571,27 @@
 	}
 
 	.createBtn2 {
+		background: #026DFF;
+		color: #FFFFFF;
+	}
+	
+	.bottomBtn_c {
+		width: 0.88rem;
+		height: 0.4rem;
+		border-radius: 0.08rem;
+		font-size: 0.14rem;
+		font-family: PingFangSC-Regular, PingFang SC;
+		font-weight: 400;
+		line-height: 0.4rem;
+		margin: 0.12rem 0.05rem 0.12rem 0;
+	}
+	
+	.bottomBtn_c1 {
+		border: 0.01rem solid #026DFF;
+		color: #026DFF;
+	}
+	
+	.bottomBtn_c2 {
 		background: #026DFF;
 		color: #FFFFFF;
 	}

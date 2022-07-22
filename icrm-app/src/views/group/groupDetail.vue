@@ -1,48 +1,58 @@
 <template>
 	<div class="home">
-		<nav-bar :title="baseMsg.value0" @touchRight="onClickRight" type="2" leftIcon rightText="添加客户"
+		<nav-bar :title="baseMsg.acGroupNm" @touchRight="onClickRight" type="2" leftIcon rightText="添加客户"
 			rightColor="#026DFF" />
 		<div class="fixedPlace">
 			<div class="baseMsgPlace">
 				<div class="baseMsg1">
-					<div class="baseMsg1_1">{{baseMsg.value0}}</div>
-					<div class="baseMsg1_2">{{baseMsg.value1?baseMsg.value1.toLocaleString():"-"}}人</div>
+					<div class="baseMsg1_1">{{baseMsg.acGroupNm}}</div>
+					<div class="baseMsg1_2">{{(baseMsg.custCnt||0).toLocaleString()}}人</div>
 				</div>
 				<div class="baseMsg2">选客策略</div>
 				<div class="baseMsg3">
-					<span v-for="(clItem, i) in baseMsg.value5" :key="'clItem'+i">{{clItem}}</span>
+					<template v-for="(filterItem,i) in baseMsg.listGroupCdtnChc" :key="'filterItem'+i">
+						<span>#</span>
+						<span>{{filterItem.chcFldNm.split("#")[0]}}&nbsp;</span>
+						<span v-if="filterItem.chcValue">{{filterItem.chcValue}}</span>
+						<span v-else-if="filterItem.chcValueMin&&filterItem.maxValue">
+							({{filterItem.minValue}},{{filterItem.chcValueMax}}]</span>
+						<span v-else-if="filterItem.chcValueMin">≥{{filterItem.chcValueMin}}</span>
+						<span v-else-if="filterItem.chcValueMax">＜{{filterItem.chcValueMax}}</span>
+						<span v-else-if="filterItem.chcValues">＜{{filterItem.chcValues}}</span>
+						<span># </span>
+					</template>
 				</div>
 				<div class="baseMsg2">客群描述</div>
-				<div class="baseMsg3">{{baseMsg.value6}}</div>
+				<div class="baseMsg3">{{baseMsg.rmk}}</div>
 				<div class="baseMsg4">
 					<div class="baseMsg4_child">
 						<span class="baseMsg4_childTitle">AUM总额：</span>
-						<span class="baseMsg4_childValue">{{formatNum(baseMsg.value2/10000)}}万元</span>
+						<span class="baseMsg4_childValue">{{formatNumW(baseMsg.aumBal||0)}}万元</span>
 					</div>
 					<div class="baseMsg4_child">
 						<span class="baseMsg4_childTitle">贷款总额：</span>
-						<span class="baseMsg4_childValue">{{formatNum(baseMsg.value7/10000)}}万元</span>
+						<span class="baseMsg4_childValue">{{formatNumW(baseMsg.loanBal||0)}}万元</span>
 					</div>
 				</div>
 				<div class="baseMsg5">
 					<div class="baseMsg4_child">
 						<span class="baseMsg4_childTitle">归属人：</span>
-						<span class="baseMsg4_childValue">{{baseMsg.value3}}</span>
+						<span class="baseMsg4_childValue">{{baseMsg.creatorNm}}</span>
 					</div>
 					<div class="baseMsg4_child">
 						<span class="baseMsg4_childTitle">机构：</span>
-						<span class="baseMsg4_childValue">{{baseMsg.value4}}</span>
+						<span class="baseMsg4_childValue">{{baseMsg.crtInstNm}}</span>
 					</div>
 				</div>
 			</div>
 		</div>
 		<div :style="{height: fixedHeight}"></div>
-		<van-list v-model:loading="loading" :finished="finished" finished-text="没有更多了" :immediate-check="false"
+		<van-list ref="vantList" v-model:loading="loading" :finished="finished" finished-text="没有更多了" :immediate-check="false"
 			@load="onLoad">
 			<div class="custItem" v-for="(custItem,i) in custList" :key="'custItem'+i">
 				<div class="custItem1">
 					<div class="custItem1_2">
-						<div class="custItem1_2_1">{{custItem.custNm}}</div>
+						<div class="custItem1_2_1">{{custItem.cstNm}}</div>
 						<div class="custItem1_2_2" v-if="custItem.svcLvl=='0'"
 							:style="{'background-image': 'url('+require('../../assets/image/business_chooseCust_type0.png')+')'}">
 						</div>
@@ -65,34 +75,34 @@
 							:style="{'background-image': 'url('+require('../../assets/image/business_chooseCust_type6.png')+')'}">
 						</div>
 						<div class="custItem1_2_3">
-							<div class="custItem1_2_3_item" v-if="custItem.vipCstFlg=='1'"
+							<div class="custItem1_2_3_item" v-if="custItem.vipCustFlg=='1'"
 								style="background-color: rgba(2,109,255,0.08);color: #026DFF;">财</div>
 							<div class="custItem1_2_3_item" v-if="custItem.agentPayCstFlg=='1'"
 								style="background-color: rgba(255,133,0,0.08);color: #FF8500;">代</div>
-							<div class="custItem1_2_3_item" v-if="custItem.newCstFlg=='1'"
+							<div class="custItem1_2_3_item" v-if="custItem.isNewCust=='1'"
 								style="background-color: rgba(255,58,58,0.08);color: #FF3A3A;">新</div>
 							<div class="custItem1_2_3_item" v-if="custItem.merntCstFlg=='1'"
 								style="background-color: rgba(68,107,161,0.08);color: #446BA1;">商</div>
-							<div class="custItem1_2_3_item" v-if="custItem.ioinHoldLoan=='1'"
+							<div class="custItem1_2_3_item" v-if="custItem.loanProHold=='1'"
 								style="background-color: rgba(55,205,55,0.08);color: #13AD13;">贷</div>
-							<div class="custItem1_2_3_item" v-if="custItem.crdtCrdCstFlg=='1'"
+							<div class="custItem1_2_3_item" v-if="custItem.cardCstFlg=='1'"
 								style="background-color: rgb(245,245,255);color: #B0B1FF;">信</div>
 							<van-icon v-if="custItem.ioinSgnMobbank=='1'"
 								:name="require('../../assets/image/business_chooseCust_jjyh_a.png')" size="16"
 								style="margin-right: 0.04rem;" />
 							<van-icon v-else :name="require('../../assets/image/business_chooseCust_jjyh.png')"
 								size="16" style="margin-right: 0.04rem;" />
-							<van-icon v-if="custItem.ioinSgnAlpy=='1'"
+							<van-icon v-if="custItem.alpySign=='1'"
 								:name="require('../../assets/image/business_chooseCust_zfb_a.png')" size="16"
 								style="margin-right: 0.04rem;" />
 							<van-icon v-else :name="require('../../assets/image/business_chooseCust_zfb.png')" size="16"
 								style="margin-right: 0.04rem;" />
-							<van-icon v-if="custItem.ioinSgnWchtPymt=='1'"
+							<van-icon v-if="custItem.wchtPymtSign=='1'"
 								:name="require('../../assets/image/business_chooseCust_wx_a.png')" size="16"
 								style="margin-right: 0.04rem;" />
 							<van-icon v-else :name="require('../../assets/image/business_chooseCust_wx.png')" size="16"
 								style="margin-right: 0.04rem;" />
-							<van-icon v-if="custItem.ioinSgnYsf=='1'"
+							<van-icon v-if="custItem.ysfSign=='1'"
 								:name="require('../../assets/image/business_chooseCust_ysf_a.png')" size="16"
 								style="margin-right: 0.04rem;" />
 							<van-icon v-else :name="require('../../assets/image/business_chooseCust_ysf.png')" size="16"
@@ -118,11 +128,11 @@
 					</div>
 					<div class="custItem2_child">
 						<span class="custItem2_childName">定期：</span>
-						<span class="custItem2_childValue">{{formatNum(custItem.timeDpsitBal/10000)}}万元</span>
+						<span class="custItem2_childValue">{{formatNum(custItem.dqBal/10000)}}万元</span>
 					</div>
 					<div class="custItem2_child">
 						<span class="custItem2_childName">活期：</span>
-						<span class="custItem2_childValue">{{formatNum(custItem.currDpsitBal/10000)}}万元</span>
+						<span class="custItem2_childValue">{{formatNum(custItem.hqBal/10000)}}万元</span>
 					</div>
 					<div class="custItem2_child">
 						<span class="custItem2_childName">贷款：</span>
@@ -149,8 +159,13 @@
 		Toast
 	} from "vant";
 	import {
+		formatNumW,
+		formatNums,
 		formatNum
 	} from "../../api/common.js";
+	import {
+		queryGroupActiveCust
+	} from "../../request/market.js";
 	export default {
 		data() {
 			return {
@@ -162,69 +177,40 @@
 				custList: [],
 				checkCust: {},
 				showDelete: false,
+				pageReady: false,
 			}
 		},
 		methods: {
+			formatNumW,
+			formatNums,
 			formatNum,
 			onLoad() {
+				if (!this.pageReady) return;
+				this.finished = false;
+				this.loading = true;
 				Toast.loading({
 					message: "正在加载",
 					forbidClick: true,
-					duration: 0
+					duration: 0,
 				});
-				setTimeout(() => {
-					for (let i = 0; i < 10; i++) {
-						this.custList.push({
-							sysId: "E2296E21EF0532A4E053E75D190A435D",
-							merntCstFlg: "1",
-							cmrcOpptSubclass: "400003",
-							aumBal: 33333333,
-							ioinHoldLoan: "1",
-							cmrcOpptDsc: "信用卡激活超3个月，无我行借记卡，未绑定我行借记卡还款",
-							cmrcOpptExpDay: "20220601",
-							followUpPrsnNm: "*君*",
-							svcLvlNm: "未达标",
-							belongOrgNm: "青原支行",
-							aumDifVal: 33333333,
-							timeDpsitBal: 33333333,
-							keyWords: "信用卡客户/未开借记卡",
-							currDpsitBal: 33333333,
-							newCstFlg: "1",
-							cmrcOpptSubclassNm: "借记卡开卡-信用卡客户-短信营销",
-							svcLvl: "6",
-							cmrcOpptBclass: "40000",
-							aumHistHestVal: 33333333,
-							loanBal: 33333333,
-							cmrcOpptStNm: "已跟进",
-							ioinSgnAlpy: "1",
-							belgCustMgr: "001343",
-							belongOrg: "75708",
-							cmrcOpptNm: "借记卡开卡-信用卡客户-短信营销+*绍*",
-							cmrcOpptId: "IC20220501400003",
-							followUpPrsn: "001343",
-							ioinSgnWchtPymt: "1",
-							ctcTel: "",
-							custNo: "P900010001601261",
-							recomRea: "客户为我行信用卡客户，未绑定借记卡还款，可营销转化为基础客户",
-							belgCustMgrNm: "*君*",
-							cmrcOpptSt: "4",
-							ioinSgnYsf: "1",
-							agentPayCstFlg: "1",
-							basicCstCnt: "1",
-							followUpDt: "20220624",
-							custNm: "*绍*" + (i + 1),
-							vipCstFlg: "1",
-							openRecomRea: false,
-							crdtCrdCstFlg: "1",
-							ioinSgnMobbank: "1",
-						});
+				this.pageIndex++;
+				queryGroupActiveCust({
+					pageSize: "10",
+					pageNum: this.pageIndex.toString(),
+					sysId: this.baseMsg.sysId
+				}, (res) => {
+					if (res.data && res.data.records) {
+						console.log(res);
+						this.total = res.data.total;
+						this.custList = this.custList.concat(res.data.records);
+						if (this.custList.length >= this.total || res.data.records.length <= 0) this.finished =
+							true;
+					} else {
+						this.finished = true;
 					}
 					Toast.clear();
 					this.loading = false;
-					if (this.custList.length >= 40) {
-						this.finished = true;
-					}
-				}, 1000);
+				});
 			},
 			onClickRight() {
 				this.$router.push({
@@ -239,9 +225,10 @@
 				alert("移除客户：" + this.checkCust.custNm);
 				this.showDelete = false;
 				this.checkCust = {};
-			}
+			},
 		},
 		mounted() {
+			localStorage.setItem("newMyGroup", "0")
 			this.baseMsg = this.$route.params.groupItem ? JSON.parse(this.$route.params.groupItem) : JSON.parse(
 				localStorage.getItem("groupDetail"));
 			this.$nextTick(() => {
@@ -249,6 +236,7 @@
 					"fixedPlace")[0], null);
 				this.fixedHeight = fixedPlace.height;
 			})
+			this.pageReady = true;
 			this.onLoad();
 		}
 	}

@@ -6383,7 +6383,7 @@ export const filterList = [{
 			disabled: false,
 			list: []
 		}, {
-			code: "06040100",
+			code: "06040200",
 			title: "水费",
 			value: "水费",
 			values: "",
@@ -6395,7 +6395,7 @@ export const filterList = [{
 			disabled: false,
 			list: []
 		}, {
-			code: "06040100",
+			code: "06040300",
 			title: "燃气费",
 			value: "燃气费",
 			values: "",

@@ -636,8 +636,6 @@
 				});
 			},
 			toJiushu(params) {
-				console.log(this.$store.state.userMsg);
-				return;
 				Toast.loading({
 					message: "正在登录九数",
 					forbidClick: true,
@@ -651,21 +649,17 @@
 					if (res.status == "000000") {
 						Toast.clear();
 						var result = JSON.parse(res.result)
-						console.log(this.$store.state.configInfo.jsRetailUrl + "&ticket=" + result.token +
-							"&router=" + params.router)
-						console.log("http://uatmap.eqianjin.com.cn/uatdasmap/pcsSso/pcsLogin?ticket=" + result
-							.token +
-							"&service=http://dasdev.com/a/cas&_t=" + new Date().getTime() + "&premap=premap")
+						// console.log(this.$store.state.configInfo.jsRetailUrl + "&ticket=" + result.token +
+						// 	"&router=" + params.router)
+						console.log("http://uatmap.eqianjin.com.cn/uatdasmap/mobile/application/appModuleSsoLogin.html?&router=retailBoard&ticket="+result.token)
 						this.$router.push({
 							name: 'jiushuWebview',
 							params: {
 								title: params.title,
 								// url: this.$store.state.configInfo.jsRetailUrl + "&ticket=" + result.token +
 								// 	"&router=" + params.router
-								url: "http://uatmap.eqianjin.com.cn/uatdasmap/pcsSso/pcsLogin?ticket=" +
-									result.token +
-									"&service=http://dasdev.com/a/cas&_t=" + new Date().getTime() +
-									"&premap=premap"
+								// url: "http://uatmap.eqianjin.com.cn/uatdasmap/pcsSso/application/appModulePcsLogin?service=http://dasdev.com/a/cas&ticket="+ result.token +"&router=retailBoard"
+								url: "http://uatmap.eqianjin.com.cn/uatdasmap/mobile/application/appModuleSsoLogin.html?router=retailBoard&ticket="+result.token
 							}
 						});
 					} else {

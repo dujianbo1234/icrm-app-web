@@ -27,7 +27,7 @@
 			</div>
 			<div class="bottomCard2">
 				<div class="bottomCard1_1">
-					已筛选<span style="color: #026DFF;">{{custNumber}}</span>位客户
+					已筛选<span style="color: #026DFF;">{{custNumber?custNumber.toLocaleString():0}}</span>位客户
 				</div>
 				<div class="bottomCard1_2" @click="toSearchRes">确定</div>
 			</div>
@@ -135,7 +135,7 @@
 	} from "vant";
 	import {
 		queryCustAgentCompanyList,
-		queryFilterResultList
+		queryFilterResultSum
 	} from "../../request/market.js";
 	export default {
 		data() {
@@ -277,22 +277,30 @@
 				this.afterConfirm();
 			},
 			afterConfirm() {
-				queryFilterResultList({
+				Toast.loading({
+					message: "正在查询",
+					forbidClick: true,
+					duration: 0,
+				});
+				queryFilterResultSum({
 					listCustFilter: this.filterArr
 				}, (res) => {
-					console.log(res)
+					Toast.clear();
+					this.custNumber = res.data.custCnt;
 				})
 			},
 			toSearchRes() {
-				if (this.filterArr.length) {
+				if (this.filterArr.length <= 0) {
+					Toast("请至少选择1项")
+				// } else if (this.custNumber <= 0) {
+				// 	Toast("当前筛选条件下无用户")
+				} else {
 					this.$router.push({
 						name: 'groupSearchResult',
 						params: {
 							filterArr: JSON.stringify(this.filterArr)
 						}
 					})
-				} else {
-					Toast("请至少选择1项")
 				}
 			}
 		},
@@ -301,7 +309,7 @@
 				pageNum: '1',
 				pageSize: '9999'
 			}, (res) => {
-				console.log(res)
+				// console.log(res)
 			})
 		}
 	}
