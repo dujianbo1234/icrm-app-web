@@ -93,8 +93,8 @@
 							<div class="msgValue3Right" >
 								<van-icon @click="visitDetail(mustDoItem.id)" v-if="mustDoItem.mastDoSt == '01'" :name="require('@/assets/image/yiban.png')" size="24"/>
 								<van-icon  @click="openVisit(mustDoItem.id)" v-if="mustDoItem.mastDoNm != '0101' && mustDoItem.mastDoSt == '02' && $store.state.userMsg.roleId=='00000004'" :name="require('@/assets/image/daiban.png')" size="24"/>
-								<van-icon  @click="openTel(mustDoItem.id)" v-if="(mustDoItem.mastDoNm == '0101' && mustDoItem.mastDoSt == '02' && $store.state.userMsg.roleId=='00000004' && mustDoItem.isPhone=='1')||isPhone" :name="require('@/assets/image/daiban.png')" size="24"/>
-								<van-icon  @click="gaveCall(mustDoItem)" v-if="mustDoItem.mastDoNm == '0101' && mustDoItem.mastDoSt == '02' && $store.state.userMsg.roleId=='00000004' && mustDoItem.isPhone=='0'" :name="require('@/assets/image/callPhone.png')" size="24"/>
+								<van-icon  @click="openTel(mustDoItem)" v-if="(mustDoItem.mastDoNm == '0101' && mustDoItem.mastDoSt == '02' && $store.state.userMsg.roleId=='00000004' && mustDoItem.isPhone=='1')||mustDoItem.isCall" :name="require('@/assets/image/daiban.png')" size="24"/>
+								<van-icon  @click="gaveCall(mustDoItem)" v-if="mustDoItem.mastDoNm == '0101' && mustDoItem.mastDoSt == '02' && $store.state.userMsg.roleId=='00000004' && mustDoItem.isPhone=='0' && !mustDoItem.isCall" :name="require('@/assets/image/callPhone.png')" size="24"/>
 								<van-icon v-if="mustDoItem.mastDoSt == '03' && $store.state.userMsg.roleId=='00000004'" :name="require('@/assets/image/daiban_gray.png')" size="24"/>
 							</div>
 						</div>
@@ -161,7 +161,8 @@
 			style="background-color: #F8F8F8;height: 80%;">
 			<div class="popTitle">
 				<div class="popTitle1" @click="cancle">取消</div>
-				<div class="popTitle2">现场定位核查记录</div>
+				<div class="popTitle2" v-if="followItem.isPhone">电话联系记录</div>
+				<div class="popTitle2" v-else>现场定位核查记录</div>
 			</div>
 			<div class="popTime">
 				<div class="popTimeDate">{{followItem.onsiteInspTm}}</div>
@@ -170,14 +171,14 @@
 				<van-field v-model="followItem.onsiteInspDsc" type="textarea" placeholder="" rows="5" autosize readonly
 					maxlength="150" />
 			</div>
-			<div class="popPlate2">
+			<div class="popPlate2" v-if="followItem.isPhone">
 				<div class="followItem5_1"
 					v-for="(file,j) in followItem.fileList"
 					:key="'file'+j" @click="openPhoto(this.$store.state.baseUrl + file.fileServerPath)">
 					<img :src="this.$store.state.baseUrl + file.fileServerPath">
 				</div>
 			</div>
-			<div class="popPlate3">
+			<div class="popPlate3" v-if="followItem.isPhone">
 				<van-icon :name="require('../../assets/image/common_dingwei_blue.png')" size="15"
 					style="margin-right: 0.04rem;flex-shrink: 0;padding: 0.03rem 0;" />
 				<div class="popPlate3_1">
@@ -195,7 +196,7 @@
 				<div class="popTitle3" @click="addTelInfo">添加</div>
 			</div>
 			<div class="popPlate1">
-				<van-field v-model="followDesc" type="textarea" placeholder="请输入电话联系记录" rows="5" autosize readonly
+				<van-field v-model="followDesc" type="textarea" placeholder="请输入电话联系记录" rows="5" autosize
 					maxlength="150" />
 			</div>
 		</van-popup>
@@ -224,8 +225,11 @@
 		queryEmployeeMustDoList,
 		followEmployeeMustDo,
 		opportCustServUploadMpaas,
-		queryEmployeeMustDoDetail
+		queryEmployeeMustDoDetail,
 	} from "../../request/market.js";
+	import {
+		custServiceAdd
+	} from "../../request/custinfo.js";
 	import moment from "moment";
 	import customerList from "../../components/common/customerList.vue";
 
@@ -294,7 +298,9 @@
 					fileList: [],
 					onsiteInspLctng:''
 				},
-				followDesc:''
+				followDesc:'',
+				custAddInfo:{},
+
 			};
 		},
 		components: {customerList},
@@ -308,6 +314,8 @@
 					Toast.fail("电话号码为空");
 					return;
 				}
+				item.isCall=true
+				console.log('mustDoList',this.mustDoList)
 				this.showCall = true;
 				this.callItem = item;
 
@@ -325,28 +333,14 @@
 
 				}, (ress) => {
 					Toast.clear();
-					this.isPhone=true
+					// this.isPhone=true
 					AlipayJSBridge.call("callHandler", {
 						phone: this.callItem.merntCtaTel
 					}, (res) => {
 
 					})
 				});
-				// custServiceAdd({
-				// 	custName: this.callItem.cstName,
-				// 	custNo: this.callItem.custNum,
-				// 	mobileNum: this.callItem.ctcTel,
-				// 	communictionChannel: "02",
-				// 	custType: '1',
-				// 	serviceChn: "1"
-				// }, (ress) => {
-				// 	Toast.clear();
-				// 	AlipayJSBridge.call("callHandler", {
-				// 		phone: this.callItem.ctcTel
-				// 	}, (res) => {
-
-				// 	})
-				// });
+				
 			},
 			chooseDate1(date) {
 				var chooseDate = moment(date).format('YYYY-MM-DD');
@@ -468,12 +462,30 @@
 				this.followValue = "";
 				this.photoList = [];
 				this.dingwei = "";
+				this.custAddInfo=el
 				this.showVisit = true;
 				this.showVisit2 = false;
 				this.getLocation();
 			},
+			addCustInfo(item,type){
+				custServiceAdd({
+					custName: item.cstName,
+					custNo: item.custNum,
+					mobileNum: item.merntCtaTel,
+					communictionChannel: type,
+					custManager:item.custMgrNm,
+					serviceContent:this.followDesc,
+					custOrgName:item.orgName,
+					custType: '1',
+					serviceChn: "10"
+				}, (ress) => {
+					Toast.clear();
+					
+				});
+			},
 			openTel(el){
-				this.id=el
+				this.custAddInfo=el
+				this.id=el.id
 				this.followDesc = "";
 				this.photoList = [];
 				this.dingwei = "";
@@ -498,6 +510,7 @@
 					id: this.id,
 				}, (res) => {
 					this.followItem=res.data
+					console.log('this.followItem',this.followItem)
 					this.followItem.showAllPhoto = false;
 					Toast.clear();
 				})
@@ -522,8 +535,12 @@
 					forbidClick: true,
 					duration: 0
 				});
+				if(this.custAddInfo.custNum){
+					this.addCustInfo(this.custAddInfo,'01')
+				}
 				followEmployeeMustDo({
 					id: this.id,
+					mastDoSt:'01',
 					onsiteInspLctng:this.dingwei,
 					onsiteInspDsc:this.followValue,
 					uploadIds: this.photoList.map(item => item.tableKey)
@@ -547,8 +564,13 @@
 					forbidClick: true,
 					duration: 0
 				});
+
+				if(this.custAddInfo.custNum){
+					this.addCustInfo(this.custAddInfo,'02')
+				}
 				followEmployeeMustDo({
 					id: this.id,
+					mastDoSt:'01',
 					onsiteInspLctng:this.dingwei,
 					onsiteInspDsc:this.followDesc,
 					uploadIds: []

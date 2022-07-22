@@ -398,7 +398,7 @@
 					}
 				} else {
 					params = {
-						sysId: this.$route.params.sysId,
+						// sysId: this.$route.params.sysId,
 						cmrcOpptId: this.baseMsg.cmrcOpptId,
 						cmrcOpptSubclass: this.baseMsg.cmrcOpptSubclass,
 						score: this.score_c
@@ -656,7 +656,7 @@
 			queryOpportPractialInfo() {
 				queryOpportPractialInfo({
 					createPerson: this.$store.state.userMsg.empno,
-					sysId: this.$route.params.sysId
+					cmrcOpptId: this.baseMsg.cmrcOpptId,
 				}, (res) => {
 					this.myScore = res.data.score
 					this.scoreId = res.data.scoreId;
@@ -671,7 +671,7 @@
 			// 查询商机进度条
 			queryOpportunityScoringProgress() {
 				queryOpportunityScoringProgress({
-					sysId: this.$route.params.sysId
+					cmrcOpptId: this.baseMsg.cmrcOpptId,
 				}, (res) => {
 					this.progressList = res.data;
 				})
@@ -679,7 +679,7 @@
 			// 查询商机评分数量
 			queryOpportPractialCount() {
 				queryOpportPractialCount({
-					sysId: this.$route.params.sysId
+					cmrcOpptId: this.baseMsg.cmrcOpptId,
 				}, (res) => {
 					this.scoreNum = res.data.score;
 					this.scorePeople = res.data.countNb

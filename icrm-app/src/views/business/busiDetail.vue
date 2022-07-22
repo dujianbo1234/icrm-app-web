@@ -82,7 +82,7 @@
 				<span style="color: #026DFF;font-weight: 500;">#推荐理由#</span>
 				<span>{{baseMsg.recomRea}}</span>
 			</div>
-			<div class="plate1_5" v-if="haveScore&&$store.state.userMsg.roleId=='00000004'">
+			<!-- <div class="plate1_5" v-if="haveScore&&$store.state.userMsg.roleId=='00000004'">
 				<div class="plate1_5_1">我评</div>
 				<van-rate v-model="score" :size="18" color="#FFBA00" void-icon="star" readonly void-color="#E0E0E0"
 					allow-half />
@@ -91,7 +91,7 @@
 					<van-icon :name="require('../../assets/image/common_edit.png')" size="12" />
 					<span style="margin-left: 0.02rem;">修改</span>
 				</div>
-			</div>
+			</div> -->
 			<div class="plate1_6" v-if="baseMsg.cmrcOpptSt=='2'" style="background-color: #026DFF;">待跟进</div>
 			<div class="plate1_6" v-if="baseMsg.cmrcOpptSt=='4'" style="background-color: #FFBA00;">已跟进</div>
 			<div class="plate1_6" v-if="baseMsg.cmrcOpptSt=='5'" style="background-color: #52C41A;">已成交</div>

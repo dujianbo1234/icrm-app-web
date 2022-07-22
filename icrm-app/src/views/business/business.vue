@@ -184,6 +184,8 @@
 				this.loading = true;
 				this.custList = [];
 				this.onLoad();
+				this.queryCmrcOpportunity()
+
 			},
 			activeCust(custValue) {
 				if (custValue.empId) {
@@ -199,6 +201,7 @@
 				this.loading = true;
 				this.custList = [];
 				this.onLoad();
+				this.queryCmrcOpportunity()
 			},
 			toPercent(point) {
 				var str = Number(point * 100).toFixed(2);
@@ -263,6 +266,18 @@
 					this.loading = false;
 				})
 			},
+			queryCmrcOpportunity(){
+				queryCmrcOpportunitySum({
+						belgCustMgr: this.chooseCust.empId,
+						belongOrg: this.chooseOrg.value
+					}, (res) => {
+					if (res.data) {
+						this.sumMsg = res.data;
+					} else {
+						Toast.fail("商机汇总数据为空");
+					}
+				})
+			},
 			mounted_m() {
 				this.kequnIndex = Number(this.$route.params.pageType) || 0;
 				getSysCodeByType({
@@ -285,13 +300,7 @@
 						Toast.fail("商机大类数据为空")
 					}
 				})
-				queryCmrcOpportunitySum({}, (res) => {
-					if (res.data) {
-						this.sumMsg = res.data;
-					} else {
-						Toast.fail("商机汇总数据为空");
-					}
-				})
+				
 				saveSmAppVisitInfo({
 					busiType: "4"
 				}, (res) => {
@@ -311,6 +320,7 @@
 			
 			localStorage.setItem("newBusiness", "0");
 			this.mounted_m();
+			this.queryCmrcOpportunity()
 		},
 		activated() {
 			if (localStorage.getItem("newBusiness") == "0") {
@@ -657,6 +667,6 @@
 		height:1.87rem
 	}
 	.height2{
-		height:2.3rem
+		height:2.37rem
 	}
 </style>
