@@ -92,7 +92,7 @@
 							</div>
 							<div class="msgValue3Right" >
 								<van-icon @click="visitDetail(mustDoItem)" v-if="mustDoItem.mastDoSt == '01'" :name="require('@/assets/image/yiban.png')" size="24"/>
-								<van-icon  @click="openVisit(mustDoItem.id)" v-if="mustDoItem.mastDoNm != '0101' && mustDoItem.mastDoSt == '02' && $store.state.userMsg.roleId=='00000004'" :name="require('@/assets/image/daiban.png')" size="24"/>
+								<van-icon  @click="openVisit(mustDoItem)" v-if="mustDoItem.mastDoNm != '0101' && mustDoItem.mastDoSt == '02' && $store.state.userMsg.roleId=='00000004'" :name="require('@/assets/image/daiban.png')" size="24"/>
 								<van-icon  @click="openTel(mustDoItem)" v-if="(mustDoItem.mastDoNm == '0101' && mustDoItem.mastDoSt == '02' && $store.state.userMsg.roleId=='00000004' && mustDoItem.isPhone=='1')||mustDoItem.isCall" :name="require('@/assets/image/daiban.png')" size="24"/>
 								<van-icon  @click="gaveCall(mustDoItem)" v-if="mustDoItem.mastDoNm == '0101' && mustDoItem.mastDoSt == '02' && $store.state.userMsg.roleId=='00000004' && mustDoItem.isPhone=='0' && !mustDoItem.isCall" :name="require('@/assets/image/callPhone.png')" size="24"/>
 								<van-icon v-if="mustDoItem.mastDoSt == '03' && $store.state.userMsg.roleId=='00000004'" :name="require('@/assets/image/daiban_gray.png')" size="24"/>
@@ -446,9 +446,9 @@
 				if(el.name=='0'){
 					this.mastDoSt=''
 				}else if(el.name=='1'){
-					this.mastDoSt='01'
-				}else if(el.name=='2'){
 					this.mastDoSt='02'
+				}else if(el.name=='2'){
+					this.mastDoSt='01'
 				}else{
 					this.mastDoSt='03'
 				}
@@ -459,7 +459,7 @@
 			},
 			openVisit(el){
 				this.newVisit=true
-				this.id=el
+				this.id=el.id
 				this.followValue = "";
 				this.photoList = [];
 				this.dingwei = "";
@@ -548,6 +548,8 @@
 				}, (res) => {
 					Toast.success(res.msg);
 					this.showVisit = false;
+					this.custAddInfo.mastDoSt='01'
+
 					this.pageIndex = 0;
 					this.loading = true;
 					// this.mustDoList = [];
@@ -731,6 +733,8 @@
 						codeName: "全部",
 						codeValue: ""
 					})
+					this.statusList[1] = this.statusList.splice(2,1,this.statusList[1])[0]
+					console.log('this.statusList',this.statusList)
 				} else {
 					Toast.fail("必办名称数据为空")
 				}

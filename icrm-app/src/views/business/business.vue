@@ -1,20 +1,21 @@
 <template>
 	<div class="home">
 		<div class="topZW"></div>
-		<div class="plate4" v-if="$store.state.userMsg.roleId!='00000004'">
-			<div class="plate4_1"  @click="$refs.orgList.showPopup();openOrgList=true;">
-					<div class="plate4_1_value ycsl">{{chooseOrg.text}}</div>
-					<van-icon v-if="openOrgList" name="arrow-up" size="14" color="#8C8C8C" />
-					<van-icon v-else name="arrow-down" size="14" color="#8C8C8C" />
-				</div>
-				<div class="plate4_1" @click="$refs.custList.showPopup();openCustList=true;">
-					<div class="plate4_1_value ycsl">{{chooseCust.empName}}</div>
-					<van-icon v-if="openCustList" name="arrow-up" size="14" color="#8C8C8C" />
-					<van-icon v-else name="arrow-down" size="14" color="#8C8C8C" />
-				</div>
-		</div>
+		
 				
 		<div :class="$store.state.userMsg.roleId!='00000004'?'fixedPlace':'fixedPlace2'">
+			<div class="plate4" v-if="$store.state.userMsg.roleId!='00000004'">
+				<div class="plate4_1"  @click="$refs.orgList.showPopup();openOrgList=true;">
+						<div class="plate4_1_value ycsl">{{chooseOrg.text}}</div>
+						<van-icon v-if="openOrgList" name="arrow-up" size="14" color="#8C8C8C" />
+						<van-icon v-else name="arrow-down" size="14" color="#8C8C8C" />
+					</div>
+					<div class="plate4_1" @click="$refs.custList.showPopup();openCustList=true;">
+						<div class="plate4_1_value ycsl">{{chooseCust.empName}}</div>
+						<van-icon v-if="openCustList" name="arrow-up" size="14" color="#8C8C8C" />
+						<van-icon v-else name="arrow-down" size="14" color="#8C8C8C" />
+					</div>
+			</div>
 			<div class="plate1">
 				<div class="palte1_1">商机进度：{{toPercent(sumMsg.thenFollowRate||0)}}</div>
 				<van-progress color="#026DFF" track-color="#EBEBEB" pivot-text=""
@@ -182,7 +183,7 @@
 				this.openOrgList = false;
 				this.pageIndex = 0;
 				this.loading = true;
-				this.custList = [];
+				this.msgList = [];
 				this.onLoad();
 				this.queryCmrcOpportunity()
 
@@ -199,7 +200,7 @@
 				this.openCustList = false;
 				this.pageIndex = 0;
 				this.loading = true;
-				this.custList = [];
+				this.msgList = [];
 				this.onLoad();
 				this.queryCmrcOpportunity()
 			},
@@ -326,6 +327,14 @@
 			if (localStorage.getItem("newBusiness") == "0") {
 				localStorage.setItem("newBusiness", "1")
 			} else {
+				this.chooseOrg={
+					text: "全部机构",
+					value: ""
+				},
+				this.chooseCust={
+					empName: "客户经理",
+					empId: ""
+				}
 				this.sumMsg = {};
 				this.orderIndex = -1;
 				this.orderType = true;

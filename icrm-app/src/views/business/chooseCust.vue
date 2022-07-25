@@ -640,12 +640,13 @@
 				}, (res) => {
 					if (res.data) {
 						var arr = res.data.map((item) => {
-							return {
+								return {
 								text: item.codeName,
 								value: item.codeValue
 							}
 						})
-						this.statusList = this.statusList.concat(arr);
+						this.statusList=this.statusList.concat(arr)
+						this.statusList=this.statusList.slice(0,4);
 						this.resetTop();
 					} else {
 						Toast.fail("服务等级数据为空")
@@ -1327,7 +1328,7 @@
 		color: #FFBA00;
 		height: 0.12rem;
 		border-bottom: 1px solid #FFBA00;
-		width: 0.62rem;
+		/* width: 0.62rem; */
 	}
 
 	.myScore {
