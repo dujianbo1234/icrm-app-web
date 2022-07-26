@@ -234,7 +234,8 @@
 					params: {
 						cmrcOpptId: item.cmrcOpptId,
 						sysId:item.sysId,
-						chooseCust:this.chooseCust
+						belgCustMgr: this.chooseCust.empId,
+						belongOrg: this.chooseOrg.value
 					}
 				})
 			},

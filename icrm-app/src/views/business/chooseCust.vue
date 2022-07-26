@@ -372,10 +372,9 @@
 				visitNum: '',
 				isEditScore: false,
 				scoreId: '',
-				chooseCust:{
-					empName: "",
-					empId: ""
-				}
+				belgCustMgr:'',
+				belongOrg:''
+				
 			}
 		},
 		components: {
@@ -551,8 +550,8 @@
 						params.svcLvl = this.levelList[this.levelIndex].value;
 						params.cmrcOpptSt = this.statusList[this.statusIndex].value;
 						params.custNm = this.searchValue;
-						params.belgCustMgr = this.chooseCust.empId;
-						params.belongOrg = this.chooseOrg.value;
+						params.belgCustMgr = this.belgCustMgr;
+						params.belongOrg = this.belongOrg;
 						break;
 					case "choose":
 						params.sysIds = this.checked;
@@ -588,8 +587,8 @@
 					svcLvl: this.levelList[this.levelIndex].value,
 					cmrcOpptSt: this.statusList[this.statusIndex].value,
 					custNm: this.searchValue,
-					belgCustMgr: this.chooseCust.empId,
-					belongOrg: this.chooseOrg.value
+					belgCustMgr: this.belgCustMgr,
+					belongOrg: this.belongOrg
 				}, (res) => {
 					if (res.data && res.data.records) {
 						this.total = res.data.total;
@@ -746,7 +745,9 @@
 			}
 		},
 		mounted() {
-			this.chooseCust = this.$route.params.chooseCust
+			this.belongOrg = this.$route.params.belongOrg
+			this.belgCustMgr = this.$route.params.belgCustMgr
+			console.log('this.belongOrg,this.belgCustMgr',this.chooseCust,this.belgCustMgr)
 		}
 	}
 </script>
