@@ -68,6 +68,7 @@
 					<span>{{custBase.belongOrgNm || '-'}}</span>
 				</div>
 			</div>
+			<div class="joinGroup" @click="toMyGroup">添加群组</div>
 		</div>
 		<!-- 客户画像 -->
 		<div class="card custPortrait">
@@ -1847,6 +1848,17 @@
 					return `${value.toString().replace(z, '$&,')}`
 				}
 			},
+			toMyGroup() {
+				this.$router.push({
+					name: 'myGroup',
+					params: {
+						active: 1,
+						gdParams: JSON.stringify({
+							custNums: [this.custBase.custNum]
+						}),
+					}
+				})
+			},
 		},
 	};
 </script>
@@ -1999,6 +2011,8 @@
 		}
 
 		.custInfo {
+			position: relative;
+
 			.custInfoName {
 				width: 100%;
 				display: flex;
@@ -2153,6 +2167,19 @@
 						color: #8C8C8C;
 					}
 				}
+			}
+
+			.joinGroup {
+				width: 0.48rem;
+				height: 0.17rem;
+				font-size: 0.12rem;
+				font-family: PingFangSC-Regular, PingFang SC;
+				font-weight: 400;
+				color: #026DFF;
+				line-height: 0.17rem;
+				position: absolute;
+				top: 0.17rem;
+				right: 0.14rem;
 			}
 
 		}

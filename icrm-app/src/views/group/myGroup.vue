@@ -73,7 +73,7 @@
 					<div class="titleLine"></div>
 					<van-field v-model="newGroupTitle" type="text" label="群组名称" maxlength="10" required
 						placeholder="请输入名称" />
-					<van-field v-model="newGroupDesc" type="textarea" label="选客描述" placeholder="请输入说明" rows="1" autosize
+					<van-field v-model="newGroupDesc" type="textarea" label="客群描述" placeholder="请输入说明" rows="1" autosize
 						maxlength="30" show-word-limit />
 					<div class="createBtns">
 						<div class="createBtn createBtn1" @click="showAdd=false">取消</div>
@@ -149,6 +149,14 @@
 		},
 		components: {
 			sendMessage
+		},
+		watch: {
+			showAdd() {
+				if(this.showAdd){
+					this.newGroupTitle = "";
+					this.newGroupDesc = "";
+				}
+			}
 		},
 		methods: {
 			formatNumW,
@@ -313,6 +321,11 @@
 			},
 			addGroup() {
 				if (this.newGroupTitle) {
+					Toast.loading({
+						message: "正在操作",
+						forbidClick: true,
+						duration: 0,
+					});
 					saveGroupFixInfo({
 						custGroupNm: this.newGroupTitle,
 						rmkExpln: this.newGroupDesc

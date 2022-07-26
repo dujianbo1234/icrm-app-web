@@ -23,7 +23,7 @@
 					</template>
 				</div>
 				<div class="baseMsg2">客群描述</div>
-				<div class="baseMsg3">{{baseMsg.rmk||"-"}}</div>
+				<div class="baseMsg3">{{baseMsg.active==0?(baseMsg.rmk||"-"):(baseMsg.rmkExpln||"-")}}</div>
 				<div class="baseMsg4">
 					<div class="baseMsg4_child">
 						<span class="baseMsg4_childTitle">AUM总额：</span>
@@ -288,6 +288,7 @@
 			mounted_m() {
 				this.baseMsg = this.$route.params.groupItem ? JSON.parse(this.$route.params.groupItem) : JSON.parse(
 					localStorage.getItem("groupDetail"));
+				console.log(this.baseMsg)
 				this.$nextTick(() => {
 					var fixedPlace = document.defaultView.getComputedStyle(document.getElementsByClassName(
 						"fixedPlace")[0], null);
