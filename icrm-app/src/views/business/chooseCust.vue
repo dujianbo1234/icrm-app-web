@@ -700,6 +700,9 @@
 		activated() {
 			localStorage.setItem("newBusiness", "0");
 			if (this.$route.params.cmrcOpptId) {
+				this.belongOrg = this.$route.params.belongOrg
+				this.belgCustMgr = this.$route.params.belgCustMgr
+				console.log('this.belongOrg,this.belgCustMgr',this.chooseCust,this.belgCustMgr)
 				this.baseMsg = {};
 				this.openDesc = false;
 				this.openSearch = false;
@@ -745,9 +748,7 @@
 			}
 		},
 		mounted() {
-			this.belongOrg = this.$route.params.belongOrg
-			this.belgCustMgr = this.$route.params.belgCustMgr
-			console.log('this.belongOrg,this.belgCustMgr',this.chooseCust,this.belgCustMgr)
+			
 		}
 	}
 </script>
