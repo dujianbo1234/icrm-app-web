@@ -1,17 +1,17 @@
 <template>
 	<div class="home">
-		<nav-bar title="我的群组" type="2" leftIcon backName="cust" />
-		<van-tabs v-model:active="active" color="#026DFF" title-active-color="#026DFF" title-inactive-color="#595959"
-			line-width="0.84rem" line-height="0.02rem">
+		<nav-bar title="我的群组" type="2" leftIcon :backName="$route.params.gdParams?'':'cust'" />
+		<van-tabs v-if="!$route.params.gdParams" v-model:active="active" color="#026DFF" title-active-color="#026DFF"
+			title-inactive-color="#595959" line-width="0.84rem" line-height="0.02rem" @change="changeTab">
 			<van-tab v-for="(tab,i) in ['动态群组','固定群组']" :key="'tab'+i" :title="tab" />
 		</van-tabs>
-		<div style="height: 0.61rem;"></div>
+		<div v-if="!$route.params.gdParams" style="height: 0.61rem;"></div>
 		<van-list v-model:loading="loading" :finished="finished" finished-text="没有更多了" :immediate-check="false"
 			@load="onLoad">
 			<van-swipe-cell v-for="(groupItem,i) in groupList" :key="'groupItem'+i">
 				<div class="groupCard" @click="toGroupDetail(groupItem)">
 					<div class="groupCardLeft">
-						<div class="groupItem1 ycsl">{{groupItem.acGroupNm}}</div>
+						<div class="groupItem1 ycsl">{{active==0?groupItem.acGroupNm:groupItem.custGroupNm}}</div>
 						<div class="groupItem2">
 							<div class="groupItem2_child">
 								<span class="groupItem2_childTitle">人数:</span>
@@ -23,11 +23,13 @@
 							</div>
 							<div class="groupItem2_child">
 								<span class="groupItem2_childTitle">归属人:</span>
-								<span class="groupItem2_childValue">{{groupItem.creatorNm}}</span>
+								<span
+									class="groupItem2_childValue">{{active==0?groupItem.creatorNm:groupItem.modifUsrName}}</span>
 							</div>
 							<div class="groupItem2_child ycsl">
 								<span class="groupItem2_childTitle">机构:</span>
-								<span class="groupItem2_childValue">{{groupItem.crtInstNm}}</span>
+								<span
+									class="groupItem2_childValue">{{active==0?groupItem.crtInstNm:groupItem.menderBelongOrgNm}}</span>
 							</div>
 						</div>
 						<div class="groupItem3_g" v-if="active==0">
@@ -43,7 +45,7 @@
 								<span># </span>
 							</template>
 						</div>
-						<div class="groupItem4" @click.stop="openMbox(groupItem)">
+						<div v-if="!$route.params.gdParams" class="groupItem4" @click.stop="openMbox(groupItem)">
 							<van-icon :name="require('../../assets/image/sendMessage.png')" size="0.25rem" />
 						</div>
 					</div>
@@ -59,26 +61,27 @@
 				</template>
 			</van-swipe-cell>
 		</van-list>
-		<div class="addGroup" v-show="active==1" @click="newGroup={};showAdd=true;">
+		<div class="addGroup" v-show="active==1&&!$route.params.gdParams" @click="newGroup={};showAdd=true;">
 			<van-icon :name="require('../../assets/image/btn_add.png')" size="0.56rem" />
 		</div>
 		<div class="bottomZW"></div>
 		<send-message ref="sendMessage" />
-		<van-overlay :show="showAdd" z-index="11">
-			<div class="plate6">
-				<div class="plate6_1">创建固定群组</div>
-				<div class="plate6_5">
-					<van-field v-model="newGroup.groupTitle" label="群组名称" label-align="right" required
-						placeholder="请输入名称" maxlength="20" />
-					<van-field v-model="newGroup.groupDesc" type="textarea" label="客群描述" label-align="right"
-						placeholder="请输入说明" rows="1" autosize maxlength="20" />
+		<div class="createOutBox">
+			<van-popup v-model:show="showAdd" z-index="11" :close-on-click-overlay="false">
+				<div class="createBox">
+					<div class="createTitle">创建固定群组</div>
+					<div class="titleLine"></div>
+					<van-field v-model="newGroupTitle" type="text" label="群组名称" maxlength="10" required
+						placeholder="请输入名称" />
+					<van-field v-model="newGroupDesc" type="textarea" label="选客描述" placeholder="请输入说明" rows="1" autosize
+						maxlength="30" show-word-limit />
+					<div class="createBtns">
+						<div class="createBtn createBtn1" @click="showAdd=false">取消</div>
+						<div class="createBtn createBtn2" @click="addGroup">创建</div>
+					</div>
 				</div>
-				<div class="plate6_4">
-					<div class="palte6_4_1" @click="showAdd=false">取消</div>
-					<div class="palte6_4_2" @click="addGroup">确定</div>
-				</div>
-			</div>
-		</van-overlay>
+			</van-popup>
+		</div>
 		<van-dialog v-model:show="showDelete">
 			<template #default>
 				<div class="dialogValue">确定删除该群组？</div>
@@ -87,6 +90,20 @@
 				<div class="dialogBtns">
 					<div class="dialogBtn dialogBtn1" @click="showDelete=false">取消</div>
 					<div class="dialogBtn dialogBtn2" @click="delGroupItem">确认</div>
+				</div>
+			</template>
+		</van-dialog>
+		<van-dialog v-model:show="showJoin">
+			<template #title>
+				<div class="dialogTitle">提示</div>
+			</template>
+			<template #default>
+				<div class="dialogValue" style="margin-top: 0;">确定加入{{joinGroup.custGroupNm}}？</div>
+			</template>
+			<template #footer>
+				<div class="dialogBtns">
+					<div class="dialogBtn dialogBtn1" @click="showJoin=false">取消</div>
+					<div class="dialogBtn dialogBtn2" @click="afterJoinGroup">确认</div>
 				</div>
 			</template>
 		</van-dialog>
@@ -106,7 +123,11 @@
 	import sendMessage from "../../components/common/sendMessage.vue";
 	import {
 		queryGroupActiveList,
-		deleteGroupActiveInfo
+		deleteGroupActiveInfo,
+		queryGroupFixList,
+		deleteGroupFixInfo,
+		saveGroupFixInfo,
+		saveGroupFixCust
 	} from "../../request/market.js";
 	export default {
 		data() {
@@ -118,9 +139,12 @@
 				pageIndex: 0,
 				groupList: [],
 				showAdd: false,
-				newGroup: {},
+				newGroupTitle: "",
+				newGroupDesc: "",
 				delGroup: {},
 				showDelete: false,
+				showJoin: false,
+				joinGroup: {},
 			}
 		},
 		components: {
@@ -147,7 +171,6 @@
 							pageNum: this.pageIndex.toString()
 						}, (res) => {
 							if (res.data && res.data.records) {
-								console.log(res.data.records[0])
 								this.groupList = this.groupList.concat(res.data.records);
 								if (this.groupList.length >= res.data.total || res.data.records.length <= 0) {
 									this.finished = true;
@@ -160,23 +183,88 @@
 						});
 						break;
 					case 1:
+						queryGroupFixList({
+							pageSize: "10",
+							pageNum: this.pageIndex.toString()
+						}, (res) => {
+							if (res.data && res.data.records) {
+								this.groupList = this.groupList.concat(res.data.records);
+								if (this.groupList.length >= res.data.total || res.data.records.length <= 0) {
+									this.finished = true;
+								}
+							} else {
+								this.finished = true;
+							}
+							Toast.clear();
+							this.loading = false;
+						});
 						break;
 				}
 			},
+			changeTab() {
+				this.pageIndex = 0;
+				this.groupList = [];
+				this.onLoad();
+			},
 			openMbox(item) {
-				this.$refs.sendMessage.openMbox({
-					type: "groupSendAll",
+				var params = {
 					searchData: {},
 					list: [],
 					shrtmsgCnl: "3"
-				})
+				}
+				if(this.active==0){
+					params.type = "activeGroupSendAll";
+					params.sysId = item.sysId;
+				}else{
+					params.type = "fixGroupSendAll";
+					params.groupId = item.groupId;
+				}
+				this.$refs.sendMessage.openMbox(params);
 			},
 			toGroupDetail(item) {
-				localStorage.setItem("groupDetail", JSON.stringify(item));
-				this.$router.push({
-					name: 'groupDetail',
-					params: {
-						groupItem: JSON.stringify(item)
+				if (this.$route.params.gdParams) {
+					this.joinGroup = item;
+					this.showJoin = true;
+				} else {
+					item.active = this.active;
+					localStorage.setItem("groupDetail", JSON.stringify(item));
+					localStorage.setItem("newMyGroup", "0")
+					this.$router.push({
+						name: 'groupDetail',
+						params: {
+							groupItem: JSON.stringify(item)
+						}
+					})
+				}
+			},
+			afterJoinGroup() {
+				this.showJoin = false;
+				Toast.loading({
+					message: "正在操作",
+					forbidClick: true,
+					duration: 0,
+				});
+				var gdParams = JSON.parse(this.$route.params.gdParams);
+				saveGroupFixCust({
+					sysId: this.joinGroup.groupId,
+					...gdParams
+				}, (res) => {
+					if (res.data == "操作成功") {
+						Toast.success("操作成功");
+						setTimeout(() => {
+							this.joinGroup.active = this.active;
+							localStorage.setItem("groupDetail", JSON.stringify(this.joinGroup));
+							localStorage.setItem("newMyGroup", "0")
+							localStorage.setItem("newGroupSearchResult", "1")
+							this.$router.push({
+								name: 'groupDetail',
+								params: {
+									groupItem: JSON.stringify(this.joinGroup)
+								}
+							})
+						}, 800)
+					} else {
+						Toast.fail(res.msg)
 					}
 				})
 			},
@@ -191,34 +279,67 @@
 					forbidClick: true,
 					duration: 0,
 				});
-				deleteGroupActiveInfo({
-					sysId: this.delGroup.sysId
-				}, (res) => {
-					console.log(res)
-					if (res.data == "操作成功") {
-						Toast.success("删除成功");
-						setTimeout(() => {
-							this.pageIndex = 0;
-							this.groupList = [];
-							this.onLoad();
-						}, 800)
-					} else {
-						Toast.fail(res.msg)
-					}
-				})
+				if (this.active == 0) {
+					deleteGroupActiveInfo({
+						sysId: this.delGroup.sysId
+					}, (res) => {
+						if (res.data == "操作成功") {
+							Toast.success("删除成功");
+							setTimeout(() => {
+								this.pageIndex = 0;
+								this.groupList = [];
+								this.onLoad();
+							}, 800)
+						} else {
+							Toast.fail(res.msg)
+						}
+					})
+				} else {
+					deleteGroupFixInfo({
+						groupId: this.delGroup.groupId
+					}, (res) => {
+						if (res.data == "操作成功") {
+							Toast.success("删除成功");
+							setTimeout(() => {
+								this.pageIndex = 0;
+								this.groupList = [];
+								this.onLoad();
+							}, 800)
+						} else {
+							Toast.fail(res.msg)
+						}
+					})
+				}
 			},
 			addGroup() {
-				if (this.newGroup.groupTitle) {
-					alert("新增 " + this.newGroup.groupTitle + " 群组：" + this.newGroup.groupDesc);
-					this.showAdd = false;
+				if (this.newGroupTitle) {
+					saveGroupFixInfo({
+						custGroupNm: this.newGroupTitle,
+						rmkExpln: this.newGroupDesc
+					}, (res) => {
+						if (res.data == "操作成功") {
+							Toast.success("创建成功");
+							this.showAdd = false;
+							setTimeout(() => {
+								this.pageIndex = 0;
+								this.groupList = [];
+								this.onLoad();
+							}, 800)
+						} else {
+							Toast.fail(res.msg)
+						}
+					})
 				} else {
 					Toast("请输入群组名称")
 				}
 			},
 			mounted_m() {
-				if (this.$router.params) {
-					this.active = this.$router.params.active || 0;
-				};
+				if (localStorage.getItem("newMyGroup") == "2") {
+					localStorage.setItem("newMyGroup", "1");
+					this.active = 1;
+				} else {
+					this.active = this.$route.params.active ? Number(this.$route.params.active) : 0;
+				}
 				this.pageReady = true;
 				this.onLoad();
 			}
@@ -238,6 +359,11 @@
 				this.groupList = [];
 				this.showAdd = false;
 				this.newGroup = {};
+				try{
+					this.$refs.sendMessage.cancle();
+				}catch(e){
+					//TODO handle the exception
+				}
 				this.mounted_m();
 			}
 		},
@@ -563,6 +689,104 @@
 	}
 
 	.dialogBtn2 {
+		background: #026DFF;
+		color: #FFFFFF;
+	}
+
+	.createOutBox>:deep(.van-popup) {
+		width: 91.47%;
+		background-color: transparent;
+	}
+
+	.createBox {
+		width: 100%;
+		background: #FFFFFF;
+		border-radius: 0.08rem;
+		padding-bottom: 0.22rem;
+	}
+
+	.createTitle {
+		width: 100%;
+		height: 0.45rem;
+		font-size: 0.16rem;
+		font-family: PingFangSC-Regular, PingFang SC;
+		font-weight: 400;
+		color: #262626;
+		line-height: 0.45rem;
+		text-align: center;
+	}
+
+	.titleLine {
+		width: 100%;
+		height: 0.07rem;
+		box-shadow: inset 0rem 0.01rem 0rem 0rem #E7E9EC;
+		margin-bottom: 0.04rem;
+	}
+
+	.createBox :deep(.van-cell) {
+		width: calc(100% - 0.72rem);
+		margin: 0.19rem auto 0.29rem;
+	}
+
+	.createBox :deep(.van-cell:after) {
+		border-bottom: 0;
+	}
+
+	.createBox :deep(.van-cell__title) {
+		text-align: right;
+		font-size: 0.14rem;
+		font-family: PingFangSC-Regular, PingFang SC;
+		font-weight: 400;
+		color: #262626;
+		width: 0.68rem;
+		line-height: 0.4rem;
+		white-space: nowrap;
+	}
+
+	.createBox :deep(.van-cell__value) {
+		width: 100%;
+		background-color: #F5F5F5;
+		border-radius: 0.05rem;
+	}
+
+	.createBox :deep(.van-field__body) {
+		min-height: 0.4rem;
+		padding: 0 0.12rem;
+	}
+
+	.createBox :deep(.van-field__word-limit) {
+		padding-right: 0.06rem;
+	}
+
+	.createBox :deep(.van-field__label--required:before) {
+		color: #026DFF;
+	}
+
+	.createBtns {
+		height: 0.3rem;
+		display: flex;
+		flex-wrap: nowrap;
+		justify-content: center;
+	}
+
+	.createBtn {
+		width: 1.08rem;
+		height: 0.3rem;
+		border-radius: 0.15rem;
+		font-size: 0.13rem;
+		font-family: PingFangSC-Medium, PingFang SC;
+		font-weight: 500;
+		line-height: 0.3rem;
+		text-align: center;
+		margin: 0 0.1rem;
+	}
+
+	.createBtn1 {
+		border: solid 0.01rem #026DFF;
+		color: #026DFF;
+	}
+
+	.createBtn2 {
 		background: #026DFF;
 		color: #FFFFFF;
 	}

@@ -19,8 +19,8 @@
 			<div class="plate2">
 				<div class="plate2_item">筛选结果：共{{formatNums(total || 0)}}位客户</div>
 				<div class="plate2_item"></div>
-				<div class="plate2_item">AUM总额：{{formatNumW(aumBal || 0)}}万元</div>
-				<div class="plate2_item">贷款总额：{{formatNumW(loanBal || 0)}}万元</div>
+				<div class="plate2_item">AUM总额：{{aumBal=="正在获取..."?aumBal:formatNumW(aumBal || 0)+"万元"}}</div>
+				<div class="plate2_item">贷款总额：{{loanBal=="正在获取..."?loanBal:formatNumW(loanBal || 0)+"万元"}}</div>
 			</div>
 		</div>
 		<div style="height: 1.98rem;"></div>
@@ -30,7 +30,7 @@
 				<div class="custItem" v-for="(item,i) in custList" :key="'item'+i"
 					:style="{'margin-left':showChecked?'15%':'0%'}">
 					<div class="leftCheckBox">
-						<van-checkbox :name="item"></van-checkbox>
+						<van-checkbox :name="item.custNum"></van-checkbox>
 					</div>
 					<div class="custItem1">
 						<div class="custItem1_2">
@@ -69,15 +69,15 @@
 		<div class="bottomZW"></div>
 		<div class="bottomBtns" v-if="showChecked">
 			<div class="bottomBtn_c bottomBtn_c1" @click="showChecked=false">取消</div>
-			<div class="bottomBtn_c bottomBtn_c2" @click="createType='dt';showCreate=true;">全部加入</div>
-			<div class="bottomBtn_c bottomBtn_c2" @click="createType='dt';showCreate=true;">加入</div>
+			<div class="bottomBtn_c bottomBtn_c2" @click="allIn">全部加入</div>
+			<div class="bottomBtn_c bottomBtn_c2" @click="someIn">加入</div>
 			<div style="width: 0.1rem;"></div>
 			<div class="bottomZW" style="width: 100%;"></div>
 		</div>
 		<div class="bottomBtns" v-else>
 			<div class="bottomBtn" @click="checkShare">
 				<div class="bottomBtnIcon bottomBtnIcon1"></div>
-				<div class="bottomBtnName">全选</div>
+				<div class="bottomBtnName">分享</div>
 			</div>
 			<div class="bottomBtn" @click="showChecked=false;createType='dt';showCreate=true;">
 				<div class="bottomBtnIcon bottomBtnIcon2"></div>
@@ -138,7 +138,8 @@
 	import {
 		queryFilterResultList,
 		saveGroupActiveInfo,
-		queryFilterResultSum
+		queryFilterResultSum,
+		saveGroupFixCust
 	} from "../../request/market.js";
 	export default {
 		data() {
@@ -176,8 +177,8 @@
 					},
 				],
 				total: 0,
-				aumBal: 0,
-				loanBal: 0,
+				aumBal: "正在获取...",
+				loanBal: "正在获取...",
 				pageReady: false,
 				showPopover: false,
 				actions: [{
@@ -191,6 +192,8 @@
 				createType: "dt",
 				groupName: "",
 				groupRemark: "",
+				newGroup: false,
+				gdParams: {},
 			}
 		},
 		watch: {
@@ -225,7 +228,6 @@
 					listCustFilter: this.filterArr
 				}, (res) => {
 					if (res.data && res.data.records) {
-						console.log(res);
 						this.total = res.data.total;
 						this.custList = this.custList.concat(res.data.records);
 						if (this.custList.length >= this.total || res.data.records.length <= 0) this.finished =
@@ -244,16 +246,56 @@
 			onSelect(action) {
 				switch (action.text) {
 					case "加入已有群组":
+						this.newGroup = false;
 						this.showChecked = true;
 						break;
 					case "创建固定群组":
+						this.newGroup = true;
 						this.createType = "gd";
 						this.showChecked = true;
 						break;
 				}
 			},
+			allIn() {
+				this.gdParams = {
+					listCustFilter: this.filterArr,
+				};
+				if (this.newGroup) {
+					this.showCreate = true;
+				} else {
+					localStorage.setItem("newGroupSearchResult", "0")
+					this.$router.push({
+						name: 'myGroup',
+						params: {
+							active: 1,
+							gdParams: JSON.stringify(this.gdParams),
+						}
+					})
+				}
+			},
+			someIn() {
+				if (this.chooseItems.length) {
+					this.gdParams = {
+						custNums: this.chooseItems,
+					};
+					if (this.newGroup) {
+						this.showCreate = true;
+					} else {
+						localStorage.setItem("newGroupSearchResult", "0")
+						this.$router.push({
+							name: 'myGroup',
+							params: {
+								active: 1,
+								gdParams: JSON.stringify(this.gdParams),
+							}
+						})
+					}
+				} else {
+					Toast("请至少选择1项")
+				}
+			},
 			createGroup() {
-				if(!this.groupName){
+				if (!this.groupName) {
 					Toast("请输入群组名称");
 					return;
 				};
@@ -262,45 +304,88 @@
 					forbidClick: true,
 					duration: 0,
 				});
-				switch (this.createType){
+				switch (this.createType) {
 					case "dt":
 						saveGroupActiveInfo({
 							listCustFilter: this.filterArr,
 							acGroupNm: this.groupName,
 							rmk: this.groupRemark
-						},(res)=>{
-							if(res.data == "操作成功"){
+						}, (res) => {
+							if (res.data == "操作成功") {
 								Toast.success("创建成功");
 								this.showCreate = false;
-								setTimeout(()=>{
+								setTimeout(() => {
 									this.$router.push({
 										name: 'myGroup',
 									})
-								},800)
-							}else{
+								}, 800)
+							} else {
 								Toast.fail(res.msg)
 							}
 						})
 						break;
 					case "gd":
-						Toast.clear();
-						// saveGroupActiveInfo
+						this.gdParams.acGroupNm = this.groupName;
+						this.gdParams.rmk = this.groupRemark;
+						saveGroupFixCust(this.gdParams, (res) => {
+							if (res.data == "操作成功") {
+								Toast.success("创建成功");
+								this.showCreate = false;
+								setTimeout(() => {
+									this.$router.push({
+										name: 'myGroup',
+										params: {
+											active: 1
+										}
+									})
+								}, 800)
+							} else {
+								Toast.fail(res.msg)
+							}
+						})
 						break;
 				}
 			},
+			mounted_m() {
+				this.filterArr = JSON.parse(this.$route.params.filterArr);
+				this.pageReady = true;
+				queryFilterResultSum({
+					listCustFilter: this.filterArr
+				}, (res) => {
+					this.aumBal = res.data.aumBal || 0;
+					this.loanBal = res.data.loanBal || 0;
+				})
+				this.onLoad()
+			}
 		},
 		mounted() {
-			this.filterArr = JSON.parse(this.$route.params.filterArr);
-			this.pageReady = true;
-			queryFilterResultSum({
-				listCustFilter: this.filterArr
-			}, (res) => {
-				this.custNumber = res.data.custCnt;
-				this.aumBal = res.data.aumBal;
-				this.loanBal = res.data.loanBal;
-			})
-			this.onLoad()
-		}
+			localStorage.setItem("newGroupSearchResult", "0");
+			this.mounted_m();
+		},
+		activated() {
+			if (localStorage.getItem("newGroupSearchResult") == "0") {
+				localStorage.setItem("newGroupSearchResult", "1")
+			} else {
+				this.filterArr = [];
+				this.loading = false;
+				this.finished = false;
+				this.pageIndex = 0;
+				this.chooseItems = [];
+				this.custList = [];
+				this.showChecked = false;
+				this.total = 0;
+				this.aumBal = "正在获取...";
+				this.loanBal = "正在获取...";
+				this.pageReady = false;
+				this.showPopover = false;
+				this.showCreate = false;
+				this.groupName = "";
+				this.groupRemark = "";
+				this.newGroup = false;
+				this.gdParams = {};
+				this.mounted_m();
+			}
+		},
 	}
 </script>
 
@@ -574,7 +659,7 @@
 		background: #026DFF;
 		color: #FFFFFF;
 	}
-	
+
 	.bottomBtn_c {
 		width: 0.88rem;
 		height: 0.4rem;
@@ -585,12 +670,12 @@
 		line-height: 0.4rem;
 		margin: 0.12rem 0.05rem 0.12rem 0;
 	}
-	
+
 	.bottomBtn_c1 {
 		border: 0.01rem solid #026DFF;
 		color: #026DFF;
 	}
-	
+
 	.bottomBtn_c2 {
 		background: #026DFF;
 		color: #FFFFFF;

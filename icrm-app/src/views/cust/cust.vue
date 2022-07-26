@@ -440,19 +440,19 @@
 					case "财富看板":
 						this.toJiushu({
 							title: "财富看板",
-							router: "retailBoard"
+							router: "retailBoard&page=1"
 						});
 						break;
 					case "贷款看板":
 						this.toJiushu({
 							title: "贷款看板",
-							router: "retailBoard"
+							router: "retailBoard&page=2"
 						});
 						break;
 					case "收单看板":
 						this.toJiushu({
 							title: "收单看板",
-							router: "retailBoard"
+							router: "retailBoard&page=3"
 						});
 						break;
 					case "全部客群":
@@ -649,17 +649,14 @@
 					if (res.status == "000000") {
 						Toast.clear();
 						var result = JSON.parse(res.result)
-						// console.log(this.$store.state.configInfo.jsRetailUrl + "&ticket=" + result.token +
-						// 	"&router=" + params.router)
-						console.log("http://uatmap.eqianjin.com.cn/uatdasmap/mobile/application/appModuleSsoLogin.html?&router=retailBoard&ticket="+result.token)
+						console.log(this.$store.state.configInfo.jsRetailUrl + "ticket=" + result.token +
+									"&router=" + params.router)
 						this.$router.push({
 							name: 'jiushuWebview',
 							params: {
 								title: params.title,
-								// url: this.$store.state.configInfo.jsRetailUrl + "&ticket=" + result.token +
-								// 	"&router=" + params.router
-								// url: "http://uatmap.eqianjin.com.cn/uatdasmap/pcsSso/application/appModulePcsLogin?service=http://dasdev.com/a/cas&ticket="+ result.token +"&router=retailBoard"
-								url: "http://uatmap.eqianjin.com.cn/uatdasmap/mobile/application/appModuleSsoLogin.html?router=retailBoard&ticket="+result.token
+								url: this.$store.state.configInfo.jsRetailUrl + "ticket=" + result.token +
+									"&router=" + params.router
 							}
 						});
 					} else {

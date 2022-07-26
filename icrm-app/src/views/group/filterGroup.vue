@@ -53,6 +53,37 @@
 				<div class="btnItem btnItem3" v-else>确定</div>
 			</div>
 		</van-popup>
+		<van-popup v-model:show="MCCShow" position="bottom" :style="{ height: '70%' }" round :lock-scroll="false"
+			:close-on-click-overlay="true" close-on-popstate>
+			<div class="popupTitle_dfdw">行业MCC码</div>
+			<div class="childListOutBox" style="padding: 0.12rem 0.18rem 0;">
+				<div class="checkedBox">
+					<div class="checkedBox1">{{activeChild1.remark}}</div>
+					<div class="checkedBox2">已选（{{MCCChecked.length}}）</div>
+					<div class="checkedBox3" v-for="(MCCNameItem,i) in MCCChecked" :key="'MCCNameItem'+i">
+						{{MCCNameItem}}
+					</div>
+				</div>
+				<div class="searchBox">
+					<van-search v-model="searchValue" shape="round" show-action placeholder="请输入行业MCC码"
+						@update:model-value="onSearch" :left-icon="require('../../assets/image/common_search.png')">
+						<template #action>
+							<div style="color: #026DFF;font-size: 0.14rem;padding-left: 0.1rem;" @click="onSearch">搜索
+							</div>
+						</template>
+					</van-search>
+				</div>
+				<van-checkbox-group v-model="MCCChecked">
+					<van-checkbox v-for="(MCCNameItem,i) in MCCShowList" :key="'dfdwItem'+i" :name="MCCNameItem">{{MCCNameItem}}
+					</van-checkbox>
+				</van-checkbox-group>
+			</div>
+			<div class="btnBox">
+				<div class="btnItem btnItem1" @click="MCCShow=false">取消</div>
+				<div class="btnItem btnItem2" v-if="MCCChecked.length" @click="MCCConfirm">确定</div>
+				<div class="btnItem btnItem3" v-else>确定</div>
+			</div>
+		</van-popup>
 		<van-popup v-model:show="dfdwShow" position="bottom" :style="{ height: '70%' }" round :lock-scroll="false"
 			:close-on-click-overlay="true" close-on-popstate>
 			<div class="popupTitle_dfdw">代发单位</div>
@@ -135,7 +166,7 @@
 	} from "vant";
 	import {
 		queryCustAgentCompanyList,
-		queryFilterResultSum
+		queryFilterResultCount
 	} from "../../request/market.js";
 	export default {
 		data() {
@@ -154,6 +185,10 @@
 				dfdwChecked: [],
 				dfdwList: ["代发单位0", "代发单位1", "代发单位2", "代发单位3", "代发单位4", "代发单位5", "代发单位6", "代发单位7", "代发单位8"],
 				dfdwShowList: ["代发单位0", "代发单位1", "代发单位2", "代发单位3", "代发单位4", "代发单位5", "代发单位6", "代发单位7", "代发单位8"],
+				MCCShow: false,
+				MCCChecked: [],
+				MCCList: ["代发单位0", "代发单位1", "代发单位2", "代发单位3", "代发单位4", "代发单位5", "代发单位6", "代发单位7", "代发单位8"],
+				MCCShowList: ["代发单位0", "代发单位1", "代发单位2", "代发单位3", "代发单位4", "代发单位5", "代发单位6", "代发单位7", "代发单位8"],
 				searchValue: "",
 			}
 		},
@@ -170,14 +205,25 @@
 			dfdwShow() {
 				if (!this.dfdwShow) {
 					this.activeChild1 = {};
+					this.searchValue = "";
+				}
+			},
+			MCCShow() {
+				if (!this.MCCShow) {
+					this.activeChild1 = {};
+					this.searchValue = "";
 				}
 			},
 		},
 		methods: {
 			onSearch() {
 				this.dfdwShowList = [];
+				this.MCCShowList = [];
 				this.dfdwList.forEach((item) => {
 					if (item.includes(this.searchValue)) this.dfdwShowList.push(item)
+				});
+				this.MCCList.forEach((item) => {
+					if (item.includes(this.searchValue)) this.MCCShowList.push(item)
 				});
 			},
 			checkChild1(item) {
@@ -185,6 +231,15 @@
 				item.maxValue = "";
 				this.activeChild1 = item;
 				switch (item.code) {
+					case "03020000":
+						var MCC = this.filterArr.find(item => item.code == "03020000");
+						if (MCC) {
+							this.MCCChecked = MCC.values.split(",");
+						} else {
+							this.MCCChecked = [];
+						}
+						this.MCCShow = true;
+						break;
 					case "04010000":
 						var dfdw = this.filterArr.find(item => item.code == "04010000");
 						if (dfdw) {
@@ -282,11 +337,11 @@
 					forbidClick: true,
 					duration: 0,
 				});
-				queryFilterResultSum({
+				queryFilterResultCount({
 					listCustFilter: this.filterArr
 				}, (res) => {
 					Toast.clear();
-					this.custNumber = res.data.custCnt;
+					this.custNumber = res.data;
 				})
 			},
 			toSearchRes() {
@@ -309,7 +364,7 @@
 				pageNum: '1',
 				pageSize: '9999'
 			}, (res) => {
-				// console.log(res)
+				console.log(res)
 			})
 		}
 	}

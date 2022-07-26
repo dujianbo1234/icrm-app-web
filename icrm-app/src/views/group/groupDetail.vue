@@ -1,15 +1,15 @@
 <template>
 	<div class="home">
-		<nav-bar :title="baseMsg.acGroupNm" @touchRight="onClickRight" type="2" leftIcon rightText="添加客户"
-			rightColor="#026DFF" />
+		<nav-bar :title="baseMsg.active==0?baseMsg.acGroupNm:baseMsg.custGroupNm" @touchRight="onClickRight" type="2"
+			leftIcon :rightText="baseMsg.active==1?'添加客户':''" rightColor="#026DFF" />
 		<div class="fixedPlace">
 			<div class="baseMsgPlace">
 				<div class="baseMsg1">
-					<div class="baseMsg1_1">{{baseMsg.acGroupNm}}</div>
-					<div class="baseMsg1_2">{{(baseMsg.custCnt||0).toLocaleString()}}人</div>
+					<div class="baseMsg1_1">{{baseMsg.active==0?baseMsg.acGroupNm:baseMsg.custGroupNm}}</div>
+					<div class="baseMsg1_2">{{(total||0).toLocaleString()}}人</div>
 				</div>
-				<div class="baseMsg2">选客策略</div>
-				<div class="baseMsg3">
+				<div class="baseMsg2" v-if="baseMsg.active==0">选客策略</div>
+				<div class="baseMsg3" v-if="baseMsg.active==0">
 					<template v-for="(filterItem,i) in baseMsg.listGroupCdtnChc" :key="'filterItem'+i">
 						<span>#</span>
 						<span>{{filterItem.chcFldNm.split("#")[0]}}&nbsp;</span>
@@ -23,7 +23,7 @@
 					</template>
 				</div>
 				<div class="baseMsg2">客群描述</div>
-				<div class="baseMsg3">{{baseMsg.rmk}}</div>
+				<div class="baseMsg3">{{baseMsg.rmk||"-"}}</div>
 				<div class="baseMsg4">
 					<div class="baseMsg4_child">
 						<span class="baseMsg4_childTitle">AUM总额：</span>
@@ -37,41 +37,43 @@
 				<div class="baseMsg5">
 					<div class="baseMsg4_child">
 						<span class="baseMsg4_childTitle">归属人：</span>
-						<span class="baseMsg4_childValue">{{baseMsg.creatorNm}}</span>
+						<span
+							class="baseMsg4_childValue">{{baseMsg.active==0?baseMsg.creatorNm:baseMsg.modifUsrName}}</span>
 					</div>
 					<div class="baseMsg4_child">
 						<span class="baseMsg4_childTitle">机构：</span>
-						<span class="baseMsg4_childValue">{{baseMsg.crtInstNm}}</span>
+						<span
+							class="baseMsg4_childValue">{{baseMsg.active==0?baseMsg.crtInstNm:baseMsg.menderBelongOrgNm}}</span>
 					</div>
 				</div>
 			</div>
 		</div>
 		<div :style="{height: fixedHeight}"></div>
-		<van-list ref="vantList" v-model:loading="loading" :finished="finished" finished-text="没有更多了" :immediate-check="false"
-			@load="onLoad">
-			<div class="custItem" v-for="(custItem,i) in custList" :key="'custItem'+i">
+		<van-list ref="vantList" v-model:loading="loading" :finished="finished" finished-text="没有更多了"
+			:immediate-check="false" @load="onLoad">
+			<div class="custItem" v-for="(custItem,i) in custList" :key="'custItem'+i" @click="toCustView(custItem)">
 				<div class="custItem1">
 					<div class="custItem1_2">
-						<div class="custItem1_2_1">{{custItem.cstNm}}</div>
-						<div class="custItem1_2_2" v-if="custItem.svcLvl=='0'"
+						<div class="custItem1_2_1">{{baseMsg.active==0?custItem.cstNm:custItem.custNm}}</div>
+						<div class="custItem1_2_2" v-if="baseMsg.active==0?custItem.svcLvl=='0':custItem.scrLvl=='0'"
 							:style="{'background-image': 'url('+require('../../assets/image/business_chooseCust_type0.png')+')'}">
 						</div>
-						<div class="custItem1_2_2" v-if="custItem.svcLvl=='1'"
+						<div class="custItem1_2_2" v-if="baseMsg.active==0?custItem.svcLvl=='1':custItem.scrLvl=='1'"
 							:style="{'background-image': 'url('+require('../../assets/image/business_chooseCust_type1.png')+')'}">
 						</div>
-						<div class="custItem1_2_2" v-if="custItem.svcLvl=='2'"
+						<div class="custItem1_2_2" v-if="baseMsg.active==0?custItem.svcLvl=='2':custItem.scrLvl=='2'"
 							:style="{'background-image': 'url('+require('../../assets/image/business_chooseCust_type2.png')+')'}">
 						</div>
-						<div class="custItem1_2_2" v-if="custItem.svcLvl=='3'"
+						<div class="custItem1_2_2" v-if="baseMsg.active==0?custItem.svcLvl=='3':custItem.scrLvl=='3'"
 							:style="{'background-image': 'url('+require('../../assets/image/business_chooseCust_type3.png')+')'}">
 						</div>
-						<div class="custItem1_2_2" v-if="custItem.svcLvl=='4'"
+						<div class="custItem1_2_2" v-if="baseMsg.active==0?custItem.svcLvl=='4':custItem.scrLvl=='4'"
 							:style="{'background-image': 'url('+require('../../assets/image/business_chooseCust_type4.png')+')'}">
 						</div>
-						<div class="custItem1_2_2" v-if="custItem.svcLvl=='5'"
+						<div class="custItem1_2_2" v-if="baseMsg.active==0?custItem.svcLvl=='5':custItem.scrLvl=='5'"
 							:style="{'background-image': 'url('+require('../../assets/image/business_chooseCust_type5.png')+')'}">
 						</div>
-						<div class="custItem1_2_2" v-if="custItem.svcLvl=='6'"
+						<div class="custItem1_2_2" v-if="baseMsg.active==0?custItem.svcLvl=='6':custItem.scrLvl=='6'"
 							:style="{'background-image': 'url('+require('../../assets/image/business_chooseCust_type6.png')+')'}">
 						</div>
 						<div class="custItem1_2_3">
@@ -108,7 +110,7 @@
 							<van-icon v-else :name="require('../../assets/image/business_chooseCust_ysf.png')" size="16"
 								style="margin-right: 0.04rem;" />
 						</div>
-						<div class="custItem1_3" @click="delCust(custItem)">
+						<div class="custItem1_3" v-if="baseMsg.active==1" @click.stop="delCust(custItem)">
 							<van-icon :name="require('../../assets/image/group_delete.png')" size="18" />
 						</div>
 					</div>
@@ -142,15 +144,17 @@
 			</div>
 		</van-list>
 		<div class="bottomZW"></div>
-		<van-overlay :show="showDelete" z-index="11">
-			<div class="plate6">
-				<div class="plate6_5">确定将该客户从群组移除？</div>
-				<div class="plate6_4">
-					<div class="palte6_4_1" @click="showDelete=false">取消</div>
-					<div class="palte6_4_2" @click="checkDelete">确定</div>
+		<van-dialog v-model:show="showDelete">
+			<template #default>
+				<div class="dialogValue">确定将该客户从群组移除？</div>
+			</template>
+			<template #footer>
+				<div class="dialogBtns">
+					<div class="dialogBtn dialogBtn1" @click="showDelete=false">取消</div>
+					<div class="dialogBtn dialogBtn2" @click="checkDelete">确认</div>
 				</div>
-			</div>
-		</van-overlay>
+			</template>
+		</van-dialog>
 	</div>
 </template>
 
@@ -164,7 +168,9 @@
 		formatNum
 	} from "../../api/common.js";
 	import {
-		queryGroupActiveCust
+		queryGroupActiveCust,
+		queryGroupFixCust,
+		deleteGroupFixCust
 	} from "../../request/market.js";
 	export default {
 		data() {
@@ -178,6 +184,7 @@
 				checkCust: {},
 				showDelete: false,
 				pageReady: false,
+				total: 0,
 			}
 		},
 		methods: {
@@ -194,27 +201,50 @@
 					duration: 0,
 				});
 				this.pageIndex++;
-				queryGroupActiveCust({
-					pageSize: "10",
-					pageNum: this.pageIndex.toString(),
-					sysId: this.baseMsg.sysId
-				}, (res) => {
-					if (res.data && res.data.records) {
-						console.log(res);
-						this.total = res.data.total;
-						this.custList = this.custList.concat(res.data.records);
-						if (this.custList.length >= this.total || res.data.records.length <= 0) this.finished =
-							true;
-					} else {
-						this.finished = true;
-					}
-					Toast.clear();
-					this.loading = false;
-				});
+				if (this.baseMsg.active == 0) {
+					queryGroupActiveCust({
+						pageSize: "10",
+						pageNum: this.pageIndex.toString(),
+						sysId: this.baseMsg.sysId
+					}, (res) => {
+						if (res.data && res.data.records) {
+							this.total = res.data.total;
+							this.custList = this.custList.concat(res.data.records);
+							if (this.custList.length >= this.total || res.data.records.length <= 0) this.finished =
+								true;
+						} else {
+							this.finished = true;
+						}
+						Toast.clear();
+						this.loading = false;
+					});
+				} else {
+					queryGroupFixCust({
+						pageSize: "10",
+						pageNum: this.pageIndex.toString(),
+						groupId: this.baseMsg.groupId
+					}, (res) => {
+						if (res.data && res.data.records) {
+							this.total = res.data.total;
+							this.custList = this.custList.concat(res.data.records);
+							if (this.custList.length >= this.total || res.data.records.length <= 0) this.finished =
+								true;
+						} else {
+							this.finished = true;
+						}
+						Toast.clear();
+						this.loading = false;
+					});
+				}
 			},
 			onClickRight() {
+				localStorage.setItem("groupDetail", "2");
+				localStorage.setItem("newMyGroup", "2");
 				this.$router.push({
-					name: 'groupAddCust'
+					name: 'groupAddCust',
+					params: {
+						groupId: this.baseMsg.groupId
+					}
 				})
 			},
 			delCust(item) {
@@ -222,23 +252,75 @@
 				this.showDelete = true;
 			},
 			checkDelete() {
-				alert("移除客户：" + this.checkCust.custNm);
 				this.showDelete = false;
-				this.checkCust = {};
+				Toast.loading({
+					message: "正在操作",
+					forbidClick: true,
+					duration: 0,
+				});
+				deleteGroupFixCust({
+					groupId: this.baseMsg.groupId,
+					sysId: this.checkCust.sysId
+				}, (res) => {
+					if (res.data == "操作成功") {
+						Toast.success("删除成功");
+						setTimeout(() => {
+							localStorage.setItem("newMyGroup", "2")
+							this.pageIndex = 0;
+							this.custList = [];
+							this.checkCust = {};
+							this.onLoad();
+						}, 800)
+					} else {
+						Toast.fail(res.msg)
+					}
+				})
 			},
+			toCustView(custItem) {
+				localStorage.setItem("groupDetail", "0");
+				this.$router.push({
+					name: 'clCustomerView',
+					query: {
+						custNum: custItem.custNum
+					}
+				})
+			},
+			mounted_m() {
+				this.baseMsg = this.$route.params.groupItem ? JSON.parse(this.$route.params.groupItem) : JSON.parse(
+					localStorage.getItem("groupDetail"));
+				this.$nextTick(() => {
+					var fixedPlace = document.defaultView.getComputedStyle(document.getElementsByClassName(
+						"fixedPlace")[0], null);
+					this.fixedHeight = fixedPlace.height;
+				})
+				this.pageReady = true;
+				this.onLoad();
+			}
 		},
 		mounted() {
-			localStorage.setItem("newMyGroup", "0")
-			this.baseMsg = this.$route.params.groupItem ? JSON.parse(this.$route.params.groupItem) : JSON.parse(
-				localStorage.getItem("groupDetail"));
-			this.$nextTick(() => {
-				var fixedPlace = document.defaultView.getComputedStyle(document.getElementsByClassName(
-					"fixedPlace")[0], null);
-				this.fixedHeight = fixedPlace.height;
-			})
-			this.pageReady = true;
-			this.onLoad();
-		}
+			localStorage.setItem("groupDetail", "0");
+			this.mounted_m();
+		},
+		activated() {
+			if (localStorage.getItem("groupDetail") == "0") {
+				localStorage.setItem("groupDetail", "1")
+			} else if (localStorage.getItem("groupDetail") == "2"){
+				this.pageIndex = 0;
+				this.custList = [];
+				this.onLoad();
+			} else {
+				this.baseMsg = {};
+				this.fixedHeight = "";
+				this.loading = false;
+				this.finished = false;
+				this.pageIndex = 0;
+				this.custList = [];
+				this.checkCust = {};
+				this.showDelete = false;
+				this.pageReady = false;
+				this.mounted_m();
+			}
+		},
 	}
 </script>
 
@@ -504,61 +586,42 @@
 		justify-content: flex-end;
 	}
 
-	.plate6 {
-		width: 74.7%;
-		background: #FFFFFF;
-		border-radius: 0.08rem;
-		position: absolute;
-		top: calc(50% - 1rem);
-		left: 12.65%;
-		padding: 0.2rem 0.12rem;
+	.dialogValue {
+		width: 90%;
+		margin: 0.36rem auto 0.24rem;
+		font-size: 0.14rem;
+		font-family: PingFangSC-Regular, PingFang SC;
+		font-weight: 400;
+		color: #262626;
+		line-height: 0.22rem;
 	}
 
-	.plate6_4 {
+	.dialogBtns {
 		width: 100%;
-		height: 0.3rem;
-		margin-top: 0.24rem;
+		margin-bottom: 0.2rem;
 		display: flex;
 		flex-wrap: nowrap;
-		justify-content: space-around;
-		align-items: center;
+		justify-content: center;
 	}
 
-	.palte6_4_1 {
+	.dialogBtn {
 		width: 1.08rem;
 		height: 0.3rem;
+		border-radius: 0.15rem;
+		font-size: 0.13rem;
+		font-family: PingFangSC-Medium, PingFang SC;
+		font-weight: 500;
+		line-height: 0.3rem;
+		margin: 0 0.08rem;
+	}
+
+	.dialogBtn1 {
 		border: 0.01rem solid #026DFF;
-		border-radius: 0.15rem;
-		font-family: PingFangSC-Medium;
-		font-size: 0.13rem;
 		color: #026DFF;
-		text-align: center;
-		line-height: 0.3rem;
-		font-weight: 500;
 	}
 
-	.palte6_4_2 {
-		width: 1.08rem;
-		height: 0.3rem;
+	.dialogBtn2 {
 		background: #026DFF;
-		border-radius: 0.15rem;
-		font-family: PingFangSC-Medium;
-		font-size: 0.13rem;
 		color: #FFFFFF;
-		text-align: center;
-		line-height: 0.3rem;
-		font-weight: 500;
-	}
-
-	.plate6_5 {
-		width: 100%;
-		font-family: PingFangSC-Medium;
-		font-size: 0.14rem;
-		color: #262626;
-		text-align: center;
-		line-height: 0.22rem;
-		font-weight: 400;
-		margin-bottom: 0.28rem;
-		margin-top: 0.15rem;
 	}
 </style>

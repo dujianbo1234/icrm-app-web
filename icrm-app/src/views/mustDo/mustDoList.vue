@@ -174,8 +174,8 @@
 			<div class="popPlate2" v-if="followItem.isPhone!='1'">
 				<div class="followItem5_1"
 					v-for="(file,j) in followItem.fileList"
-					:key="'file'+j" @click="openPhoto(this.$store.state.baseUrl + file.fileServerPath)">
-					<img :src="this.$store.state.baseUrl + file.fileServerPath">
+					:key="'file'+j" @click="openPhoto($store.state.configInfo.icrmUrl + file.fileServerPath)">
+					<img :src="$store.state.configInfo.icrmUrl + file.fileServerPath">
 				</div>
 			</div>
 			<div class="popPlate3" v-if="followItem.isPhone!='1'">

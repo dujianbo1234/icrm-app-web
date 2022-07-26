@@ -35,11 +35,10 @@
 				<div class="total">
 					<span>筛选结果：共{{formatNums(total)}}条数据 </span>
 				</div>
-				<div class="sendAll" v-if="$store.state.userMsg.orgClass != '90000001'" @click="sendFrom">
+				<div class="sendAll" @click="sendFrom">
 					<span v-if="showBatchSend">取消添加</span>
 					<span v-else>批量添加</span>
 				</div>
-				<div v-else></div>
 			</div>
 		</div>
 		<van-list class="vanListStyle" v-model:loading="loading" :finished="finished" finished-text="没有更多了"
@@ -48,7 +47,8 @@
 				<div class="custItem" v-for="(item,i) in custList" :key="'item'+i"
 					:style="{'margin-left':showBatchSend?'15%':'0%'}">
 					<div class="leftCheckBox">
-						<van-checkbox :name="item" @click="checkAll=false" :disabled="item.belongGroup"></van-checkbox>
+						<van-checkbox :name="item.custNum" @click="checkAll=false" :disabled="item.isGroupCust=='1'">
+						</van-checkbox>
 					</div>
 					<div class="custItem1">
 						<div class="custItem1_2">
@@ -73,9 +73,9 @@
 						</div>
 						<div class="playFrom">
 							<van-icon :name="require('@/assets/image/group_delete.png')" size="0.18rem"
-								style="margin-right: 0.24rem;" v-if="item.belongGroup" @click="delCust(item)" />
+								style="margin-right: 0.24rem;" v-if="item.isGroupCust=='1'" @click="delCust(item)" />
 							<van-icon :name="require('@/assets/image/group_add.png')" size="0.18rem"
-								style="margin-right: 0.24rem;" v-else @click="addCust(item)" />
+								style="margin-right: 0.24rem;" v-else @click="addCust([item.custNum])" />
 						</div>
 					</div>
 					<div class="custItem2">
@@ -120,9 +120,10 @@
 		formatNums
 	} from "@/api/common.js";
 	import {
-		custServiceAdd,
-		queryCustSearchList
-	} from "@/request/custinfo.js";
+		querySelCustList,
+		deleteGroupFixCust,
+		addGroupFixSelCust
+	} from "@/request/market.js";
 	import {
 		Toast
 	} from "vant";
@@ -183,14 +184,15 @@
 				params: {
 					pageSize: "10",
 					pageNum: "1",
-					belgCustMgr: '', // 客户经理
+					belgCustMgr: "", // 客户经理
 					// orderType: "",      // 排序
 					cstName: "", // 客户名称
 					svcLvl: '', // 服务等级
 					ctcTel: "", // 联系电话
 					certNum: "", // 证件号
 					cstLvl: "", // 客户等级
-					belongOrg: '', // 归属机构
+					belongOrg: "", // 归属机构
+					groupId: ""
 				},
 				tageList: [{
 					key: '',
@@ -224,13 +226,18 @@
 			};
 		},
 		mounted() {
+			this.params.groupId = this.$route.params.groupId;
 			this.queryList();
 		},
 		watch: {
 			searchValue() {
+				this.params.custNum = "";
+				this.params.ctcTel = "";
+				this.params.certNum = "";
+				this.params.cstName = "";
 				if (this.searchValue) {
-					if (this.searchValue.length == 6) { //客户号
-						this.params.belgCustMgr = this.searchValue;
+					if (this.searchValue.length == 16) { //客户号
+						this.params.custNum = this.searchValue;
 					} else if (this.searchValue.length == 11) { //手机号
 						this.params.ctcTel = this.searchValue;
 					} else if (this.searchValue.length == 18) { //身份证号
@@ -238,9 +245,11 @@
 					} else { //客户姓名
 						this.params.cstName = this.searchValue;
 					}
-				} else {
-					this.params.belgCustMgr = '';
-					this.params.cstName = '';
+				}
+			},
+			showBatchSend() {
+				if(this.showBatchSend){
+					this.chooseItems = []
 				}
 			}
 		},
@@ -259,7 +268,7 @@
 				});
 				this.pageIndex++;
 				this.params.pageNum = this.pageIndex.toString();
-				queryCustSearchList(this.params, (res) => {
+				querySelCustList(this.params, (res) => {
 					if (res.data && res.data.records) {
 						this.total = res.data.total;
 						this.custList = this.custList.concat(res.data.records);
@@ -305,35 +314,70 @@
 				this.showDelete = true;
 			},
 			checkDelete() {
-				alert("将客户 " + this.deleteItem.cstName + "从该群组移除");
-				this.deleteItem.belongGroup = false;
 				this.showDelete = false;
+				Toast.loading({
+					message: "正在操作",
+					forbidClick: true,
+					duration: 0,
+				});
+				deleteGroupFixCust({
+					groupId: this.params.groupId,
+					custNum: this.deleteItem.custNum
+				}, (res) => {
+					if (res.data == "操作成功") {
+						Toast.success("删除成功");
+						this.deleteItem.isGroupCust = "0";
+					} else {
+						Toast.fail(res.msg)
+					}
+				})
 			},
-			addCust(item) {
-				item.belongGroup = true;
+			addCust(list) {
+				Toast.loading({
+					message: "正在操作",
+					forbidClick: true,
+					duration: 0,
+				});
+				addGroupFixSelCust({
+					groupId: this.params.groupId,
+					custNums: list
+				}, (res) => {
+					if (res.data == "操作成功") {
+						this.showBatchSend = false;
+						Toast.success("添加成功");
+						list.forEach((item) => {
+							this.custList.find(custItem => custItem.custNum == item).isGroupCust = "1"
+						});
+					} else {
+						Toast.fail(res.msg)
+					}
+				})
 			},
 			/* 批量添加的按钮 */
 			msgBatchSend(sendAll) {
 				if (sendAll) {
-					alert("全部添加");
-					this.$refs.checkboxGroup.toggleAll(false);
-					this.reload();
+					Toast.loading({
+						message: "正在操作",
+						forbidClick: true,
+						duration: 0,
+					});
+					addGroupFixSelCust(this.params, (res) => {
+						if (res.data == "操作成功") {
+							this.showBatchSend = false;
+							Toast.success("添加成功");
+							setTimeout(() => {
+								this.reload();
+							}, 800)
+						} else {
+							Toast.fail(res.msg)
+						}
+					})
 				} else {
 					if (this.chooseItems && this.chooseItems.length < 1) {
 						Toast.fail('请选择客户!')
 						return
 					};
-					let list = this.chooseItems.map(item => {
-						return {
-							cstName: item.cstName,
-							custNum: item.custNum,
-							ctcTel: item.ctcTel
-						}
-					});
-					alert("添加" + list.length + "条数据");
-					this.chooseItems.forEach(item => item.belongGroup = true);
-					this.$refs.checkboxGroup.toggleAll(false);
-					this.showBatchSend = false;
+					this.addCust(this.chooseItems)
 				}
 			},
 			closeOrg() {
@@ -622,6 +666,7 @@
 						letter-spacing: 0;
 						font-weight: 400;
 						margin-top: 0.04rem;
+						white-space: nowrap;
 					}
 
 					.custItem2_childName {

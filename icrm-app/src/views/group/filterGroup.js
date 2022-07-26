@@ -3561,7 +3561,7 @@ export const filterList = [{
 		minValue: "",
 		maxValue: "",
 		remark: "商户MCC码",
-		disabled: false,
+		disabled: true,
 		list: []
 	}, {
 		code: "03030000",
@@ -4101,7 +4101,7 @@ export const filterList = [{
 		minValue: "",
 		maxValue: "",
 		remark: "取核心代发单位字段",
-		disabled: false,
+		disabled: true,
 		list: []
 	}, {
 		code: "04020000",
