@@ -333,15 +333,9 @@
 				openDesc: false,
 				openSearch: false,
 				openOrgList: false,
-				chooseOrg: {
-					text: "全部机构",
-					value: ""
-				},
+				
 				openCustList: false,
-				chooseCust: {
-					empName: "客户经理",
-					empId: ""
-				},
+				
 				searchValue: "",
 				levelIndex: 0,
 				statusIndex: 0,
@@ -377,11 +371,27 @@
 				scorePeople: '',
 				visitNum: '',
 				isEditScore: false,
-				scoreId: ''
+				scoreId: '',
+				chooseCust:{
+					empName: "",
+					empId: ""
+				}
 			}
 		},
 		components: {
 			customerList
+		},
+		watch:{
+			showScore(el){
+				if(el){
+					if(this.myScore){
+						this.score_c=this.myScore
+					}else{
+						this.score_c=0
+					}
+				}
+
+			}
 		},
 		methods: {
 			editScore() {
@@ -438,44 +448,44 @@
 				this.openSearch = false;
 				this.resetTop();
 			},
-			activeOrg(orgValue) {
-				if (orgValue.value) {
-					this.chooseOrg = orgValue
-				} else {
-					this.chooseOrg = {
-						text: "选择机构",
-						value: ""
-					}
-				};
-				this.chooseCust = {
-					empName: "客户经理",
-					empId: ""
-				};
-				this.openOrgList = false;
-				this.pageIndex = 0;
-				this.loading = true;
-				this.custList = [];
-				this.checked = [];
-				this.openFP = false;
-				this.onLoad();
-			},
-			activeCust(custValue) {
-				if (custValue.empId) {
-					this.chooseCust = custValue
-				} else {
-					this.chooseCust = {
-						empName: "客户经理",
-						empId: ""
-					}
-				};
-				this.openCustList = false;
-				this.pageIndex = 0;
-				this.loading = true;
-				this.custList = [];
-				this.checked = [];
-				this.openFP = false;
-				this.onLoad();
-			},
+			// activeOrg(orgValue) {
+			// 	if (orgValue.value) {
+			// 		this.chooseOrg = orgValue
+			// 	} else {
+			// 		this.chooseOrg = {
+			// 			text: "选择机构",
+			// 			value: ""
+			// 		}
+			// 	};
+			// 	this.chooseCust = {
+			// 		empName: "客户经理",
+			// 		empId: ""
+			// 	};
+			// 	this.openOrgList = false;
+			// 	this.pageIndex = 0;
+			// 	this.loading = true;
+			// 	this.custList = [];
+			// 	this.checked = [];
+			// 	this.openFP = false;
+			// 	this.onLoad();
+			// },
+			// activeCust(custValue) {
+			// 	if (custValue.empId) {
+			// 		this.chooseCust = custValue
+			// 	} else {
+			// 		this.chooseCust = {
+			// 			empName: "客户经理",
+			// 			empId: ""
+			// 		}
+			// 	};
+			// 	this.openCustList = false;
+			// 	this.pageIndex = 0;
+			// 	this.loading = true;
+			// 	this.custList = [];
+			// 	this.checked = [];
+			// 	this.openFP = false;
+			// 	this.onLoad();
+			// },
 			changeLevel(i) {
 				this.levelIndex = i;
 				this.pageIndex = 0;
@@ -695,15 +705,9 @@
 				this.openDesc = false;
 				this.openSearch = false;
 				this.openOrgList = false;
-				this.chooseOrg = {
-					text: "全部机构",
-					value: ""
-				};
+				
 				this.openCustList = false;
-				this.chooseCust = {
-					empName: "客户经理",
-					empId: ""
-				};
+				
 				this.searchValue = "";
 				this.levelIndex = 0;
 				this.statusIndex = 0;
@@ -741,7 +745,9 @@
 				this.$refs.autoPlace.scrollTop = Number(localStorage.getItem("autoPlaceScrollTop"))
 			}
 		},
-		mounted() {}
+		mounted() {
+			this.chooseCust = this.$route.params.chooseCust
+		}
 	}
 </script>
 

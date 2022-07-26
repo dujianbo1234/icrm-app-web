@@ -233,7 +233,8 @@
 					name: 'chooseCust',
 					params: {
 						cmrcOpptId: item.cmrcOpptId,
-						sysId:item.sysId
+						sysId:item.sysId,
+						chooseCust:this.chooseCust
 					}
 				})
 			},
