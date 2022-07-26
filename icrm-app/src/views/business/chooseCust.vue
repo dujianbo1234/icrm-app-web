@@ -43,7 +43,7 @@
 								stroke-width="5" />
 						</div>
 						<div class="wantScore" v-if="changeScore" @click="showScore=true">
-							<p>我也想评分？</p>
+							<div>我也想评分？</div>
 						</div>
 						<div class="myScore" v-else>
 							<p style="margin-right:0.03rem">我的评分</p>
@@ -640,12 +640,13 @@
 				}, (res) => {
 					if (res.data) {
 						var arr = res.data.map((item) => {
-							return {
+								return {
 								text: item.codeName,
 								value: item.codeValue
 							}
 						})
-						this.statusList = this.statusList.concat(arr);
+						this.statusList=this.statusList.concat(arr)
+						this.statusList=this.statusList.slice(0,4);
 						this.resetTop();
 					} else {
 						Toast.fail("服务等级数据为空")
@@ -1320,14 +1321,14 @@
 		margin-left: 0.08rem;
 	}
 
-	.wantScore p {
+	.wantScore div {
 		font-size: 0.1rem;
 		font-family: PingFangSC-Regular, PingFang SC;
 		font-weight: 400;
 		color: #FFBA00;
 		height: 0.12rem;
 		border-bottom: 1px solid #FFBA00;
-		width: 0.58rem;
+		/* width: 0.62rem; */
 	}
 
 	.myScore {

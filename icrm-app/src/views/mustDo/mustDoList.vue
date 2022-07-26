@@ -91,8 +91,8 @@
 								<span class="daoqiDate">{{ mustDoItem.expDay }}</span>
 							</div>
 							<div class="msgValue3Right" >
-								<van-icon @click="visitDetail(mustDoItem.id)" v-if="mustDoItem.mastDoSt == '01'" :name="require('@/assets/image/yiban.png')" size="24"/>
-								<van-icon  @click="openVisit(mustDoItem.id)" v-if="mustDoItem.mastDoNm != '0101' && mustDoItem.mastDoSt == '02' && $store.state.userMsg.roleId=='00000004'" :name="require('@/assets/image/daiban.png')" size="24"/>
+								<van-icon @click="visitDetail(mustDoItem)" v-if="mustDoItem.mastDoSt == '01'" :name="require('@/assets/image/yiban.png')" size="24"/>
+								<van-icon  @click="openVisit(mustDoItem)" v-if="mustDoItem.mastDoNm != '0101' && mustDoItem.mastDoSt == '02' && $store.state.userMsg.roleId=='00000004'" :name="require('@/assets/image/daiban.png')" size="24"/>
 								<van-icon  @click="openTel(mustDoItem)" v-if="(mustDoItem.mastDoNm == '0101' && mustDoItem.mastDoSt == '02' && $store.state.userMsg.roleId=='00000004' && mustDoItem.isPhone=='1')||mustDoItem.isCall" :name="require('@/assets/image/daiban.png')" size="24"/>
 								<van-icon  @click="gaveCall(mustDoItem)" v-if="mustDoItem.mastDoNm == '0101' && mustDoItem.mastDoSt == '02' && $store.state.userMsg.roleId=='00000004' && mustDoItem.isPhone=='0' && !mustDoItem.isCall" :name="require('@/assets/image/callPhone.png')" size="24"/>
 								<van-icon v-if="mustDoItem.mastDoSt == '03' && $store.state.userMsg.roleId=='00000004'" :name="require('@/assets/image/daiban_gray.png')" size="24"/>
@@ -161,7 +161,7 @@
 			style="background-color: #F8F8F8;height: 80%;">
 			<div class="popTitle">
 				<div class="popTitle1" @click="cancle">取消</div>
-				<div class="popTitle2" v-if="followItem.isPhone">电话联系记录</div>
+				<div class="popTitle2" v-if="followItem.isPhone=='1'">电话联系记录</div>
 				<div class="popTitle2" v-else>现场定位核查记录</div>
 			</div>
 			<div class="popTime">
@@ -171,14 +171,14 @@
 				<van-field v-model="followItem.onsiteInspDsc" type="textarea" placeholder="" rows="5" autosize readonly
 					maxlength="150" />
 			</div>
-			<div class="popPlate2" v-if="followItem.isPhone">
+			<div class="popPlate2" v-if="followItem.isPhone!='1'">
 				<div class="followItem5_1"
 					v-for="(file,j) in followItem.fileList"
 					:key="'file'+j" @click="openPhoto(this.$store.state.baseUrl + file.fileServerPath)">
 					<img :src="this.$store.state.baseUrl + file.fileServerPath">
 				</div>
 			</div>
-			<div class="popPlate3" v-if="followItem.isPhone">
+			<div class="popPlate3" v-if="followItem.isPhone!='1'">
 				<van-icon :name="require('../../assets/image/common_dingwei_blue.png')" size="15"
 					style="margin-right: 0.04rem;flex-shrink: 0;padding: 0.03rem 0;" />
 				<div class="popPlate3_1">
@@ -314,7 +314,7 @@
 					Toast.fail("电话号码为空");
 					return;
 				}
-				item.isCall=true
+				// item.isCall=true
 				console.log('mustDoList',this.mustDoList)
 				this.showCall = true;
 				this.callItem = item;
@@ -322,6 +322,7 @@
 			},
 			callCust() {
 				this.showCall = false;
+				this.callItem.isCall = true;
 				Toast.loading({
 					message: "正在唤起",
 					forbidClick: true,
@@ -445,9 +446,9 @@
 				if(el.name=='0'){
 					this.mastDoSt=''
 				}else if(el.name=='1'){
-					this.mastDoSt='01'
-				}else if(el.name=='2'){
 					this.mastDoSt='02'
+				}else if(el.name=='2'){
+					this.mastDoSt='01'
 				}else{
 					this.mastDoSt='03'
 				}
@@ -458,7 +459,7 @@
 			},
 			openVisit(el){
 				this.newVisit=true
-				this.id=el
+				this.id=el.id
 				this.followValue = "";
 				this.photoList = [];
 				this.dingwei = "";
@@ -501,7 +502,7 @@
 			},
 			visitDetail(el){
 				this.newVisit=false
-				this.id=el
+				this.id=el.id
 				this.showVisit = false;
 				this.showVisit2 = true;
 				this.getLocation();
@@ -547,10 +548,12 @@
 				}, (res) => {
 					Toast.success(res.msg);
 					this.showVisit = false;
+					this.custAddInfo.mastDoSt='01'
+
 					this.pageIndex = 0;
 					this.loading = true;
-					this.mustDoList = [];
-					this.onLoad();
+					// this.mustDoList = [];
+					// this.onLoad();
 					Toast.clear();
 				})
 			},
@@ -576,9 +579,11 @@
 					uploadIds: []
 				}, (res) => {
 					Toast.success(res.msg);
+					this.custAddInfo.mastDoSt='01'
 					this.showVisit3 = false;
 					this.pageIndex = 0;
 					this.loading = true;
+
 					// this.mustDoList = [];
 					// this.onLoad();
 					Toast.clear();
@@ -647,7 +652,7 @@
 					})
                 }else{
 					this.mastDoBclass=''
-
+					this.mastDoSt=''
 					this.mustDoNameList=this.mustDoName
 				}
 				this.pageIndex = 0;
@@ -728,6 +733,8 @@
 						codeName: "全部",
 						codeValue: ""
 					})
+					this.statusList[1] = this.statusList.splice(2,1,this.statusList[1])[0]
+					console.log('this.statusList',this.statusList)
 				} else {
 					Toast.fail("必办名称数据为空")
 				}
