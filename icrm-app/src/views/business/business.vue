@@ -346,6 +346,8 @@
 				this.visitNum = "";
 				this.useNum = "";
 				this.mounted_m();
+				this.queryCmrcOpportunity()
+
 			}
 		},
 	}

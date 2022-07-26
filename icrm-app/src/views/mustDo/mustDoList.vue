@@ -652,7 +652,7 @@
 					})
                 }else{
 					this.mastDoBclass=''
-
+					this.mastDoSt=''
 					this.mustDoNameList=this.mustDoName
 				}
 				this.pageIndex = 0;
