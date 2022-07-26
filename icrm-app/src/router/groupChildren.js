@@ -8,6 +8,9 @@ export default [{
 }, {
 	path: '/groupDetail',
 	name: 'groupDetail',
+	meta: {
+		keepAlive: true
+	},
 	component: () => import('@/views/group/groupDetail.vue')
 }, {
 	path: '/groupAddCust',
@@ -20,5 +23,8 @@ export default [{
 }, {
 	path: '/groupSearchResult',
 	name: 'groupSearchResult',
+	meta: {
+		keepAlive: true
+	},
 	component: () => import('@/views/group/groupSearchResult.vue')
 }];

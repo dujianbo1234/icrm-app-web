@@ -86,3 +86,25 @@ export const queryGroupActiveList = (params,fun) => {request("market.queryGroupA
 export const deleteGroupActiveInfo = (params,fun) => {request("market.deleteGroupActiveInfo", params, fun)}
 // 查询动态群组客户
 export const queryGroupActiveCust = (params,fun) => {request("market.queryGroupActiveCust", params, fun)}
+// 查询筛选结果总数
+export const queryFilterResultCount = (params,fun) => {request("market.queryFilterResultCount", params, fun)}
+// 查询固定群组列表
+export const queryGroupFixList = (params,fun) => {request("market.queryGroupFixList", params, fun)}
+// 保存固定群组客户
+export const saveGroupFixCust = (params,fun) => {request("market.saveGroupFixCust", params, fun)}
+// 查询固定群组客户
+export const queryGroupFixCust = (params,fun) => {request("market.queryGroupFixCust", params, fun)}
+// 删除固定群组
+export const deleteGroupFixInfo = (params,fun) => {request("market.deleteGroupFixInfo", params, fun)}
+// 删除固定群组客户
+export const deleteGroupFixCust = (params,fun) => {request("market.deleteGroupFixCust", params, fun)}
+// 保存动态群组
+export const saveGroupFixInfo = (params,fun) => {request("market.saveGroupFixInfo", params, fun)}
+// 选择客户列表查询
+export const querySelCustList = (params,fun) => {request("market.querySelCustList", params, fun)}
+// 添加固定群组客户
+export const addGroupFixSelCust = (params,fun) => {request("market.addGroupFixSelCust", params, fun)}
+// 添加动态群组批量短信
+export const addGroupActiveMessageSend = (params,fun) => {request("market.addGroupActiveMessageSend", params, fun)}
+// 添加固定群组批量短信
+export const addGroupFixMessageSend = (params,fun) => {request("market.addGroupFixMessageSend", params, fun)}

@@ -38,12 +38,17 @@
 				type: String,
 				default: ""
 			},
+			backParams: {
+				type: Object,
+				default: {}
+			},
 		},
 		methods: {
 			back() {
 				if(this.backName){
 					this.$router.push({
-						name: this.backName
+						name: this.backName,
+						params: this.backParams
 					})
 					this.$emit('back')
 				}else{

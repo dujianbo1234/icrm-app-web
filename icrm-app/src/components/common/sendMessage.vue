@@ -1,6 +1,6 @@
 <template>
 	<div class="outBox">
-		<van-popup v-model:show="showMBox"
+		<van-popup v-model:show="showMBox" :close-on-click-overlay="false"
 			style="width: 91.5%;background: #FFFFFF;border-radius: 0.08rem;padding-bottom: 0.15rem;">
 			<div class="plate1">短信发送</div>
 			<div class="plate2"></div>
@@ -91,6 +91,10 @@
 	import {
 		addWarningMgtMessageSend
 	} from "../../request/product.js";
+	import {
+		addGroupActiveMessageSend,
+		addGroupFixMessageSend
+	} from "../../request/market.js";
 	/**
 	 * 引入vant组件
 	 * @variable: Toast 轻提示组件
@@ -152,8 +156,11 @@
 					case "messageListSendAll":
 						this.GMParams.searchData = msg.searchData;
 						break;
-					case "groupSendAll":
-						this.GMParams.searchData = msg.searchData;
+					case "activeGroupSendAll":
+						this.GMParams.sysId = msg.sysId;
+						break;
+					case "fixGroupSendAll":
+						this.GMParams.groupId = msg.groupId;
 						break;
 					default:
 						this.GMParams.custList = msg.list.map((item) => {
@@ -298,8 +305,11 @@
 					case "messageListSendAll":
 						this.sendMessage(addWarningMgtMessageSend);
 						break;
-					case "groupSendAll":
-						// this.sendMessage(addWarningMgtMessageSend);
+					case "activeGroupSendAll":
+						this.sendMessage(addGroupActiveMessageSend);
+						break;
+					case "fixGroupSendAll":
+						this.sendMessage(addGroupFixMessageSend);
 						break;
 					default:
 						this.sendMessage(addMessageSendInfo);
