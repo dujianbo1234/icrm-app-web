@@ -675,7 +675,7 @@
 					} else {
 						this.changeScore = true
 					}
-					console.log('this.myScore', this.myScore)
+					console.log('queryOpportPractialInfo', res.data)
 				})
 			},
 			// 查询商机进度条
@@ -713,7 +713,7 @@
 				this.searchValue = "";
 				this.levelIndex = 0;
 				this.statusIndex = 0;
-
+				this.isEditScore=false
 				this.levelList = [{
 					text: "全部",
 					value: ""
@@ -1353,7 +1353,7 @@
 	.wantScore {
 		height: 0.12rem;
 		display: flex;
-		justify-content: right;
+		justify-content: flex-end;
 	}
 
 	.scoreStar {

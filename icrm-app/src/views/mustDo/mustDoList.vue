@@ -485,6 +485,7 @@
 				});
 			},
 			openTel(el){
+				console.log(el)
 				this.custAddInfo=el
 				this.id=el.id
 				this.followDesc = "";
@@ -536,6 +537,7 @@
 					forbidClick: true,
 					duration: 0
 				});
+				console.log(this.custAddInfo)
 				if(this.custAddInfo.custNum){
 					this.addCustInfo(this.custAddInfo,'01')
 				}
