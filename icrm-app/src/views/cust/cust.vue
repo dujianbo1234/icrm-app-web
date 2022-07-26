@@ -439,20 +439,20 @@
 						break;
 					case "财富看板":
 						this.toJiushu({
-							title: "财富看板",
-							router: "retailBoard&page=1"
+							title: "财富客群看板",
+							router: "resale"
 						});
 						break;
 					case "贷款看板":
 						this.toJiushu({
-							title: "贷款看板",
-							router: "retailBoard&page=2"
+							title: "贷款客群运营看板",
+							router: "lonas"
 						});
 						break;
 					case "收单看板":
 						this.toJiushu({
-							title: "收单看板",
-							router: "retailBoard&page=3"
+							title: "收单商户",
+							router: "acquirer"
 						});
 						break;
 					case "全部客群":

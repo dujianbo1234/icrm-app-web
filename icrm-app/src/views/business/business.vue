@@ -1,20 +1,20 @@
 <template>
 	<div class="home">
 		<div class="topZW"></div>
-		
-				
+
+
 		<div :class="$store.state.userMsg.roleId!='00000004'?'fixedPlace':'fixedPlace2'">
 			<div class="plate4" v-if="$store.state.userMsg.roleId!='00000004'">
-				<div class="plate4_1"  @click="$refs.orgList.showPopup();openOrgList=true;">
-						<div class="plate4_1_value ycsl">{{chooseOrg.text}}</div>
-						<van-icon v-if="openOrgList" name="arrow-up" size="14" color="#8C8C8C" />
-						<van-icon v-else name="arrow-down" size="14" color="#8C8C8C" />
-					</div>
-					<div class="plate4_1" @click="$refs.custList.showPopup();openCustList=true;">
-						<div class="plate4_1_value ycsl">{{chooseCust.empName}}</div>
-						<van-icon v-if="openCustList" name="arrow-up" size="14" color="#8C8C8C" />
-						<van-icon v-else name="arrow-down" size="14" color="#8C8C8C" />
-					</div>
+				<div class="plate4_1" @click="$refs.orgList.showPopup();openOrgList=true;">
+					<div class="plate4_1_value ycsl">{{chooseOrg.text}}</div>
+					<van-icon v-if="openOrgList" name="arrow-up" size="14" color="#8C8C8C" />
+					<van-icon v-else name="arrow-down" size="14" color="#8C8C8C" />
+				</div>
+				<div class="plate4_1" @click="$refs.custList.showPopup();openCustList=true;">
+					<div class="plate4_1_value ycsl">{{chooseCust.empName}}</div>
+					<van-icon v-if="openCustList" name="arrow-up" size="14" color="#8C8C8C" />
+					<van-icon v-else name="arrow-down" size="14" color="#8C8C8C" />
+				</div>
 			</div>
 			<div class="plate1">
 				<div class="palte1_1">商机进度：{{toPercent(sumMsg.thenFollowRate||0)}}</div>
@@ -160,7 +160,7 @@
 				visitNum: "",
 				useNum: "",
 				pageReady: false,
-				contentHeight:''
+				contentHeight: ''
 			}
 		},
 		components: {
@@ -228,12 +228,12 @@
 			},
 			openDetail(item) {
 				localStorage.setItem("cmrcOpptId", item.cmrcOpptId);
-				console.log('sysIdItem',item)
+				console.log('sysIdItem', item)
 				this.$router.push({
 					name: 'chooseCust',
 					params: {
 						cmrcOpptId: item.cmrcOpptId,
-						sysId:item.sysId,
+						sysId: item.sysId,
 						belgCustMgr: this.chooseCust.empId,
 						belongOrg: this.chooseOrg.value
 					}
@@ -269,11 +269,11 @@
 					this.loading = false;
 				})
 			},
-			queryCmrcOpportunity(){
+			queryCmrcOpportunity() {
 				queryCmrcOpportunitySum({
-						belgCustMgr: this.chooseCust.empId,
-						belongOrg: this.chooseOrg.value
-					}, (res) => {
+					belgCustMgr: this.chooseCust.empId,
+					belongOrg: this.chooseOrg.value
+				}, (res) => {
 					if (res.data) {
 						this.sumMsg = res.data;
 					} else {
@@ -303,7 +303,7 @@
 						Toast.fail("商机大类数据为空")
 					}
 				})
-				
+
 				saveSmAppVisitInfo({
 					busiType: "4"
 				}, (res) => {
@@ -320,7 +320,7 @@
 			},
 		},
 		mounted() {
-			
+
 			localStorage.setItem("newBusiness", "0");
 			this.mounted_m();
 			this.queryCmrcOpportunity()
@@ -329,14 +329,14 @@
 			if (localStorage.getItem("newBusiness") == "0") {
 				localStorage.setItem("newBusiness", "1")
 			} else {
-				this.chooseOrg={
-					text: "全部机构",
-					value: ""
-				},
-				this.chooseCust={
-					empName: "客户经理",
-					empId: ""
-				}
+				this.chooseOrg = {
+						text: "全部机构",
+						value: ""
+					},
+					this.chooseCust = {
+						empName: "客户经理",
+						empId: ""
+					}
 				this.sumMsg = {};
 				this.orderIndex = -1;
 				this.orderType = true;
@@ -369,7 +369,7 @@
 		height: env(safe-area-inset-top);
 		background-color: #F8F8F8;
 		position: fixed;
-		top:0;
+		top: 0;
 		z-index: 9999;
 	}
 
@@ -381,14 +381,17 @@
 		width: 100%;
 		position: fixed;
 		background-color: #F8F8F8;
-		top: 0.9rem;
+		top: calc(constant(safe-area-inset-top) + 0.5rem);
+		top: calc(env(safe-area-inset-top) + 0.5rem);
 		z-index: 9;
 	}
+
 	.fixedPlace2 {
 		width: 100%;
 		position: fixed;
 		background-color: #F8F8F8;
-		top: 0.4rem;
+		top: constant(safe-area-inset-top);
+		top: env(safe-area-inset-top);
 		z-index: 9;
 	}
 
@@ -633,6 +636,7 @@
 		color: #BFBFBF;
 		letter-spacing: 1px;
 	}
+
 	.plate4_1 {
 		height: 0.22rem;
 		font-family: PingFangSC-Regular;
@@ -652,16 +656,18 @@
 	.plate4_1_value {
 		margin-right: 0.04rem;
 	}
-	.orgCust{
+
+	.orgCust {
 		position: fixed;
 		background-color: #F8F8F8;
 		top: constant(safe-area-inset-top);
 		top: env(safe-area-inset-top);
 		z-index: 99;
 	}
-	.plate4{
+
+	.plate4 {
 		width: 100%;
-		padding:0 3.2%;
+		padding: 0 3.2%;
 		margin: 0 auto;
 		height: 0.5rem;
 		display: flex;
@@ -676,10 +682,12 @@
 		border-bottom: solid 1px #EFEFEF;
 
 	}
-	.height1{
-		height:1.87rem
+
+	.height1 {
+		height: 1.87rem
 	}
-	.height2{
-		height:2.37rem
+
+	.height2 {
+		height: 2.37rem
 	}
 </style>

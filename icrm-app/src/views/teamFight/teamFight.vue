@@ -99,10 +99,45 @@
 					// 		}
 					// 	});
 					// 	break;
+					case "考核指标":
+						this.toJiushu({
+							title: "考核指标",
+							router: "retailBoard&page=1"
+						});
+						break;
 					default:
 						Toast("功能开发中");
 						break;
 				}
+			},
+			toJiushu(params) {
+				Toast.loading({
+					message: "正在登录九数",
+					forbidClick: true,
+					duration: 0
+				});
+				AlipayJSBridge.call("loginNgiam", {
+					url: this.$store.state.configInfo.icrmUrl + "/jjbank/api/sso/ngiam-rst",
+					clientApiKey: this.$store.state.configInfo.jsClientApiKey,
+					userApiKey: this.$store.state.userMsg.userApiKey
+				}, (res) => {
+					if (res.status == "000000") {
+						Toast.clear();
+						var result = JSON.parse(res.result)
+						console.log(this.$store.state.configInfo.jsRetailUrl + "ticket=" + result.token +
+									"&router=" + params.router)
+						this.$router.push({
+							name: 'jiushuWebview',
+							params: {
+								title: params.title,
+								url: this.$store.state.configInfo.jsRetailUrl + "ticket=" + result.token +
+									"&router=" + params.router
+							}
+						});
+					} else {
+						Toast.fail(res.msg)
+					}
+				});
 			},
 		},
 		mounted() {
