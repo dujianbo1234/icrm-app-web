@@ -34,23 +34,61 @@
 		</div>
 		<van-popup v-model:show="defaultShow" position="bottom" style="height: 5rem" round :lock-scroll="false"
 			:close-on-click-overlay="true" close-on-popstate>
-			<div class="popupTitle">{{activeChild1.title}}</div>
-			<div class="childListOutBox">
-				<div class="childListBox">
-					<div class="childRemark">{{activeChild1.remark}}</div>
-					<div class="childListItem" v-for="(childListItem,i) in activeChild1.list"
-						v-show="!childListItem.disabled" :key="'childListItem'+i"
-						:class="childListItem.code==activeChild2.code||(!activeChild2.code&&filterArr.find(item=>item.code==childListItem.code))?'childListItem_a':''"
-						@click="checkChild2(childListItem,i)">
-						{{childListItem.title}}
+			<div style="position: relative;height: 100%;width: 100%;">
+				<div class="popupTitle">{{activeChild1.title}}</div>
+				<div class="childListOutBox">
+					<div class="childListBox">
+						<div class="childRemark">{{activeChild1.remark}}</div>
+						<div class="childListItem" v-for="(childListItem,i) in activeChild1.list"
+							v-show="!childListItem.disabled" :key="'childListItem'+i"
+							:class="childListItem.code==activeChild2.code||(!activeChild2.code&&filterArr.find(item=>item.code==childListItem.code))?'childListItem_a':''"
+							@click="checkChild2(childListItem,i)">
+							{{childListItem.title}}
+						</div>
 					</div>
 				</div>
-			</div>
-			<div class="btnBox">
-				<div class="btnItem btnItem1" @click="defaultShow=false">取消</div>
-				<div class="btnItem btnItem2" v-if="activeChild2.list&&!activeChild2.list.length||activeChild3.code"
-					@click="defaultConfirm">确定</div>
-				<div class="btnItem btnItem3" v-else>确定</div>
+				<div class="btnBox">
+					<div class="btnItem btnItem1" @click="defaultShow=false">取消</div>
+					<div class="btnItem btnItem2" v-if="activeChild2.list&&!activeChild2.list.length||activeChild3.code"
+						@click="defaultConfirm">确定</div>
+					<div class="btnItem btnItem3" v-else>确定</div>
+				</div>
+				<div class="child3BoxDirection" ref="child3BoxDirection" v-show="child3Show||child3Show_c">
+					<div class="child3BoxDirectionChild"></div>
+				</div>
+				<div class="child3Box" ref="child3Box" v-show="child3Show">
+					<div class="child3InBox">
+						<div class="child3Box_1">{{activeChild2.code?activeChild2.remark:''}}</div>
+						<div class="child3Box_2">
+							<div class="child3BoxItem" v-for="(child3BoxItem,i) in activeChild2.list"
+								v-show="!child3BoxItem.disabled" :key="'child3BoxItem'+i"
+								:class="child3BoxItem.code==activeChild3.code||(!activeChild3.code&&filterArr.find(item=>item.code==child3BoxItem.code))?'child3BoxItem_a':''"
+								@click="checkChild3(child3BoxItem)">
+								{{child3BoxItem.title}}
+							</div>
+						</div>
+						<div class="child3Box_4" style="padding: 0 0.08rem;" v-show="activeChild3.title=='自定义'">
+							<van-field v-model="activeChild3.minValue" type="number" input-align="center" center
+								placeholder="请输入最小值" />
+							<div class="centerLine"></div>
+							<van-field v-model="activeChild3.maxValue" type="number" input-align="center" center
+								placeholder="请输入最大值" />
+						</div>
+						<div class="child3Box_3" v-if="activeChild3.remark">{{activeChild3.remark}}</div>
+					</div>
+				</div>
+				<div class="child3Box" ref="child3Box_c" v-show="child3Show_c">
+					<div class="child3InBox">
+						<div class="child3Box_4">
+							<van-field v-model="activeChild2.minValue" type="number" input-align="center" center
+								placeholder="请输入最小值" />
+							<div class="centerLine"></div>
+							<van-field v-model="activeChild2.maxValue" type="number" input-align="center" center
+								placeholder="请输入最大值" />
+						</div>
+						<div class="child3Box_3" v-if="activeChild2.remark">{{activeChild2.remark}}</div>
+					</div>
+				</div>
 			</div>
 		</van-popup>
 		<van-popup v-model:show="MCCShow" position="bottom" style="height: 5rem" round :lock-scroll="false"
@@ -116,45 +154,6 @@
 				<div class="btnItem btnItem3" v-else>确定</div>
 			</div>
 		</van-popup>
-		<div class="child3Box" ref="child3Box" v-show="child3Show">
-			<div class="child3BoxDirection" ref="child3BoxDirection">
-				<div class="child3BoxDirectionChild"></div>
-			</div>
-			<div class="child3InBox">
-				<div class="child3Box_1">{{activeChild2.code?activeChild2.remark:''}}</div>
-				<div class="child3Box_2">
-					<div class="child3BoxItem" v-for="(child3BoxItem,i) in activeChild2.list"
-						v-show="!child3BoxItem.disabled" :key="'child3BoxItem'+i"
-						:class="child3BoxItem.code==activeChild3.code||(!activeChild3.code&&filterArr.find(item=>item.code==child3BoxItem.code))?'child3BoxItem_a':''"
-						@click="checkChild3(child3BoxItem)">
-						{{child3BoxItem.title}}
-					</div>
-				</div>
-				<div class="child3Box_4" style="padding: 0 0.08rem;" v-show="activeChild3.title=='自定义'">
-					<van-field v-model="activeChild3.minValue" type="number" input-align="center" center
-						placeholder="请输入最小值" />
-					<div class="centerLine"></div>
-					<van-field v-model="activeChild3.maxValue" type="number" input-align="center" center
-						placeholder="请输入最大值" />
-				</div>
-				<div class="child3Box_3" v-if="activeChild3.remark">{{activeChild3.remark}}</div>
-			</div>
-		</div>
-		<div class="child3Box" ref="child3Box_c" v-show="child3Show_c">
-			<div class="child3BoxDirection" ref="child3BoxDirection_c">
-				<div class="child3BoxDirectionChild"></div>
-			</div>
-			<div class="child3InBox">
-				<div class="child3Box_4">
-					<van-field v-model="activeChild2.minValue" type="number" input-align="center" center
-						placeholder="请输入最小值" />
-					<div class="centerLine"></div>
-					<van-field v-model="activeChild2.maxValue" type="number" input-align="center" center
-						placeholder="请输入最大值" />
-				</div>
-				<div class="child3Box_3" v-if="activeChild2.remark">{{activeChild2.remark}}</div>
-			</div>
-		</div>
 	</div>
 </template>
 
@@ -280,16 +279,14 @@
 					var top = box.getBoundingClientRect().top,
 						left = box.getBoundingClientRect().left,
 						width = box.offsetWidth;
+					this.$refs.child3BoxDirection.style.top = "calc(" + (top + 10) + "px + 0.25rem - 100vh + 5rem)";
+					this.$refs.child3BoxDirection.style.left = "calc(" + (left + width / 2) + "px - 0.1rem)";
 					if (this.activeChild2.title == "自定义") {
-						this.$refs.child3Box_c.style.top = "calc(" + (top + 10) + "px + 0.35rem)";
-						this.$refs.child3BoxDirection_c.style.top = "calc(" + (top + 10) + "px + 0.25rem)";
-						this.$refs.child3BoxDirection_c.style.left = "calc(" + (left + width / 2) + "px - 0.1rem)";
+						this.$refs.child3Box_c.style.top = "calc(" + (top + 10) + "px + 0.35rem - 100vh + 5rem)";
 						this.child3Show_c = true;
 					}
 					if (this.activeChild2.list.length) {
-						this.$refs.child3Box.style.top = "calc(" + (top + 10) + "px + 0.35rem)";
-						this.$refs.child3BoxDirection.style.top = "calc(" + (top + 10) + "px + 0.25rem)";
-						this.$refs.child3BoxDirection.style.left = "calc(" + (left + width / 2) + "px - 0.1rem)";
+						this.$refs.child3Box.style.top = "calc(" + (top + 10) + "px + 0.35rem - 100vh + 5rem)";
 						var zdy = this.activeChild2.list.find(item => item.title == "自定义");
 						if (zdy) {
 							var zdyItem = this.filterArr.find(item => item.code == zdy.code);
@@ -348,8 +345,8 @@
 			toSearchRes() {
 				if (this.filterArr.length <= 0) {
 					Toast("请至少选择1项")
-					} else if (this.custNumber <= 0) {
-						Toast("当前筛选条件下无用户")
+				} else if (this.custNumber <= 0) {
+					Toast("当前筛选条件下无用户")
 				} else {
 					localStorage.setItem("newFilterGroup", "0");
 					this.$router.push({
@@ -698,8 +695,7 @@
 	}
 
 	.child3Box {
-		position: fixed;
-		top: 30%;
+		position: absolute;
 		left: 0.18rem;
 		z-index: 9999;
 		width: calc(100% - 0.36rem);
@@ -710,14 +706,14 @@
 
 	.child3BoxDirection {
 		box-sizing: border-box;
-		position: fixed;
-		left: 50%;
+		position: absolute;
 		width: 0.2rem;
 		height: 0.2rem;
 		display: flex;
 		flex-wrap: nowrap;
 		align-items: center;
 		justify-content: center;
+		z-index: 10000;
 	}
 
 	.child3BoxDirectionChild {
