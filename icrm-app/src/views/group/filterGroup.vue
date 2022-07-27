@@ -363,16 +363,18 @@
 				}
 			},
 			mounted_m() {
-				queryCustAgentCompanyList({
-					pageNum: '1',
-					pageSize: '9999'
-				}, (res) => {
-					// console.log(res)
-				})
+				
 			}
 		},
 		mounted() {
 			localStorage.setItem("newFilterGroup", "0");
+			queryCustAgentCompanyList({
+				pageNum: "1",
+				pageSize: "9999",
+				searchType: "1"
+			}, (res) => {
+				console.log(res)
+			})
 			this.mounted_m();
 		},
 		activated() {

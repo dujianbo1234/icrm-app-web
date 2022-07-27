@@ -446,7 +446,7 @@
 					case "贷款看板":
 						this.toJiushu({
 							title: "贷款客群运营看板",
-							router: "lonas"
+							router: "loans"
 						});
 						break;
 					case "收单看板":
@@ -649,6 +649,7 @@
 					if (res.status == "000000") {
 						Toast.clear();
 						var result = JSON.parse(res.result)
+						console.log(this.$store.state.configInfo.jsRetailUrl);
 						console.log(this.$store.state.configInfo.jsRetailUrl + "ticket=" + result.token +
 									"&router=" + params.router)
 						this.$router.push({

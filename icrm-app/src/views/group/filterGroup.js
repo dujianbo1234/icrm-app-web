@@ -319,7 +319,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "我行收单商户，名下收单客户号以C开头",
-				disabled: false,
+				disabled: true,
 				list: []
 			}, {
 				code: "01030404",
@@ -3489,7 +3489,7 @@ export const filterList = [{
 		minValue: "",
 		maxValue: "",
 		remark: "取九银店老板中商户绑定的店员人数",
-		disabled: false,
+		disabled: true,
 		list: [{
 			code: "03010100",
 			title: "1",
