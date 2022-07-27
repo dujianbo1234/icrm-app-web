@@ -385,7 +385,7 @@
 						this.haveScore = true;
 						Toast("发布成功~感谢您的评价");
 						this.changeScore = false;
-						this.getScore();
+						// this.getScore();
 					}
 				});
 			},
@@ -396,18 +396,18 @@
 					this.baseMsg = res.data;
 				});
 			},
-			getScore() {
-				queryOpportPractialInfo({
-					sysId: this.$route.params.sysId
-				}, (res) => {
-					if (res.data && res.data.score) {
-						this.score = res.data.score;
-						this.scoreId = res.data.scoreId;
-						this.haveScore = true;
-					}
-					this.showScore = true;
-				});
-			},
+			// getScore() {
+			// 	queryOpportPractialInfo({
+			// 		sysId: this.$route.params.sysId
+			// 	}, (res) => {
+			// 		if (res.data && res.data.score) {
+			// 			this.score = res.data.score;
+			// 			this.scoreId = res.data.scoreId;
+			// 			this.haveScore = true;
+			// 		}
+			// 		this.showScore = true;
+			// 	});
+			// },
 			getFollowMsg() {
 				queryOpportCustServList({
 					sysId: this.$route.params.sysId
@@ -448,7 +448,7 @@
 				this.$route.params.custNo = item.custNo;
 				this.$route.params.sysId = item.sysId;
 				this.getBaseMsg();
-				this.getScore();
+				// this.getScore();
 				this.getFollowMsg();
 				this.getOtherBusi();
 			},
@@ -1070,7 +1070,7 @@
 				this.prdList = [];
 				this.showCustView = false;
 				this.getBaseMsg();
-				this.getScore();
+				// this.getScore();
 				this.getFollowMsg();
 				this.getOtherBusi();
 				this.getShowCustView();
@@ -1082,7 +1082,7 @@
 		mounted() {
 			this.passMount = true;
 			this.getBaseMsg();
-			this.getScore();
+			// this.getScore();
 			this.getFollowMsg();
 			this.getOtherBusi();
 			this.getShowCustView();

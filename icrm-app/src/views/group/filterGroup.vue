@@ -1,7 +1,7 @@
 <template>
 	<div class="home">
 		<nav-bar title="条件群组" type="2" leftIcon />
-		<van-tabs v-model:active="active" scrollspy sticky>
+		<van-tabs v-model:active="active" ref="mainTab" scrollspy sticky>
 			<van-tab v-for="(filterItem,i) in filterList" :key="'filterItem'+i" v-show="!filterItem.disabled"
 				:title="filterItem.value">
 				<div class="plateTitle">{{filterItem.title}}</div>
@@ -32,7 +32,7 @@
 				<div class="bottomCard1_2" @click="toSearchRes">确定</div>
 			</div>
 		</div>
-		<van-popup v-model:show="defaultShow" position="bottom" :style="{ height: '60%' }" round :lock-scroll="false"
+		<van-popup v-model:show="defaultShow" position="bottom" style="height: 5rem" round :lock-scroll="false"
 			:close-on-click-overlay="true" close-on-popstate>
 			<div class="popupTitle">{{activeChild1.title}}</div>
 			<div class="childListOutBox">
@@ -53,7 +53,7 @@
 				<div class="btnItem btnItem3" v-else>确定</div>
 			</div>
 		</van-popup>
-		<van-popup v-model:show="MCCShow" position="bottom" :style="{ height: '70%' }" round :lock-scroll="false"
+		<van-popup v-model:show="MCCShow" position="bottom" style="height: 5rem" round :lock-scroll="false"
 			:close-on-click-overlay="true" close-on-popstate>
 			<div class="popupTitle_dfdw">行业MCC码</div>
 			<div class="childListOutBox" style="padding: 0.12rem 0.18rem 0;">
@@ -74,7 +74,8 @@
 					</van-search>
 				</div>
 				<van-checkbox-group v-model="MCCChecked">
-					<van-checkbox v-for="(MCCNameItem,i) in MCCShowList" :key="'dfdwItem'+i" :name="MCCNameItem">{{MCCNameItem}}
+					<van-checkbox v-for="(MCCNameItem,i) in MCCShowList" :key="'dfdwItem'+i" :name="MCCNameItem">
+						{{MCCNameItem}}
 					</van-checkbox>
 				</van-checkbox-group>
 			</div>
@@ -84,7 +85,7 @@
 				<div class="btnItem btnItem3" v-else>确定</div>
 			</div>
 		</van-popup>
-		<van-popup v-model:show="dfdwShow" position="bottom" :style="{ height: '70%' }" round :lock-scroll="false"
+		<van-popup v-model:show="dfdwShow" position="bottom" style="height: 5rem" round :lock-scroll="false"
 			:close-on-click-overlay="true" close-on-popstate>
 			<div class="popupTitle_dfdw">代发单位</div>
 			<div class="childListOutBox" style="padding: 0.12rem 0.18rem 0;">
@@ -347,9 +348,10 @@
 			toSearchRes() {
 				if (this.filterArr.length <= 0) {
 					Toast("请至少选择1项")
-				// } else if (this.custNumber <= 0) {
-				// 	Toast("当前筛选条件下无用户")
+					} else if (this.custNumber <= 0) {
+						Toast("当前筛选条件下无用户")
 				} else {
+					localStorage.setItem("newFilterGroup", "0");
 					this.$router.push({
 						name: 'groupSearchResult',
 						params: {
@@ -357,16 +359,42 @@
 						}
 					})
 				}
+			},
+			mounted_m() {
+				queryCustAgentCompanyList({
+					pageNum: '1',
+					pageSize: '9999'
+				}, (res) => {
+					// console.log(res)
+				})
 			}
 		},
 		mounted() {
-			queryCustAgentCompanyList({
-				pageNum: '1',
-				pageSize: '9999'
-			}, (res) => {
-				console.log(res)
-			})
-		}
+			localStorage.setItem("newFilterGroup", "0");
+			this.mounted_m();
+		},
+		activated() {
+			if (localStorage.getItem("newFilterGroup") == "0") {
+				localStorage.setItem("newFilterGroup", "1")
+				this.$refs.mainTab.scrollTo(this.active)
+			} else {
+				this.active = 0;
+				this.activeChild1 = {};
+				this.activeChild2 = {};
+				this.activeChild3 = {};
+				this.defaultShow = false;
+				this.filterArr = [];
+				this.custNumber = 0;
+				this.child3Show = false;
+				this.child3Show_c = false;
+				this.dfdwShow = false;
+				this.dfdwChecked = [];
+				this.MCCShow = false;
+				this.MCCChecked = [];
+				this.searchValue = "";
+				this.mounted_m();
+			}
+		},
 	}
 </script>
 

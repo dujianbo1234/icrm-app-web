@@ -1,6 +1,6 @@
 <template>
 	<div class="home">
-		<nav-bar title="我的群组" type="2" leftIcon :backName="$route.params.gdParams?'':'cust'" />
+		<nav-bar :title="$route.params.gdParams?'选择群组':'我的群组'" type="2" leftIcon :backName="$route.params.gdParams?'':'cust'" />
 		<van-tabs v-if="!$route.params.gdParams" v-model:active="active" color="#026DFF" title-active-color="#026DFF"
 			title-inactive-color="#595959" line-width="0.84rem" line-height="0.02rem" @change="changeTab">
 			<van-tab v-for="(tab,i) in ['动态群组','固定群组']" :key="'tab'+i" :title="tab" />

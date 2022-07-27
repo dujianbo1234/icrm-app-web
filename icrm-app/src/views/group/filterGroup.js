@@ -6528,11 +6528,11 @@ export const filterList = [{
 			list: []
 		}, {
 			code: "07020300",
-			title: "[300,160)",
-			value: "[300,160)",
+			title: "[300,600)",
+			value: "[300,600)",
 			values: "",
 			colField: "CARD_TRAN_CNT_1Y_RNG",
-			name: "近1年信用卡交易笔数#[300,160)",
+			name: "近1年信用卡交易笔数#[300,600)",
 			minValue: "",
 			maxValue: "",
 			remark: "",
