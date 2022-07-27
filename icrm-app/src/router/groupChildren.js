@@ -19,6 +19,9 @@ export default [{
 }, {
 	path: '/filterGroup',
 	name: 'filterGroup',
+	meta: {
+		keepAlive: true
+	},
 	component: () => import('@/views/group/filterGroup.vue')
 }, {
 	path: '/groupSearchResult',

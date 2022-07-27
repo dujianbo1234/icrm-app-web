@@ -345,9 +345,15 @@
 					if (res.data == "操作成功") {
 						this.showBatchSend = false;
 						Toast.success("添加成功");
-						list.forEach((item) => {
-							this.custList.find(custItem => custItem.custNum == item).isGroupCust = "1"
-						});
+						if (list.length>1) {
+							setTimeout(() => {
+								this.$router.go(-1);
+							}, 800)
+						} else{
+							list.forEach((item) => {
+								this.custList.find(custItem => custItem.custNum == item).isGroupCust = "1"
+							});
+						}
 					} else {
 						Toast.fail(res.msg)
 					}

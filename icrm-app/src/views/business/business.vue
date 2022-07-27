@@ -1,8 +1,6 @@
 <template>
 	<div class="home">
 		<div class="topZW"></div>
-
-
 		<div :class="$store.state.userMsg.roleId!='00000004'?'fixedPlace':'fixedPlace2'">
 			<div class="plate4" v-if="$store.state.userMsg.roleId!='00000004'">
 				<div class="plate4_1" @click="$refs.orgList.showPopup();openOrgList=true;">
@@ -320,7 +318,6 @@
 			},
 		},
 		mounted() {
-
 			localStorage.setItem("newBusiness", "0");
 			this.mounted_m();
 			this.queryCmrcOpportunity()
@@ -328,6 +325,7 @@
 		activated() {
 			if (localStorage.getItem("newBusiness") == "0") {
 				localStorage.setItem("newBusiness", "1")
+				this.queryCmrcOpportunity()
 			} else {
 				this.chooseOrg = {
 						text: "全部机构",
@@ -349,7 +347,6 @@
 				this.useNum = "";
 				this.mounted_m();
 				this.queryCmrcOpportunity()
-
 			}
 		},
 	}
