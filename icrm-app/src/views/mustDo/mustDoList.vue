@@ -14,10 +14,10 @@
 			</div>
 		</div>
 		<div class="firstTab">
-			<van-tabs class="tabBarStyle" v-model:active="active" line-width="0" color="#0088FF" title-active-color="#026DFF"
-				title-inactive-color="#262626" @click-tab="onClickTab">
-				<van-tab  v-for="item in mustDoKind" :key="item.codeValue" :title="item.codeName"/>
-		</van-tabs>
+			<van-tabs class="tabBarStyle" v-model:active="active" line-width="0" color="#0088FF"
+				title-active-color="#026DFF" title-inactive-color="#262626" @click-tab="onClickTab">
+				<van-tab v-for="item in mustDoKind" :key="item.codeValue" :title="item.codeName" />
+			</van-tabs>
 		</div>
 		<!-- <div class="plate4">
 			<div class="plate4_title">必办名称</div>
@@ -39,37 +39,35 @@
 		</div> -->
 		<div class="list">
 			<div class="plate4_title">必办名称</div>
-            <van-tabs class="month" v-model:active="tageListActive" type="card" @click-tab="tageListChange">
+			<van-tabs class="month" v-model:active="tageListActive" type="card" @click-tab="tageListChange">
 				<van-tab v-for="item in mustDoNameList" :key="item.codeValue" :title="item.codeName">
 				</van-tab>
-            </van-tabs>
-        </div>
+			</van-tabs>
+		</div>
 		<div class="list">
 			<div class="plate4_title">必办状态</div>
-            <van-tabs class="month" v-model:active="statusActive" type="card" @click-tab="statusListChange">
+			<van-tabs class="month" v-model:active="statusActive" type="card" @click-tab="statusListChange">
 				<van-tab v-for="item in statusList" :key="item.codeValue" :title="item.codeName">
 				</van-tab>
-            </van-tabs>
-        </div>
-        <div class="dateRow">
-            <div style="font-size:0.13rem;width: 0.6rem;text-align: left;">到期日</div>
+			</van-tabs>
+		</div>
+		<div class="dateRow">
+			<div style="font-size:0.13rem;width: 0.6rem;text-align: left;">到期日</div>
 			<div class="plate4_childBox">
 				<div class="plate4_child" :class="beginDate?'plate4_child_a':''" style="min-width: 1.05rem;"
 					@click="dateShow1 = true">
 					<span style="margin-right: 0.06rem;">{{beginDate||"开始时间"}}</span>
-					<van-icon :name="require('../../assets/image/common_date.png')"
-						style="margin-bottom: 0.03rem;" />
+					<van-icon :name="require('../../assets/image/common_date.png')" style="margin-bottom: 0.03rem;" />
 				</div>
 				<div style="font-size: 0.12rem;margin-right: 0.1rem;color: #8C8C8C">—</div>
 				<div class="plate4_child" :class="endDate?'plate4_child_a':''" style="min-width: 1.05rem;"
 					@click="dateShow2 = true">
 					<span style="margin-right: 0.06rem;">{{endDate||"结束时间"}}</span>
-					<van-icon :name="require('../../assets/image/common_date.png')"
-						style="margin-bottom: 0.03rem;" />
+					<van-icon :name="require('../../assets/image/common_date.png')" style="margin-bottom: 0.03rem;" />
 				</div>
 			</div>
-            
-        </div>
+
+		</div>
 		<van-calendar v-model:show="dateShow1" :show-confirm="false" :show-cancle="false" color="#026DFF"
 			:min-date="minDate" :max-date="maxDate" @confirm="chooseDate1">
 			<template #title>
@@ -91,13 +89,14 @@
 		<div class="total">
 			<div>筛选结果：共{{allNum}}条数据</div>
 		</div>
-		<van-list id="listHeight" v-model:loading="loading" :finished="finished" finished-text="没有更多了" @load="onLoad" class="vanList" :style="{height:listHeight+'px'}">
+		<van-list id="listHeight" v-model:loading="loading" :finished="finished" finished-text="没有更多了" @load="onLoad"
+			class="vanList" :style="{height:listHeight+'px'}">
 			<div v-for="(mustDoItem, i) in mustDoList" :key="'mustDoItem' + i" class="msgCardOutBox">
 				<div class="msgCardBox" @click="openDetail">
 					<div class="msgCard">
 						<div class="msgValue1">
 							<div class="msgValue1Left ycsl">{{ mustDoItem.mastDoName }}</div>
-							<div class="msgValue1Right" >
+							<div class="msgValue1Right">
 								<div class="msgValue1RightItem"
 									:style="{'background-color':mustDoItem.mastDoSt == '01'? '#52C41A': mustDoItem.mastDoSt == '02'? '#E93030': '#bfbfbf',}">
 									{{ mustDoItem.mastDoSt=='01'?'已办':mustDoItem.mastDoSt=='02'?'待办':'逾期未办'}}
@@ -109,12 +108,20 @@
 								<span class="daoqiDate">到期日：</span>
 								<span class="daoqiDate">{{ mustDoItem.expDay }}</span>
 							</div>
-							<div class="msgValue3Right" >
-								<van-icon @click="visitDetail(mustDoItem)" v-if="mustDoItem.mastDoSt == '01'" :name="require('@/assets/image/yiban.png')" size="24"/>
-								<van-icon  @click="openVisit(mustDoItem)" v-if="mustDoItem.mastDoNm != '0101' && mustDoItem.mastDoSt == '02' && $store.state.userMsg.roleId=='00000004'" :name="require('@/assets/image/daiban.png')" size="24"/>
-								<van-icon  @click="openTel(mustDoItem)" v-if="(mustDoItem.mastDoNm == '0101' && mustDoItem.mastDoSt == '02' && $store.state.userMsg.roleId=='00000004' && mustDoItem.isPhone=='1')||mustDoItem.isCall" :name="require('@/assets/image/daiban.png')" size="24"/>
-								<van-icon  @click="gaveCall(mustDoItem)" v-if="mustDoItem.mastDoNm == '0101' && mustDoItem.mastDoSt == '02' && $store.state.userMsg.roleId=='00000004' && mustDoItem.isPhone=='0' && !mustDoItem.isCall" :name="require('@/assets/image/callPhone.png')" size="24"/>
-								<van-icon v-if="mustDoItem.mastDoSt == '03' && $store.state.userMsg.roleId=='00000004'" :name="require('@/assets/image/daiban_gray.png')" size="24"/>
+							<div class="msgValue3Right">
+								<van-icon @click="visitDetail(mustDoItem)" v-if="mustDoItem.mastDoSt == '01'"
+									:name="require('@/assets/image/yiban.png')" size="24" />
+								<van-icon @click="openVisit(mustDoItem)"
+									v-if="mustDoItem.mastDoNm != '0101' && mustDoItem.mastDoSt == '02' && $store.state.userMsg.roleId=='00000004'"
+									:name="require('@/assets/image/daiban.png')" size="24" />
+								<van-icon @click="openTel(mustDoItem)"
+									v-if="(mustDoItem.mastDoNm == '0101' && mustDoItem.mastDoSt == '02' && $store.state.userMsg.roleId=='00000004' && mustDoItem.isPhone=='1')||mustDoItem.isCall"
+									:name="require('@/assets/image/daiban.png')" size="24" />
+								<van-icon @click="gaveCall(mustDoItem)"
+									v-if="mustDoItem.mastDoNm == '0101' && mustDoItem.mastDoSt == '02' && $store.state.userMsg.roleId=='00000004' && mustDoItem.isPhone=='0' && !mustDoItem.isCall"
+									:name="require('@/assets/image/callPhone.png')" size="24" />
+								<van-icon v-if="mustDoItem.mastDoSt == '03' && $store.state.userMsg.roleId=='00000004'"
+									:name="require('@/assets/image/daiban_gray.png')" size="24" />
 							</div>
 						</div>
 						<div>
@@ -144,11 +151,11 @@
 				<div class="popTitle2">现场定位核查</div>
 				<div class="popTitle3" @click="addVisit">添加</div>
 			</div>
-			<div class="popPlate1" >
+			<div class="popPlate1">
 				<van-field v-model="followValue" type="textarea" placeholder="请输入拜访记录（非必填）" rows="5" autosize
 					maxlength="150" />
 			</div>
-			
+
 			<div class="popPlate2">
 				<div class="cameraBox" v-for="(photo,i) in photoList" :key="'photo'+i">
 					<van-icon class="delBtn" :name="require('../../assets/image/common_delete.png')" color="##8C8C8C"
@@ -165,7 +172,8 @@
 				<van-icon :name="require('../../assets/image/common_dingwei_blue.png')" size="15"
 					style="margin-right: 0.04rem;flex-shrink: 0;padding: 0.03rem 0;" />
 				<div class="popPlate3_1" v-if="openLocation">
-					<div class="popPlate3_1_1">{{dingwei.split("------")[1]?dingwei.split("------")[1]:dingwei.split("------")[0]}}</div>
+					<div class="popPlate3_1_1">
+						{{dingwei.split("------")[1]?dingwei.split("------")[1]:dingwei.split("------")[0]}}</div>
 					<div class="popPlate3_1_2">{{dingwei.split("------")[1]?dingwei.split("------")[0]:""}}</div>
 				</div>
 				<div class="popPlate3_1" v-else>
@@ -191,9 +199,8 @@
 					maxlength="150" />
 			</div>
 			<div class="popPlate2" v-if="followItem.isPhone!='1'">
-				<div class="followItem5_1"
-					v-for="(file,j) in followItem.fileList"
-					:key="'file'+j" @click="openPhoto($store.state.configInfo.icrmUrl + file.fileServerPath)">
+				<div class="followItem5_1" v-for="(file,j) in followItem.fileList" :key="'file'+j"
+					@click="openPhoto($store.state.configInfo.icrmUrl + file.fileServerPath)">
 					<img :src="$store.state.configInfo.icrmUrl + file.fileServerPath">
 				</div>
 			</div>
@@ -201,11 +208,15 @@
 				<van-icon :name="require('../../assets/image/common_dingwei_blue.png')" size="15"
 					style="margin-right: 0.04rem;flex-shrink: 0;padding: 0.03rem 0;" />
 				<div class="popPlate3_1">
-					<div class="popPlate3_1_1">{{followItem.onsiteInspLctng.split("------")[1]?followItem.onsiteInspLctng.split("------")[1]:followItem.onsiteInspLctng.split("------")[0]}}</div>
-					<div class="popPlate3_1_2">{{followItem.onsiteInspLctng.split("------")[1]?followItem.onsiteInspLctng.split("------")[0]:""}}</div>
+					<div class="popPlate3_1_1">
+						{{followItem.onsiteInspLctng.split("------")[1]?followItem.onsiteInspLctng.split("------")[1]:followItem.onsiteInspLctng.split("------")[0]}}
+					</div>
+					<div class="popPlate3_1_2">
+						{{followItem.onsiteInspLctng.split("------")[1]?followItem.onsiteInspLctng.split("------")[0]:""}}
+					</div>
 				</div>
 			</div>
-			
+
 		</van-popup>
 		<van-popup v-model:show="showVisit3" round position="bottom" z-index="99999" :close-on-click-overlay="false"
 			style="background-color: #F8F8F8;height: 80%;">
@@ -258,8 +269,8 @@
 	export default {
 		data() {
 			return {
-				isPhone:false,
-				showCall:false,
+				isPhone: false,
+				showCall: false,
 				callItem: {},
 
 				openOrgList: false,
@@ -272,59 +283,69 @@
 					empName: "客户经理",
 					empId: ""
 				},
-				listHeight:'',
-				finished:false,
-				loading:false,
-				beginDate:'',
-				endDate:'',
-				active:'',
-                tageListActive: '',
+				listHeight: '',
+				finished: false,
+				loading: false,
+				beginDate: '',
+				endDate: '',
+				active: '',
+				tageListActive: '',
 				statusActive: '',
-				statusList:[],
+				statusList: [],
 				dateShow1: false,
 				dateShow2: false,
-				isStartDate:false,
-				isEndDate:false,
-				minDate:new Date(2010, 0, 1),
-				maxDate:new Date(2099,0,0),
-                tageList: [
-                    { key: '', title: "全部" },
-                    { key: 0, title: "商户长期未交易" },
-                    { key: 1, title: "调研" },
-                ],
+				isStartDate: false,
+				isEndDate: false,
+				minDate: new Date(2010, 0, 1),
+				maxDate: new Date(2099, 0, 0),
+				tageList: [{
+						key: '',
+						title: "全部"
+					},
+					{
+						key: 0,
+						title: "商户长期未交易"
+					},
+					{
+						key: 1,
+						title: "调研"
+					},
+				],
 				finished: false,
 				pageIndex: 0,
-				mustDoNameList:[],
-				mustDoKind:[],
-				mustDoName:[],
-				mastDoBclass:'',
-				mastDoSt:'',
-				mastDoNm:'',
-				expDayStart:'',
-				allNum:'',
-				expDayEnd:'',
+				mustDoNameList: [],
+				mustDoKind: [],
+				mustDoName: [],
+				mastDoBclass: '',
+				mastDoSt: '',
+				mastDoNm: '',
+				expDayStart: '',
+				allNum: '',
+				expDayEnd: '',
 				mustDoList: [],
 				showVisit: false,
 				showVisit2: false,
-				showVisit3:false,
+				showVisit3: false,
 				followValue: "",
 				photoList: [],
 				dingwei: "",
 				openLocation: true,
-				id:'',
-				newVisit:false,
-				followItem:{
+				id: '',
+				newVisit: false,
+				followItem: {
 					fileList: [],
-					onsiteInspLctng:''
+					onsiteInspLctng: ''
 				},
-				followDesc:'',
-				custAddInfo:{},
+				followDesc: '',
+				custAddInfo: {},
 
 			};
 		},
-		components: {customerList},
+		components: {
+			customerList
+		},
 		methods: {
-			gaveCall(item){
+			gaveCall(item) {
 				if (isNaN(item.merntCtaTel)) {
 					Toast.fail("电话号码格式有误");
 					return;
@@ -334,7 +355,7 @@
 					return;
 				}
 				// item.isCall=true
-				console.log('mustDoList',this.mustDoList)
+				console.log('mustDoList', this.mustDoList)
 				this.showCall = true;
 				this.callItem = item;
 
@@ -360,7 +381,7 @@
 
 					})
 				});
-				
+
 			},
 			chooseDate1(date) {
 				var chooseDate = moment(date).format('YYYY-MM-DD');
@@ -409,7 +430,7 @@
 						value: ""
 					}
 				};
-				this.chooseCust={
+				this.chooseCust = {
 					empName: "客户经理",
 					empId: ""
 				}
@@ -434,26 +455,26 @@
 				this.mustDoList = [];
 				this.onLoad();
 			},
-			tageListChange(el){
-				if(this.mastDoBclass=='01'){
-					if(el.name=='0'){
-						this.mastDoNm=''
-					}else{
-						this.mastDoNm='0101'
+			tageListChange(el) {
+				if (this.mastDoBclass == '01') {
+					if (el.name == '0') {
+						this.mastDoNm = ''
+					} else {
+						this.mastDoNm = '0101'
 					}
-				}else if(this.mastDoBclass=='02'){
-					if(el.name=='0'){
-						this.mastDoNm=''
-					}else{
-						this.mastDoNm='0201'
+				} else if (this.mastDoBclass == '02') {
+					if (el.name == '0') {
+						this.mastDoNm = ''
+					} else {
+						this.mastDoNm = '0201'
 					}
-				}else{
-					if(el.name=='0'){
-						this.mastDoNm=''
-					}else if(el.name=='1'){
-						this.mastDoNm='0101'
-					}else{
-						this.mastDoNm='0201'
+				} else {
+					if (el.name == '0') {
+						this.mastDoNm = ''
+					} else if (el.name == '1') {
+						this.mastDoNm = '0101'
+					} else {
+						this.mastDoNm = '0201'
 					}
 				}
 				this.pageIndex = 0;
@@ -461,52 +482,52 @@
 				this.mustDoList = [];
 				this.onLoad();
 			},
-			statusListChange(el){
-				if(el.name=='0'){
-					this.mastDoSt=''
-				}else if(el.name=='1'){
-					this.mastDoSt='02'
-				}else if(el.name=='2'){
-					this.mastDoSt='01'
-				}else{
-					this.mastDoSt='03'
+			statusListChange(el) {
+				if (el.name == '0') {
+					this.mastDoSt = ''
+				} else if (el.name == '1') {
+					this.mastDoSt = '02'
+				} else if (el.name == '2') {
+					this.mastDoSt = '01'
+				} else {
+					this.mastDoSt = '03'
 				}
 				this.pageIndex = 0;
 				this.loading = true;
 				this.mustDoList = [];
 				this.onLoad();
 			},
-			openVisit(el){
-				this.newVisit=true
-				this.id=el.id
+			openVisit(el) {
+				this.newVisit = true
+				this.id = el.id
 				this.followValue = "";
 				this.photoList = [];
 				this.dingwei = "";
-				this.custAddInfo=el
+				this.custAddInfo = el
 				this.showVisit = true;
 				this.showVisit2 = false;
 				this.getLocation();
 			},
-			addCustInfo(item,type){
+			addCustInfo(item, type) {
 				custServiceAdd({
 					custName: item.cstName,
 					custNo: item.custNum,
 					mobileNum: item.merntCtaTel,
 					communictionChannel: type,
-					custManager:item.custMgrNm,
-					serviceContent:this.followDesc,
-					custOrgName:item.orgName,
+					custManager: item.custMgrNm,
+					serviceContent: this.followDesc,
+					custOrgName: item.orgName,
 					custType: '1',
 					serviceChn: "10"
 				}, (ress) => {
 					Toast.clear();
-					
+
 				});
 			},
-			openTel(el){
+			openTel(el) {
 				console.log(el)
-				this.custAddInfo=el
-				this.id=el.id
+				this.custAddInfo = el
+				this.id = el.id
 				this.followDesc = "";
 				this.photoList = [];
 				this.dingwei = "";
@@ -520,9 +541,9 @@
 					showIndex: false
 				});
 			},
-			visitDetail(el){
-				this.newVisit=false
-				this.id=el.id
+			visitDetail(el) {
+				this.newVisit = false
+				this.id = el.id
 				this.showVisit = false;
 				this.showVisit2 = true;
 				this.getLocation();
@@ -530,8 +551,8 @@
 				queryEmployeeMustDoDetail({
 					id: this.id,
 				}, (res) => {
-					this.followItem=res.data
-					console.log('this.followItem',this.followItem)
+					this.followItem = res.data
+					console.log('this.followItem', this.followItem)
 					this.followItem.showAllPhoto = false;
 					Toast.clear();
 				})
@@ -557,19 +578,19 @@
 					duration: 0
 				});
 				console.log(this.custAddInfo)
-				if(this.custAddInfo.custNum){
-					this.addCustInfo(this.custAddInfo,'01')
+				if (this.custAddInfo.custNum) {
+					this.addCustInfo(this.custAddInfo, '01')
 				}
 				followEmployeeMustDo({
 					id: this.id,
-					mastDoSt:'01',
-					onsiteInspLctng:this.dingwei,
-					onsiteInspDsc:this.followValue,
+					mastDoSt: '01',
+					onsiteInspLctng: this.dingwei,
+					onsiteInspDsc: this.followValue,
 					uploadIds: this.photoList.map(item => item.tableKey)
 				}, (res) => {
 					Toast.success(res.msg);
 					this.showVisit = false;
-					this.custAddInfo.mastDoSt='01'
+					this.custAddInfo.mastDoSt = '01'
 
 					this.pageIndex = 0;
 					this.loading = true;
@@ -578,8 +599,8 @@
 					Toast.clear();
 				})
 			},
-			addTelInfo(){
-				if(this.followDesc==''){
+			addTelInfo() {
+				if (this.followDesc == '') {
 					Toast.fail("请输入拜访记录");
 					return;
 				}
@@ -589,18 +610,18 @@
 					duration: 0
 				});
 
-				if(this.custAddInfo.custNum){
-					this.addCustInfo(this.custAddInfo,'02')
+				if (this.custAddInfo.custNum) {
+					this.addCustInfo(this.custAddInfo, '02')
 				}
 				followEmployeeMustDo({
 					id: this.id,
-					mastDoSt:'01',
-					onsiteInspLctng:this.dingwei,
-					onsiteInspDsc:this.followDesc,
+					mastDoSt: '01',
+					onsiteInspLctng: this.dingwei,
+					onsiteInspDsc: this.followDesc,
 					uploadIds: []
 				}, (res) => {
 					Toast.success(res.msg);
-					this.custAddInfo.mastDoSt='01'
+					this.custAddInfo.mastDoSt = '01'
 					this.showVisit3 = false;
 					this.pageIndex = 0;
 					this.loading = true;
@@ -622,7 +643,7 @@
 						});
 						opportCustServUploadMpaas({
 							file: res1.result
-						},(res2)=>{
+						}, (res2) => {
 							Toast.success("上传成功");
 							this.photoList.push({
 								url: res1.result,
@@ -648,39 +669,39 @@
 					}
 				});
 			},
-			getHeight(){
+			getHeight() {
 				var mainHeight = document.documentElement.clientHeight;
 				var listHeight = document.getElementById('listHeight');
-				var toTop =  listHeight.offsetTop;
-				this.listHeight = mainHeight-toTop
+				var toTop = listHeight.offsetTop;
+				this.listHeight = mainHeight - toTop
 			},
-			
-			
-			onClickTab(el){
-				this.tageListActive='0'
-				this.statusActive='0'
-				this.mastDoNm=''
-                if(el.name=='1'){
-					this.mastDoBclass='01'
-                    this.mustDoNameList=this.mustDoName.filter(item=>{
-						return item.codeValue!='0201'
-					})
-                }else if(el.name=='2'){
-					this.mastDoBclass='02'
 
-                     this.mustDoNameList=this.mustDoName.filter(item=>{
-						return item.codeValue!='0101'
+
+			onClickTab(el) {
+				this.tageListActive = '0'
+				this.statusActive = '0'
+				this.mastDoNm = ''
+				if (el.name == '1') {
+					this.mastDoBclass = '01'
+					this.mustDoNameList = this.mustDoName.filter(item => {
+						return item.codeValue != '0201'
 					})
-                }else{
-					this.mastDoBclass=''
-					this.mastDoSt=''
-					this.mustDoNameList=this.mustDoName
+				} else if (el.name == '2') {
+					this.mastDoBclass = '02'
+
+					this.mustDoNameList = this.mustDoName.filter(item => {
+						return item.codeValue != '0101'
+					})
+				} else {
+					this.mastDoBclass = ''
+					this.mastDoSt = ''
+					this.mustDoNameList = this.mustDoName
 				}
 				this.pageIndex = 0;
 				this.loading = true;
 				this.mustDoList = [];
 				this.onLoad();
-            },
+			},
 			onLoad() {
 				this.finished = false;
 				Toast.loading({
@@ -692,13 +713,13 @@
 				let params = {
 					belongOrg: this.chooseOrg.value,
 					belgCustMgr: this.chooseCust.empId,
-					mastDoBclass:this.mastDoBclass,
-					mastDoNm:this.mastDoNm,
-					mastDoSt:this.mastDoSt,
+					mastDoBclass: this.mastDoBclass,
+					mastDoNm: this.mastDoNm,
+					mastDoSt: this.mastDoSt,
 					pageNum: this.pageIndex.toString(),
 					pageSize: "10",
-					expDayStart:this.beginDate.split("-").join(""),
-					expDayEnd:this.endDate.split("-").join("")
+					expDayStart: this.beginDate.split("-").join(""),
+					expDayEnd: this.endDate.split("-").join("")
 				};
 				this.params = JSON.stringify(params);
 				queryEmployeeMustDoList(params, (res) => {
@@ -707,7 +728,7 @@
 						this.allNum = res.data.total.toLocaleString();
 						this.mustDoList = this.mustDoList.concat(res.data.records);
 						if (this.mustDoList.length >= this.allNum) this.finished = true;
-						console.log('this.mustDoList',this.mustDoList)
+						console.log('this.mustDoList', this.mustDoList)
 					} else {
 						Toast.fail("必办列表为空");
 						this.finished = true;
@@ -740,7 +761,7 @@
 						codeName: "全部",
 						codeValue: ""
 					})
-					this.mustDoNameList=this.mustDoName
+					this.mustDoNameList = this.mustDoName
 				} else {
 					Toast.fail("必办名称数据为空")
 				}
@@ -754,13 +775,13 @@
 						codeName: "全部",
 						codeValue: ""
 					})
-					this.statusList[1] = this.statusList.splice(2,1,this.statusList[1])[0]
-					console.log('this.statusList',this.statusList)
+					this.statusList[1] = this.statusList.splice(2, 1, this.statusList[1])[0]
+					console.log('this.statusList', this.statusList)
 				} else {
 					Toast.fail("必办名称数据为空")
 				}
 			})
-			
+
 		},
 	};
 </script>
@@ -772,6 +793,7 @@
 		padding: 0;
 		border: 0;
 	}
+
 	:deep(.van-calendar__popup .van-popup__close-icon) {
 		display: none;
 	}
@@ -779,9 +801,11 @@
 	:deep(.van-calendar__popup) {
 		height: 60%;
 	}
+
 	.plate4_childBox::-webkit-scrollbar {
 		display: none;
 	}
+
 	.plate4_childBox {
 		width: 100%;
 		flex-shrink: 1;
@@ -791,6 +815,7 @@
 		justify-content: flex-start;
 		overflow-x: auto;
 	}
+
 	.plate4_child {
 		flex-shrink: 0;
 		height: 0.28rem;
@@ -809,10 +834,12 @@
 		align-items: center;
 		justify-content: center;
 	}
+
 	.plate4_child_a {
 		background: #E0EDFF;
 		color: #026DFF;
 	}
+
 	.calendarTitle {
 		width: 100%;
 		padding: 0 0.16rem;
@@ -840,56 +867,75 @@
 		overflow: hidden;
 		background-color: #fff;
 	}
-	.firstTab{
-		width:93.6%;
-		margin:0 auto;
+
+	.firstTab {
+		width: 93.6%;
+		margin: 0 auto;
 		border-bottom: solid 1px #EFEFEF;
-	  	padding: 0.08rem 0;
+		padding: 0.08rem 0;
 
 	}
-	.tabBarStyle{
+
+	.tabBarStyle {
 		// padding-top: 0.16rem;
 	}
+
 	.list {
 		display: flex;
 		align-items: center;
 		// overflow-x: auto;
 
-      width: 100%;
-	  margin: 0 auto;
-	  padding: 0.04rem 0;
+		width: 93.6%;
+		margin: 0 auto;
+		padding: 0.05rem 0;
 		border-bottom: solid 1px #EFEFEF;
-      background: #fff;
-      &:deep(.month) {
-        .van-tabs__nav--card {
-          border: none;
-        }
-        .van-tab--card,
-        .van-tab--active {
-          margin: 0 0.1rem;
-          border-radius: 0.14rem;
-        }
-		
-        .van-tab--card {
-          background: rgba(245, 245, 245, 1);
-          border-right: none;
-          color: #8c8c8c;
-        }
-        .van-tab--active {
-          background: rgba(2, 109, 255, 0.12);
-          color: #026dff;
-        }
-      }
-    }
-	.dateRow{
+		background: #fff;
+
+		&:deep(.month) {
+			.van-tab {
+				flex: none;
+			}
+			
+			.van-tabs__nav--card {
+				border: none;
+				overflow-x: auto;
+				padding-right: -1rem;
+			}
+			
+			.van-tabs__nav--card::-webkit-scrollbar {
+				display: none;
+			}
+
+			.van-tab--card,
+			.van-tab--active {
+				margin: 0 0.1rem;
+				border-radius: 0.2rem;
+				min-width: 0.75rem;
+				padding: 0 0.1rem;
+			}
+
+			.van-tab--card {
+				background: rgba(245, 245, 245, 1);
+				border-right: none;
+				color: #8c8c8c;
+			}
+
+			.van-tab--active {
+				background: rgba(2, 109, 255, 0.12);
+				color: #026dff;
+			}
+		}
+	}
+
+	.dateRow {
 		display: flex;
 		align-items: center;
 		margin: 0.16rem 0.32rem;
 	}
-	
-	
-	
-		.total {
+
+
+
+	.total {
 		font-size: 0.1rem;
 		color: #262626;
 		height: 0.35rem;
@@ -900,12 +946,14 @@
 		justify-content: space-between;
 		align-items: center;
 	}
+
 	.vanList {
 		// margin-top: 0.09rem;
 		overflow: auto;
 		background-color: #F5F5F5;
 
 	}
+
 	.msgCardOutBox {
 		width: 100%;
 		position: relative;
@@ -914,10 +962,12 @@
 		align-items: center;
 		transition: margin-left 0.3s;
 	}
+
 	.msgCardBox {
 		width: 100%;
 		padding: 0.06rem 3%;
 	}
+
 	.msgCard {
 		width: 100%;
 		background-color: #ffffff;
@@ -926,6 +976,7 @@
 		font-size: 0.16rem;
 		padding: 0.1rem 0.15rem;
 	}
+
 	.msgValue1 {
 		width: 100%;
 		display: flex;
@@ -966,6 +1017,7 @@
 		margin-bottom: 0.08rem;
 		justify-content: space-between;
 	}
+
 	.msgValue2Left,
 	.msgValue3Left,
 	.msgValue4Left {
@@ -981,14 +1033,17 @@
 		flex-shrink: 1;
 		font-weight: 400;
 	}
-	.daoqiDate{
+
+	.daoqiDate {
 		font-weight: 400;
 		color: #262626;
 		font-size: 0.12rem;
 	}
-	.msgContent{
+
+	.msgContent {
 		font-weight: 400;
 	}
+
 	.msgValue3 {
 		border-bottom: solid 0.01rem #f5f5f5;
 		padding-bottom: 0.08rem;
@@ -1008,7 +1063,7 @@
 		font-size: 00.12rem;
 		color: #999999;
 	}
-	
+
 	.plate1 {
 		width: 93.6%;
 		margin: 0 auto;
@@ -1035,6 +1090,7 @@
 	.plate1_1_value {
 		margin-right: 0.04rem;
 	}
+
 	.popTitle {
 		width: 100%;
 		height: 0.51rem;
@@ -1067,14 +1123,17 @@
 		right: 0.16rem;
 		color: #026DFF;
 	}
-	.popTime{
+
+	.popTime {
 		text-align: right;
 	}
-	.popTimeDate{
+
+	.popTimeDate {
 		font-size: 0.14rem;
 		color: #262626;
 		margin-right: 0.16rem;
 	}
+
 	.popPlate1 {
 		width: calc(100% - 0.24rem);
 		padding: 0.12rem;
@@ -1172,6 +1231,7 @@
 		top: -0.06rem;
 		right: -0.06rem;
 	}
+
 	.followItem5 {
 		width: calc(100% - 0.2rem);
 		margin: 0.12rem auto 0;
@@ -1198,6 +1258,7 @@
 	.followItem5_1>img {
 		width: 100%;
 	}
+
 	.plate6 {
 		width: 74.7%;
 		background: #FFFFFF;
@@ -1219,6 +1280,7 @@
 		font-weight: 500;
 		margin-bottom: 0.24rem;
 	}
+
 	.plate6_4 {
 		width: 100%;
 		height: 0.3rem;
@@ -1265,12 +1327,13 @@
 		font-weight: 400;
 		margin-bottom: 0.24rem;
 	}
+
 	.plate4_title {
 		font-size: 0.14rem;
 		font-family: PingFangSC-Regular, PingFang SC;
 		font-weight: 400;
 		color: #262626;
 		flex-shrink: 0;
-		margin-right: 0.1rem;
+		margin-right: 0rem;
 	}
 </style>
