@@ -587,12 +587,14 @@
 					this.resetTop();
 				})
 				saveSmAppVisitInfo({
-					busiType: "5"
+					busiType: "5",
+					mktId:this.baseMsg.cmrcOpptId
 				}, (res) => {
 
 				});
 				querySmAppVisitSum({
-					busiType: "5"
+					busiType: "5",
+					mktId:this.baseMsg.cmrcOpptId
 				}, (res) => {
 					if (res.data) {
 						this.visitNum = res.data.visitNum;
