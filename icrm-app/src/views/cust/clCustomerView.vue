@@ -359,8 +359,7 @@
 			<span></span>
 		</div>
 		<!-- 发短信 - 打电话 - 登门拜访 -->
-		<LowestLevel :custBase="custBase"
-			v-if="$store.state.userMsg.roleId == '00000001'||$store.state.userMsg.orgClass != '90000001'" />
+		<LowestLevel :custBase="custBase" v-if="$store.state.userMsg.roleId != '00000005'" />
 	</div>
 </template>
 
@@ -1856,6 +1855,7 @@
 						gdParams: JSON.stringify({
 							custNums: [this.custBase.custNum]
 						}),
+						backLevel: 2
 					}
 				})
 			},

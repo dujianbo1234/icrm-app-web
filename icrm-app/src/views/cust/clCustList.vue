@@ -37,7 +37,7 @@
 					<span>筛选结果：共{{formatNums(total)}}条数据 </span>
 				</div>
 				<div class="sendAll"
-					v-if="$store.state.userMsg.roleId == '00000001'||$store.state.userMsg.orgClass != '90000001'"
+					v-if="$store.state.userMsg.roleId != '00000005'"
 					@click="sendFrom">
 					<span v-if="showBatchSend">取消批量发送</span>
 					<span v-else>批量发送</span>
@@ -75,7 +75,7 @@
 							</div>
 						</div>
 						<div class="playFrom"
-							v-if="$store.state.userMsg.roleId == '00000001'||$store.state.userMsg.orgClass != '90000001'">
+							v-if="$store.state.userMsg.roleId != '00000005'">
 							<van-icon
 								:name="item.ctcTel?require(`@/assets/image/callPhone.png`):require(`@/assets/image/callPhone_gray.png`)"
 								size="0.22rem" style="margin-right: 0.2rem;"

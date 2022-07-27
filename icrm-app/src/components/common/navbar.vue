@@ -42,6 +42,10 @@
 				type: Object,
 				default: {}
 			},
+			backLevel: {
+				type: Number,
+				default: 1
+			},
 		},
 		methods: {
 			back() {
@@ -52,7 +56,8 @@
 					})
 					this.$emit('back')
 				}else{
-					this.$router.go(-1);
+					console.log(this.backLevel)
+					this.$router.go(this.backLevel*(-1));
 					this.$emit('back')
 				}
 			},

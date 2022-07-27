@@ -1,7 +1,8 @@
 <template>
 	<div class="home">
 		<nav-bar :title="baseMsg.active==0?baseMsg.acGroupNm:baseMsg.custGroupNm" @touchRight="onClickRight" type="2"
-			leftIcon :rightText="baseMsg.active==1?'添加客户':''" rightColor="#026DFF" />
+			leftIcon :rightText="baseMsg.active==1?'添加客户':''" rightColor="#026DFF"
+			:backLevel="$route.params.backLevel?Number($route.params.backLevel):1" />
 		<div class="fixedPlace">
 			<div class="baseMsgPlace">
 				<div class="baseMsg1">
@@ -288,7 +289,7 @@
 			mounted_m() {
 				this.baseMsg = this.$route.params.groupItem ? JSON.parse(this.$route.params.groupItem) : JSON.parse(
 					localStorage.getItem("groupDetail"));
-				console.log(this.baseMsg)
+				console.log(this.$route.params)
 				this.$nextTick(() => {
 					var fixedPlace = document.defaultView.getComputedStyle(document.getElementsByClassName(
 						"fixedPlace")[0], null);
@@ -305,7 +306,7 @@
 		activated() {
 			if (localStorage.getItem("groupDetail") == "0") {
 				localStorage.setItem("groupDetail", "1")
-			} else if (localStorage.getItem("groupDetail") == "2"){
+			} else if (localStorage.getItem("groupDetail") == "2") {
 				this.pageIndex = 0;
 				this.custList = [];
 				this.onLoad();

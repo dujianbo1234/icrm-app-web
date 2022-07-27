@@ -1,6 +1,7 @@
 <template>
 	<div class="home">
-		<nav-bar :title="$route.params.gdParams?'选择群组':'我的群组'" type="2" leftIcon :backName="$route.params.gdParams?'':'cust'" />
+		<nav-bar :title="$route.params.gdParams?'选择群组':'我的群组'" type="2" leftIcon
+			:backName="$route.params.gdParams?'':'cust'" />
 		<van-tabs v-if="!$route.params.gdParams" v-model:active="active" color="#026DFF" title-active-color="#026DFF"
 			title-inactive-color="#595959" line-width="0.84rem" line-height="0.02rem" @change="changeTab">
 			<van-tab v-for="(tab,i) in ['动态群组','固定群组']" :key="'tab'+i" :title="tab" />
@@ -45,7 +46,7 @@
 								<span># </span>
 							</template>
 						</div>
-						<div v-if="!$route.params.gdParams" class="groupItem4" @click.stop="openMbox(groupItem)">
+						<div v-if="!$route.params.gdParams&&$store.state.userMsg.roleId != '00000005'" class="groupItem4" @click.stop="openMbox(groupItem)">
 							<van-icon :name="require('../../assets/image/sendMessage.png')" size="0.25rem" />
 						</div>
 					</div>
@@ -152,7 +153,7 @@
 		},
 		watch: {
 			showAdd() {
-				if(this.showAdd){
+				if (this.showAdd) {
 					this.newGroupTitle = "";
 					this.newGroupDesc = "";
 				}
@@ -220,10 +221,10 @@
 					list: [],
 					shrtmsgCnl: "3"
 				}
-				if(this.active==0){
+				if (this.active == 0) {
 					params.type = "activeGroupSendAll";
 					params.sysId = item.sysId;
-				}else{
+				} else {
 					params.type = "fixGroupSendAll";
 					params.groupId = item.groupId;
 				}
@@ -267,7 +268,8 @@
 							this.$router.push({
 								name: 'groupDetail',
 								params: {
-									groupItem: JSON.stringify(this.joinGroup)
+									groupItem: JSON.stringify(this.joinGroup),
+									backLevel: this.$route.params.backLevel||""
 								}
 							})
 						}, 800)
@@ -347,6 +349,7 @@
 				}
 			},
 			mounted_m() {
+				window.addEventListener('popstate', null, false);
 				if (localStorage.getItem("newMyGroup") == "2") {
 					localStorage.setItem("newMyGroup", "1");
 					this.active = 1;
@@ -356,6 +359,10 @@
 				this.pageReady = true;
 				this.onLoad();
 			}
+		},
+		beforeRouteLeave(to, from, next) {
+			window.removeEventListener('popstate', null, false);
+			next();
 		},
 		mounted() {
 			localStorage.setItem("newMyGroup", "0");
@@ -372,9 +379,9 @@
 				this.groupList = [];
 				this.showAdd = false;
 				this.newGroup = {};
-				try{
+				try {
 					this.$refs.sendMessage.cancle();
-				}catch(e){
+				} catch (e) {
 					//TODO handle the exception
 				}
 				this.mounted_m();

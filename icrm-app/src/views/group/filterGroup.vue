@@ -34,7 +34,7 @@
 		</div>
 		<van-popup v-model:show="defaultShow" position="bottom" style="height: 5rem" round :lock-scroll="false"
 			:close-on-click-overlay="true" close-on-popstate>
-			<div style="position: relative;height: 100%;width: 100%;">
+			<div ref="positionBox" style="position: relative;height: 100%;width: 100%;">
 				<div class="popupTitle">{{activeChild1.title}}</div>
 				<div class="childListOutBox">
 					<div class="childListBox">
@@ -44,6 +44,9 @@
 							:class="childListItem.code==activeChild2.code||(!activeChild2.code&&filterArr.find(item=>item.code==childListItem.code))?'childListItem_a':''"
 							@click="checkChild2(childListItem,i)">
 							{{childListItem.title}}
+						</div>
+						<div class="child2Remark" v-show="!child3Show&&!child3Show_c&&activeChild2.remark">
+							{{activeChild2.remark}}
 						</div>
 					</div>
 				</div>
@@ -276,17 +279,19 @@
 					this.activeChild2 = item;
 					this.activeChild3 = {};
 					var box = document.getElementsByClassName("childListItem")[i];
+					var outBox = this.$refs.positionBox;
 					var top = box.getBoundingClientRect().top,
 						left = box.getBoundingClientRect().left,
-						width = box.offsetWidth;
-					this.$refs.child3BoxDirection.style.top = "calc(" + (top + 10) + "px + 0.25rem - 100vh + 5rem)";
+						width = box.offsetWidth,
+						delTop = outBox.getBoundingClientRect().top;
+					this.$refs.child3BoxDirection.style.top = "calc(" + (top + 10 - delTop) + "px + 0.25rem)";
 					this.$refs.child3BoxDirection.style.left = "calc(" + (left + width / 2) + "px - 0.1rem)";
 					if (this.activeChild2.title == "自定义") {
-						this.$refs.child3Box_c.style.top = "calc(" + (top + 10) + "px + 0.35rem - 100vh + 5rem)";
+						this.$refs.child3Box_c.style.top = "calc(" + (top + 10 - delTop) + "px + 0.35rem)";
 						this.child3Show_c = true;
 					}
 					if (this.activeChild2.list.length) {
-						this.$refs.child3Box.style.top = "calc(" + (top + 10) + "px + 0.35rem - 100vh + 5rem)";
+						this.$refs.child3Box.style.top = "calc(" + (top + 10 - delTop) + "px + 0.35rem)";
 						var zdy = this.activeChild2.list.find(item => item.title == "自定义");
 						if (zdy) {
 							var zdyItem = this.filterArr.find(item => item.code == zdy.code);
@@ -608,6 +613,19 @@
 		color: #595959;
 		line-height: 0.19rem;
 		text-align: left;
+	}
+
+	.child2Remark {
+		width: 100%;
+		font-size: 0.11rem;
+		font-family: PingFangSC-Regular, PingFang SC;
+		font-weight: 400;
+		color: #595959;
+		line-height: 0.18rem;
+		text-align: left;
+		padding-top: 0.08rem;
+		margin-top: 0.02rem;
+		border-top: 0.01rem solid #F5F5F5;
 	}
 
 	.childListOutBox {

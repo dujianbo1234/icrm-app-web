@@ -108,11 +108,17 @@
 							<div class="msgCard2_1">
 								<div class="msgCard2_1_1">
 									<div class="msgCard2_1_1_1">{{msgItem.rmdCntnt}}</div>
-									<div class="msgCard2_1_1_2" @click="checkItem=msgItem;showCall=true">
+									<div class="msgCard2_1_1_2" @click="checkItem=msgItem;showCall=true" v-if="$store.state.userMsg.roleId != '00000005'">
 										<van-icon :name="require('../../assets/image/callPhone.png')" size="24" />
 									</div>
-									<div class="msgCard2_1_1_2" @click="openMbox([msgItem],false)">
+									<div class="msgCard2_1_1_2" v-else>
+										<van-icon :name="require('../../assets/image/callPhone_gray.png')" size="24" />
+									</div>
+									<div class="msgCard2_1_1_2" @click="openMbox([msgItem],false)" v-if="$store.state.userMsg.roleId != '00000005'">
 										<van-icon :name="require('../../assets/image/sendMessage.png')" size="24" />
+									</div>
+									<div class="msgCard2_1_1_2" v-else>
+										<van-icon :name="require('../../assets/image/sendMessage_gray.png')" size="24" />
 									</div>
 								</div>
 								<div class="msgCard2_1_2">
