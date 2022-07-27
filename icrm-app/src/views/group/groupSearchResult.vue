@@ -6,13 +6,13 @@
 				<div class="plate1_1">选客策略</div>
 				<div class="plate1_2">
 					<div class="plate1_2_item" v-for="(filterItem,i) in filterArr" :key="'filterItem'+i">
-						<div class="plate1_2_item_text">#{{filterItem.name.split("#")[0]}}#</div>
-						<div class="plate1_2_item_text" v-if="filterItem.value">{{filterItem.value}}</div>
-						<div class="plate1_2_item_text" v-else-if="filterItem.minValue&&filterItem.maxValue">
+						<div class="plate1_2_item_text ycsl">#{{filterItem.name.split("#")[0]}}#</div>
+						<div class="plate1_2_item_text ycsl" v-if="filterItem.value">{{filterItem.value}}</div>
+						<div class="plate1_2_item_text ycsl" v-else-if="filterItem.minValue&&filterItem.maxValue">
 							({{filterItem.minValue}},{{filterItem.maxValue}}]</div>
-						<div class="plate1_2_item_text" v-else-if="filterItem.minValue">≥{{filterItem.minValue}}</div>
-						<div class="plate1_2_item_text" v-else-if="filterItem.maxValue">＜{{filterItem.maxValue}}</div>
-						<div class="plate1_2_item_text" v-else-if="filterItem.values">＜{{filterItem.values}}</div>
+						<div class="plate1_2_item_text ycsl" v-else-if="filterItem.minValue">≥{{filterItem.minValue}}</div>
+						<div class="plate1_2_item_text ycsl" v-else-if="filterItem.maxValue">＜{{filterItem.maxValue}}</div>
+						<div class="plate1_2_item_text ycsl" v-else-if="filterItem.values">{{filterItem.values}}</div>
 					</div>
 				</div>
 			</div>
@@ -446,6 +446,7 @@
 
 	.plate1_2_item {
 		height: 0.4rem;
+		max-width: 60%;
 		background: #F2F8FF;
 		border-radius: 0.2rem;
 		padding: 0.05rem 0.14rem;

@@ -289,7 +289,6 @@
 			mounted_m() {
 				this.baseMsg = this.$route.params.groupItem ? JSON.parse(this.$route.params.groupItem) : JSON.parse(
 					localStorage.getItem("groupDetail"));
-				console.log(this.$route.params)
 				this.$nextTick(() => {
 					var fixedPlace = document.defaultView.getComputedStyle(document.getElementsByClassName(
 						"fixedPlace")[0], null);

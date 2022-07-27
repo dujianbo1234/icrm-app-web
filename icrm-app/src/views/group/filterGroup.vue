@@ -115,9 +115,14 @@
 					</van-search>
 				</div>
 				<van-checkbox-group v-model="MCCChecked">
-					<van-checkbox v-for="(MCCNameItem,i) in MCCShowList" :key="'dfdwItem'+i" :name="MCCNameItem">
-						{{MCCNameItem}}
-					</van-checkbox>
+					<van-list v-model:loading="loading" :finished="finished" finished-text="没有更多了" @load="onLoad"
+						:immediate-check="false">
+						<van-checkbox
+							v-for="(MCCNameItem,i) in (showLength>=MCCShowList.length?MCCShowList:MCCShowList.slice(0,showLength))"
+							:key="'dfdwItem'+i" :name="MCCNameItem" style="text-align: left;">
+							{{MCCNameItem}}
+						</van-checkbox>
+					</van-list>
 				</van-checkbox-group>
 			</div>
 			<div class="btnBox">
@@ -147,8 +152,14 @@
 					</van-search>
 				</div>
 				<van-checkbox-group v-model="dfdwChecked">
-					<van-checkbox v-for="(dfdwItem,i) in dfdwShowList" :key="'dfdwItem'+i" :name="dfdwItem">{{dfdwItem}}
-					</van-checkbox>
+					<van-list v-model:loading="loading" :finished="finished" finished-text="没有更多了" @load="onLoad"
+						:immediate-check="false">
+						<van-checkbox
+							v-for="(dfdwItem,i) in (showLength>=dfdwShowList.length?dfdwShowList:dfdwShowList.slice(0,showLength))"
+							:key="'dfdwItem'+i" :name="dfdwItem" style="text-align: left;">
+							{{dfdwItem}}
+						</van-checkbox>
+					</van-list>
 				</van-checkbox-group>
 			</div>
 			<div class="btnBox">
@@ -186,13 +197,17 @@
 				child3Show_c: false,
 				dfdwShow: false,
 				dfdwChecked: [],
-				dfdwList: ["代发单位0", "代发单位1", "代发单位2", "代发单位3", "代发单位4", "代发单位5", "代发单位6", "代发单位7", "代发单位8"],
-				dfdwShowList: ["代发单位0", "代发单位1", "代发单位2", "代发单位3", "代发单位4", "代发单位5", "代发单位6", "代发单位7", "代发单位8"],
+				dfdwList: [],
+				dfdwShowList: [],
 				MCCShow: false,
 				MCCChecked: [],
-				MCCList: ["代发单位0", "代发单位1", "代发单位2", "代发单位3", "代发单位4", "代发单位5", "代发单位6", "代发单位7", "代发单位8"],
-				MCCShowList: ["代发单位0", "代发单位1", "代发单位2", "代发单位3", "代发单位4", "代发单位5", "代发单位6", "代发单位7", "代发单位8"],
+				MCCList: [],
+				MCCShowList: [],
 				searchValue: "",
+				pageReady: 0,
+				loading: false,
+				finished: false,
+				showLength: 0,
 			}
 		},
 		watch: {
@@ -209,16 +224,46 @@
 				if (!this.dfdwShow) {
 					this.activeChild1 = {};
 					this.searchValue = "";
+				} else {
+					this.loading = false;
+					this.finished = false;
+					this.showLength = 0;
+					setTimeout(()=>{
+						this.onLoad();
+					},800)
 				}
 			},
 			MCCShow() {
 				if (!this.MCCShow) {
 					this.activeChild1 = {};
 					this.searchValue = "";
+				} else {
+					this.loading = false;
+					this.finished = false;
+					this.showLength = 0;
+					setTimeout(()=>{
+						this.onLoad();
+					},800)
 				}
 			},
 		},
 		methods: {
+			onLoad() {
+				if (this.pageReady < 2) return;
+				this.loading = true;
+				this.finished = false;
+				this.showLength += 10;
+				this.loading = false;
+				if (this.dfdwShow) {
+					if (this.showLength >= this.dfdwShowList.length) {
+						this.finished = true;
+					}
+				} else if (this.MCCShow) {
+					if (this.showLength >= this.MCCShow.length) {
+						this.finished = true;
+					}
+				}
+			},
 			onSearch() {
 				this.dfdwShowList = [];
 				this.MCCShowList = [];
@@ -334,6 +379,18 @@
 				this.dfdwShow = false;
 				this.afterConfirm();
 			},
+			MCCConfirm() {
+				this.activeChild1.values = this.MCCChecked.join(",");
+				var addChild = JSON.parse(JSON.stringify(this.activeChild1));
+				var itemIndex = this.filterArr.findIndex(item => item.code == this.activeChild1.code);
+				if (itemIndex < 0) {
+					this.filterArr.push(addChild);
+				} else {
+					this.filterArr.splice(itemIndex, 1, addChild);
+				}
+				this.MCCShow = false;
+				this.afterConfirm();
+			},
 			afterConfirm() {
 				Toast.loading({
 					message: "正在查询",
@@ -350,8 +407,8 @@
 			toSearchRes() {
 				if (this.filterArr.length <= 0) {
 					Toast("请至少选择1项")
-				} else if (this.custNumber <= 0) {
-					Toast("当前筛选条件下无用户")
+				// } else if (this.custNumber <= 0) {
+				// 	Toast("当前筛选条件下无用户")
 				} else {
 					localStorage.setItem("newFilterGroup", "0");
 					this.$router.push({
@@ -363,7 +420,14 @@
 				}
 			},
 			mounted_m() {
-				
+				var timer = setInterval(() => {
+					if (this.pageReady >= 2) {
+						clearInterval(timer);
+						timer = "";
+						Toast.clear();
+						this.onLoad();
+					}
+				}, 100)
 			}
 		},
 		mounted() {
@@ -373,7 +437,29 @@
 				pageSize: "9999",
 				searchType: "1"
 			}, (res) => {
-				console.log(res)
+				if (res.data && res.data.records && res.data.records.length) {
+					res.data.records.forEach(item => this.dfdwList.push(item.agentCompany))
+					this.dfdwShowList = this.dfdwList;
+					this.pageReady++;
+				}
+			})
+			queryCustAgentCompanyList({
+				pageNum: "1",
+				pageSize: "9999",
+				searchType: "2"
+			}, (res) => {
+				if (res.data && res.data.records && res.data.records.length) {
+					var result = []
+					res.data.records.forEach(item => result.push(item.mccCodeNm));
+					result = result.join(",").split(",");
+					result.forEach((item) => {
+						if (this.MCCList.findIndex(MCCItem => MCCItem == item) < 0) {
+							this.MCCList.push(item)
+						}
+					})
+					this.MCCShowList = this.MCCList;
+					this.pageReady++;
+				}
 			})
 			this.mounted_m();
 		},

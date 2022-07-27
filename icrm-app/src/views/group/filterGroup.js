@@ -3554,14 +3554,14 @@ export const filterList = [{
 	}, {
 		code: "03020000",
 		title: "行业MCC码",
-		value: "行业MCC码",
+		value: "",
 		values: "",
 		colField: "MCC_CODE",
-		name: "",
+		name: "行业MCC码",
 		minValue: "",
 		maxValue: "",
 		remark: "商户MCC码",
-		disabled: true,
+		disabled: false,
 		list: []
 	}, {
 		code: "03030000",
@@ -4094,14 +4094,14 @@ export const filterList = [{
 	list: [{
 		code: "04010000",
 		title: "代发单位",
-		value: "代发单位",
+		value: "",
 		values: "",
 		colField: "TRAN_MANE",
-		name: "",
+		name: "代发单位",
 		minValue: "",
 		maxValue: "",
 		remark: "取核心代发单位字段",
-		disabled: true,
+		disabled: false,
 		list: []
 	}, {
 		code: "04020000",

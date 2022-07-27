@@ -56,7 +56,6 @@
 					})
 					this.$emit('back')
 				}else{
-					console.log(this.backLevel)
 					this.$router.go(this.backLevel*(-1));
 					this.$emit('back')
 				}

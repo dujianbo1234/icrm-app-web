@@ -649,9 +649,8 @@
 					if (res.status == "000000") {
 						Toast.clear();
 						var result = JSON.parse(res.result)
-						console.log(this.$store.state.configInfo.jsRetailUrl);
-						console.log(this.$store.state.configInfo.jsRetailUrl + "ticket=" + result.token +
-									"&router=" + params.router)
+						// console.log(this.$store.state.configInfo.jsRetailUrl + "ticket=" + result.token +
+						// 			"&router=" + params.router)
 						this.$router.push({
 							name: 'jiushuWebview',
 							params: {

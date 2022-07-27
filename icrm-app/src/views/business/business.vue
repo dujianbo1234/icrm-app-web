@@ -228,7 +228,6 @@
 			openDetail(item) {
 				this.msgListItem=item
 				localStorage.setItem("cmrcOpptId", item.cmrcOpptId);
-				console.log('sysIdItem', item)
 				this.$router.push({
 					name: 'chooseCust',
 					params: {
@@ -260,7 +259,6 @@
 				}, (res) => {
 					if (res.data && res.data.records) {
 						this.msgList = this.msgList.concat(res.data.records);
-						console.log(this.msgList)
 						if (this.msgList.length >= res.data.total) this.finished = true;
 					} else {
 						this.finished = true;
