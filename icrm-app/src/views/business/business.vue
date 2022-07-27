@@ -21,11 +21,11 @@
 				<div class="plate1_2">
 					<div class="plate1_2_child">
 						<span class="plate1_2_childName">总数：</span>
-						<span class="plate1_2_childValue">{{sumMsg.allSum||"-"}}</span>
+						<span class="plate1_2_childValue">{{sumMsg.allSum||0}}</span>
 					</div>
 					<div class="plate1_2_child">
 						<span class="plate1_2_childName">已跟进：</span>
-						<span class="plate1_2_childValue">{{sumMsg.thenFollowNum||"-"}}</span>
+						<span class="plate1_2_childValue">{{sumMsg.thenFollowNum||0}}</span>
 					</div>
 					<div class="plate1_2_child">
 						<span class="plate1_2_childName">成交率：</span>

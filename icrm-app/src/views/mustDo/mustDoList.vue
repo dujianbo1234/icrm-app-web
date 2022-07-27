@@ -622,9 +622,12 @@
 				}, (res) => {
 					Toast.success(res.msg);
 					this.custAddInfo.mastDoSt = '01'
+				this.callItem.isCall = false;
+
 					this.showVisit3 = false;
 					this.pageIndex = 0;
 					this.loading = true;
+					console.log(this.custAddInfo, '02')
 
 					// this.mustDoList = [];
 					// this.onLoad();
@@ -911,7 +914,7 @@
 			.van-tab--active {
 				margin: 0 0.1rem;
 				border-radius: 0.2rem;
-				min-width: 0.75rem;
+				min-width: 0.5rem;
 				padding: 0 0.1rem;
 			}
 
