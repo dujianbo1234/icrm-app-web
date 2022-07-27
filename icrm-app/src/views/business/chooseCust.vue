@@ -420,9 +420,9 @@
 						score: this.score_c
 					}
 				}
-				console.log('params', params)
+				// console.log('params', params)
 				saveOpportPractialInfo(params, (res) => {
-					console.log('saveOpportPractialInfo', res)
+					// console.log('saveOpportPractialInfo', res)
 					if (res.data == "操作成功") {
 						this.showScore = false
 						Toast("发布成功~感谢您的评价");
@@ -475,7 +475,7 @@
 			},
 			openDetail(item) {
 				localStorage.setItem("autoPlaceScrollTop", String(this.$refs.autoPlace.scrollTop))
-				console.log(item)
+				// console.log(item)
 				this.$router.push({
 					name: 'busiDetail',
 					params: {
@@ -645,7 +645,7 @@
 					} else {
 						this.changeScore = true
 					}
-					console.log('queryOpportPractialInfo', res.data)
+					// console.log('queryOpportPractialInfo', res.data)
 				})
 			},
 			// 查询商机进度条
@@ -672,7 +672,7 @@
 			if (this.$route.params.cmrcOpptId) {
 				this.belongOrg = this.$route.params.belongOrg
 				this.belgCustMgr = this.$route.params.belgCustMgr
-				console.log('this.belongOrg,this.belgCustMgr',this.chooseCust,this.belgCustMgr)
+				// console.log('this.belongOrg,this.belgCustMgr',this.chooseCust,this.belgCustMgr)
 				this.baseMsg = {};
 				this.openDesc = false;
 				this.openSearch = false;

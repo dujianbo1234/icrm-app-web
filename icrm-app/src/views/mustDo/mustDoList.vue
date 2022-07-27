@@ -355,7 +355,7 @@
 					return;
 				}
 				// item.isCall=true
-				console.log('mustDoList', this.mustDoList)
+				// console.log('mustDoList', this.mustDoList)
 				this.showCall = true;
 				this.callItem = item;
 
@@ -525,7 +525,7 @@
 				});
 			},
 			openTel(el) {
-				console.log(el)
+				// console.log(el)
 				this.custAddInfo = el
 				this.id = el.id
 				this.followDesc = "";
@@ -552,7 +552,7 @@
 					id: this.id,
 				}, (res) => {
 					this.followItem = res.data
-					console.log('this.followItem', this.followItem)
+					// console.log('this.followItem', this.followItem)
 					this.followItem.showAllPhoto = false;
 					Toast.clear();
 				})
@@ -577,7 +577,7 @@
 					forbidClick: true,
 					duration: 0
 				});
-				console.log(this.custAddInfo)
+				// console.log(this.custAddInfo)
 				if (this.custAddInfo.custNum) {
 					this.addCustInfo(this.custAddInfo, '01')
 				}
@@ -627,7 +627,7 @@
 					this.showVisit3 = false;
 					this.pageIndex = 0;
 					this.loading = true;
-					console.log(this.custAddInfo, '02')
+					// console.log(this.custAddInfo, '02')
 
 					// this.mustDoList = [];
 					// this.onLoad();
@@ -731,7 +731,7 @@
 						this.allNum = res.data.total.toLocaleString();
 						this.mustDoList = this.mustDoList.concat(res.data.records);
 						if (this.mustDoList.length >= this.allNum) this.finished = true;
-						console.log('this.mustDoList', this.mustDoList)
+						// console.log('this.mustDoList', this.mustDoList)
 					} else {
 						Toast.fail("必办列表为空");
 						this.finished = true;
@@ -779,7 +779,7 @@
 						codeValue: ""
 					})
 					this.statusList[1] = this.statusList.splice(2, 1, this.statusList[1])[0]
-					console.log('this.statusList', this.statusList)
+					// console.log('this.statusList', this.statusList)
 				} else {
 					Toast.fail("必办名称数据为空")
 				}
