@@ -19,27 +19,28 @@
 					<div class="rightPane">
 						<div class="rowStyle">
 							<div>5.0</div>
-							<van-progress track-color="#F4F5F9" color="#FFBA00" :percentage="progressList.five"
+							<van-progress track-color="#F4F5F9" color="#FFBA00" :percentage="(progressList.five=='0'||!progressList.five)?0:((Number(progressList.five))/scorePeople)*100"
 								stroke-width="5" />
+							
 						</div>
 						<div class="rowStyle">
 							<div>4.0</div>
-							<van-progress track-color="#F4F5F9" color="#FFBA00" :percentage="progressList.four"
+							<van-progress track-color="#F4F5F9" color="#FFBA00" :percentage="(progressList.four=='0'||!progressList.four)?0:((Number(progressList.four))/scorePeople)*100"
 								stroke-width="5" />
 						</div>
 						<div class="rowStyle">
 							<div>3.0</div>
-							<van-progress track-color="#F4F5F9" color="#FFBA00" :percentage="progressList.three"
+							<van-progress track-color="#F4F5F9" color="#FFBA00" :percentage="(progressList.three=='0'||!progressList.three)?0:((Number(progressList.three))/scorePeople)*100"
 								stroke-width="5" />
 						</div>
 						<div class="rowStyle">
 							<div>2.0</div>
-							<van-progress track-color="#F4F5F9" color="#FFBA00" :percentage="progressList.two"
+							<van-progress track-color="#F4F5F9" color="#FFBA00" :percentage="(progressList.two=='0'||!progressList.two)?0:((Number(progressList.two))/scorePeople)*100"
 								stroke-width="5" />
 						</div>
 						<div class="rowStyle">
 							<div>1.0</div>
-							<van-progress track-color="#F4F5F9" color="#FFBA00" :percentage="progressList.one"
+							<van-progress track-color="#F4F5F9" color="#FFBA00" :percentage="(progressList.one=='0'||!progressList.one)?0:((Number(progressList.one))/scorePeople)*100"
 								stroke-width="5" />
 						</div>
 						<div class="wantScore" v-if="changeScore" @click="showScore=true">
@@ -56,29 +57,32 @@
 						</div>
 					</div>
 				</div>
-				<div class="plate1_2">
+				<!-- <div class="plate1_2" :class="openDesc?'':'plate1_4_close'"> -->
+				
+				<div class="plate1_2" :class="openDesc?'':'plate1_4_close'">
 					<!-- <div class="plate1_2_1">
 						<van-rate v-model="baseMsg.practialScore" :size="16" color="#FFBA00" void-icon="star" readonly
 							void-color="#E0E0E0" allow-half gutter="2" />
 						<div class="plate1_2_1_value">{{baseMsg.practialScore}}</div>
 					</div> -->
 					<div class="plate1_2_2">到期日期：{{baseMsg.cmrcOpptExpDay}}</div>
+					<div class="plate1_3">{{baseMsg.keyWords}}</div>
+					<div class="plate1_4" >商机描述：{{baseMsg.cmrcOpptDsc}}</div>
 				</div>
-				<div class="plate1_3">{{baseMsg.keyWords}}</div>
-				<div class="plate1_4" :class="openDesc?'':'plate1_4_close'">商机描述：{{baseMsg.cmrcOpptDsc}}</div>
+				
 			</div>
 			<div class="plate2" @click="openDesc=!openDesc;resetTop();">
 				<van-icon v-if="openDesc" name="arrow-up" size="20" color="#8C8C8C" />
 				<van-icon v-else name="arrow-down" size="20" color="#8C8C8C" />
 			</div>
 			<!-- <div class="plate3" v-if="openSearch"> -->
-			<div class="plate3">
+			<!-- <div class="plate3">
 				<van-search v-model="searchValue" shape="round" show-action placeholder="请输入关键词进行搜索" @search="onSearch"
 					@blur="onSearch" :left-icon="require('../../assets/image/common_search.png')">
 					<template #action>
 					</template>
 				</van-search>
-			</div>
+			</div> -->
 			<!-- <div class="plate4" v-if="!openSearch">
 				
 				<div class="plate4_2" v-if="!openSearch" @click="openSearch=true;resetTop();">
@@ -804,11 +808,12 @@
 
 	.plate1_2 {
 		width: 100%;
-		height: 0.21rem;
-		display: flex;
+		text-align: left;
+		/* height: 0.21rem; */
+		/* display: flex;
 		flex-wrap: nowrap;
 		align-items: center;
-		justify-content: space-between;
+		justify-content: space-between; */
 		margin-top: 0.08rem;
 		margin-bottom: 0.06rem;
 
@@ -833,6 +838,7 @@
 
 	.plate1_2_2 {
 		height: 0.18rem;
+		margin: 0.08rem 0;
 		font-family: PingFangSC-Regular;
 		font-size: 0.12rem;
 		color: #8C8C8C;
@@ -866,10 +872,12 @@
 	}
 
 	.plate1_4_close {
-		overflow: hidden;
-		text-overflow: ellipsis;
-		display: -webkit-box;
-		-webkit-line-clamp: 2;
+		/* overflow: hidden; */
+		height: 0;
+		visibility: hidden;
+		/* text-overflow: ellipsis; */
+		/* display: -webkit-box; */
+		/* -webkit-line-clamp: 2; */
 		-webkit-box-orient: vertical;
 	}
 
