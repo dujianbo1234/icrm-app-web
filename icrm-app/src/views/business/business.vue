@@ -158,7 +158,8 @@
 				visitNum: "",
 				useNum: "",
 				pageReady: false,
-				contentHeight: ''
+				contentHeight: '',
+				msgListItem:{}
 			}
 		},
 		components: {
@@ -225,6 +226,7 @@
 				this.onLoad();
 			},
 			openDetail(item) {
+				this.msgListItem=item
 				localStorage.setItem("cmrcOpptId", item.cmrcOpptId);
 				console.log('sysIdItem', item)
 				this.$router.push({
@@ -324,6 +326,9 @@
 		},
 		activated() {
 			if (localStorage.getItem("newBusiness") == "0") {
+				if(this.$route.params.scoreNum){
+					this.msgListItem.practialScore=this.$route.params.scoreNum
+				}
 				localStorage.setItem("newBusiness", "1")
 				this.queryCmrcOpportunity()
 			} else {

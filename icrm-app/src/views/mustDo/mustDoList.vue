@@ -52,7 +52,7 @@
 			</van-tabs>
 		</div>
 		<div class="dateRow">
-			<div style="font-size:0.13rem;width: 0.6rem;text-align: left;">到期日</div>
+			<div class="plate4_title">到期日</div>
 			<div class="plate4_childBox">
 				<div class="plate4_child" :class="beginDate?'plate4_child_a':''" style="min-width: 1.05rem;"
 					@click="dateShow1 = true">
@@ -814,6 +814,7 @@
 		align-items: center;
 		justify-content: flex-start;
 		overflow-x: auto;
+		margin-left: 0.16rem;
 	}
 
 	.plate4_child {
@@ -928,9 +929,10 @@
 	}
 
 	.dateRow {
+		width: 93.6%;
 		display: flex;
 		align-items: center;
-		margin: 0.16rem 0.32rem;
+		margin: 0.05rem 0.14rem;
 	}
 
 

@@ -1,6 +1,6 @@
 <template>
 	<div class="home">
-		<nav-bar title="选择客户" type="2" leftIcon />
+		<nav-bar title="选择客户" type="2" leftIcon backName="business" :backParams="{scoreNum}"/>
 		<div class="fixedPlace">
 			<div class="plate1">
 				<div class="plate1_1">{{baseMsg.cmrcOpptSubclassNm}}</div>
@@ -397,6 +397,9 @@
 			}
 		},
 		methods: {
+			onClickLeft(){
+				// this.
+			},
 			editScore() {
 				this.showScore = true
 				this.isEditScore = true
@@ -451,44 +454,7 @@
 				this.openSearch = false;
 				this.resetTop();
 			},
-			// activeOrg(orgValue) {
-			// 	if (orgValue.value) {
-			// 		this.chooseOrg = orgValue
-			// 	} else {
-			// 		this.chooseOrg = {
-			// 			text: "选择机构",
-			// 			value: ""
-			// 		}
-			// 	};
-			// 	this.chooseCust = {
-			// 		empName: "客户经理",
-			// 		empId: ""
-			// 	};
-			// 	this.openOrgList = false;
-			// 	this.pageIndex = 0;
-			// 	this.loading = true;
-			// 	this.custList = [];
-			// 	this.checked = [];
-			// 	this.openFP = false;
-			// 	this.onLoad();
-			// },
-			// activeCust(custValue) {
-			// 	if (custValue.empId) {
-			// 		this.chooseCust = custValue
-			// 	} else {
-			// 		this.chooseCust = {
-			// 			empName: "客户经理",
-			// 			empId: ""
-			// 		}
-			// 	};
-			// 	this.openCustList = false;
-			// 	this.pageIndex = 0;
-			// 	this.loading = true;
-			// 	this.custList = [];
-			// 	this.checked = [];
-			// 	this.openFP = false;
-			// 	this.onLoad();
-			// },
+			
 			changeLevel(i) {
 				this.levelIndex = i;
 				this.pageIndex = 0;
