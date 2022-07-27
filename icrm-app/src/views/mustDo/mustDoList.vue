@@ -19,14 +19,33 @@
 				<van-tab  v-for="item in mustDoKind" :key="item.codeValue" :title="item.codeName"/>
 		</van-tabs>
 		</div>
-		
+		<!-- <div class="plate4">
+			<div class="plate4_title">必办名称</div>
+			<div class="plate4_childBox">
+				<div class="plate4_child" v-for="(tab3Item,i) in codeList3" :key="'tab3'+i"
+					:class="tab3Item.choose?'plate4_child_a':''" @click="changeTab3(i)">
+					{{tab3Item.text}}
+				</div>
+			</div>
+		</div>
+		<div class="plate4">
+			<div class="plate4_title">必办状态</div>
+			<div class="plate4_childBox">
+				<div class="plate4_child" v-for="(tab3Item,i) in codeList3" :key="'tab3'+i"
+					:class="tab3Item.choose?'plate4_child_a':''" @click="changeTab3(i)">
+					{{tab3Item.text}}
+				</div>
+			</div>
+		</div> -->
 		<div class="list">
+			<div class="plate4_title">必办名称</div>
             <van-tabs class="month" v-model:active="tageListActive" type="card" @click-tab="tageListChange">
 				<van-tab v-for="item in mustDoNameList" :key="item.codeValue" :title="item.codeName">
 				</van-tab>
             </van-tabs>
         </div>
 		<div class="list">
+			<div class="plate4_title">必办状态</div>
             <van-tabs class="month" v-model:active="statusActive" type="card" @click-tab="statusListChange">
 				<van-tab v-for="item in statusList" :key="item.codeValue" :title="item.codeName">
 				</van-tab>
@@ -832,12 +851,14 @@
 		// padding-top: 0.16rem;
 	}
 	.list {
-      width: 93.6%;
+		display: flex;
+		align-items: center;
+		// overflow-x: auto;
+
+      width: 100%;
 	  margin: 0 auto;
-	  padding: 0.16rem 0;
+	  padding: 0.04rem 0;
 		border-bottom: solid 1px #EFEFEF;
-	  
-    //   padding: 0.01rem 0 0.15rem;
       background: #fff;
       &:deep(.month) {
         .van-tabs__nav--card {
@@ -846,8 +867,9 @@
         .van-tab--card,
         .van-tab--active {
           margin: 0 0.1rem;
-          border-radius: 0.15rem;
+          border-radius: 0.14rem;
         }
+		
         .van-tab--card {
           background: rgba(245, 245, 245, 1);
           border-right: none;
@@ -1242,5 +1264,13 @@
 		line-height: 0.22rem;
 		font-weight: 400;
 		margin-bottom: 0.24rem;
+	}
+	.plate4_title {
+		font-size: 0.14rem;
+		font-family: PingFangSC-Regular, PingFang SC;
+		font-weight: 400;
+		color: #262626;
+		flex-shrink: 0;
+		margin-right: 0.1rem;
 	}
 </style>
