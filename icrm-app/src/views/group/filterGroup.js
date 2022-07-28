@@ -6336,9 +6336,9 @@ export const filterList = [{
 			list: [{
 				code: "06030201",
 				title: "全部",
-				value: "全部",
+				value: "是",
 				values: "",
-				colField: "HN_JJ_CARD_SIGN",
+				colField: "CARD_SIGN",
 				name: "信用卡客户是否绑定我行借记卡还款#全部",
 				minValue: "",
 				maxValue: "",
