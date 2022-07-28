@@ -735,7 +735,11 @@
 
 		},
 		beforeRouteEnter(to, from, next) {
-			this.backName = from.name;
+			try{
+				this.backName = from.name;
+			}catch(e){
+				
+			}
 			next();
 		},
 	}

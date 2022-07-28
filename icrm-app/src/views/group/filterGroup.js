@@ -3300,11 +3300,11 @@ export const filterList = [{
 		disabled: false,
 		list: [{
 			code: "02110100",
-			title: "≤30天",
-			value: "≤30天",
+			title: "<=30天",
+			value: "<=30天",
 			values: "",
 			colField: "TH_CRDT_EXP_DAYS_RNG",
-			name: "他行授信到期日#≤30天",
+			name: "他行授信到期日#<=30天",
 			minValue: "",
 			maxValue: "",
 			remark: "",
@@ -3336,11 +3336,11 @@ export const filterList = [{
 			list: []
 		}, {
 			code: "02110400",
-			title: "＞90天",
-			value: "＞90天",
+			title: ">90天",
+			value: ">90天",
 			values: "",
 			colField: "TH_CRDT_EXP_DAYS_RNG",
-			name: "他行授信到期日#＞90天",
+			name: "他行授信到期日#>90天",
 			minValue: "",
 			maxValue: "",
 			remark: "",
@@ -3372,18 +3372,30 @@ export const filterList = [{
 		disabled: false,
 		list: [{
 			code: "02120100",
-			title: "白户或-1",
-			value: "白户或-1",
+			title: "白户",
+			value: "白户",
 			values: "",
 			colField: "RH_CRED_SCRO_RNG",
-			name: "人行征信分#白户或-1",
+			name: "人行征信分#白户",
 			minValue: "",
 			maxValue: "",
-			remark: "客户征信无贷款记录或征信分显示为-1",
+			remark: "客户征信无贷款记录",
 			disabled: false,
 			list: []
 		}, {
 			code: "02120200",
+			title: "-1",
+			value: "-1",
+			values: "",
+			colField: "RH_CRED_SCRO_RNG",
+			name: "人行征信分#-1",
+			minValue: "",
+			maxValue: "",
+			remark: "征信分显示为-1",
+			disabled: false,
+			list: []
+		}, {
+			code: "02120300",
 			title: "[0,750)",
 			value: "[0,750)",
 			values: "",
@@ -3395,7 +3407,7 @@ export const filterList = [{
 			disabled: false,
 			list: []
 		}, {
-			code: "02120300",
+			code: "02120400",
 			title: "[750,790)",
 			value: "[750,790)",
 			values: "",
@@ -3407,7 +3419,7 @@ export const filterList = [{
 			disabled: false,
 			list: []
 		}, {
-			code: "02120400",
+			code: "02120500",
 			title: "[790,840)",
 			value: "[790,840)",
 			values: "",
@@ -3419,7 +3431,7 @@ export const filterList = [{
 			disabled: false,
 			list: []
 		}, {
-			code: "02120500",
+			code: "02120600",
 			title: "[840,880)",
 			value: "[840,880)",
 			values: "",
@@ -3431,7 +3443,7 @@ export const filterList = [{
 			disabled: false,
 			list: []
 		}, {
-			code: "02120600",
+			code: "02120700",
 			title: "≥880",
 			value: "≥880",
 			values: "",
@@ -3443,7 +3455,7 @@ export const filterList = [{
 			disabled: false,
 			list: []
 		}, {
-			code: "02120700",
+			code: "02120800",
 			title: "自定义",
 			value: "",
 			values: "",
@@ -3455,7 +3467,7 @@ export const filterList = [{
 			disabled: false,
 			list: []
 		}, {
-			code: "02120800",
+			code: "02120900",
 			title: "无数据",
 			value: "无数据",
 			values: "",
