@@ -595,17 +595,17 @@
 				saveSmAppVisitInfo({
 					busiType: "5",
 					mktId: this.baseMsg.cmrcOpptId
-				}, (res) => {
-
+				}, (response) => {
+					querySmAppVisitSum({
+						busiType: "5",
+						mktId: this.baseMsg.cmrcOpptId
+					}, (res) => {
+						if (res.data) {
+							this.visitNum = res.data.visitNum;
+						}
+					});
 				});
-				querySmAppVisitSum({
-					busiType: "5",
-					mktId: this.baseMsg.cmrcOpptId
-				}, (res) => {
-					if (res.data) {
-						this.visitNum = res.data.visitNum;
-					}
-				});
+				
 				getSysCodeByType({
 					codeType: "SVC_LVL_SHOW"
 				}, (res) => {
