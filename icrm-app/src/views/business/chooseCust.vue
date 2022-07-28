@@ -1,6 +1,6 @@
 <template>
 	<div class="home">
-		<nav-bar title="选择客户" type="2" leftIcon backName="business" :backParams="{scoreNum}"/>
+		<nav-bar title="选择客户" type="2" leftIcon :backName="backName" :backParams="{scoreNum}" />
 		<div class="fixedPlace">
 			<div class="plate1">
 				<div class="plate1_1">{{baseMsg.cmrcOpptSubclassNm}}</div>
@@ -19,28 +19,33 @@
 					<div class="rightPane">
 						<div class="rowStyle">
 							<div>5.0</div>
-							<van-progress track-color="#F4F5F9" color="#FFBA00" :percentage="(progressList.five=='0'||!progressList.five)?0:((Number(progressList.five))/scorePeople)*100"
+							<van-progress track-color="#F4F5F9" color="#FFBA00"
+								:percentage="(progressList.five=='0'||!progressList.five)?0:((Number(progressList.five))/scorePeople)*100"
 								stroke-width="5" />
-							
+
 						</div>
 						<div class="rowStyle">
 							<div>4.0</div>
-							<van-progress track-color="#F4F5F9" color="#FFBA00" :percentage="(progressList.four=='0'||!progressList.four)?0:((Number(progressList.four))/scorePeople)*100"
+							<van-progress track-color="#F4F5F9" color="#FFBA00"
+								:percentage="(progressList.four=='0'||!progressList.four)?0:((Number(progressList.four))/scorePeople)*100"
 								stroke-width="5" />
 						</div>
 						<div class="rowStyle">
 							<div>3.0</div>
-							<van-progress track-color="#F4F5F9" color="#FFBA00" :percentage="(progressList.three=='0'||!progressList.three)?0:((Number(progressList.three))/scorePeople)*100"
+							<van-progress track-color="#F4F5F9" color="#FFBA00"
+								:percentage="(progressList.three=='0'||!progressList.three)?0:((Number(progressList.three))/scorePeople)*100"
 								stroke-width="5" />
 						</div>
 						<div class="rowStyle">
 							<div>2.0</div>
-							<van-progress track-color="#F4F5F9" color="#FFBA00" :percentage="(progressList.two=='0'||!progressList.two)?0:((Number(progressList.two))/scorePeople)*100"
+							<van-progress track-color="#F4F5F9" color="#FFBA00"
+								:percentage="(progressList.two=='0'||!progressList.two)?0:((Number(progressList.two))/scorePeople)*100"
 								stroke-width="5" />
 						</div>
 						<div class="rowStyle">
 							<div>1.0</div>
-							<van-progress track-color="#F4F5F9" color="#FFBA00" :percentage="(progressList.one=='0'||!progressList.one)?0:((Number(progressList.one))/scorePeople)*100"
+							<van-progress track-color="#F4F5F9" color="#FFBA00"
+								:percentage="(progressList.one=='0'||!progressList.one)?0:((Number(progressList.one))/scorePeople)*100"
 								stroke-width="5" />
 						</div>
 						<div class="wantScore" v-if="changeScore" @click="showScore=true">
@@ -58,7 +63,7 @@
 					</div>
 				</div>
 				<!-- <div class="plate1_2" :class="openDesc?'':'plate1_4_close'"> -->
-				
+
 				<div class="plate1_2" :class="openDesc?'':'plate1_4_close'">
 					<!-- <div class="plate1_2_1">
 						<van-rate v-model="baseMsg.practialScore" :size="16" color="#FFBA00" void-icon="star" readonly
@@ -67,9 +72,9 @@
 					</div> -->
 					<div class="plate1_2_2">到期日期：{{baseMsg.cmrcOpptExpDay}}</div>
 					<div class="plate1_3">{{baseMsg.keyWords}}</div>
-					<div class="plate1_4" >商机描述：{{baseMsg.cmrcOpptDsc}}</div>
+					<div class="plate1_4">商机描述：{{baseMsg.cmrcOpptDsc}}</div>
 				</div>
-				
+
 			</div>
 			<div class="plate2" @click="openDesc=!openDesc;resetTop();">
 				<van-icon v-if="openDesc" name="arrow-up" size="20" color="#8C8C8C" />
@@ -337,9 +342,9 @@
 				openDesc: false,
 				openSearch: false,
 				openOrgList: false,
-				
+
 				openCustList: false,
-				
+
 				searchValue: "",
 				levelIndex: 0,
 				statusIndex: 0,
@@ -376,30 +381,27 @@
 				visitNum: '',
 				isEditScore: false,
 				scoreId: '',
-				belgCustMgr:'',
-				belongOrg:''
-				
+				belgCustMgr: '',
+				belongOrg: '',
+				backName: "",
 			}
 		},
 		components: {
 			customerList
 		},
-		watch:{
-			showScore(el){
-				if(el){
-					if(this.myScore){
-						this.score_c=this.myScore
-					}else{
-						this.score_c=0
+		watch: {
+			showScore(el) {
+				if (el) {
+					if (this.myScore) {
+						this.score_c = this.myScore
+					} else {
+						this.score_c = 0
 					}
 				}
 
 			}
 		},
 		methods: {
-			onClickLeft(){
-				// this.
-			},
 			editScore() {
 				this.showScore = true
 				this.isEditScore = true
@@ -454,7 +456,7 @@
 				this.openSearch = false;
 				this.resetTop();
 			},
-			
+
 			changeLevel(i) {
 				this.levelIndex = i;
 				this.pageIndex = 0;
@@ -580,11 +582,11 @@
 					"00000009";
 				this.baseMsg.cmrcOpptId = this.$route.params.cmrcOpptId || localStorage.getItem("cmrcOpptId");
 				this.baseMsg.cmrcOpptSubclass = this.$route.params.cmrcOpptSubclass
-				
+
 				this.onLoad();
 				queryCmrcOpportunitySumInfo({
-					// cmrcOpptId: this.baseMsg.cmrcOpptId
-					cmrcOpptSubclass:this.baseMsg.cmrcOpptSubclass
+					cmrcOpptId: this.baseMsg.cmrcOpptId
+					// cmrcOpptSubclass: this.baseMsg.cmrcOpptSubclass
 
 				}, (res) => {
 					this.baseMsg = res.data;
@@ -592,13 +594,13 @@
 				})
 				saveSmAppVisitInfo({
 					busiType: "5",
-					mktId:this.baseMsg.cmrcOpptId
+					mktId: this.baseMsg.cmrcOpptId
 				}, (res) => {
 
 				});
 				querySmAppVisitSum({
 					busiType: "5",
-					mktId:this.baseMsg.cmrcOpptId
+					mktId: this.baseMsg.cmrcOpptId
 				}, (res) => {
 					if (res.data) {
 						this.visitNum = res.data.visitNum;
@@ -625,13 +627,13 @@
 				}, (res) => {
 					if (res.data) {
 						var arr = res.data.map((item) => {
-								return {
+							return {
 								text: item.codeName,
 								value: item.codeValue
 							}
 						})
-						this.statusList=this.statusList.concat(arr)
-						this.statusList=this.statusList.slice(0,4);
+						this.statusList = this.statusList.concat(arr)
+						this.statusList = this.statusList.slice(0, 4);
 						this.resetTop();
 					} else {
 						Toast.fail("服务等级数据为空")
@@ -643,7 +645,7 @@
 				queryOpportPractialInfo({
 					createPerson: this.$store.state.userMsg.empno,
 					// cmrcOpptId: this.baseMsg.cmrcOpptId,
-					cmrcOpptSubclass:this.baseMsg.cmrcOpptSubclass
+					cmrcOpptSubclass: this.baseMsg.cmrcOpptSubclass
 
 				}, (res) => {
 					this.myScore = res.data.score
@@ -660,7 +662,7 @@
 			queryOpportunityScoringProgress() {
 				queryOpportunityScoringProgress({
 					// cmrcOpptId: this.baseMsg.cmrcOpptId,
-					cmrcOpptSubclass:this.baseMsg.cmrcOpptSubclass
+					cmrcOpptSubclass: this.baseMsg.cmrcOpptSubclass
 
 				}, (res) => {
 					this.progressList = res.data;
@@ -670,9 +672,9 @@
 			queryOpportPractialCount() {
 				queryOpportPractialCount({
 					// cmrcOpptId: this.baseMsg.cmrcOpptId,
-					cmrcOpptSubclass:this.baseMsg.cmrcOpptSubclass
+					cmrcOpptSubclass: this.baseMsg.cmrcOpptSubclass
 				}, (res) => {
-					console.log('this.baseMsg,res,data',this.baseMsg,res.data)
+					console.log('this.baseMsg,res,data', this.baseMsg, res.data)
 					this.scoreNum = res.data.score;
 					this.scorePeople = res.data.countNb
 				})
@@ -689,13 +691,13 @@
 				this.openDesc = false;
 				this.openSearch = false;
 				this.openOrgList = false;
-				
+
 				this.openCustList = false;
-				
+
 				this.searchValue = "";
 				this.levelIndex = 0;
 				this.statusIndex = 0;
-				this.isEditScore=false
+				this.isEditScore = false
 				this.levelList = [{
 					text: "全部",
 					value: ""
@@ -730,8 +732,12 @@
 			}
 		},
 		mounted() {
-			
-		}
+
+		},
+		beforeRouteEnter(to, from, next) {
+			this.backName = from.name;
+			next();
+		},
 	}
 </script>
 

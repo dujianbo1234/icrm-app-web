@@ -19,8 +19,8 @@
 			<div class="plate2">
 				<div class="plate2_item">筛选结果：共{{formatNums(total || 0)}}位客户</div>
 				<div class="plate2_item"></div>
-				<div class="plate2_item">AUM总额：{{aumBal=="正在获取..."?aumBal:formatNumW(aumBal || 0)+"万元"}}</div>
-				<div class="plate2_item">贷款总额：{{loanBal=="正在获取..."?loanBal:formatNumW(loanBal || 0)+"万元"}}</div>
+				<!-- <div class="plate2_item">AUM总额：{{aumBal=="正在获取..."?aumBal:formatNumW(aumBal || 0)+"万元"}}</div> -->
+				<!-- <div class="plate2_item">贷款总额：{{loanBal=="正在获取..."?loanBal:formatNumW(loanBal || 0)+"万元"}}</div> -->
 			</div>
 		</div>
 		<div style="height: 1.98rem;"></div>
@@ -349,12 +349,12 @@
 			mounted_m() {
 				this.filterArr = JSON.parse(this.$route.params.filterArr);
 				this.pageReady = true;
-				queryFilterResultSum({
-					listCustFilter: this.filterArr
-				}, (res) => {
-					this.aumBal = res.data.aumBal || 0;
-					this.loanBal = res.data.loanBal || 0;
-				})
+				// queryFilterResultSum({
+				// 	listCustFilter: this.filterArr
+				// }, (res) => {
+				// 	this.aumBal = res.data.aumBal || 0;
+				// 	this.loanBal = res.data.loanBal || 0;
+				// })
 				this.onLoad()
 			}
 		},

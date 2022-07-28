@@ -660,7 +660,8 @@
 							}
 						});
 					} else {
-						Toast.fail(res.msg)
+						// Toast.fail(res.msg)
+						Toast("无九数权限，请联系对应业务组开通")
 					}
 				});
 			},

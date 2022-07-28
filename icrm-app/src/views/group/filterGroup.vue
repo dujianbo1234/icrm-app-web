@@ -407,8 +407,8 @@
 			toSearchRes() {
 				if (this.filterArr.length <= 0) {
 					Toast("请至少选择1项")
-				// } else if (this.custNumber <= 0) {
-				// 	Toast("当前筛选条件下无用户")
+				} else if (this.custNumber <= 0) {
+					Toast("当前筛选条件下无用户")
 				} else {
 					localStorage.setItem("newFilterGroup", "0");
 					this.$router.push({
