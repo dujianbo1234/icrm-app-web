@@ -113,8 +113,8 @@
 		<div class="sendMsgBtnBox" v-if="showBatchSend">
 			<div></div>
 			<div class="sendBox">
-				<div class="sendMsgBtn" style="margin-right: 0.1rem;" @click="msgBatchSend(false)">批量发送</div>
-				<div class="sendMsgBtn" @click="msgBatchSend(true)">全部发送</div>
+				<div class="sendMsgBtn" style="margin-right: 0.05rem;" @click="msgBatchSend(true)">全部发送</div>
+				<div class="sendMsgBtn" @click="msgBatchSend(false)">发送</div>
 			</div>
 		</div>
 		<!-- 选择机构组件 -->
@@ -694,7 +694,7 @@
 
 							.crdtCrdCstFlg {
 								background-color: rgba(176, 177, 255, 0.08);
-								color: #B0B1FF
+								color: #B0B1FF;
 							}
 						}
 					}
@@ -849,12 +849,14 @@
 	}
 
 	.sendMsgBtn {
+		width: 0.88rem;
+		height: 0.4rem;
+		line-height: 0.4rem;
+		text-align: center;
 		font-size: 0.14rem;
-		padding: 0.1rem 0.15rem;
 		background-color: #026DFF;
 		color: #fff;
-		text-align: center;
-		border-radius: 0.04rem;
+		border-radius: 0.08rem;
 	}
 
 	.plate6 {

@@ -171,7 +171,7 @@
 											<div class="custItem1_2_3_item" v-if="item.ioinHoldLoan=='1'"
 												style="background-color: rgba(55,205,55,0.08);color: #13AD13;">贷</div>
 											<div class="custItem1_2_3_item" v-if="item.crdtCrdCstFlg=='1'"
-												style="background-color: rgba(55,205,55,0.08);color: #13AD13;">信</div>
+												style="background-color: rgba(176,177,255,0.08);color: #B0B1FF;">信</div>
 											<van-icon v-if="item.ioinSgnMobbank=='1'"
 												:name="require('../../assets/image/business_chooseCust_jjyh_a.png')"
 												size="16" style="margin-right: 0.04rem;" />
@@ -605,7 +605,7 @@
 						}
 					});
 				});
-				
+
 				getSysCodeByType({
 					codeType: "SVC_LVL_SHOW"
 				}, (res) => {

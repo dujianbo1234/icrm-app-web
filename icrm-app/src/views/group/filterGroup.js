@@ -3300,11 +3300,11 @@ export const filterList = [{
 		disabled: false,
 		list: [{
 			code: "02110100",
-			title: "<=30天",
+			title: "≤30天",
 			value: "<=30天",
 			values: "",
 			colField: "TH_CRDT_EXP_DAYS_RNG",
-			name: "他行授信到期日#<=30天",
+			name: "他行授信到期日#≤30天",
 			minValue: "",
 			maxValue: "",
 			remark: "",
@@ -3336,11 +3336,11 @@ export const filterList = [{
 			list: []
 		}, {
 			code: "02110400",
-			title: ">90天",
+			title: "＞90天",
 			value: ">90天",
 			values: "",
 			colField: "TH_CRDT_EXP_DAYS_RNG",
-			name: "他行授信到期日#>90天",
+			name: "他行授信到期日#＞90天",
 			minValue: "",
 			maxValue: "",
 			remark: "",
@@ -6409,7 +6409,7 @@ export const filterList = [{
 		}, {
 			code: "06040300",
 			title: "燃气费",
-			value: "燃气费",
+			value: "天然气",
 			values: "",
 			colField: "PTF_SIGN",
 			name: "渠道签约#燃气费",
