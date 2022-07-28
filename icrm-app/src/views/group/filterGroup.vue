@@ -224,6 +224,7 @@
 				if (!this.dfdwShow) {
 					this.activeChild1 = {};
 					this.searchValue = "";
+					this.dfdwShowList = this.dfdwList;
 				} else {
 					this.loading = false;
 					this.finished = false;
@@ -237,6 +238,7 @@
 				if (!this.MCCShow) {
 					this.activeChild1 = {};
 					this.searchValue = "";
+					this.MCCShowList = this.MCCList;
 				} else {
 					this.loading = false;
 					this.finished = false;
