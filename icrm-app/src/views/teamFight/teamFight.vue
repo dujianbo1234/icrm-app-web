@@ -125,13 +125,13 @@
 						Toast.clear();
 						var result = JSON.parse(res.result)
 						// console.log(this.$store.state.configInfo.jsRetailUrl + "ticket=" + result.token +
-						// 			"&router=" + params.router)
+						// 			"&router=" + params.router + "&_t=" + Date.now())
 						this.$router.push({
 							name: 'jiushuWebview',
 							params: {
 								title: params.title,
 								url: this.$store.state.configInfo.jsRetailUrl + "ticket=" + result.token +
-									"&router=" + params.router
+									"&router=" + params.router + "&_t=" + Date.now()
 							}
 						});
 					} else {

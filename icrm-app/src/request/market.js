@@ -28,45 +28,45 @@ export const queryOpportCustServList = (params,fun) => {request("market.queryOpp
 export const saveOpportCustServInfo = (params,fun) => {request("market.saveOpportCustServInfo", params, fun)}
 // 商机跟进上传图片
 export const opportCustServUploadMpaas = (params,fun) => {request("market.opportCustServUpload", params, fun)}
-//商机排行榜
+// 商机排行榜
 export const queryCmrcOpportRankList = (params,fun) => {request("market.queryCmrcOpportRankList", params, fun)}
-//必办列表查询
+// 必办列表查询
 export const queryEmployeeMustDoList = (params,fun) => {request("market.queryEmployeeMustDoList", params, fun)}
-//客户拜访详情
+// 客户拜访详情
 export const queryCustomeServicFollow = (params,fun) => {request("custserv.queryCustomeServicFollow", params, fun)}
-//客户拜访电话跟进信息
+// 客户拜访电话跟进信息
 export const custServiceUpdate = (params,fun) => {request("custserv.custServiceUpdate", params, fun)}
-//必办现场定位
+// 必办现场定位
 export const followEmployeeMustDo = (params,fun) => {request("market.followEmployeeMustDo", params, fun)}
-//必办详情查询
+// 必办详情查询
 export const queryEmployeeMustDoDetail = (params,fun) => {request("market.queryEmployeeMustDoDetail", params, fun)}
-//查询客户维护信息
+// 查询客户维护信息
 export const queryCustMaintainInfo = (params,fun) => {request("market.queryCustMaintainInfo", params, fun)}
-//分配商机信息
+// 分配商机信息
 export const distributeCmrcOpport = (params,fun) => {request("market.distributeCmrcOpport", params, fun)}
-//查询商机客户持有产品
+// 查询商机客户持有产品
 export const queryOpportCustHoldPrd = (params,fun) => {request("market.queryOpportCustHoldPrd", params, fun)}
-//定期存款产品明细查询
+// 定期存款产品明细查询
 export const queryCustTimeDepAcctInfo = (params,fun) => {request("market.queryCustTimeDepAcctInfo", params, fun)}
-//活期存款产品明细查询
+// 活期存款产品明细查询
 export const queryCustCurrDepAcctInfo = (params,fun) => {request("market.queryCustCurrDepAcctInfo", params, fun)}
-//贷款产品明细查询
+// 贷款产品明细查询
 export const queryCustLoanAcctInfo = (params,fun) => {request("market.queryCustLoanAcctInfo", params, fun)}
-//理财产品明细查询
+// 理财产品明细查询
 export const queryCustFinaAcctInfo = (params,fun) => {request("market.queryCustFinaAcctInfo", params, fun)}
-//理财交易明细查询
+// 理财交易明细查询
 export const queryCustFinaTranInfo = (params,fun) => {request("market.queryCustFinaTranInfo", params, fun)}
-//基金产品明细查询
+// 基金产品明细查询
 export const queryCustFundAcctInfo = (params,fun) => {request("market.queryCustFundAcctInfo", params, fun)}
-//保险产品明细查询
+// 保险产品明细查询
 export const queryCustBassAcctInfo = (params,fun) => {request("market.queryCustBassAcctInfo", params, fun)}
-//信托产品明细查询
+// 信托产品明细查询
 export const queryCustTrustAcctInfo = (params,fun) => {request("market.queryCustTrustAcctInfo", params, fun)}
-//保存应用浏览记录
+// 保存应用浏览记录
 export const saveSmAppVisitInfo = (params,fun) => {request("market.saveSmAppVisitInfo", params, fun)}
-//查询应用浏览记录汇总
+// 查询应用浏览记录汇总
 export const querySmAppVisitSum = (params,fun) => {request("market.querySmAppVisitSum", params, fun)}
-//全部短信发送申请审批
+// 全部短信发送申请审批
 export const approveAllMessageSendApply = (params,fun) => {request("market.approveAllMessageSendApply", params, fun)}
 // 商机评分进度条
 export const queryOpportunityScoringProgress = (params,fun) => {request("market.queryOpportunityScoringProgress", params, fun)}

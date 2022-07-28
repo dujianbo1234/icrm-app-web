@@ -46,7 +46,8 @@
 								<span># </span>
 							</template>
 						</div>
-						<div v-if="!$route.params.gdParams&&$store.state.userMsg.roleId != '00000005'" class="groupItem4" @click.stop="openMbox(groupItem)">
+						<div v-if="!$route.params.gdParams&&$store.state.userMsg.roleId != '00000005'"
+							class="groupItem4" @click.stop="openMbox(groupItem)">
 							<van-icon :name="require('../../assets/image/sendMessage.png')" size="0.25rem" />
 						</div>
 					</div>
@@ -128,7 +129,8 @@
 		queryGroupFixList,
 		deleteGroupFixInfo,
 		saveGroupFixInfo,
-		saveGroupFixCust
+		saveGroupFixCust,
+		addGroupFixSelCust
 	} from "../../request/market.js";
 	export default {
 		data() {
@@ -254,29 +256,54 @@
 					duration: 0,
 				});
 				var gdParams = JSON.parse(this.$route.params.gdParams);
-				saveGroupFixCust({
-					sysId: this.joinGroup.groupId,
-					...gdParams
-				}, (res) => {
-					if (res.data == "操作成功") {
-						Toast.success("操作成功");
-						setTimeout(() => {
-							this.joinGroup.active = this.active;
-							localStorage.setItem("groupDetail", JSON.stringify(this.joinGroup));
-							localStorage.setItem("newMyGroup", "0")
-							localStorage.setItem("newGroupSearchResult", "1")
-							this.$router.push({
-								name: 'groupDetail',
-								params: {
-									groupItem: JSON.stringify(this.joinGroup),
-									backLevel: this.$route.params.backLevel||""
-								}
-							})
-						}, 800)
-					} else {
-						Toast.fail(res.msg)
-					}
-				})
+				if (this.$route.params.backLevel == 2) {
+					addGroupFixSelCust({
+						groupId: this.joinGroup.groupId,
+						...gdParams
+					}, (res) => {
+						if (res.data == "操作成功") {
+							Toast.success("操作成功");
+							setTimeout(() => {
+								this.joinGroup.active = this.active;
+								localStorage.setItem("groupDetail", JSON.stringify(this.joinGroup));
+								localStorage.setItem("newMyGroup", "0")
+								localStorage.setItem("newGroupSearchResult", "1")
+								this.$router.push({
+									name: 'groupDetail',
+									params: {
+										groupItem: JSON.stringify(this.joinGroup),
+										backLevel: 2
+									}
+								})
+							}, 800)
+						} else {
+							Toast.fail(res.msg)
+						}
+					})
+				} else {
+					saveGroupFixCust({
+						sysId: this.joinGroup.groupId,
+						...gdParams
+					}, (res) => {
+						if (res.data == "操作成功") {
+							Toast.success("操作成功");
+							setTimeout(() => {
+								this.joinGroup.active = this.active;
+								localStorage.setItem("groupDetail", JSON.stringify(this.joinGroup));
+								localStorage.setItem("newMyGroup", "0")
+								localStorage.setItem("newGroupSearchResult", "1")
+								this.$router.push({
+									name: 'groupDetail',
+									params: {
+										groupItem: JSON.stringify(this.joinGroup)
+									}
+								})
+							}, 800)
+						} else {
+							Toast.fail(res.msg)
+						}
+					})
+				}
 			},
 			beforeDelGroupItem(item) {
 				this.delGroup = item;
