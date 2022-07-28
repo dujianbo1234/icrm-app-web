@@ -579,9 +579,13 @@
 					"00000003" || this.$store.state.userMsg.roleId == "00000008" || this.$store.state.userMsg.roleId ==
 					"00000009";
 				this.baseMsg.cmrcOpptId = this.$route.params.cmrcOpptId || localStorage.getItem("cmrcOpptId");
+				this.baseMsg.cmrcOpptSubclass = this.$route.params.cmrcOpptSubclass
+				
 				this.onLoad();
 				queryCmrcOpportunitySumInfo({
-					cmrcOpptId: this.baseMsg.cmrcOpptId
+					// cmrcOpptId: this.baseMsg.cmrcOpptId
+					cmrcOpptSubclass:this.baseMsg.cmrcOpptSubclass
+
 				}, (res) => {
 					this.baseMsg = res.data;
 					this.resetTop();
@@ -638,7 +642,9 @@
 			queryOpportPractialInfo() {
 				queryOpportPractialInfo({
 					createPerson: this.$store.state.userMsg.empno,
-					cmrcOpptId: this.baseMsg.cmrcOpptId,
+					// cmrcOpptId: this.baseMsg.cmrcOpptId,
+					cmrcOpptSubclass:this.baseMsg.cmrcOpptSubclass
+
 				}, (res) => {
 					this.myScore = res.data.score
 					this.scoreId = res.data.scoreId;
@@ -653,7 +659,9 @@
 			// 查询商机进度条
 			queryOpportunityScoringProgress() {
 				queryOpportunityScoringProgress({
-					cmrcOpptId: this.baseMsg.cmrcOpptId,
+					// cmrcOpptId: this.baseMsg.cmrcOpptId,
+					cmrcOpptSubclass:this.baseMsg.cmrcOpptSubclass
+
 				}, (res) => {
 					this.progressList = res.data;
 				})
@@ -661,8 +669,10 @@
 			// 查询商机评分数量
 			queryOpportPractialCount() {
 				queryOpportPractialCount({
-					cmrcOpptId: this.baseMsg.cmrcOpptId,
+					// cmrcOpptId: this.baseMsg.cmrcOpptId,
+					cmrcOpptSubclass:this.baseMsg.cmrcOpptSubclass
 				}, (res) => {
+					console.log('this.baseMsg,res,data',this.baseMsg,res.data)
 					this.scoreNum = res.data.score;
 					this.scorePeople = res.data.countNb
 				})

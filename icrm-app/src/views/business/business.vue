@@ -231,6 +231,7 @@
 				this.$router.push({
 					name: 'chooseCust',
 					params: {
+						cmrcOpptSubclass: item.cmrcOpptSubclass,
 						cmrcOpptId: item.cmrcOpptId,
 						sysId: item.sysId,
 						belgCustMgr: this.chooseCust.empId,
