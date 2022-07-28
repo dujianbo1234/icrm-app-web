@@ -159,7 +159,7 @@
 				useNum: "",
 				pageReady: false,
 				contentHeight: '',
-				msgListItem:{}
+				msgListItem: {}
 			}
 		},
 		components: {
@@ -226,7 +226,7 @@
 				this.onLoad();
 			},
 			openDetail(item) {
-				this.msgListItem=item
+				this.msgListItem = item
 				localStorage.setItem("cmrcOpptId", item.cmrcOpptId);
 				this.$router.push({
 					name: 'chooseCust',
@@ -302,7 +302,6 @@
 						Toast.fail("商机大类数据为空")
 					}
 				})
-
 				saveSmAppVisitInfo({
 					busiType: "4"
 				}, (res) => {
@@ -325,8 +324,10 @@
 		},
 		activated() {
 			if (localStorage.getItem("newBusiness") == "0") {
-				if(this.$route.params.scoreNum){
-					this.msgListItem.practialScore=this.$route.params.scoreNum
+				var scoreNum_n = localStorage.getItem("scoreNum");
+				if (scoreNum_n && scoreNum_n >= 0) {
+					this.msgListItem.practialScore = scoreNum_n;
+					localStorage.setItem("scoreNum", -1);
 				}
 				localStorage.setItem("newBusiness", "1")
 				this.queryCmrcOpportunity()

@@ -5567,11 +5567,11 @@ export const filterList = [{
 				list: []
 			}, {
 				code: "05030102",
-				title: "[3500,25000)",
-				value: "[3500,25000)",
+				title: "[3500,20000)",
+				value: "[3500,20000)",
 				values: "",
 				colField: "AUM_BAL_RNG",
-				name: "AUM余额-全部#[3500,25000)",
+				name: "AUM余额-全部#[3500,20000)",
 				minValue: "",
 				maxValue: "",
 				remark: "",

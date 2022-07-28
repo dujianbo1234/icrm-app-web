@@ -1,6 +1,6 @@
 <template>
 	<div class="home">
-		<nav-bar title="选择客户" type="2" leftIcon :backName="backName" :backParams="{scoreNum}" />
+		<nav-bar title="选择客户" type="2" leftIcon />
 		<div class="fixedPlace">
 			<div class="plate1">
 				<div class="plate1_1">{{baseMsg.cmrcOpptSubclassNm}}</div>
@@ -674,9 +674,9 @@
 					// cmrcOpptId: this.baseMsg.cmrcOpptId,
 					cmrcOpptSubclass: this.baseMsg.cmrcOpptSubclass
 				}, (res) => {
-					console.log('this.baseMsg,res,data', this.baseMsg, res.data)
 					this.scoreNum = res.data.score;
-					this.scorePeople = res.data.countNb
+					localStorage.setItem("scoreNum", this.scoreNum);
+					this.scorePeople = res.data.countNb;
 				})
 			},
 
@@ -733,14 +733,6 @@
 		},
 		mounted() {
 
-		},
-		beforeRouteEnter(to, from, next) {
-			try{
-				this.backName = from.name;
-			}catch(e){
-				
-			}
-			next();
 		},
 	}
 </script>
