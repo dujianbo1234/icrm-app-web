@@ -5088,7 +5088,7 @@ export const filterList = [{
 			list: [{
 				code: "05020101",
 				title: "＜3500",
-				value: "＜3500",
+				value: "3500",
 				values: "",
 				colField: "AUM_MONTH_AVG_RNG",
 				name: "AUM月日均-全部#＜3500",
@@ -6697,7 +6697,7 @@ export const filterList = [{
 		}, {
 			code: "08030700",
 			title: "≥85%",
-			value: "≥85%",
+			value: "≥85%%",
 			values: "",
 			colField: "PHONE_BK_DAYAC_60D_RNG",
 			name: "手机银行近60天日活率#≥85%",
