@@ -80,7 +80,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
-			disabled: false,
+			disabled: true,
 			list: []
 		}]
 	}, {
@@ -620,7 +620,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "按年份自定义",
-			disabled: false,
+			disabled: true,
 			list: []
 		}]
 	}]
@@ -727,7 +727,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
-				disabled: false,
+				disabled: true,
 				list: []
 			}]
 		}, {
@@ -811,7 +811,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
-				disabled: false,
+				disabled: true,
 				list: []
 			}]
 		}, {
@@ -895,7 +895,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
-				disabled: false,
+				disabled: true,
 				list: []
 			}]
 		}, {
@@ -979,7 +979,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
-				disabled: false,
+				disabled: true,
 				list: []
 			}]
 		}, {
@@ -1063,7 +1063,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
-				disabled: false,
+				disabled: true,
 				list: []
 			}]
 		}]
@@ -1351,7 +1351,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
-				disabled: false,
+				disabled: true,
 				list: []
 			}]
 		}, {
@@ -1435,7 +1435,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
-				disabled: false,
+				disabled: true,
 				list: []
 			}]
 		}, {
@@ -1519,7 +1519,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
-				disabled: false,
+				disabled: true,
 				list: []
 			}]
 		}, {
@@ -1603,7 +1603,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
-				disabled: false,
+				disabled: true,
 				list: []
 			}]
 		}, {
@@ -1687,7 +1687,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
-				disabled: false,
+				disabled: true,
 				list: []
 			}]
 		}]
@@ -1771,7 +1771,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
-				disabled: false,
+				disabled: true,
 				list: []
 			}]
 		}, {
@@ -1843,7 +1843,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
-				disabled: false,
+				disabled: true,
 				list: []
 			}]
 		}, {
@@ -1915,7 +1915,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
-				disabled: false,
+				disabled: true,
 				list: []
 			}]
 		}, {
@@ -1987,7 +1987,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
-				disabled: false,
+				disabled: true,
 				list: []
 			}]
 		}, {
@@ -2059,7 +2059,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
-				disabled: false,
+				disabled: true,
 				list: []
 			}]
 		}]
@@ -2155,7 +2155,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
-				disabled: false,
+				disabled: true,
 				list: []
 			}]
 		}, {
@@ -2239,7 +2239,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
-				disabled: false,
+				disabled: true,
 				list: []
 			}]
 		}, {
@@ -2323,7 +2323,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
-				disabled: false,
+				disabled: true,
 				list: []
 			}]
 		}, {
@@ -2407,7 +2407,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
-				disabled: false,
+				disabled: true,
 				list: []
 			}]
 		}, {
@@ -2491,7 +2491,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
-				disabled: false,
+				disabled: true,
 				list: []
 			}]
 		}]
@@ -2564,7 +2564,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
-			disabled: false,
+			disabled: true,
 			list: []
 		}]
 	}, {
@@ -2636,7 +2636,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
-			disabled: false,
+			disabled: true,
 			list: []
 		}]
 	}, {
@@ -2720,7 +2720,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
-			disabled: false,
+			disabled: true,
 			list: []
 		}]
 	}, {
@@ -2887,7 +2887,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
-				disabled: false,
+				disabled: true,
 				list: []
 			}]
 		}, {
@@ -2983,7 +2983,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
-				disabled: false,
+				disabled: true,
 				list: []
 			}]
 		}, {
@@ -3079,7 +3079,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
-				disabled: false,
+				disabled: true,
 				list: []
 			}]
 		}, {
@@ -3175,7 +3175,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
-				disabled: false,
+				disabled: true,
 				list: []
 			}]
 		}, {
@@ -3271,7 +3271,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
-				disabled: false,
+				disabled: true,
 				list: []
 			}]
 		}, {
@@ -3356,7 +3356,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
-			disabled: false,
+			disabled: true,
 			list: []
 		}]
 	}, {
@@ -3464,7 +3464,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "范围[-1,1000]",
-			disabled: false,
+			disabled: true,
 			list: []
 		}, {
 			code: "02120900",
@@ -3560,7 +3560,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
-			disabled: false,
+			disabled: true,
 			list: []
 		}]
 	}, {
@@ -3680,7 +3680,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
-			disabled: false,
+			disabled: true,
 			list: []
 		}]
 	}, {
@@ -3752,7 +3752,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
-			disabled: false,
+			disabled: true,
 			list: []
 		}]
 	}, {
@@ -3812,7 +3812,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
-			disabled: false,
+			disabled: true,
 			list: []
 		}]
 	}, {
@@ -3860,7 +3860,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
-			disabled: false,
+			disabled: true,
 			list: []
 		}]
 	}, {
@@ -3944,7 +3944,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
-			disabled: false,
+			disabled: true,
 			list: []
 		}]
 	}, {
@@ -4028,7 +4028,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
-			disabled: false,
+			disabled: true,
 			list: []
 		}]
 	}, {
@@ -4088,7 +4088,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
-			disabled: false,
+			disabled: true,
 			list: []
 		}]
 	}]
@@ -4184,7 +4184,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
-			disabled: false,
+			disabled: true,
 			list: []
 		}]
 	}, {
@@ -4268,7 +4268,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
-			disabled: false,
+			disabled: true,
 			list: []
 		}]
 	}, {
@@ -4340,7 +4340,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
-			disabled: false,
+			disabled: true,
 			list: []
 		}]
 	}, {
@@ -4436,7 +4436,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
-			disabled: false,
+			disabled: true,
 			list: []
 		}]
 	}, {
@@ -4520,7 +4520,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
-			disabled: false,
+			disabled: true,
 			list: []
 		}]
 	}, {
@@ -4580,7 +4580,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
-			disabled: false,
+			disabled: true,
 			list: []
 		}]
 	}]
@@ -4687,7 +4687,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
-				disabled: false,
+				disabled: true,
 				list: []
 			}]
 		}, {
@@ -4759,7 +4759,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
-				disabled: false,
+				disabled: true,
 				list: []
 			}]
 		}, {
@@ -4843,7 +4843,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
-				disabled: false,
+				disabled: true,
 				list: []
 			}]
 		}, {
@@ -4915,7 +4915,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
-				disabled: false,
+				disabled: true,
 				list: []
 			}]
 		}, {
@@ -4987,7 +4987,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
-				disabled: false,
+				disabled: true,
 				list: []
 			}]
 		}, {
@@ -5059,7 +5059,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
-				disabled: false,
+				disabled: true,
 				list: []
 			}]
 		}]
@@ -5155,7 +5155,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
-				disabled: false,
+				disabled: true,
 				list: []
 			}]
 		}, {
@@ -5227,7 +5227,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
-				disabled: false,
+				disabled: true,
 				list: []
 			}]
 		}, {
@@ -5311,7 +5311,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
-				disabled: false,
+				disabled: true,
 				list: []
 			}]
 		}, {
@@ -5383,7 +5383,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
-				disabled: false,
+				disabled: true,
 				list: []
 			}]
 		}, {
@@ -5455,7 +5455,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
-				disabled: false,
+				disabled: true,
 				list: []
 			}]
 		}, {
@@ -5527,7 +5527,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
-				disabled: false,
+				disabled: true,
 				list: []
 			}]
 		}]
@@ -5623,7 +5623,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
-				disabled: false,
+				disabled: true,
 				list: []
 			}]
 		}, {
@@ -5695,7 +5695,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
-				disabled: false,
+				disabled: true,
 				list: []
 			}]
 		}, {
@@ -5779,7 +5779,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
-				disabled: false,
+				disabled: true,
 				list: []
 			}]
 		}, {
@@ -5851,7 +5851,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
-				disabled: false,
+				disabled: true,
 				list: []
 			}]
 		}, {
@@ -5923,7 +5923,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
-				disabled: false,
+				disabled: true,
 				list: []
 			}]
 		}, {
@@ -5995,7 +5995,7 @@ export const filterList = [{
 				minValue: "",
 				maxValue: "",
 				remark: "",
-				disabled: false,
+				disabled: true,
 				list: []
 			}]
 		}]
@@ -6068,7 +6068,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
-			disabled: false,
+			disabled: true,
 			list: []
 		}]
 	}, {
@@ -6152,7 +6152,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
-			disabled: false,
+			disabled: true,
 			list: []
 		}]
 	}]
@@ -6500,7 +6500,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
-			disabled: false,
+			disabled: true,
 			list: []
 		}]
 	}, {
@@ -6572,7 +6572,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
-			disabled: false,
+			disabled: true,
 			list: []
 		}]
 	}]
@@ -6716,7 +6716,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
-			disabled: false,
+			disabled: true,
 			list: []
 		}]
 	}, {
@@ -6812,7 +6812,7 @@ export const filterList = [{
 			minValue: "",
 			maxValue: "",
 			remark: "",
-			disabled: false,
+			disabled: true,
 			list: []
 		}]
 	}, {

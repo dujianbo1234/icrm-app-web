@@ -229,9 +229,9 @@
 					this.loading = false;
 					this.finished = false;
 					this.showLength = 0;
-					setTimeout(()=>{
+					setTimeout(() => {
 						this.onLoad();
-					},800)
+					}, 800)
 				}
 			},
 			MCCShow() {
@@ -243,9 +243,9 @@
 					this.loading = false;
 					this.finished = false;
 					this.showLength = 0;
-					setTimeout(()=>{
+					setTimeout(() => {
 						this.onLoad();
-					},800)
+					}, 800)
 				}
 			},
 		},
@@ -431,6 +431,10 @@
 					}
 				}, 100)
 			}
+		},
+		beforeRouteEnter(to, from, next) {
+			if (from.name == "cust") localStorage.setItem("newFilterGroup", "1");
+			next();
 		},
 		mounted() {
 			localStorage.setItem("newFilterGroup", "0");

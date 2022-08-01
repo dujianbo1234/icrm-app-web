@@ -15,8 +15,8 @@
 						<span>#</span>
 						<span>{{filterItem.chcFldNm.split("#")[0]}}&nbsp;</span>
 						<span v-if="filterItem.chcValue">{{filterItem.chcValue}}</span>
-						<span v-else-if="filterItem.chcValueMin&&filterItem.maxValue">
-							({{filterItem.minValue}},{{filterItem.chcValueMax}}]</span>
+						<span v-else-if="filterItem.chcValueMin&&filterItem.chcValueMax">
+							({{filterItem.chcValueMin}},{{filterItem.chcValueMax}}]</span>
 						<span v-else-if="filterItem.chcValueMin">≥{{filterItem.chcValueMin}}</span>
 						<span v-else-if="filterItem.chcValueMax">＜{{filterItem.chcValueMax}}</span>
 						<span v-else-if="filterItem.chcValues">＜{{filterItem.chcValues}}</span>
@@ -171,7 +171,8 @@
 	import {
 		queryGroupActiveCust,
 		queryGroupFixCust,
-		deleteGroupFixCust
+		deleteGroupFixCust,
+		queryGroupFixList
 	} from "../../request/market.js";
 	export default {
 		data() {
@@ -289,6 +290,14 @@
 			mounted_m() {
 				this.baseMsg = this.$route.params.groupItem ? JSON.parse(this.$route.params.groupItem) : JSON.parse(
 					localStorage.getItem("groupDetail"));
+				// queryGroupFixList({
+				// 	pageSize: "10",
+				// 	pageNum: "1",
+				// 	groupId: this.baseMsg.groupId
+				// }, (res) => {
+				// 	console.log(res)
+				// 	if (res.data.records && res.data.records.length) this.baseMsg = res.data.records[0];
+				// });
 				this.$nextTick(() => {
 					var fixedPlace = document.defaultView.getComputedStyle(document.getElementsByClassName(
 						"fixedPlace")[0], null);
