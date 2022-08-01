@@ -164,11 +164,11 @@
 						value: 'AUM资产'
 					},
 					{
-						key: 'timeDpsitBal',
+						key: 'dqBal',
 						value: '定期'
 					},
 					{
-						key: 'currDpsitBal',
+						key: 'hqBal',
 						value: '活期'
 					},
 					{
@@ -227,6 +227,7 @@
 					pageNum: this.pageIndex.toString(),
 					listCustFilter: this.filterArr
 				}, (res) => {
+					console.log(res)
 					if (res.data && res.data.records) {
 						this.total = res.data.total;
 						this.custList = this.custList.concat(res.data.records);

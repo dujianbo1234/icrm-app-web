@@ -19,7 +19,7 @@
 							({{filterItem.chcValueMin}},{{filterItem.chcValueMax}}]</span>
 						<span v-else-if="filterItem.chcValueMin">≥{{filterItem.chcValueMin}}</span>
 						<span v-else-if="filterItem.chcValueMax">＜{{filterItem.chcValueMax}}</span>
-						<span v-else-if="filterItem.chcValues">＜{{filterItem.chcValues}}</span>
+						<span v-else-if="filterItem.chcValues">{{filterItem.chcValues}}</span>
 						<span># </span>
 					</template>
 				</div>

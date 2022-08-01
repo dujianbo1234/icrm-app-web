@@ -24,6 +24,9 @@ export default [{
 	{
 		path: '/impQZCust',
 		name: 'impQZCust',
+		meta: {
+			keepAlive: true
+		},
 		component: () => import('@/views/cust/impQZCust.vue')
 	},
 	{

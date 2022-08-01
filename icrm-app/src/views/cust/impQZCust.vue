@@ -251,7 +251,6 @@
 				openPLFP: false,
 				checked: [],
 				checkAll: false,
-				show44: false,
 				params: {
 					pageSize: "10",
 					pageNum: "1",
@@ -539,13 +538,28 @@
 					})
 				})
 			},
+			mounted_m() {
+				var fixedPlace = document.defaultView.getComputedStyle(document.getElementsByClassName("fixedPlace")[0],
+					null);
+				this.gtgh = this.$store.state.userMsg.roleId == '00000001' || this.$store.state.userMsg.roleId ==
+					'00000002' ||
+					this.$store.state.userMsg.roleId == '00000003' || this.$store.state.userMsg.roleId == '00000006' ||
+					this
+					.$store.state.userMsg.roleId == '00000007' || this.$store.state.userMsg.roleId == '00000008';
+				this.fixedHeight = fixedPlace.height;
+				this.onLoad();
+			}
+		},
+		beforeRouteEnter(to, from, next) {
+			if (from.name == "cust") {
+				localStorage.setItem("newImpQZCust", "1")
+			} else {
+				localStorage.setItem("newImpQZCust", "0")
+			};
+			next();
 		},
 		mounted() {
-			var fixedPlace = document.defaultView.getComputedStyle(document.getElementsByClassName("fixedPlace")[0], null);
-			this.gtgh = this.$store.state.userMsg.roleId == '00000001' || this.$store.state.userMsg.roleId == '00000002' ||
-				this.$store.state.userMsg.roleId == '00000003' || this.$store.state.userMsg.roleId == '00000006' || this
-				.$store.state.userMsg.roleId == '00000007' || this.$store.state.userMsg.roleId == '00000008';
-			this.fixedHeight = fixedPlace.height;
+			localStorage.setItem("newImpQZCust", "0");
 			getSysCodeByType({
 				codeType: "cur_tage"
 			}, (res) => {
@@ -572,8 +586,57 @@
 					Toast.fail("业务类型列表数据为空")
 				}
 			})
-			this.onLoad();
-		}
+			this.mounted_m();
+		},
+		activated() {
+			if (localStorage.getItem("newImpQZCust") == "0") {
+				localStorage.setItem("newImpQZCust", "1")
+			} else {
+				this.searchValue = "";
+				this.orderIndex = null;
+				this.orderType = true;
+				this.tageIndex = 0;
+				this.busiIndex = 0;
+				this.moreBoxOpen = false;
+				this.value1 = "";
+				this.value2 = "";
+				this.value3 = "";
+				this.value4 = "";
+				this.total = "0";
+				this.estCstSum = "0";
+				this.estAmtSum = "0";
+				this.msgList = [];
+				this.pageIndex = 0;
+				this.loading = false;
+				this.finished = false;
+				this.chooseOrg = {
+					text: "选择机构",
+					value: ""
+				};
+				this.openPLFP = false;
+				this.checked = [];
+				this.checkAll = false;
+				this.params = {
+					pageSize: "10",
+					pageNum: "1",
+					orderType: "",
+					cstName: "",
+					cstMagNo: "",
+					busiType: "",
+					curTage: "",
+					estCstStart: "",
+					estCstEnd: "",
+					estAmtStart: "",
+					estAmtEnd: "",
+					orgId: ""
+				};
+				this.fixedHeight = "0px";
+				this.showDelGh = false;
+				this.delCustItem = {};
+				this.gtgh = false;
+				this.mounted_m();
+			}
+		},
 	}
 </script>
 

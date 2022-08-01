@@ -10,9 +10,32 @@
 						—— 暂无可筛选指标 ——
 					</div>
 					<div class="filterItem" v-for="(filterItemChild,j) in filterItem.list" :key="'filterItemChild'+j"
-						:class="activeChild1.code==filterItemChild.code?'filterItem_a':''"
+						:class="(activeChild1.code==filterItemChild.code||findFilter(filterItemChild,4,true)>=0)?'filterItem_a':''"
 						v-show="!filterItemChild.disabled" @click="checkChild1(filterItemChild)">
-						{{filterItemChild.title}}
+						<span class="ycsl" style="width: 100%;">
+							{{findFilter(filterItemChild,4)?findFilter(filterItemChild,4).name.split("#")[0]:filterItemChild.title}}
+						</span>
+						<span class="ycsl" style="width: 100%;font-size: 0.11rem;"
+							v-if="findFilter(filterItemChild,4,true)>=0">
+							<span v-if="findFilter(filterItemChild,4).value">
+								{{findFilter(filterItemChild,4).value}}
+							</span>
+							<span
+								v-else-if="findFilter(filterItemChild,4).minValue&&findFilter(filterItemChild,4).maxValue">
+								({{findFilter(filterItemChild,4).minValue}},{{findFilter(filterItemChild,4).maxValue}}]
+							</span>
+							<span v-else-if="findFilter(filterItemChild,4).minValue">
+								≥{{findFilter(filterItemChild,4).minValue}}
+							</span>
+							<span v-else-if="findFilter(filterItemChild,4).maxValue">
+								＜{{findFilter(filterItemChild,4).maxValue}}
+							</span>
+							<span v-else-if="findFilter(filterItemChild,4).values">
+								{{findFilter(filterItemChild,4).values}}
+							</span>
+						</span>
+						<div class="delButton" v-if="findFilter(filterItemChild,4,true)>=0"
+							@click.stop="delFilter(filterItemChild)"></div>
 					</div>
 				</div>
 				<div v-if="i==filterList.length-1">
@@ -231,7 +254,7 @@
 					this.showLength = 0;
 					setTimeout(() => {
 						this.onLoad();
-					}, 800)
+					}, 300)
 				}
 			},
 			MCCShow() {
@@ -245,11 +268,18 @@
 					this.showLength = 0;
 					setTimeout(() => {
 						this.onLoad();
-					}, 800)
+					}, 300)
 				}
 			},
 		},
 		methods: {
+			findFilter(item, length, index) {
+				if (index) {
+					return this.filterArr.findIndex(items => items.code.slice(0, length) == item.code.slice(0, length))
+				} else {
+					return this.filterArr.find(items => items.code.slice(0, length) == item.code.slice(0, length))
+				}
+			},
 			onLoad() {
 				if (this.pageReady < 2) return;
 				this.loading = true;
@@ -311,10 +341,21 @@
 							}
 						}
 						this.defaultShow = true;
+						var thirdItem = this.findFilter(item, 4);
+						if (thirdItem && thirdItem.code.slice(-2) != "00") {
+							let cc2_item = this.activeChild1.list.find(ac1 => ac1.code.slice(0, 6) == thirdItem.code.slice(
+								0, 6));
+							let cc2_i = this.activeChild1.list.findIndex(ac1 => ac1.code.slice(0, 6) == thirdItem.code
+								.slice(0, 6));
+							setTimeout(() => {
+								this.checkChild2(cc2_item, cc2_i);
+							}, 220);
+						};
 						break;
 				}
 			},
 			checkChild2(item, i) {
+				console.log(item, i)
 				this.child3Show = false;
 				this.child3Show_c = false;
 				if (item.code == this.activeChild2.code) {
@@ -405,6 +446,17 @@
 					Toast.clear();
 					this.custNumber = res.data;
 				})
+			},
+			delFilter(item) {
+				var index = this.findFilter(item, 4, true);
+				if (index >= 0) {
+					this.filterArr.splice(index, 1);
+					if (this.filterArr.length) {
+						this.afterConfirm();
+					} else {
+						this.custNumber = 0;
+					}
+				}
 			},
 			toSearchRes() {
 				if (this.filterArr.length <= 0) {
@@ -650,7 +702,7 @@
 	.filterItem {
 		width: 44%;
 		margin: 0.06rem 0 0.06rem 4%;
-		padding: 0 0.1rem;
+		padding: 0.04rem 0.1rem;
 		height: 0.4rem;
 		background: #F5F5F5;
 		border-radius: 0.2rem;
@@ -660,9 +712,10 @@
 		color: #262626;
 		line-height: 0.16rem;
 		display: flex;
-		flex-wrap: nowrap;
+		flex-wrap: wrap;
 		align-items: center;
 		justify-content: center;
+		position: relative;
 	}
 
 	.filterItem_a {
@@ -988,5 +1041,17 @@
 		display: flex;
 		align-items: center;
 		margin-right: 0.08rem;
+	}
+
+	.delButton {
+		width: 0.15rem;
+		height: 0.15rem;
+		position: absolute;
+		top: -0.02rem;
+		right: -0.02rem;
+		background-image: url(../../assets/image/common_delete.png);
+		background-repeat: no-repeat;
+		background-size: cover;
+		background-position: center;
 	}
 </style>
