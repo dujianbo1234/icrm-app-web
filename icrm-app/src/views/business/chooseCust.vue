@@ -660,6 +660,7 @@
 			},
 			// 查询商机进度条
 			queryOpportunityScoringProgress() {
+				// console.log('cmrcOpptSubclass',this.baseMsg)
 				queryOpportunityScoringProgress({
 					// cmrcOpptId: this.baseMsg.cmrcOpptId,
 					cmrcOpptSubclass: this.baseMsg.cmrcOpptSubclass

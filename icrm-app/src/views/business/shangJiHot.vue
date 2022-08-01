@@ -118,7 +118,8 @@
 						this.$router.push({
 							name: 'chooseCust',
 							params: {
-								cmrcOpptId: bdItem.cmrcOpptId
+								cmrcOpptId: bdItem.cmrcOpptId,
+								cmrcOpptSubclass: bdItem.modelId
 							}
 						})
 					} else {

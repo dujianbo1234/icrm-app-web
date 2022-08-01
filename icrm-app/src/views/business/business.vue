@@ -264,6 +264,7 @@
 					} else {
 						this.finished = true;
 					}
+
 					Toast.clear();
 					this.loading = false;
 				})
