@@ -2899,7 +2899,7 @@ export const filterList = [{
 			name: "",
 			minValue: "",
 			maxValue: "",
-			remark: "取最近一次线上征信报告上授信到期日晚于当前日期的所有贷款汇总",
+			remark: "取最近一次线上征信报告上授信到期日晚于当前日期的信用类贷款汇总",
 			disabled: false,
 			list: [{
 				code: "02100201",
@@ -2995,7 +2995,7 @@ export const filterList = [{
 			name: "",
 			minValue: "",
 			maxValue: "",
-			remark: "取最近一次线上征信报告上授信到期日晚于当前日期的所有贷款汇总",
+			remark: "取最近一次线上征信报告上授信到期日晚于当前日期的保证类贷款汇总",
 			disabled: false,
 			list: [{
 				code: "02100301",
@@ -3091,7 +3091,7 @@ export const filterList = [{
 			name: "",
 			minValue: "",
 			maxValue: "",
-			remark: "取最近一次线上征信报告上授信到期日晚于当前日期的所有贷款汇总",
+			remark: "取最近一次线上征信报告上授信到期日晚于当前日期的抵押类贷款汇总",
 			disabled: false,
 			list: [{
 				code: "02100401",
@@ -3187,7 +3187,7 @@ export const filterList = [{
 			name: "",
 			minValue: "",
 			maxValue: "",
-			remark: "取最近一次线上征信报告上授信到期日晚于当前日期的所有贷款汇总",
+			remark: "取最近一次线上征信报告上授信到期日晚于当前日期的质押类贷款汇总",
 			disabled: false,
 			list: [{
 				code: "02100501",
