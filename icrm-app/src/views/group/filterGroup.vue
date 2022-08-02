@@ -75,8 +75,7 @@
 				</div>
 				<div class="btnBox">
 					<div class="btnItem btnItem1" @click="defaultShow=false">取消</div>
-					<div class="btnItem btnItem2" v-if="activeChild2.list&&!activeChild2.list.length||activeChild3.code"
-						@click="defaultConfirm">确定</div>
+					<div class="btnItem btnItem2" v-if="canConfirm" @click="defaultConfirm">确定</div>
 					<div class="btnItem btnItem3" v-else>确定</div>
 				</div>
 				<div class="child3BoxDirection" ref="child3BoxDirection" v-show="child3Show||child3Show_c">
@@ -271,6 +270,31 @@
 					}, 300)
 				}
 			},
+		},
+		computed: {
+			canConfirm() {
+				if (this.activeChild2.title) {
+					if (this.activeChild2.title == "自定义") {
+						return this.activeChild2.minValue || this.activeChild2.minValue;
+					} else {
+						if (this.activeChild2.list.length) {
+							if (this.activeChild3.title) {
+								if (this.activeChild3.title == "自定义") {
+									return this.activeChild3.minValue || this.activeChild3.minValue;
+								} else {
+									return true;
+								}
+							} else {
+								return false;
+							}
+						} else {
+							return true;
+						}
+					}
+				} else {
+					return false;
+				}
+			}
 		},
 		methods: {
 			findFilter(item, length, index) {
@@ -499,7 +523,14 @@
 				searchType: "1"
 			}, (res) => {
 				if (res.data && res.data.records && res.data.records.length) {
-					res.data.records.forEach(item => this.dfdwList.push(item.agentCompany))
+					var result1 = [];
+					res.data.records.forEach(item => result1.push(item.agentCompany))
+					result1 = result1.join(",").split(",");
+					result1.forEach((item) => {
+						if (this.dfdwList.findIndex(dfdwItem => dfdwItem == item) < 0) {
+							this.dfdwList.push(item)
+						}
+					})
 					this.dfdwShowList = this.dfdwList;
 					this.pageReady++;
 				}
@@ -510,10 +541,10 @@
 				searchType: "2"
 			}, (res) => {
 				if (res.data && res.data.records && res.data.records.length) {
-					var result = []
-					res.data.records.forEach(item => result.push(item.mccCodeNm));
-					result = result.join(",").split(",");
-					result.forEach((item) => {
+					var result2 = [];
+					res.data.records.forEach(item => result2.push(item.mccCodeNm));
+					result2 = result2.join(",").split(",");
+					result2.forEach((item) => {
 						if (this.MCCList.findIndex(MCCItem => MCCItem == item) < 0) {
 							this.MCCList.push(item)
 						}
