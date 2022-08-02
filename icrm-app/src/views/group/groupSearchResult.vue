@@ -29,7 +29,7 @@
 			<van-checkbox-group v-model="chooseItems" ref="checkboxGroup">
 				<div class="custItem" v-for="(item,i) in custList" :key="'item'+i"
 					:style="{'margin-left':showChecked?'15%':'0%'}" @click="toCustView(item)">
-					<div class="leftCheckBox">
+					<div class="leftCheckBox" @click.stop>
 						<van-checkbox :name="item.custNum"></van-checkbox>
 					</div>
 					<div class="custItem1">

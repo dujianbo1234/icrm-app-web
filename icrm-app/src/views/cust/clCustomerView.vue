@@ -1848,6 +1848,7 @@
 				}
 			},
 			toMyGroup() {
+				localStorage.setItem("newMyGroup", "1");
 				this.$router.push({
 					name: 'myGroup',
 					params: {

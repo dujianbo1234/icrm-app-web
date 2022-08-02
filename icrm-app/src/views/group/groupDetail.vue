@@ -268,6 +268,7 @@
 						Toast.success("删除成功");
 						setTimeout(() => {
 							localStorage.setItem("newMyGroup", "2")
+							this.reLoadTotal();
 							this.pageIndex = 0;
 							this.custList = [];
 							this.checkCust = {};
@@ -277,6 +278,18 @@
 						Toast.fail(res.msg)
 					}
 				})
+			},
+			reLoadTotal() {
+				queryGroupFixList({
+					pageSize: "10",
+					pageNum: "1",
+					groupId: this.baseMsg.groupId
+				}, (res) => {
+					if (res.data.records && res.data.records.length) {
+						this.baseMsg.aumBal = res.data.records[0].aumBal;
+						this.baseMsg.loanBal = res.data.records[0].loanBal;
+					}
+				});
 			},
 			toCustView(custItem) {
 				localStorage.setItem("groupDetail", "0");
@@ -290,14 +303,7 @@
 			mounted_m() {
 				this.baseMsg = this.$route.params.groupItem ? JSON.parse(this.$route.params.groupItem) : JSON.parse(
 					localStorage.getItem("groupDetail"));
-				// queryGroupFixList({
-				// 	pageSize: "10",
-				// 	pageNum: "1",
-				// 	groupId: this.baseMsg.groupId
-				// }, (res) => {
-				// 	console.log(res)
-				// 	if (res.data.records && res.data.records.length) this.baseMsg = res.data.records[0];
-				// });
+				this.reLoadTotal();
 				this.$nextTick(() => {
 					var fixedPlace = document.defaultView.getComputedStyle(document.getElementsByClassName(
 						"fixedPlace")[0], null);
@@ -315,6 +321,7 @@
 			if (localStorage.getItem("groupDetail") == "0") {
 				localStorage.setItem("groupDetail", "1")
 			} else if (localStorage.getItem("groupDetail") == "2") {
+				this.reLoadTotal();
 				this.pageIndex = 0;
 				this.custList = [];
 				this.onLoad();

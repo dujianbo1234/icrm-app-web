@@ -266,7 +266,7 @@
 							setTimeout(() => {
 								this.joinGroup.active = this.active;
 								localStorage.setItem("groupDetail", JSON.stringify(this.joinGroup));
-								localStorage.setItem("newMyGroup", "0")
+								localStorage.setItem("newMyGroup", "2")
 								localStorage.setItem("newGroupSearchResult", "1")
 								this.$router.push({
 									name: 'groupDetail',
@@ -290,7 +290,7 @@
 							setTimeout(() => {
 								this.joinGroup.active = this.active;
 								localStorage.setItem("groupDetail", JSON.stringify(this.joinGroup));
-								localStorage.setItem("newMyGroup", "0")
+								localStorage.setItem("newMyGroup", "2")
 								localStorage.setItem("newGroupSearchResult", "1")
 								this.$router.push({
 									name: 'groupDetail',
@@ -396,6 +396,7 @@
 			this.mounted_m();
 		},
 		activated() {
+			console.log("newMyGroup："+localStorage.getItem("newMyGroup"))
 			if (localStorage.getItem("newMyGroup") == "0") {
 				localStorage.setItem("newMyGroup", "1")
 			} else {
