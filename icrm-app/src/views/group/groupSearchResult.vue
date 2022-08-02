@@ -19,8 +19,8 @@
 			<div class="plate2">
 				<div class="plate2_item">筛选结果：共{{formatNums(total || 0)}}位客户</div>
 				<div class="plate2_item"></div>
-				<!-- <div class="plate2_item">AUM总额：{{aumBal=="正在获取..."?aumBal:formatNumW(aumBal || 0)+"万元"}}</div> -->
-				<!-- <div class="plate2_item">贷款总额：{{loanBal=="正在获取..."?loanBal:formatNumW(loanBal || 0)+"万元"}}</div> -->
+				<div class="plate2_item">AUM总额：{{aumBal=="正在获取..."?aumBal:formatNumW(aumBal || 0)+"万元"}}</div>
+				<div class="plate2_item">贷款总额：{{loanBal=="正在获取..."?loanBal:formatNumW(loanBal || 0)+"万元"}}</div>
 			</div>
 		</div>
 		<div style="height: 1.98rem;"></div>
@@ -28,7 +28,7 @@
 			@load="onLoad" :immediate-check="false">
 			<van-checkbox-group v-model="chooseItems" ref="checkboxGroup">
 				<div class="custItem" v-for="(item,i) in custList" :key="'item'+i"
-					:style="{'margin-left':showChecked?'15%':'0%'}">
+					:style="{'margin-left':showChecked?'15%':'0%'}" @click="toCustView(item)">
 					<div class="leftCheckBox">
 						<van-checkbox :name="item.custNum"></van-checkbox>
 					</div>
@@ -40,12 +40,12 @@
 							</div>
 							<div class="custItem1_2_3">
 								<template
-									v-for="(text, j) in ['vipCstFlg','agentPayCstFlg', 'newCstFlg', 'merntCstFlg', 'ioinHoldLoan', 'crdtCrdCstFlg']">
+									v-for="(text, j) in ['vipCustFlg','agentPayCstFlg', 'isNewCust', 'merntCstFlg', 'loanProHold', 'cardCstFlg']">
 									<div :class="text" v-if="item[text] =='1'" :key="j">{{['财','代','新','商','贷','信'][j]}}
 									</div>
 								</template>
 								<template
-									v-for="(text, s) in ['ioinSgnMobbank','ioinSgnAlpy','ioinSgnWchtPymt', 'ioinSgnYsf']"
+									v-for="(text, s) in ['ioinSgnMobbank','alpySign','wchtPymtSign', 'ysfSign']"
 									:key="s">
 									<van-icon
 										:name="require(`@/assets/image/business_chooseCust_${['jjyh','zfb','wx','ysf'][s]}${['.png','_a.png'][item[text] || 0]}`)"
@@ -347,15 +347,24 @@
 						break;
 				}
 			},
+			toCustView(item) {
+				localStorage.setItem("newGroupSearchResult", "0");
+				this.$router.push({
+					name: 'clCustomerView',
+					query: {
+						custNum: item.custNum
+					}
+				})
+			},
 			mounted_m() {
 				this.filterArr = JSON.parse(this.$route.params.filterArr);
 				this.pageReady = true;
-				// queryFilterResultSum({
-				// 	listCustFilter: this.filterArr
-				// }, (res) => {
-				// 	this.aumBal = res.data.aumBal || 0;
-				// 	this.loanBal = res.data.loanBal || 0;
-				// })
+				queryFilterResultSum({
+					listCustFilter: this.filterArr
+				}, (res) => {
+					this.aumBal = res.data.aumBal || 0;
+					this.loanBal = res.data.loanBal || 0;
+				})
 				this.onLoad()
 			}
 		},
@@ -749,12 +758,12 @@
 						display: flex;
 						flex-wrap: nowrap;
 
-						.vipCstFlg,
+						.vipCustFlg,
 						.agentPayCstFlg,
-						.newCstFlg,
+						.isNewCust,
 						.merntCstFlg,
-						.ioinHoldLoan,
-						.crdtCrdCstFlg {
+						.loanProHold,
+						.cardCstFlg {
 							width: 0.19rem;
 							height: 0.16rem;
 							border-radius: 0.02rem;
@@ -766,7 +775,7 @@
 							margin-right: 0.04rem;
 						}
 
-						.vipCstFlg {
+						.vipCustFlg {
 							background-color: rgba(2, 109, 255, 0.08);
 							color: #026DFF;
 						}
@@ -776,7 +785,7 @@
 							color: #FF8500;
 						}
 
-						.newCstFlg {
+						.isNewCust {
 							background-color: rgba(255, 58, 58, 0.08);
 							color: #FF3A3A;
 						}
@@ -786,12 +795,12 @@
 							color: #446BA1;
 						}
 
-						.ioinHoldLoan {
+						.loanProHold {
 							background-color: rgba(55, 205, 55, 0.08);
 							color: #13AD13;
 						}
 
-						.crdtCrdCstFlg {
+						.cardCstFlg {
 							background-color: rgba(176, 177, 255, 0.08);
 							color: #B0B1FF
 						}

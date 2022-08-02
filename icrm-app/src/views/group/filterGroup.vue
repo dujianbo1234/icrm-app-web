@@ -355,7 +355,6 @@
 				}
 			},
 			checkChild2(item, i) {
-				console.log(item, i)
 				this.child3Show = false;
 				this.child3Show_c = false;
 				if (item.code == this.activeChild2.code) {
@@ -401,6 +400,10 @@
 			defaultConfirm() {
 				var addChild = this.activeChild3.code ? this.activeChild3 : this.activeChild2;
 				addChild = JSON.parse(JSON.stringify(addChild));
+				if (addChild.maxValue && addChild.minValue && Number(addChild.maxValue) < Number(addChild.minValue)) {
+					Toast("最大值不能小于最小值");
+					return;
+				}
 				var itemIndex = this.filterArr.findIndex(item => item.code.slice(0, 4) == addChild.code.slice(0, 4));
 				if (itemIndex < 0) {
 					this.filterArr.push(addChild);
