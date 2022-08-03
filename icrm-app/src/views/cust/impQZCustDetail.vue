@@ -473,6 +473,12 @@
 			setTimeout(()=>{
 				this.pageShow = true;
 			},10)
+			setTimeout(()=>{
+				this.topchange = 1;
+			},1000)
+			setTimeout(()=>{
+				this.topchange = 100;
+			},2000)
 		}
 	}
 </script>

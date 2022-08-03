@@ -32,6 +32,9 @@ export default [{
 	{
 		path: '/gtghList',
 		name: 'gtghList',
+		meta: {
+			keepAlive: true
+		},
 		component: () => import('@/views/cust/gtghList.vue')
 	},
 	{

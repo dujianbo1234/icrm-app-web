@@ -169,8 +169,7 @@
 			</van-checkbox-group>
 		</van-list>
 		<div class="bottomZW"></div>
-		<cust-list-cs ref="custList" @activeCust="activeCust" />
-		<org-list ref="orgList" type="2" @activeOrg="activeOrg" />
+		<org-list ref="orgList" :type="2" @activeOrg="activeOrg" />
 		<van-overlay :show="showDelGh" z-index="11">
 			<div class="plate6">
 				<div class="plate6_5">确认取消管户？</div>
@@ -199,7 +198,6 @@
 		saveCaretakerAPP,
 		deleteCaretakerApp
 	} from "../../request/custinfo.js";
-	import custlistCS from "../../components/cust/custlistCS.vue";
 	import {
 		Toast,
 		Dialog
@@ -233,7 +231,6 @@
 				},
 				checked: [],
 				checkAll: false,
-				show44: false,
 				params: {
 					pageSize: "10",
 					pageNum: "1",
@@ -255,9 +252,6 @@
 				gtgh: false,
 				delNum: 0,
 			}
-		},
-		components: {
-			"cust-list-cs": custlistCS
 		},
 		methods: {
 			onSearch() {
@@ -421,6 +415,7 @@
 				});
 			},
 			openDetail(item) {
+				localStorage.setItem("newGtghList", "2")
 				this.$router.push({
 					name: 'impQZCustDetail',
 					params: item
@@ -474,13 +469,24 @@
 					})
 				})
 			},
+			mounted_m() {
+				var fixedPlace = document.defaultView.getComputedStyle(document.getElementsByClassName("fixedPlace")[0],
+					null);
+				this.gtgh = this.$store.state.userMsg.roleId == '00000001' || this.$store.state.userMsg.roleId ==
+					'00000002' ||
+					this.$store.state.userMsg.roleId == '00000003' || this.$store.state.userMsg.roleId == '00000008';
+				this.fixedHeight = fixedPlace.height;
+				this.params.manageCstId = this.$store.state.userMsg.empid;
+				this.onLoad();
+			}
+		},
+		beforeRouteLeave(to, from, next) {
+			window.removeEventListener('popstate', null, false);
+			next();
 		},
 		mounted() {
-			var fixedPlace = document.defaultView.getComputedStyle(document.getElementsByClassName("fixedPlace")[0], null);
-			this.gtgh = this.$store.state.userMsg.roleId == '00000001' || this.$store.state.userMsg.roleId == '00000002' ||
-				this.$store.state.userMsg.roleId == '00000003' || this.$store.state.userMsg.roleId == '00000008';
-			this.fixedHeight = fixedPlace.height;
-			this.params.manageCstId = this.$store.state.userMsg.empid;
+			localStorage.setItem("newGtghList", "0");
+			this.mounted_m();
 			getSysCodeByType({
 				codeType: "cur_tage"
 			}, (res) => {
@@ -493,7 +499,7 @@
 				} else {
 					Toast.fail("阶段列表数据为空")
 				}
-			})
+			});
 			getSysCodeByType({
 				codeType: "BUSI_TYPE"
 			}, (res) => {
@@ -506,9 +512,64 @@
 				} else {
 					Toast.fail("业务类型列表数据为空")
 				}
-			})
-			this.onLoad();
-		}
+			});
+		},
+		activated() {
+			if (localStorage.getItem("newGtghList") == "0") {
+				localStorage.setItem("newGtghList", "1")
+			} else if (localStorage.getItem("newGtghList") == "2") {
+				setTimeout(() => {
+					this.pageIndex = 0;
+					this.msgList = [];
+					this.onLoad();
+				}, 1)
+			} else {
+				this.searchValue = "";
+				this.orderIndex = null;
+				this.orderType = true;
+				this.tageIndex = 0;
+				this.busiIndex = 0;
+				this.moreBoxOpen = false;
+				this.value1 = "";
+				this.value2 = "";
+				this.value3 = "";
+				this.value4 = "";
+				this.total = "0";
+				this.estCstSum = "0";
+				this.estAmtSum = "0";
+				this.msgList = [];
+				this.pageIndex = 0;
+				this.loading = false;
+				this.finished = false;
+				this.chooseOrg = {
+					text: "选择机构",
+					value: ""
+				};
+				this.checked = [];
+				this.checkAll = false;
+				this.params = {
+					pageSize: "10",
+					pageNum: "1",
+					orderType: "",
+					cstName: "",
+					cstMagNo: "",
+					busiType: "",
+					curTage: "",
+					estCstStart: "",
+					estCstEnd: "",
+					estAmtStart: "",
+					estAmtEnd: "",
+					orgId: "",
+					manageCstId: "",
+				};
+				this.fixedHeight = "0px";
+				this.showDelGh = false;
+				this.delCustItem = {};
+				this.gtgh = false;
+				this.delNum = 0;
+				this.mounted_m();
+			}
+		},
 	}
 </script>
 

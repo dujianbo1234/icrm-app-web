@@ -22,7 +22,7 @@
 							</span>
 							<span
 								v-else-if="findFilter(filterItemChild,4).minValue&&findFilter(filterItemChild,4).maxValue">
-								({{findFilter(filterItemChild,4).minValue}},{{findFilter(filterItemChild,4).maxValue}}]
+								[{{findFilter(filterItemChild,4).minValue}},{{findFilter(filterItemChild,4).maxValue}})
 							</span>
 							<span v-else-if="findFilter(filterItemChild,4).minValue">
 								≥{{findFilter(filterItemChild,4).minValue}}

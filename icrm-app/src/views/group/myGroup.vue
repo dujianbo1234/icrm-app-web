@@ -39,10 +39,10 @@
 								<span>{{filterItem.chcFldNm.split("#")[0]}}&nbsp;</span>
 								<span v-if="filterItem.chcValue">{{filterItem.chcValue}}</span>
 								<span v-else-if="filterItem.chcValueMin&&filterItem.maxValue">
-									({{filterItem.minValue}},{{filterItem.chcValueMax}}]</span>
+									[{{filterItem.minValue}},{{filterItem.chcValueMax}})</span>
 								<span v-else-if="filterItem.chcValueMin">≥{{filterItem.chcValueMin}}</span>
 								<span v-else-if="filterItem.chcValueMax">＜{{filterItem.chcValueMax}}</span>
-								<span v-else-if="filterItem.chcValues">＜{{filterItem.chcValues}}</span>
+								<span v-else-if="filterItem.chcValues">{{filterItem.chcValues}}</span>
 								<span># </span>
 							</template>
 						</div>
@@ -396,7 +396,6 @@
 			this.mounted_m();
 		},
 		activated() {
-			console.log("newMyGroup："+localStorage.getItem("newMyGroup"))
 			if (localStorage.getItem("newMyGroup") == "0") {
 				localStorage.setItem("newMyGroup", "1")
 			} else {

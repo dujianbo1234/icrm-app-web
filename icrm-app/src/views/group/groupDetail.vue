@@ -16,7 +16,7 @@
 						<span>{{filterItem.chcFldNm.split("#")[0]}}&nbsp;</span>
 						<span v-if="filterItem.chcValue">{{filterItem.chcValue}}</span>
 						<span v-else-if="filterItem.chcValueMin&&filterItem.chcValueMax">
-							({{filterItem.chcValueMin}},{{filterItem.chcValueMax}}]</span>
+							[{{filterItem.chcValueMin}},{{filterItem.chcValueMax}})</span>
 						<span v-else-if="filterItem.chcValueMin">≥{{filterItem.chcValueMin}}</span>
 						<span v-else-if="filterItem.chcValueMax">＜{{filterItem.chcValueMax}}</span>
 						<span v-else-if="filterItem.chcValues">{{filterItem.chcValues}}</span>
@@ -280,16 +280,18 @@
 				})
 			},
 			reLoadTotal() {
-				queryGroupFixList({
-					pageSize: "10",
-					pageNum: "1",
-					groupId: this.baseMsg.groupId
-				}, (res) => {
-					if (res.data.records && res.data.records.length) {
-						this.baseMsg.aumBal = res.data.records[0].aumBal;
-						this.baseMsg.loanBal = res.data.records[0].loanBal;
-					}
-				});
+				if (this.baseMsg.active == 1) {
+					queryGroupFixList({
+						pageSize: "10",
+						pageNum: "1",
+						groupId: this.baseMsg.groupId
+					}, (res) => {
+						if (res.data.records && res.data.records.length) {
+							this.baseMsg.aumBal = res.data.records[0].aumBal;
+							this.baseMsg.loanBal = res.data.records[0].loanBal;
+						}
+					});
+				}
 			},
 			toCustView(custItem) {
 				localStorage.setItem("groupDetail", "0");

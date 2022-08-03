@@ -9,7 +9,7 @@
 						<div class="plate1_2_item_text ycsl">#{{filterItem.name.split("#")[0]}}#</div>
 						<div class="plate1_2_item_text ycsl" v-if="filterItem.value">{{filterItem.value}}</div>
 						<div class="plate1_2_item_text ycsl" v-else-if="filterItem.minValue&&filterItem.maxValue">
-							({{filterItem.minValue}},{{filterItem.maxValue}}]</div>
+							[{{filterItem.minValue}},{{filterItem.maxValue}})</div>
 						<div class="plate1_2_item_text ycsl" v-else-if="filterItem.minValue">≥{{filterItem.minValue}}</div>
 						<div class="plate1_2_item_text ycsl" v-else-if="filterItem.maxValue">＜{{filterItem.maxValue}}</div>
 						<div class="plate1_2_item_text ycsl" v-else-if="filterItem.values">{{filterItem.values}}</div>
@@ -104,7 +104,7 @@
 						<span>{{filterItem.name.split("#")[0]}}&nbsp;</span>
 						<span v-if="filterItem.value">{{filterItem.value}}</span>
 						<span v-else-if="filterItem.minValue&&filterItem.maxValue">
-							({{filterItem.minValue}},{{filterItem.maxValue}}]</span>
+							[{{filterItem.minValue}},{{filterItem.maxValue}})</span>
 						<span v-else-if="filterItem.minValue">≥{{filterItem.minValue}}</span>
 						<span v-else-if="filterItem.maxValue">＜{{filterItem.maxValue}}</span>
 						<span v-else-if="filterItem.values">＜{{filterItem.values}}</span>
@@ -359,13 +359,18 @@
 			mounted_m() {
 				this.filterArr = JSON.parse(this.$route.params.filterArr);
 				this.pageReady = true;
+				Toast.loading({
+					message: "正在加载",
+					forbidClick: true,
+					duration: 0,
+				});
 				queryFilterResultSum({
 					listCustFilter: this.filterArr
 				}, (res) => {
 					this.aumBal = res.data.aumBal || 0;
 					this.loanBal = res.data.loanBal || 0;
+					this.onLoad();
 				})
-				this.onLoad()
 			}
 		},
 		mounted() {
