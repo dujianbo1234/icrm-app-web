@@ -275,12 +275,22 @@
 			canConfirm() {
 				if (this.activeChild2.title) {
 					if (this.activeChild2.title == "自定义") {
-						return this.activeChild2.minValue || this.activeChild2.minValue;
+						if (this.activeChild2.minValue == "." || this.activeChild2.minValue == "-" ||
+							this.activeChild2.maxValue == "." || this.activeChild2.maxValue == "-") {
+							return false;
+						} else {
+							return this.activeChild2.minValue || this.activeChild2.maxValue;
+						}
 					} else {
 						if (this.activeChild2.list.length) {
 							if (this.activeChild3.title) {
 								if (this.activeChild3.title == "自定义") {
-									return this.activeChild3.minValue || this.activeChild3.minValue;
+									if (this.activeChild3.minValue == "." || this.activeChild3.minValue == "-" ||
+										this.activeChild3.maxValue == "." || this.activeChild3.maxValue == "-") {
+										return false;
+									} else {
+										return this.activeChild3.minValue || this.activeChild3.maxValue;
+									}
 								} else {
 									return true;
 								}
