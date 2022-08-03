@@ -3301,7 +3301,7 @@ export const filterList = [{
 		list: [{
 			code: "02110100",
 			title: "≤30天",
-			value: "<=30天",
+			value: "≤30天",
 			values: "",
 			colField: "TH_CRDT_EXP_DAYS_RNG",
 			name: "他行授信到期日#≤30天",
@@ -3337,7 +3337,7 @@ export const filterList = [{
 		}, {
 			code: "02110400",
 			title: "＞90天",
-			value: ">90天",
+			value: "＞90天",
 			values: "",
 			colField: "TH_CRDT_EXP_DAYS_RNG",
 			name: "他行授信到期日#＞90天",
@@ -5088,7 +5088,7 @@ export const filterList = [{
 			list: [{
 				code: "05020101",
 				title: "＜3500",
-				value: "3500",
+				value: "＜3500",
 				values: "",
 				colField: "AUM_MONTH_AVG_RNG",
 				name: "AUM月日均-全部#＜3500",
@@ -6409,7 +6409,7 @@ export const filterList = [{
 		}, {
 			code: "06040300",
 			title: "燃气费",
-			value: "天然气",
+			value: "燃气费",
 			values: "",
 			colField: "PTF_SIGN",
 			name: "渠道签约#燃气费",
@@ -6697,7 +6697,7 @@ export const filterList = [{
 		}, {
 			code: "08030700",
 			title: "≥85%",
-			value: "≥85%%",
+			value: "≥85%",
 			values: "",
 			colField: "PHONE_BK_DAYAC_60D_RNG",
 			name: "手机银行近60天日活率#≥85%",
